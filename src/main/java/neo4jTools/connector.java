@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class connector {
     String DB_PATH = "/home/gqxwolf/neo4j/neo4j-community-3.2.3/testdb/databases/graph.db";
+    String conFile = "/home/gqxwolf/neo4j/conf/neo4j.conf";
     GraphDatabaseService graphDB;
 
     public connector(String DB_PATH) {
@@ -25,6 +26,7 @@ public class connector {
     public void startDB() {
         //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
         this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(this.DB_PATH))
+//                .loadPropertiesFromFile(conFile)
                 .setConfig(GraphDatabaseSettings.mapped_memory_page_size, "8k")
                 .setConfig(GraphDatabaseSettings.pagecache_memory, "2G")
                 .newGraphDatabase();
@@ -33,9 +35,9 @@ public class connector {
 
         registerShutdownHook(this.graphDB);
         if (graphDB == null) {
-            //System.out.println("Initialize fault");
+            System.out.println("Initialize fault");
         } else {
-            //System.out.println("Initialize success");
+            System.out.println("Initialize success");
         }
     }
 

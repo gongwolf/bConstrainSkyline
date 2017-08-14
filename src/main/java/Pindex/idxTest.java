@@ -14,17 +14,27 @@ public class idxTest {
     public static void main(String args[])
     {
         idxTest t = new idxTest();
+        long ct = System.nanoTime();
+        t.test();
+        System.out.println((System.nanoTime()-ct)/1000000);
+
+    }
+
+    private void test() {
+//        connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
         connector n = new connector();
         n.startDB();
         GraphDatabaseService graphdb = n.getDBObject();
-        String sid = "1";
+        String sid = "2";
         String eid = "99";
-        t.runIdxSkyline(sid,eid,graphdb);
-        long ct = System.nanoTime();
-        t.getShortestCost(sid,eid,graphdb);
-        System.out.println((System.nanoTime()-ct)/1000000);
+        runIdxSkyline(sid,eid,graphdb);
+//        long ct = System.nanoTime();
+//        getShortestCost(sid,eid,graphdb);
+//        System.out.println((System.nanoTime()-ct)/1000000);
+//        ct = System.nanoTime();
+//        runUseNodeFinal(sid,eid,graphdb);
+//        System.out.println((System.nanoTime()-ct)/1000000);
         n.shutdownDB();
-
     }
 
     public ArrayList<path> runIdxSkyline(String sid, String did, GraphDatabaseService graphdb) {

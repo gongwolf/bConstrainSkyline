@@ -6,22 +6,24 @@ import java.io.*;
 import java.util.*;
 
 public class MetisFile {
-    String NodePath = "/home/gqxwolf/mydata/projectData/testGraph/data/NodeInfo.txt";
-    String EdgePath = "/home/gqxwolf/mydata/projectData/testGraph/data/SegInfo.txt";
-    String metisGraphFile = "/home/gqxwolf/mydata/projectData/testGraph/data/metisFormatFile.csv";
-    String mappingPath = "/home/gqxwolf/mydata/projectData/testGraph/data/mapping/";
+    String NodePath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/NodeInfo.txt";
+    String EdgePath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/SegInfo.txt";
+    String metisGraphFile = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/metisFormatFile.csv";
+    String mappingPath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/mapping/";
 
 
+    //Node_id, the adj nodes of this node id.
     HashMap<String, ArrayList<String[]>> NodeList = new HashMap<>();
+
     HashMap<String, Boolean> remainNodes = new HashMap<>();
     ArrayList<HashMap<String, ArrayList<String[]>>> connectionSets = new ArrayList<>();
 
     public static void main(String args[]) {
         MetisFile mf = new MetisFile();
-        mf.generateMetisFile(-1);
-        mf.checkingConnection("1");
-        System.out.println("======================");
-        mf.countEdges("/home/gqxwolf/mydata/projectData/testGraph/data/metisFormatFile.csv");
+//        mf.generateMetisFile(-1);
+//        mf.checkingConnection("1");
+//        System.out.println("======================");
+        mf.countEdges("/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/mapping/mapped_metis_3.graph");
     }
 
     public void generateMetisFile(int costid) {
@@ -33,8 +35,8 @@ public class MetisFile {
             int i = 0;
 
             while ((line = br.readLine()) != null) {
-                String Nodeid = line.split(" ")[0];
-                System.out.println(Nodeid);
+                String Nodeid = line.split(",")[0];
+//                System.out.println(Nodeid);
                 String content = readSegMentInfo(Nodeid, costid);
 //                 System.out.println(content);
                 // bw.write((Long.parseLong(Nodeid) + 1) + " " + content);
@@ -62,7 +64,7 @@ public class MetisFile {
             br = new BufferedReader(new FileReader(EdgePath));
             String line = null;
             while ((line = br.readLine()) != null) {
-                String[] segInfo = line.split(" ");
+                String[] segInfo = line.split(",");
                 // System.out.println(segInfo[0]+"
                 // "+segInfo[1]+Nodeid.equals(segInfo[0]));
                 if (Nodeid.equals(segInfo[0])) {
@@ -96,17 +98,18 @@ public class MetisFile {
         int id = 1;
         while (!remainNodes.isEmpty()) {
             String nodeid = getRandomStartNode();
+            //Node nid belong to this connection component
+            //Adj nodes of the nid, String[]{adj nid, cost1, cost2....}
             HashMap<String, ArrayList<String[]>> set = runDFS(nodeid);
-            System.out.println(set.size());
+            System.out.println(id+ " " +set.size());
             this.connectionSets.add(set);
             mappingToMetisFormat(set, id);
-
+            id++;
 
 //            if (set.size() < 10000) {
 //                mappingToMetisFormat(set, id);
 //                id++;
 //                System.out.println(set.size());
-////                break;
 //            }
         }
         System.out.println("===========================");
@@ -156,6 +159,7 @@ public class MetisFile {
         st.add(nodeid);
         while (!st.isEmpty()) {
             String cNode = st.pop();
+            //neighbor of the cNode
             ArrayList<String[]> s = this.NodeList.get(cNode);
             if (!sub_NodeList.containsKey(cNode)) {
                 sub_NodeList.put(cNode, s);
@@ -163,7 +167,6 @@ public class MetisFile {
 
             this.remainNodes.remove(cNode);
 
-//            if (this.remainNodes.containsKey(cNode)) {
             for (int i = 0; i < s.size(); i++) {
                 String n_nodeid = s.get(i)[0];
                 if (this.remainNodes.containsKey(n_nodeid)) {
@@ -171,7 +174,6 @@ public class MetisFile {
                     this.remainNodes.remove(n_nodeid);
                 }
             }
-//            }
         }
         return sub_NodeList;
     }

@@ -8,15 +8,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class BlinksPartition {
-    String EdgesInfoPath = "/home/gqxwolf/mydata/projectData/testGraph/data/SegInfo.txt";
-    String nodeMappingBase = "/home/gqxwolf/mydata/projectData/testGraph/data/mapping/";
-    String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
+    String EdgesInfoPath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/SegInfo.txt";
+    String nodeMappingBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/mapping/";
+    String PathBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/";
     private ArrayList<Pair<String, String>> connectionInfos = new ArrayList<>();
     private HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
-    public int NodeNum = 100;
+    public int NodeNum = 67393;
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         BlinksPartition bp = new BlinksPartition();
 //        long[] infos = bp.getC_id(55);
 //        System.out.println(infos[0]);
@@ -25,8 +24,23 @@ public class BlinksPartition {
 //        System.out.println(pid);
         ArrayList<String> portals = bp.getPortals();
         System.out.println(portals.size());
+//        bp.writePoralsToDisk(portals);
         bp.portalsMapping(portals);
 
+    }
+
+    public void writePoralsToDisk(ArrayList<String> portals) {
+        String portalFile = PathBase + "portalList.txt";
+        try (FileWriter fw = new FileWriter(portalFile, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            for (String portal : portals) {
+                out.println(portal);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private ArrayList<String> getPortals() {
@@ -68,8 +82,8 @@ public class BlinksPartition {
             BufferedReader br = new BufferedReader(new FileReader(EdgesInfoPath));
             String line = null;
             while ((line = br.readLine()) != null) {
-                String StartNode = String.valueOf(Integer.parseInt(line.split(" ")[0]) + 1);
-                String EndNode = String.valueOf(Integer.parseInt(line.split(" ")[1]) + 1);
+                String StartNode = String.valueOf(Integer.parseInt(line.split(",")[0]) + 1);
+                String EndNode = String.valueOf(Integer.parseInt(line.split(",")[1]) + 1);
 //                System.out.println(StartNode+ " -> "+ EndNode+ "     "+line);
                 Pair<String, String> p = new Pair<>(StartNode, EndNode);
                 this.connectionInfos.add(p);
@@ -80,13 +94,11 @@ public class BlinksPartition {
     }
 
     public void loadPartitionsInfo() {
-        String paritionFile = PathBase+"partitions_info.txt";
+        String paritionFile = PathBase + "partitions_info.txt";
         File pFile = new File(paritionFile);
-        if(pFile.exists())
-        {
+        if (pFile.exists()) {
             readPartionsInfo(paritionFile);
-        }else
-        {
+        } else {
             writePartionsInfo(paritionFile);
         }
 
@@ -101,7 +113,7 @@ public class BlinksPartition {
                 String Cid = line.split(" ")[1];
                 String Pid = line.split(" ")[2];
                 Pair<String, String> p = new Pair<>(Cid, Pid);
-                this.partitionInfos.put(NodeId,p);
+                this.partitionInfos.put(NodeId, p);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +123,7 @@ public class BlinksPartition {
     private void writePartionsInfo(String paritionFile) {
         try (FileWriter fw = new FileWriter(paritionFile, true);
              BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter out = new PrintWriter(bw)){
+             PrintWriter out = new PrintWriter(bw)) {
             int i = 1;
             for (; i <= this.NodeNum; i++) {
                 long infos[] = this.getC_id(i);
@@ -121,17 +133,17 @@ public class BlinksPartition {
                 if (cid == -1) {
                     System.out.println("Find a node not in all the node_mapping files");
                     break;
-//                } else if (cid < 19) {
-//                    pid = 0;
+                    //To-do
+                } else if (cid > 3) {
+                    pid = 0;
 //                } else {
 //                    pid = this.getPid_inC(cid, mapped_id);
-                }else
-                {
-                    pid = this.getPid_inC(cid,mapped_id);
+                } else {
+                    pid = this.getPid_inC(cid, mapped_id);
                 }
 
                 Pair<String, String> p = new Pair<>(String.valueOf(cid), String.valueOf(pid));
-                this.partitionInfos.put(String.valueOf(i),p);
+                this.partitionInfos.put(String.valueOf(i), p);
 
                 out.println(i + " " + cid + " " + pid);
             }
@@ -155,10 +167,11 @@ public class BlinksPartition {
                         int sIndex = f.getName().lastIndexOf("_") + 1;
                         int eIndex = f.getName().lastIndexOf(".");
                         C_id = Integer.parseInt(f.getName().substring(sIndex, eIndex));
-//                        if (C_id >= 19)
-                        return new long[]{C_id, Long.parseLong(line.split(" ")[1])};
-//                        else
-//                            return new long[]{C_id, 0};
+                        //To-Do
+                        if (C_id <=3)
+                            return new long[]{C_id, Long.parseLong(line.split(" ")[1])};
+                        else
+                            return new long[]{C_id, 0};
                     }
                 }
 
@@ -172,7 +185,7 @@ public class BlinksPartition {
 
     private int getPid_inC(int cid, long mapped_id) {
         int pid = -1;
-        String partFile = nodeMappingBase + "mapped_metis_1.graph.part.6";
+        String partFile = nodeMappingBase + "mapped_metis_"+cid+".graph.part.150";
 //        String partFile = PathBase + "mapped_metis_" + cid + ".graph.part.10";
         try {
             BufferedReader br = new BufferedReader(new FileReader(partFile));
@@ -460,7 +473,7 @@ public class BlinksPartition {
         try (FileWriter fw = new FileWriter(pidPath, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
-            out.println(portalNode + " "+bits);
+            out.println(portalNode + " " + bits);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -26,13 +26,13 @@ import Pindex.path;
 public class test {
     HashMap<String, HashMap<String, HashMap<String, String>>> pMapping = new HashMap<>();
     public HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
-    public static String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
+    public static String PathBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/";
     public static String paritionFile = PathBase + "partitions_info.txt";
 
     public static void main(String args[]) {
         test t = new test();
-         String sid = "1";
-         String eid = "99";
+//         String sid = "1";
+//         String eid = "99";
         t.readPartitionInfo();
         t.readPartionsInfo(paritionFile);
 //         ArrayList<path> r = t.runUseNodeFinal(sid,eid);
@@ -51,7 +51,10 @@ public class test {
 //        t.generateInnerPair();
 //        t.generateInterPair();
 
-        connector n = new connector();
+//        connector n = new connector();
+
+        connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
+
         n.startDB();
         GraphDatabaseService graphdb = n.getDBObject();
         t.buildIndex(graphdb);
@@ -59,8 +62,8 @@ public class test {
     }
 
     private void buildIndex(GraphDatabaseService graphdb) {
-        String innerP = "/home/gqxwolf/mydata/projectData/testGraph/data/Pairs/pairs.inner";
-        String interP = "/home/gqxwolf/mydata/projectData/testGraph/data/Pairs/pairs.inter";
+        String innerP = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/Pairs/pairs.inner";
+        String interP = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/Pairs/pairs.inter";
 
         int i = 1;
         System.out.println("Building inner index is processing");
@@ -84,7 +87,7 @@ public class test {
                      }
                  }
 
-                 if (i % 200 == 0) {
+                 if (i % 10000 == 0) {
                      System.out.println(i + "..........");
                  }
                  i++;
@@ -94,7 +97,7 @@ public class test {
              e.printStackTrace();
          }
 
-        i = 1;
+        long i_ter = 1;
         System.out.println("Building inter index is processing");
         try (BufferedReader br = new BufferedReader(new FileReader(interP))) {
             String line = null;
@@ -107,10 +110,10 @@ public class test {
 
                 double[] costs = getShortestCost(sid, eid,graphdb);
                 writeToDisk(cid, pid, sid, eid, costs);
-                if (i % 400 == 0) {
-                    System.out.println(i + "..........");
+                if (i_ter % 400000 == 0) {
+                    System.out.println(i_ter + "..........");
                 }
-                i++;
+                i_ter++;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,7 +121,7 @@ public class test {
     }
 
     private void writeToDisk(String cid, String pid, String sid, String eid, double[] costs) {
-        String fpath = "/home/gqxwolf/mydata/projectData/testGraph/data/indexes/inter/" + cid + "/";
+        String fpath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/indexes/inter/" + cid + "/";
         File f = new File(fpath);
         if (!f.exists()) {
             f.mkdirs();
@@ -143,7 +146,7 @@ public class test {
     }
 
     private void writeToDisk(String cid, String pid, pairSer ps) {
-        String fpath = "/home/gqxwolf/mydata/projectData/testGraph/data/indexes/inner/" + cid + "/" + pid
+        String fpath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/indexes/inner/" + cid + "/" + pid
                 + "_idx/";
         File f = new File(fpath);
         if (!f.exists()) {
@@ -168,7 +171,7 @@ public class test {
     }
 
     private void writePairToDisk(String cid, String pid, String sid, String eid, String indexType) {
-        String fpath = "/home/gqxwolf/mydata/projectData/testGraph/data/Pairs/";
+        String fpath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/Pairs/";
         File fFile = new File(fpath);
         if (!fFile.exists()) {
             fFile.mkdirs();
@@ -335,7 +338,7 @@ public class test {
 
     public void readPartitionInfo() {
         this.pMapping.clear();
-        String partitionInfoPath = "/home/gqxwolf/mydata/projectData/testGraph/data/portals/";
+        String partitionInfoPath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/portals/";
         File parFile = new File(partitionInfoPath);
         for (File cFile : parFile.listFiles()) {
             // System.out.println(cFile.getName());
