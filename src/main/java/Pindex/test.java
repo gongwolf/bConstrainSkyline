@@ -54,7 +54,6 @@ public class test {
 //        connector n = new connector();
 
         connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
-
         n.startDB();
         GraphDatabaseService graphdb = n.getDBObject();
         t.buildIndex(graphdb);
@@ -75,7 +74,7 @@ public class test {
                  String pid = infos[1];
                  String sid = infos[2];
                  String eid = infos[3];
-                 ArrayList<path> skyR = this.runUseNodeFinal(sid, eid,graphdb);
+                 ArrayList<path> skyR = this.runUseNodeFinal(sid, eid,graphdb,pid);
                  if (skyR!=null && skyR.size() != 0 ) {
                      removePathNotWithinBlock(pid, skyR);
                      if (skyR.size() != 0) {
@@ -277,7 +276,7 @@ public class test {
 
     }
 
-    public ArrayList<path> runUseNodeFinal(String sid, String did, GraphDatabaseService graphdb) {
+    public ArrayList<path> runUseNodeFinal(String sid, String did, GraphDatabaseService graphdb, String pid) {
 //        connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
         Node Source;
         Node Destination;
@@ -287,7 +286,7 @@ public class test {
             tx.success();
         }
         myshortestPathUseNodeFinal mspNode = new myshortestPathUseNodeFinal(graphdb);
-        ArrayList<path> r = mspNode.getSkylinePath(Source, Destination);
+        ArrayList<path> r = mspNode.getSkylinePath(Source, Destination,pid,this.partitionInfos);
         return r;
     }
 
