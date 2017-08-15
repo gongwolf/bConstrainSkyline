@@ -286,7 +286,7 @@ public class test {
             tx.success();
         }
         myshortestPathUseNodeFinal mspNode = new myshortestPathUseNodeFinal(graphdb);
-        ArrayList<path> r = mspNode.getSkylinePath(Source, Destination,pid,this.partitionInfos);
+        ArrayList<path> r = mspNode.getSkylinePath(Source, Destination);
         return r;
     }
 
