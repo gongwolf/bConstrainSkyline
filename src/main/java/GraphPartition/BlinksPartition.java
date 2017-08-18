@@ -46,6 +46,7 @@ public class BlinksPartition {
     private ArrayList<String> getPortals() {
         loadEdgesInfo();
         loadPartitionsInfo();
+        System.out.println(partitionInfos.size());
         System.out.println(this.connectionInfos.size());
         System.out.println(this.partitionInfos.size());
 //

@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -19,6 +20,9 @@ public class statistic {
     HashMap<String, HashMap<String, Integer>> NodesSta = new HashMap<>();
     public static String PathBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/";
     public static String partitionFile = PathBase + "partitions_info.txt";
+    String NodePath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/NodeInfo.txt";
+
+    public HashSet<String> nodes = new HashSet<>();
 
     public static void main(String args[]) {
         statistic s = new statistic();
@@ -29,17 +33,24 @@ public class statistic {
     public void portalStatistic() {
         readPartionsInfo(this.partitionFile);
         readPartitionInfo();
-//        System.out.println("there are " + pMapping.size() + " connection components!!");
-//        for (Map.Entry<String, HashMap<String, HashMap<String, String>>> e : pMapping.entrySet()) {
-//            System.out.println("For connection component id " + e.getKey() + " :");
-//            System.out.println("    there are " + e.getValue().size() + " partitions");
-////            TreeMap<String, HashMap<String, String>>t = new TreeMap(new StringComparator());
-////            t.putAll(e.getValue());
-////            for (Map.Entry<String, HashMap<String, String>> pe : t.entrySet())
-////            {
-////                System.out.println("            pid:"+pe.getKey()+"  - size:"+pe.getValue().size());
-////            }
-//        }
+        loadNodes();
+        System.out.println(nodes.contains("67393"));
+        System.out.println(this.partitionInfos.keySet().contains("67393"));
+        System.out.println("there are " + pMapping.size() + " connection components!!");
+        for (Map.Entry<String, HashMap<String, HashMap<String, String>>> e : pMapping.entrySet()) {
+            System.out.println("For connection component id " + e.getKey() + " :");
+            System.out.println("    there are " + e.getValue().size() + " partitions");
+            TreeMap<String, HashMap<String, String>>t = new TreeMap(new StringComparator());
+            t.putAll(e.getValue());
+            for (Map.Entry<String, HashMap<String, String>> pe : t.entrySet())
+            {
+//                System.out.println("            pid:"+pe.getKey()+"  - size:"+pe.getValue().size());
+                if(pe.getValue().get("0")!=null)
+                {
+                    System.out.println("found it");
+                }
+            }
+        }
 
 
         for (String nodeid : partitionInfos.keySet()) {
@@ -52,6 +63,7 @@ public class statistic {
 
 
 //        System.out.println("there are " + NodesSta.size() + " connection components!!");
+
         for (Map.Entry<String, HashMap<String, Integer>> e : NodesSta.entrySet()) {
             int cid = Integer.parseInt(e.getKey());
             if (cid <= 3) {
@@ -167,5 +179,19 @@ public class statistic {
             }
         }
 
+    }
+
+    private void loadNodes() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(NodePath));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                String StartNode = String.valueOf(Integer.parseInt(line.split(",")[0]) + 1);
+//                System.out.println(StartNode+ " -> "+ EndNode+ "     "+line);
+                this.nodes.add(StartNode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
