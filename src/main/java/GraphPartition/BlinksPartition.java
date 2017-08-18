@@ -25,7 +25,7 @@ public class BlinksPartition {
         ArrayList<String> portals = bp.getPortals();
         System.out.println(portals.size());
 //        bp.writePoralsToDisk(portals);
-        bp.portalsMapping(portals);
+//        bp.portalsMapping(portals);
 
     }
 

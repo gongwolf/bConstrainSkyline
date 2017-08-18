@@ -29,46 +29,41 @@ public class idxTest {
     }
 
     private void test() {
-        connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
-        n.startDB();
-        GraphDatabaseService graphdb = n.getDBObject();
-        long ct = System.nanoTime();
-        getShortestCost("30825","35003",graphdb);
-        System.out.println("running time "+ (System.nanoTime() - ct) / 1000000);
-
-//        readPartionsInfo(paritionFile);
-////        connector n = new connector();
+//        connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
 //        n.startDB();
 //        GraphDatabaseService graphdb = n.getDBObject();
-//        String sid = "30825";
-//        String eid = "35003";
-//        String pid = "112";
-//
-//        System.out.println("============================");
-//        long run1 = System.nanoTime();
-//        ArrayList<path> r1 = runUseNodeFinal(sid, eid, graphdb);
-//        System.out.println(r1.size());
-//        removePathNotWithinBlock(pid, r1);
-//        run1 = (System.nanoTime()-run1)/1000000;
-//        System.out.println(r1.size());
-////        System.out.println(r1.get(0));
-//        System.out.println("============================");
-//        long run2 = System.nanoTime();
-//        ArrayList<path> r2 = runSkylineInBlock(sid, eid, pid, graphdb);
-//        removePathNotWithinBlock(pid,r2);
-//        run2 = (System.nanoTime()-run2)/1000000;
-//        System.out.println(r2.size());
-////        System.out.println(r2.get(0));
-//
-//
-//        System.out.println("============================");
-//        System.out.println(run1 + "   " + run2);
-////        long ct = System.nanoTime();
-////        getShortestCost(sid,eid,graphdb);
-////        System.out.println((System.nanoTime()-ct)/1000000);
-////        ct = System.nanoTime();
-////        runUseNodeFinal(sid,eid,graphdb);
-////        System.out.println((System.nanoTime()-ct)/1000000);
+//        long ct = System.nanoTime();
+//        getShortestCost("30825","35003",graphdb);
+//        System.out.println("running time "+ (System.nanoTime() - ct) / 1000000);
+
+
+        connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
+        readPartionsInfo(paritionFile);
+        n.startDB();
+        GraphDatabaseService graphdb = n.getDBObject();
+        String sid = "8883";
+        String eid = "22751";
+        String pid = "62";
+
+        System.out.println("============================");
+        long run1 = System.nanoTime();
+        ArrayList<path> r1 = runUseNodeFinal(sid, eid, graphdb);
+        System.out.println(r1.size());
+        removePathNotWithinBlock(pid, r1);
+        run1 = (System.nanoTime()-run1)/1000000;
+        System.out.println(r1.size());
+//        System.out.println(r1.get(0));
+        System.out.println("============================");
+        long run2 = System.nanoTime();
+        ArrayList<path> r2 = runSkylineInBlock(sid, eid, pid, graphdb);
+        removePathNotWithinBlock(pid,r2);
+        run2 = (System.nanoTime()-run2)/1000000;
+        System.out.println(r2.size());
+//        System.out.println(r2.get(0));
+
+
+        System.out.println("============================");
+        System.out.println(run1 + "   " + run2);
         n.shutdownDB();
     }
 
