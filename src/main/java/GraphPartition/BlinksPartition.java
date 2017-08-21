@@ -25,7 +25,7 @@ public class BlinksPartition {
         ArrayList<String> portals = bp.getPortals();
         System.out.println(portals.size());
 //        bp.writePoralsToDisk(portals);
-//        bp.portalsMapping(portals);
+        bp.portalsMapping(portals);
 
     }
 
@@ -57,6 +57,12 @@ public class BlinksPartition {
 
             if (isCutterEdge(ep)) {
                 S.add(ep);
+                if(ep.getKey().equals("60409")||ep.getValue().equals("60409"))
+                {
+                    System.out.println(ep);
+                    System.out.println(this.partitionInfos.get(ep.getKey()));
+                    System.out.println(this.partitionInfos.get(ep.getValue()));
+                }
             }
 
         }
@@ -278,6 +284,10 @@ public class BlinksPartition {
             for (String pid : pMapping.get(cid).keySet()) {
                 System.out.println("   " + pid + "   " + pMapping.get(cid).get(pid).size());
                 for (String portalNode : pMapping.get(cid).get(pid)) {
+                    if(portalNode.equals("60409"))
+                    {
+                        System.out.println("!!!");
+                    }
                     String bits = "";
                     boolean ip = isIncomingPortal(Integer.parseInt(portalNode), pid);
                     boolean op = isOutGoingPortal(Integer.parseInt(portalNode), pid);
@@ -291,7 +301,7 @@ public class BlinksPartition {
                     } else {
                         bits = "11";
                     }
-                    writeToDisk(cid, pid, portalNode, bits);
+//                    writeToDisk(cid, pid, portalNode, bits);
                 }
             }
 

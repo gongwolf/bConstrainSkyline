@@ -2,14 +2,12 @@ package Pindex;
 
 import javafx.util.Pair;
 import neo4jTools.StringComparator;
+import org.apache.shiro.crypto.hash.Hash;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class statistic {
     //nodeID,Pair<Cid,Pid>
@@ -17,10 +15,16 @@ public class statistic {
     //HashMap<Cid,HashMap<pid,HashMap<nodeid,bits>>>
     HashMap<String, HashMap<String, HashMap<String, String>>> pMapping = new HashMap<>();
     //HashMap<Cid,HashMap<pid,#ofNodes>>
-    HashMap<String, HashMap<String, Integer>> NodesSta = new HashMap<>();
+    HashMap<String, HashMap<String, HashSet<String>>> NodesSta = new HashMap<>();
+
+    HashSet<String> a = new HashSet<>();
+    ArrayList<String> b = new ArrayList<>();
+
+    ArrayList<String> portals = new ArrayList<>();
     public static String PathBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/";
     public static String partitionFile = PathBase + "partitions_info.txt";
     String NodePath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/NodeInfo.txt";
+    String PortalsPath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/portalList.txt";
 
     public HashSet<String> nodes = new HashSet<>();
 
@@ -34,90 +38,84 @@ public class statistic {
         readPartionsInfo(this.partitionFile);
         readPartitionInfo();
         loadNodes();
+        loadPortals();
         System.out.println(nodes.contains("67393"));
         System.out.println(this.partitionInfos.keySet().contains("67393"));
-        System.out.println("there are " + pMapping.size() + " connection components!!");
-        for (Map.Entry<String, HashMap<String, HashMap<String, String>>> e : pMapping.entrySet()) {
-            System.out.println("For connection component id " + e.getKey() + " :");
-            System.out.println("    there are " + e.getValue().size() + " partitions");
-            TreeMap<String, HashMap<String, String>>t = new TreeMap(new StringComparator());
-            t.putAll(e.getValue());
-            for (Map.Entry<String, HashMap<String, String>> pe : t.entrySet())
-            {
-//                System.out.println("            pid:"+pe.getKey()+"  - size:"+pe.getValue().size());
-                if(pe.getValue().get("0")!=null)
-                {
-                    System.out.println("found it");
-                }
-            }
-        }
+
+
 
 
         for (String nodeid : partitionInfos.keySet()) {
             String cid = this.partitionInfos.get(nodeid).getKey();
             String pid = this.partitionInfos.get(nodeid).getValue();
-            if (!isPortal(nodeid, cid, pid)) {
-                countNodesNumber(nodeid, cid, pid);
+            if (!isPortal(nodeid,cid,pid)) {
+                countNodesNumber(nodeid,cid,pid);
             }
         }
 
+        System.out.println(isPortal("60409","2","60"));
 
-//        System.out.println("there are " + NodesSta.size() + " connection components!!");
+        for(String bb:b)
+        {
+            if(this.portals.contains(bb))
+            {
+                System.out.println(bb);
+            }
+        }
 
-        for (Map.Entry<String, HashMap<String, Integer>> e : NodesSta.entrySet()) {
+        for (Map.Entry<String, HashMap<String, HashSet<String>>> e : NodesSta.entrySet()) {
             int cid = Integer.parseInt(e.getKey());
-            if (cid <= 3) {
-//                System.out.println("For connection component id " + e.getKey() + " :");
-//                System.out.println("    there are " + e.getValue().size() + " partitions");
-                TreeMap<String, Integer> t = new TreeMap(new StringComparator());
+            if (cid != -1) {
+                TreeMap<String, HashSet<String>> t = new TreeMap(new StringComparator());
                 t.putAll(e.getValue());
-                for (Map.Entry<String, Integer> pe : t.entrySet()) {
+                for (Map.Entry<String, HashSet<String>> pe : t.entrySet()) {
                     String pid = pe.getKey();
-//                    int numberofPortal = this.pMapping.get(String.valueOf(cid)).get(pid).size();
-                    int numberofNodes = pe.getValue();
-//                    System.out.println("            pid:" + pe.getKey() + "  - size:" + numberofNodes +" "+ (double)numberofPortal/numberofNodes );
-                    System.out.println("            pid:" + pe.getKey() + "  - size:" + numberofNodes );
+                    HashSet<String> numberofNodes = pe.getValue();
+//                    System.out.println("            pid:" + pe.getKey() + "  - size:" + numberofNodes.size() );
                 }
             }
         }
 
     }
 
+    private boolean isContains(String nodeid, String cid, String pid) {
+        return this.NodesSta.get(cid).get(pid).contains(nodeid);
+    }
+
     private void countNodesNumber(String nodeid, String cid, String pid) {
         // System.out.println(" " + portalNode + " " + bits);
         if (NodesSta.containsKey(cid)) {
-            HashMap<String, Integer> partitions = NodesSta.get(cid);
+            HashMap<String, HashSet<String>> partitions = NodesSta.get(cid);
             if (partitions.containsKey(pid)) {
-                int numberOfNodes = partitions.get(pid) + 1;
-                partitions.put(pid, numberOfNodes);
+                HashSet<String> numberOfNodes = partitions.get(pid);
+                if (!numberOfNodes.contains(nodeid)) {
+                    numberOfNodes.add(nodeid);
+                    partitions.put(pid, numberOfNodes);
+                    a.add(nodeid);
+                    b.add(nodeid);
+                }
             } else {
-                partitions.put(pid, 1);
+                HashSet<String> numberOfNodes = new HashSet<>();
+                numberOfNodes.add(nodeid);
+                partitions.put(pid, numberOfNodes);
+                a.add(nodeid);
+                b.add(nodeid);
             }
         } else {
-            HashMap<String, Integer> partitions = new HashMap<>();
-            partitions.put(pid, 1);
+            HashMap<String, HashSet<String>> partitions = new HashMap<>();
+            HashSet<String> numberOfNodes = new HashSet<>();
+            numberOfNodes.add(nodeid);
+            partitions.put(pid, numberOfNodes);
             NodesSta.put(cid, partitions);
+            a.add(nodeid);
+            b.add(nodeid);
         }
 
     }
 
 
     private boolean isPortal(String nodeid, String cid, String pid) {
-        HashMap<String, HashMap<String, String>> pe = this.pMapping.get(cid);
-        if (pe != null) {
-            HashMap<String, String> ne = pe.get(pid);
-            if (ne != null) {
-                String node = ne.get(nodeid);
-                if (node != null) {
-                    return true;
-                } else {
-                    return false;
-                }
-
-            }
-            return false;
-        }
-        return false;
+        return this.portals.contains(nodeid);
     }
 
 
@@ -189,6 +187,20 @@ public class statistic {
                 String StartNode = String.valueOf(Integer.parseInt(line.split(",")[0]) + 1);
 //                System.out.println(StartNode+ " -> "+ EndNode+ "     "+line);
                 this.nodes.add(StartNode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadPortals() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(PortalsPath));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                String StartNode = line.trim();
+//                System.out.println(StartNode+ " -> "+ EndNode+ "     "+line);
+                this.portals.add(StartNode);
             }
         } catch (Exception e) {
             e.printStackTrace();
