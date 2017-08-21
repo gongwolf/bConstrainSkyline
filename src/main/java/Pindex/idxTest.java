@@ -16,8 +16,12 @@ import java.util.HashMap;
 
 public class idxTest {
     public HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
+
     public static String PathBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/";
     public static String paritionFile = PathBase + "partitions_info.txt";
+    public static String portalListFile = PathBase+"portalList.txt";
+
+    ArrayList<String> portals = new ArrayList<>();
 
     public static void main(String args[]) {
         idxTest t = new idxTest();
@@ -41,9 +45,9 @@ public class idxTest {
         readPartionsInfo(paritionFile);
         n.startDB();
         GraphDatabaseService graphdb = n.getDBObject();
-        String sid = "8883";
-        String eid = "22751";
-        String pid = "62";
+        String sid = "56476";
+        String eid = "45252";
+        String pid = "22";
 
         System.out.println("============================");
         long run1 = System.nanoTime();
@@ -52,18 +56,19 @@ public class idxTest {
         removePathNotWithinBlock(pid, r1);
         run1 = (System.nanoTime()-run1)/1000000;
         System.out.println(r1.size());
-//        System.out.println(r1.get(0));
+        System.out.println(r1.get(0));
         System.out.println("============================");
         long run2 = System.nanoTime();
         ArrayList<path> r2 = runSkylineInBlock(sid, eid, pid, graphdb);
         removePathNotWithinBlock(pid,r2);
         run2 = (System.nanoTime()-run2)/1000000;
         System.out.println(r2.size());
-//        System.out.println(r2.get(0));
+        System.out.println(r2.get(0));
 
 
         System.out.println("============================");
         System.out.println(run1 + "   " + run2);
+        System.out.println(statistic.checkPathResultEquation(r1,r2));
         n.shutdownDB();
     }
 
@@ -105,8 +110,8 @@ public class idxTest {
             Destination = graphdb.findNode(BNode.BusNode, "name", did);
             tx.success();
         }
-        mySkylineInBlock ibNode = new mySkylineInBlock(graphdb);
-        ArrayList<path> r = ibNode.getSkylinePath(Source, Destination, pid, this.partitionInfos);
+        mySkylineInBlock ibNode = new mySkylineInBlock(graphdb,this.partitionInfos,this.portals);
+        ArrayList<path> r = ibNode.getSkylinePath(Source, Destination, pid);
         return r;
     }
 
@@ -192,6 +197,19 @@ public class idxTest {
             }
         }
 
+    }
+
+    private void loadPortals() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(portalListFile));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                String StartNode = line.trim();
+                this.portals.add(StartNode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

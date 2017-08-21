@@ -1,19 +1,23 @@
 package GraphPartition;
 
 import javafx.util.Pair;
+import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Sin;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class BlinksPartition {
-    String EdgesInfoPath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/SegInfo.txt";
-    String nodeMappingBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/mapping/";
-    String PathBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/";
+    String PathBase = "/home/gqxwolf/mydata/projectData/testGraph2/data/";
+    String EdgesInfoPath = PathBase + "SegInfo.txt";
+    String nodeMappingBase = PathBase + "mapping/";
     private ArrayList<Pair<String, String>> connectionInfos = new ArrayList<>();
     private HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
-    public int NodeNum = 67393;
+    private HashMap<String, HashMap<String, Integer>> numberOfPartitions = new HashMap<>();
+
+    public int NodeNum = 25;
 
     public static void main(String args[]) {
         BlinksPartition bp = new BlinksPartition();
@@ -23,8 +27,9 @@ public class BlinksPartition {
 //        int pid = bp.getPid_inC((int) infos[0], infos[1]);
 //        System.out.println(pid);
         ArrayList<String> portals = bp.getPortals();
+        System.out.println("===========================");
         System.out.println(portals.size());
-//        bp.writePoralsToDisk(portals);
+        bp.writePoralsToDisk(portals);
         bp.portalsMapping(portals);
 
     }
@@ -46,6 +51,7 @@ public class BlinksPartition {
     private ArrayList<String> getPortals() {
         loadEdgesInfo();
         loadPartitionsInfo();
+        loadnumberinPartition();
         System.out.println(partitionInfos.size());
         System.out.println(this.connectionInfos.size());
         System.out.println(this.partitionInfos.size());
@@ -57,31 +63,107 @@ public class BlinksPartition {
 
             if (isCutterEdge(ep)) {
                 S.add(ep);
-                if(ep.getKey().equals("60409")||ep.getValue().equals("60409"))
-                {
-                    System.out.println(ep);
-                    System.out.println(this.partitionInfos.get(ep.getKey()));
-                    System.out.println(this.partitionInfos.get(ep.getValue()));
+//                if(ep.getKey().equals("3")||ep.getValue().equals("3"))
+//                {
+//                    System.out.println(ep);
+//                    System.out.println(this.partitionInfos.get(ep.getKey()));
+//                    System.out.println(this.partitionInfos.get(ep.getValue()));
+//                }
+            }
+
+        }
+
+
+        System.out.println("======");
+        ArrayList<Pair<String, String>> copyOfS = new ArrayList<>(S);
+        System.out.println(copyOfS.size());
+
+        int aa = 0;
+        for (Pair<String, String> sp : S) {
+
+
+            if(copyOfS.contains(sp)) {
+                aa++;
+                String startNode = sp.getKey();
+                String endNode = sp.getValue();
+
+                ArrayList<Pair<String, String>> Sincs = getIncidentTo(copyOfS, startNode);
+                ArrayList<Pair<String, String>> Eincs = getIncidentTo(copyOfS, endNode);
+
+//            if (sp.getKey().equals("3") || sp.getValue().equals("3")) {
+//                System.out.println(Ss + "   " + Se);
+//            }
+
+                String Scid = this.partitionInfos.get(sp.getKey()).getKey();
+                String Spid = this.partitionInfos.get(sp.getKey()).getValue();
+                String Ecid = this.partitionInfos.get(sp.getValue()).getKey();
+                String Epid = this.partitionInfos.get(sp.getValue()).getValue();
+
+
+                int SNumOfBlocks = this.numberOfPartitions.get(Scid).get(Spid);
+                int ENumOfBlocks = this.numberOfPartitions.get(Ecid).get(Epid);
+                System.out.println("   :"+sp + "  --> "+ Sincs.size()+"+"+SNumOfBlocks+"="+(Sincs.size() + SNumOfBlocks)+"  ===>  "+Eincs.size()+"+"+ENumOfBlocks+"="+(Eincs.size() + ENumOfBlocks));
+
+                if ((Sincs.size() + 0.1*SNumOfBlocks) >= (0.1*ENumOfBlocks + Eincs.size())) {
+                    P.add(startNode);
+                    removeFromSpeEdges(copyOfS, Sincs);
+                } else {
+                    P.add(endNode);
+                    removeFromSpeEdges(copyOfS, Eincs);
+                }
+                System.out.println(copyOfS.size());
+            }
+        }
+        System.out.println("aa:"+aa);
+        return new ArrayList<>(P);
+    }
+
+    private void removeFromSpeEdges(ArrayList<Pair<String, String>> source, ArrayList<Pair<String, String>> sub) {
+        for (Pair<String, String> p : sub) {
+            for (int i = 0; i < source.size(); ) {
+                if (source.get(i).equals(p)) {
+                    source.remove(i);
+                } else {
+                    i++;
                 }
             }
-
         }
+    }
 
-        for (Pair<String, String> sp : S) {
-            String startNode = sp.getKey();
-            String endNode = sp.getValue();
+    private void loadnumberinPartition() {
+        for (Map.Entry<String, Pair<String, String>> e : this.partitionInfos.entrySet()) {
+            String nodeID = e.getKey();
+            String cid = e.getValue().getKey();
+            String pid = e.getValue().getValue();
 
-            int Ss = getIncidentTo(S, startNode);
-            int Se = getIncidentTo(S, endNode);
-//            System.out.println(Ss + "   "+ Se);
+            if (numberOfPartitions.containsKey(cid)) {
+                HashMap<String, Integer> parinf = numberOfPartitions.get(cid);
+                if (parinf.containsKey(pid)) {
+                    int n = parinf.get(pid) + 1;
+                    parinf.put(pid, n);
+                    numberOfPartitions.put(cid, parinf);
+                } else {
+                    parinf.put(pid, 1);
+                    numberOfPartitions.put(cid, parinf);
+                }
 
-            if (Ss >= Se) {
-                P.add(startNode);
             } else {
-                P.add(endNode);
+                HashMap<String, Integer> parinf = new HashMap<>();
+                parinf.put(pid, 1);
+                numberOfPartitions.put(cid, parinf);
             }
+
         }
-        return new ArrayList<>(P);
+
+//        System.out.println(numberOfPartitions.size());
+//        for (Map.Entry<String, HashMap<String, Integer>> parInfos : numberOfPartitions.entrySet()) {
+//            for (Map.Entry<String, Integer> e : parInfos.getValue().entrySet()) {
+//                System.out.println(e.getKey() + " ====== " + e.getValue());
+//
+//            }
+//
+//        }
+
     }
 
     private void loadEdgesInfo() {
@@ -89,8 +171,8 @@ public class BlinksPartition {
             BufferedReader br = new BufferedReader(new FileReader(EdgesInfoPath));
             String line = null;
             while ((line = br.readLine()) != null) {
-                String StartNode = String.valueOf(Integer.parseInt(line.split(",")[0]) + 1);
-                String EndNode = String.valueOf(Integer.parseInt(line.split(",")[1]) + 1);
+                String StartNode = String.valueOf(Integer.parseInt(line.split(" ")[0]) + 1);
+                String EndNode = String.valueOf(Integer.parseInt(line.split(" ")[1]) + 1);
 //                System.out.println(StartNode+ " -> "+ EndNode+ "     "+line);
                 Pair<String, String> p = new Pair<>(StartNode, EndNode);
                 this.connectionInfos.add(p);
@@ -160,6 +242,9 @@ public class BlinksPartition {
         }
     }
 
+    /*
+    * @return value: cid, mapped id
+    * */
     private long[] getC_id(long nodeid) {
         int C_id = -1;
         File nodeDir = new File(nodeMappingBase);
@@ -175,7 +260,7 @@ public class BlinksPartition {
                         int eIndex = f.getName().lastIndexOf(".");
                         C_id = Integer.parseInt(f.getName().substring(sIndex, eIndex));
                         //To-Do
-                        if (C_id <=3)
+                        if (C_id <= 3)
                             return new long[]{C_id, Long.parseLong(line.split(" ")[1])};
                         else
                             return new long[]{C_id, 0};
@@ -192,7 +277,7 @@ public class BlinksPartition {
 
     private int getPid_inC(int cid, long mapped_id) {
         int pid = -1;
-        String partFile = nodeMappingBase + "mapped_metis_"+cid+".graph.part.150";
+        String partFile = nodeMappingBase + "mapped_metis_" + cid + ".graph.part.3";
 //        String partFile = PathBase + "mapped_metis_" + cid + ".graph.part.10";
         try {
             BufferedReader br = new BufferedReader(new FileReader(partFile));
@@ -231,15 +316,16 @@ public class BlinksPartition {
     }
 
 
-    private int getIncidentTo(ArrayList<Pair<String, String>> s, String startNode) {
-        int counter = 0;
+    private ArrayList<Pair<String, String>> getIncidentTo(ArrayList<Pair<String, String>> s, String node) {
+        ArrayList<Pair<String, String>> incPairs = new ArrayList<>();
+//        int counter = 0;
         for (Pair<String, String> p : s) {
-            if (startNode.equals(p.getValue())) {
-                counter++;
+            if (node.equals(p.getValue())) {
+                incPairs.add(p);
+//                counter++;
             }
-
         }
-        return counter;
+        return incPairs;
     }
 
 
@@ -284,8 +370,7 @@ public class BlinksPartition {
             for (String pid : pMapping.get(cid).keySet()) {
                 System.out.println("   " + pid + "   " + pMapping.get(cid).get(pid).size());
                 for (String portalNode : pMapping.get(cid).get(pid)) {
-                    if(portalNode.equals("60409"))
-                    {
+                    if (portalNode.equals("60409")) {
                         System.out.println("!!!");
                     }
                     String bits = "";
@@ -301,7 +386,7 @@ public class BlinksPartition {
                     } else {
                         bits = "11";
                     }
-//                    writeToDisk(cid, pid, portalNode, bits);
+                    writeToDisk(cid, pid, portalNode, bits);
                 }
             }
 

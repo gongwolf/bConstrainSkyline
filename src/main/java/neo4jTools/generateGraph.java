@@ -7,79 +7,74 @@ import java.io.*;
 import java.util.*;
 
 public class generateGraph {
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph2/data/";
+    String EdgesPath = DBBase + "SegInfo.txt";
+    String NodePath = DBBase + "NodeInfo.txt";
 
-    public static void main(String args[])
-    {int numberNodes = 100;
-        int numberofEdges = 200;
+    public static void main(String args[]) {
+        int numberNodes = 25;
+        int numberofEdges = 100;
         int numberofDimen = 3;
         generateGraph g = new generateGraph();
-        g.generateG(numberNodes,numberofEdges,numberofDimen);
+        g.generateG(numberNodes, numberofEdges, numberofDimen);
 
     }
 
-    private void generateG(int numberNodes, int numberofEdges,int numberofDimens) {
-        File dataF = new File("/home/gqxwolf/mydata/projectData/testGraph/data/");
+    private void generateG(int numberNodes, int numberofEdges, int numberofDimens) {
+        File dataF = new File(DBBase);
         try {
             FileUtils.deleteDirectory(dataF);
             dataF.mkdirs();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        HashMap<Pair<String,String>,String[]> Edges = new HashMap<>();
-        HashMap<String,String[]> Nodes = new HashMap<>();
-        for (int i = 0; i < numberNodes; i++)
-        {
-//            System.out.println(i+ "  "+getRandomNumberInRange(1,10)+"  "+getRandomNumberInRange(1,10));
-            String cost1 = String.valueOf(getRandomNumberInRange(1,25));
-            String cost2 = String.valueOf(getRandomNumberInRange(1,25));
-            Nodes.put(String.valueOf(i),new String[]{cost1,cost2});
+        HashMap<Pair<String, String>, String[]> Edges = new HashMap<>();
+        HashMap<String, String[]> Nodes = new HashMap<>();
+
+
+        //生成经度和纬度
+        for (int i = 0; i < numberNodes; i++) {
+            String cost1 = String.valueOf(getRandomNumberInRange(1, 25));
+            String cost2 = String.valueOf(getRandomNumberInRange(1, 25));
+            Nodes.put(String.valueOf(i), new String[]{cost1, cost2});
         }
 
-        for (int i =0 ; i < numberofEdges;i++)
-        {
-            String startNode = String.valueOf(getRandomNumberInRange(0,numberNodes-1));
-            String endNode = String.valueOf(getRandomNumberInRange(0,numberNodes-1));
-            while(startNode.equals(endNode))
-            {
-                endNode = String.valueOf(getRandomNumberInRange(0,numberNodes-1));
+        //Create the Edges information.
+        for (int i = 0; i < numberofEdges; i++) {
+            String startNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
+            String endNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
+            while (startNode.equals(endNode)) {
+                endNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
             }
 
             String[] costs = new String[numberofDimens];
-            for(int j=0;j<numberofDimens;j++)
-            {
-                costs[j]=String.valueOf(getRandomNumberInRange(1,100));
+            for (int j = 0; j < numberofDimens; j++) {
+                costs[j] = String.valueOf(getRandomNumberInRange(1, 100));
             }
 
-            Edges.put(new Pair(startNode,endNode),costs);
+            Edges.put(new Pair(startNode, endNode), costs);
         }
-
 
 
         HashSet<String> containedNodes = new HashSet<>();
-        for(Pair<String,String> p : Edges.keySet())
-        {
+        for (Pair<String, String> p : Edges.keySet()) {
             containedNodes.add(p.getKey());
-//            containedNodes.add(p.getValue());
         }
 
-        for(String node : Nodes.keySet())
-        {
-            if(!containedNodes.contains(node))
-            {
+        for (String node : Nodes.keySet()) {
+            if (!containedNodes.contains(node)) {
                 String startNode = String.valueOf(node);
-                String endNode = String.valueOf(getRandomNumberInRange(0,numberNodes-1));
-                while(startNode.equals(endNode))
-                {
-                    endNode = String.valueOf(getRandomNumberInRange(0,numberNodes-1));
+                String endNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
+                while (startNode.equals(endNode)) {
+                    endNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
                 }
 
                 String[] costs = new String[numberofDimens];
-                for(int j=0;j<numberofDimens;j++)
-                {
-                    costs[j]=String.valueOf(getRandomNumberInRange(1,100));
+                for (int j = 0; j < numberofDimens; j++) {
+                    costs[j] = String.valueOf(getRandomNumberInRange(1, 100));
                 }
 
-                Edges.put(new Pair(startNode,endNode),costs);
+                Edges.put(new Pair(startNode, endNode), costs);
             }
         }
         writeNodeToDisk(Nodes);
@@ -92,11 +87,10 @@ public class generateGraph {
     }
 
     private void writeEdgeToDisk(HashMap<Pair<String, String>, String[]> edges) {
-        String nodespath = "/home/gqxwolf/mydata/projectData/testGraph/data/SegInfo.txt";
-        try (FileWriter fw = new FileWriter(nodespath, true);
+        try (FileWriter fw = new FileWriter(EdgesPath, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
-            for(Map.Entry<Pair<String,String>,String[]> node : edges.entrySet()) {
+            for (Map.Entry<Pair<String, String>, String[]> node : edges.entrySet()) {
                 StringBuffer sb = new StringBuffer();
                 String snodeId = node.getKey().getKey();
                 String enodeId = node.getKey().getValue();
@@ -113,13 +107,12 @@ public class generateGraph {
     }
 
     private void writeNodeToDisk(HashMap<String, String[]> nodes) {
-        String nodespath = "/home/gqxwolf/mydata/projectData/testGraph/data/NodeInfo.txt";
-        try (FileWriter fw = new FileWriter(nodespath, true);
+        try (FileWriter fw = new FileWriter(NodePath, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
             TreeMap<String, String[]> tm = new TreeMap<String, String[]>(new StringComparator());
             tm.putAll(nodes);
-            for(Map.Entry<String,String[]> node : tm.entrySet()) {
+            for (Map.Entry<String, String[]> node : tm.entrySet()) {
                 StringBuffer sb = new StringBuffer();
                 String nodeId = node.getKey();
                 sb.append(nodeId).append(" ");
@@ -129,7 +122,7 @@ public class generateGraph {
                 out.println(sb.toString());
             }
         } catch (IOException e) {
-e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

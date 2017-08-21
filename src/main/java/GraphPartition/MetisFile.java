@@ -6,10 +6,12 @@ import java.io.*;
 import java.util.*;
 
 public class MetisFile {
-    String NodePath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/NodeInfo.txt";
-    String EdgePath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/SegInfo.txt";
-    String metisGraphFile = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/metisFormatFile.csv";
-    String mappingPath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/mapping/";
+    String DBBase  = "/home/gqxwolf/mydata/projectData/testGraph2/data/";
+    String NodePath = DBBase+"NodeInfo.txt";
+    String EdgePath = DBBase+"SegInfo.txt";
+    String metisGraphFile = DBBase+"metisFormatFile.csv";
+    String mappingPath = DBBase+"mapping/";
+    String mappedGraphFileName = "mapped_metis_1.graph";
 
 
     //Node_id, the adj nodes of this node id.
@@ -18,12 +20,16 @@ public class MetisFile {
     HashMap<String, Boolean> remainNodes = new HashMap<>();
     ArrayList<HashMap<String, ArrayList<String[]>>> connectionSets = new ArrayList<>();
 
+    public MetisFile(String mappedGraphFileName) {
+        this.mappedGraphFileName = mappingPath+mappedGraphFileName;
+    }
+
     public static void main(String args[]) {
-        MetisFile mf = new MetisFile();
+        MetisFile mf = new MetisFile("mapped_metis_1.graph");
 //        mf.generateMetisFile(-1);
 //        mf.checkingConnection("1");
 //        System.out.println("======================");
-        mf.countEdges("/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/mapping/mapped_metis_3.graph");
+        mf.countEdges();
     }
 
     public void generateMetisFile(int costid) {
@@ -35,7 +41,7 @@ public class MetisFile {
             int i = 0;
 
             while ((line = br.readLine()) != null) {
-                String Nodeid = line.split(",")[0];
+                String Nodeid = line.split(" ")[0];
 //                System.out.println(Nodeid);
                 String content = readSegMentInfo(Nodeid, costid);
 //                 System.out.println(content);
@@ -64,7 +70,7 @@ public class MetisFile {
             br = new BufferedReader(new FileReader(EdgePath));
             String line = null;
             while ((line = br.readLine()) != null) {
-                String[] segInfo = line.split(",");
+                String[] segInfo = line.split(" ");
                 // System.out.println(segInfo[0]+"
                 // "+segInfo[1]+Nodeid.equals(segInfo[0]));
                 if (Nodeid.equals(segInfo[0])) {
@@ -284,11 +290,11 @@ public class MetisFile {
         }
     }
 
-    public int countEdges(String path) {
+    public int countEdges() {
         int EdgesNum = 0;
         int nodeNum = 0;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(path));
+            BufferedReader br = new BufferedReader(new FileReader(this.mappedGraphFileName));
             String line = null;
             while ((line = br.readLine()) != null) {
                 EdgesNum = EdgesNum + (line.split(" ").length);

@@ -12,8 +12,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class connector {
-    String DB_PATH = "/home/gqxwolf/neo4j/neo4j-community-3.2.3/testdb/databases/graph.db";
-    String conFile = "/home/gqxwolf/neo4j/conf/neo4j.conf";
+    String DB_PATH = "/home/gqxwolf/neo4j323/testdb/databases/graph.db";
+    String conFile = "/home/gqxwolf/neo4j323/conf/neo4j.conf";
     GraphDatabaseService graphDB;
 
     public connector(String DB_PATH) {

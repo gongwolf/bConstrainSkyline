@@ -23,6 +23,9 @@ import neo4jTools.*;
 import Pindex.path;
 
 public class mySkylineInBlock {
+    //HashMap<nodeId, Pair<cid,pid>>
+    private final HashMap<String, Pair<String, String>> partitionInfos;
+    private final ArrayList<String> portals;
     GraphDatabaseService graphdb;
     myNodePriorityQueue mqueue;
     ArrayList<path> skylinPaths = new ArrayList<>();
@@ -38,13 +41,16 @@ public class mySkylineInBlock {
     private int removedPath;
     private int insertedPath;
 
-    public mySkylineInBlock(GraphDatabaseService graphdb) {
+
+    public mySkylineInBlock(GraphDatabaseService graphdb, HashMap<String, Pair<String, String>> partitionInfos, ArrayList<String> portals) {
         this.graphdb = graphdb;
         mqueue = new myNodePriorityQueue();
+        this.partitionInfos= partitionInfos;
+        this.portals = portals;
     }
 
     // public void getSkylinePath(Node source, Node destination) {
-    public ArrayList<path> getSkylinePath(Node source, Node destination, String pid, HashMap<String, Pair<String, String>> partitionInfos) {
+    public ArrayList<path> getSkylinePath(Node source, Node destination, String pid) {
         String sourceId = String.valueOf(source.getId());
         String destinationId = String.valueOf(destination.getId());
         Long pagecachedInFindNodes = 0L;
@@ -90,9 +96,11 @@ public class mySkylineInBlock {
             // System.out.println("---------------------------------");
             // }
             // System.out.println("initilzed the sky line path");
+            long ct = System.currentTimeMillis();
             for (String p_type : iniPath.getPropertiesName()) {
-                myDijkstra(source, destination, p_type);
+                myDijkstra(source, destination, p_type,pid);
             }
+            System.out.println(System.currentTimeMillis()-ct);
 
             myNode start = processedNodeList.get(String.valueOf(source.getId()));
             if (start != null) {
@@ -182,11 +190,10 @@ public class mySkylineInBlock {
                                         this.insertedPath += info[0];
                                         this.removedPath += info[1];
                                         usedInNode = usedInNode + (System.nanoTime() - nrt);
-                                        if (!nextNode.inqueue && pid.equals(partitionInfos.get(mapped_nexid)));
+                                        //If nextNode is not in the queue, and the next node is in the same block with source node.
+                                        //Also, the next node is not a portal node, because destination node is a portal node.
+                                        if (!nextNode.inqueue && pid.equals(partitionInfos.get(mapped_nexid).getValue()) && !this.portals.contains(mapped_nexid));
                                             mqueue.add(nextNode);
-                                        // System.out.println("expand :" + np);
-                                        // System.out.println("push into queue
-                                        // :"+ nextNode.id);
                                     }
                                 }
                             }
@@ -458,7 +465,10 @@ public class mySkylineInBlock {
         }
     }
 
-    public double myDijkstra(Node source, Node destination, String property_type) {
+
+    //Find the lower bound in the same block
+
+    public double myDijkstra(Node source, Node destination, String property_type, String pid) {
         String sid = String.valueOf(source.getId());
         String did = String.valueOf(destination.getId());
 
@@ -493,6 +503,12 @@ public class mySkylineInBlock {
 
             for (Pair<myNode, Double> p : expensions) {
                 myNode nextNode = p.getKey();
+                String mapped_next_node_id = String.valueOf(Integer.parseInt(nextNode.id)+1);
+
+                if(!pid.equals(this.partitionInfos.get(mapped_next_node_id).getValue()) || portals.contains(mapped_next_node_id))
+                {
+                    continue;
+                }
                 // System.out.println(" nextNode:"+nextNode.id);
 
                 Double cost = p.getValue();

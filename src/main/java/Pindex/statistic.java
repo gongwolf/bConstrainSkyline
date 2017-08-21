@@ -3,6 +3,8 @@ package Pindex;
 import javafx.util.Pair;
 import neo4jTools.StringComparator;
 import org.apache.shiro.crypto.hash.Hash;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,22 +45,18 @@ public class statistic {
         System.out.println(this.partitionInfos.keySet().contains("67393"));
 
 
-
-
         for (String nodeid : partitionInfos.keySet()) {
             String cid = this.partitionInfos.get(nodeid).getKey();
             String pid = this.partitionInfos.get(nodeid).getValue();
-            if (!isPortal(nodeid,cid,pid)) {
-                countNodesNumber(nodeid,cid,pid);
+            if (!isPortal(nodeid, cid, pid)) {
+                countNodesNumber(nodeid, cid, pid);
             }
         }
 
-        System.out.println(isPortal("60409","2","60"));
+        System.out.println(isPortal("60409", "2", "60"));
 
-        for(String bb:b)
-        {
-            if(this.portals.contains(bb))
-            {
+        for (String bb : b) {
+            if (this.portals.contains(bb)) {
                 System.out.println(bb);
             }
         }
@@ -205,5 +203,65 @@ public class statistic {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean checkPathResultEquation(ArrayList<path> r1, ArrayList<path> r2) {
+        boolean[] results = new boolean[r1.size()];
+        if (r1.size() != r2.size())
+            return false;
+        int i = 0;
+        for (path p1 : r1) {
+            for (path p2 : r2) {
+                if (isEqualPath(p1, p2)) {
+                    results[i] = true;
+                    continue;
+                }
+            }
+            i++;
+        }
+
+        for (boolean f : results) {
+            if (!f) {
+                return false;
+            }
+        }
+
+
+        return true;
+    }
+
+    private static boolean isEqualPath(path p1, path p2) {
+        return isEqualNodes(p1.Nodes, p2.Nodes) && isEqualEdges(p1.relationships, p2.relationships);
+    }
+
+    private static boolean isEqualEdges(ArrayList<Relationship> relationships1, ArrayList<Relationship> relationships2) {
+        if (relationships1.size() != relationships2.size()) {
+            return false;
+        }
+
+
+        for (int i = 0; i < relationships1.size(); i++) {
+            if (relationships1.get(i).getId() != relationships2.get(i).getId()) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+
+    private static boolean isEqualNodes(ArrayList<Node> nodes1, ArrayList<Node> nodes2) {
+        if (nodes1.size() != nodes2.size()) {
+            return false;
+        }
+
+
+        for (int i = 0; i < nodes1.size(); i++) {
+            if (nodes1.get(i).getId() != nodes2.get(i).getId()) {
+                return false;
+            }
+
+        }
+        return true;
     }
 }
