@@ -1,4 +1,5 @@
-import javafx.util.Pair;
+package Pindex;
+
 import neo4jTools.BNode;
 import neo4jTools.connector;
 import org.neo4j.graphdb.Direction;

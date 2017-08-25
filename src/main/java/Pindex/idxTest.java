@@ -41,13 +41,14 @@ public class idxTest {
 //        System.out.println("running time "+ (System.nanoTime() - ct) / 1000000);
 
 
-        connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
+        connector n = new connector("/home/gqxwolf/neo4j323/csldb/databases/graph.db");
         readPartionsInfo(paritionFile);
+        loadPortals();
         n.startDB();
         GraphDatabaseService graphdb = n.getDBObject();
-        String sid = "56476";
-        String eid = "45252";
-        String pid = "22";
+        String sid = "26475";
+        String eid = "15943";
+        String pid = "101";
 
         System.out.println("============================");
         long run1 = System.nanoTime();
@@ -56,15 +57,37 @@ public class idxTest {
         removePathNotWithinBlock(pid, r1);
         run1 = (System.nanoTime()-run1)/1000000;
         System.out.println(r1.size());
-        System.out.println(r1.get(0));
+//        for(path p2:r1)
+//        {
+//            System.out.println(p2);
+//        }
+//        System.out.println(r1.get(0));
+
+//        for(Node n1s:r1.get(1).Nodes)
+//        {
+//            String id = String.valueOf(n1s.getId()+1);
+//            System.out.println(n1s+"  "+this.partitionInfos.get(id).getKey()+"  "+this.partitionInfos.get(id).getValue()+" "+this.portals.contains(id));
+//
+//        }
+
         System.out.println("============================");
         long run2 = System.nanoTime();
         ArrayList<path> r2 = runSkylineInBlock(sid, eid, pid, graphdb);
+        System.out.println(r2.size());
         removePathNotWithinBlock(pid,r2);
         run2 = (System.nanoTime()-run2)/1000000;
         System.out.println(r2.size());
-        System.out.println(r2.get(0));
+//        for(path p2:r2)
+//        {
+//            System.out.println(p2);
+//        }
 
+//        for(Node n1s:r2.get(0).Nodes)
+//        {
+//            String id = String.valueOf(n1s.getId()+1);
+//            System.out.println(n1s+"  "+this.partitionInfos.get(id).getKey()+"  "+this.partitionInfos.get(id).getValue()+" "+this.portals.contains(id));
+//
+//        }
 
         System.out.println("============================");
         System.out.println(run1 + "   " + run2);
@@ -179,10 +202,10 @@ public class idxTest {
 
             boolean flag = true;
             for (Node n : p.Nodes) {
-                if (n.getId() != sid && n.getId() != eid) {
+                if (n.getId() != sid && n.getId() != eid ) {
                     String nid = String.valueOf(n.getId() + 1);
                     String n_pid = this.partitionInfos.get(nid).getValue();
-                    if (!n_pid.equals(pid)) {
+                    if (!n_pid.equals(pid) || this.portals.contains(nid)) {
                         flag = false;
                         break;
                     }

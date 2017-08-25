@@ -2,7 +2,6 @@ package Pindex;
 
 import javafx.util.Pair;
 import neo4jTools.StringComparator;
-import org.apache.shiro.crypto.hash.Hash;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -33,6 +32,7 @@ public class statistic {
     public static void main(String args[]) {
         statistic s = new statistic();
         s.portalStatistic();
+//        s.countIncommingPortal(1,"0");
 
     }
 
@@ -41,8 +41,8 @@ public class statistic {
         readPartitionInfo();
         loadNodes();
         loadPortals();
-        System.out.println(nodes.contains("67393"));
-        System.out.println(this.partitionInfos.keySet().contains("67393"));
+//        System.out.println(nodes.contains("67393"));
+//        System.out.println(this.partitionInfos.keySet().contains("67393"));
 
 
         for (String nodeid : partitionInfos.keySet()) {
@@ -53,27 +53,68 @@ public class statistic {
             }
         }
 
-        System.out.println(isPortal("60409", "2", "60"));
-
-        for (String bb : b) {
-            if (this.portals.contains(bb)) {
-                System.out.println(bb);
-            }
-        }
+//        System.out.println(isPortal("60409", "2", "60"));
+//
+//        for (String bb : b) {
+//            if (this.portals.contains(bb)) {
+//                System.out.println(bb);
+//            }
+//        }
 
         for (Map.Entry<String, HashMap<String, HashSet<String>>> e : NodesSta.entrySet()) {
             int cid = Integer.parseInt(e.getKey());
-            if (cid != -1) {
+            if (cid > 3) {
                 TreeMap<String, HashSet<String>> t = new TreeMap(new StringComparator());
                 t.putAll(e.getValue());
+                System.out.println(cid);
                 for (Map.Entry<String, HashSet<String>> pe : t.entrySet()) {
                     String pid = pe.getKey();
                     HashSet<String> numberofNodes = pe.getValue();
-//                    System.out.println("            pid:" + pe.getKey() + "  - size:" + numberofNodes.size() );
+//                    int countinfos[] = countIncommingPortal(cid,pid);
+//                    int number = countinfos[0];
+//                    int numberOfIn = countinfos[1];
+//                    int numberOfOut = countinfos[2];
+//                    System.out.println("            pid:" + pe.getKey() + "  - size:" + numberofNodes.size()+" "+number+" "+numberOfIn+" "+numberOfOut );
+                    System.out.println("            pid:" + pe.getKey() + "  - size:" + numberofNodes.size()+" ");
                 }
             }
         }
 
+    }
+
+    private int[] countIncommingPortal(int cid, String pid) {
+        int numberofIn = 0;
+        int numberofOut = 0;
+        int number=0;
+        String filename = PathBase+"portals/"+cid+"/"+pid;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line = null;
+            while ((line = br.readLine()) != null) {
+
+                line = line.trim().split(" ")[1];
+                if(line.startsWith("1"))
+                {
+//                    System.out.println("In");
+                    numberofIn++;
+                }
+
+                if(line.endsWith("1"))
+                {
+//                    System.out.println("Out");
+                    numberofOut++;
+                }
+
+                number++;
+//                System.out.println(line+"  "+line.endsWith("1"));
+//                System.out.println(number+" "+numberofIn+" "+numberofOut);
+//                System.out.println("----------");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new int[]{number,numberofIn,numberofOut};
     }
 
     private boolean isContains(String nodeid, String cid, String pid) {

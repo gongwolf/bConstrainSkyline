@@ -107,18 +107,18 @@ public class myNode {
         this.EduDist = Math.sqrt(d1 + d2);
     }
 
-    public int[] addToSkylineResult(path np) {
-        int removedPath = 0;
-        int insertedPath = 0;
+    public void addToSkylineResult(path np) {
+//        int removedPath = 0;
+//        int insertedPath = 0;
         int i = 0;
         if (this.subRouteSkyline.isEmpty()) {
-            insertedPath++;
+//            insertedPath++;
             this.subRouteSkyline.add(np);
         } else if (this.subRouteSkyline.get(0).getCosts()[0] == 0 && this.subRouteSkyline.size() == 1) {
             this.subRouteSkyline.remove(0);
             this.subRouteSkyline.add(np);
-            removedPath++;
-            insertedPath++;
+//            removedPath++;
+//            insertedPath++;
         } else {
             boolean alreadyinsert = false;
             boolean needToRemove = false;
@@ -127,19 +127,19 @@ public class myNode {
                     // if (alreadyinsert && i != this.subRouteSkyline.size() -
                     // 1) {
                     if (alreadyinsert) {
-                        removedPath++;
+//                        removedPath++;
                         needToRemove = true;
                     }
                     break;
                 } else {
                     if (checkDominated(np.getCosts(), subRouteSkyline.get(i).getCosts())) {
                         this.subRouteSkyline.remove(i);
-                        removedPath++;
+//                        removedPath++;
                     } else {
                         i++;
                     }
                     if (!alreadyinsert) {
-                        insertedPath++;
+//                        insertedPath++;
                         alreadyinsert = true;
                     }
                 }
@@ -149,8 +149,8 @@ public class myNode {
                 this.subRouteSkyline.add(np);
             }
         }
-        int[] result = new int[] { insertedPath, removedPath };
-        return result;
+//        int[] result = new int[] { insertedPath, removedPath };
+//        return result;
     }
 
     private boolean checkDominated(double[] costs, double[] estimatedCosts) {

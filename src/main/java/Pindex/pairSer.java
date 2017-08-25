@@ -58,8 +58,5 @@ class pathSer implements Serializable{
         {
             costs[i]=p.getCosts()[i];
         }
-
-        
-
     }
 }

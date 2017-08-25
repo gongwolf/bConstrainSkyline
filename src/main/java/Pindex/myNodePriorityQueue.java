@@ -10,7 +10,7 @@ public class myNodePriorityQueue {
 
     public myNodePriorityQueue() {
         mycomparator mc = new mycomparator();
-        this.queue = new PriorityQueue<>(1000000, mc);
+        this.queue = new PriorityQueue<>(mc);
     }
 
     public boolean add(myNode p)
@@ -46,6 +46,93 @@ class mycomparator implements Comparator<myNode> {
         if(x.EduDist == y.EduDist){
             return 0;
         }else if(x.EduDist > y.EduDist){
+            return 1;
+        }else{
+            return -1;
+        }
+    }
+}
+
+
+class mycomparatorwithTotal implements Comparator<myNode> {
+    public int compare(myNode x, myNode y) {
+        double xp,yp;
+        xp=yp=0;
+
+
+        for(double d:x.lowerBound)
+        {
+            xp += d;
+        }
+
+        for(double d:y.lowerBound)
+        {
+            yp += d;
+        }
+
+        if(xp==yp)
+        {
+            return 0;
+        }else if(xp>yp){
+            return 1;
+        }else{
+            return -1;
+        }
+    }
+}
+
+
+
+class mycomparatorwithMin implements Comparator<myNode> {
+    public int compare(myNode x, myNode y) {
+        double xp,yp;
+        xp=yp=0;
+        int n = x.lowerBound.length;
+
+        double xm[] = new double[n];
+        double ym[] = new double[n];
+
+
+        for(path p:x.subRouteSkyline)
+        {
+            int xi=0;
+            for(double d:p.getCosts())
+            {
+                if(d<xm[xi])
+                {
+                    xm[xi]=d;
+                }
+                xi++;
+            }
+        }
+
+        for(path p:y.subRouteSkyline)
+        {
+            int yi=0;
+            for(double d:p.getCosts())
+            {
+                if(d<xm[yi])
+                {
+                    xm[yi]=d;
+                }
+                yi++;
+            }
+        }
+
+        for(double d:ym)
+        {
+            yp += d;
+        }
+
+        for(double d:xm)
+        {
+            xp += d;
+        }
+
+        if(xp==yp)
+        {
+            return 0;
+        }else if(xp>yp){
             return 1;
         }else{
             return -1;

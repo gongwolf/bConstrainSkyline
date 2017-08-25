@@ -30,55 +30,55 @@ public class mySkylineInBlock {
     myNodePriorityQueue mqueue;
     ArrayList<path> skylinPaths = new ArrayList<>();
     HashMap<String, myNode> processedNodeList = new HashMap<>();
-    ArrayList<String> p_list = new ArrayList<>();
-    ArrayList<path> ppp = new ArrayList<>();
+//    ArrayList<String> p_list = new ArrayList<>();
+//    ArrayList<path> ppp = new ArrayList<>();
     int NumberOfProperties = 0;
-    long usedInDijkstra = 0;
-    long qTime = 0;
+//    long usedInDijkstra = 0;
+//    long qTime = 0;
     long used_In_skyline_operation = 0;
     double[] iniLowerBound = null;
-    private int totalDegree;
-    private int removedPath;
-    private int insertedPath;
+//    private int totalDegree;
+//    private int removedPath;
+//    private int insertedPath;
 
 
     public mySkylineInBlock(GraphDatabaseService graphdb, HashMap<String, Pair<String, String>> partitionInfos, ArrayList<String> portals) {
         this.graphdb = graphdb;
         mqueue = new myNodePriorityQueue();
-        this.partitionInfos= partitionInfos;
+        this.partitionInfos = partitionInfos;
         this.portals = portals;
     }
 
     // public void getSkylinePath(Node source, Node destination) {
     public ArrayList<path> getSkylinePath(Node source, Node destination, String pid) {
-        String sourceId = String.valueOf(source.getId());
-        String destinationId = String.valueOf(destination.getId());
-        Long pagecachedInFindNodes = 0L;
-        Long pagecachedInInital = 0L;
-        Long pagecachedInFindSkyPath = 0L;
-        Long pinsInFindNodes = 0L;
-        Long pinsInInital = 0L;
-        Long PinsInFindSkyPath = 0L;
+//        String sourceId = String.valueOf(source.getId());
+//        String destinationId = String.valueOf(destination.getId());
+//        Long pagecachedInFindNodes = 0L;
+//        Long pagecachedInInital = 0L;
+//        Long pagecachedInFindSkyPath = 0L;
+//        Long pinsInFindNodes = 0L;
+//        Long pinsInInital = 0L;
+//        Long PinsInFindSkyPath = 0L;
         Long numInIPath = 0L;
-        Long numFinalPath = 0L;
-        Long numIters = 0L;
-        Long numAccessedNodes = 0L;
-        Long Pages_2 = 0L;
-        Long Pins_2 = 0L;
-        Long time_2 = 0L;
+//        Long numFinalPath = 0L;
+//        Long numIters = 0L;
+//        Long numAccessedNodes = 0L;
+//        Long Pages_2 = 0L;
+//        Long Pins_2 = 0L;
+//        Long time_2 = 0L;
 
         long usedInNode = 0;
-        long usedInMain = 0;
-        long usedInCheckExpand = 0;
-        long usedInExpansion = 0;
-        int maxQueueSize = Integer.MIN_VALUE;
-        int maxLengthOfPath = Integer.MIN_VALUE;
-        long pruningNum = 0;
-        long extendedPathNum = 0;
-
-        Long time_1 = System.currentTimeMillis();
-        Long Pages_1 = getFromManagementBean("Page cache", "Faults", graphdb);
-        Long Pins_1 = getFromManagementBean("Page cache", "Pins", graphdb);
+//        long usedInMain = 0;
+//        long usedInCheckExpand = 0;
+//        long usedInExpansion = 0;
+//        int maxQueueSize = Integer.MIN_VALUE;
+//        int maxLengthOfPath = Integer.MIN_VALUE;
+//        long pruningNum = 0;
+//        long extendedPathNum = 0;
+//
+//        Long time_1 = System.currentTimeMillis();
+//        Long Pages_1 = getFromManagementBean("Page cache", "Faults", graphdb);
+//        Long Pins_1 = getFromManagementBean("Page cache", "Pins", graphdb);
 
         try (Transaction tx = this.graphdb.beginTx()) {
             path iniPath = new path(source, source);
@@ -90,45 +90,54 @@ public class mySkylineInBlock {
                 return null;
             }
 
+//            if(1==1)
+//            {
+//                return skylinPaths;
+//            }
             // for (path p : skylinPaths) {
             // System.out.println(printCosts(p.getCosts()));
             // // System.out.println(p);
             // System.out.println("---------------------------------");
             // }
             // System.out.println("initilzed the sky line path");
-            long ct = System.currentTimeMillis();
+//            long a1 = System.nanoTime();
             for (String p_type : iniPath.getPropertiesName()) {
-                myDijkstra(source, destination, p_type,pid);
+                myDijkstra(source, destination, p_type, pid);
             }
-            System.out.println(System.currentTimeMillis()-ct);
+//            System.out.println((System.nanoTime()-a1)/1000000);
 
             myNode start = processedNodeList.get(String.valueOf(source.getId()));
             if (start != null) {
                 mqueue.add(start);
             }
+//            System.out.println(mqueue.size());
             tx.success();
-            Pages_2 = getFromManagementBean("Page cache", "Faults", graphdb);
-            Pins_2 = getFromManagementBean("Page cache", "Pins", graphdb);
-            time_2 = System.currentTimeMillis();
+//            Pages_2 = getFromManagementBean("Page cache", "Faults", graphdb);
+//            Pins_2 = getFromManagementBean("Page cache", "Pins", graphdb);
+//            time_2 = System.currentTimeMillis();
         }
 
         int i = 0;
         try (Transaction tx = this.graphdb.beginTx()) {
             while (!mqueue.isEmpty()) {
 
-                if (mqueue.size() > maxQueueSize) {
-                    maxQueueSize = mqueue.size();
-                }
+//                if (mqueue.size() > maxQueueSize) {
+//                    maxQueueSize = mqueue.size();
+//                }
 
                 myNode vs = mqueue.pop();
                 vs.inqueue = false;
-                // System.out.println("-------------------------------------");
-                // System.out.println("pop: "+vs.id);
 
-                if (!p_list.contains(vs.id)) {
-                    this.totalDegree += vs.degree;
-                    p_list.add(vs.id);
-                }
+//                if(vs.id.equals("22656"))
+//                {
+//                System.out.println("-------------------------------------");
+//                System.out.println("pop: " + vs.id);
+//                }
+
+//                if (!p_list.contains(vs.id)) {
+////                    this.totalDegree += vs.degree;
+//                    p_list.add(vs.id);
+//                }
 
                 i++;
                 // if(i==20)
@@ -137,7 +146,7 @@ public class mySkylineInBlock {
                 // }
                 int index = 0;
                 // System.out.println(vs.id+" "+vs.subRouteSkyline.size());
-                for (; index < vs.subRouteSkyline.size();) {
+                for (; index < vs.subRouteSkyline.size(); ) {
                     path p = vs.subRouteSkyline.get(index);
                     // System.out.println("is processed " + p.processed_flag + "
                     // : " + p);
@@ -150,20 +159,20 @@ public class mySkylineInBlock {
                         // from subRouteSkyline.
                         // Because all expansions from this p should not be a
                         // finally result.
-                        long cheexprt = System.nanoTime();
+//                        long cheexprt = System.nanoTime();
                         boolean is_expand = needToBeExpanded(p, destination);
                         // System.out.println(is_expand);
-                        usedInCheckExpand += (System.nanoTime() - cheexprt);
+//                        usedInCheckExpand += (System.nanoTime() - cheexprt);
 
                         if (!is_expand) {
                             vs.subRouteSkyline.remove(index);
                             // System.out.println("----- discard "+p);
-                            pruningNum++;
+//                            pruningNum++;
                         } else {
-                            extendedPathNum++;
-                            long expRt = System.nanoTime();
+//                            extendedPathNum++;
+//                            long expRt = System.nanoTime();
                             ArrayList<path> paths = p.expand();
-                            usedInExpansion += System.nanoTime() - expRt;
+//                            usedInExpansion += System.nanoTime() - expRt;
 
                             for (path np : paths) {
                                 // long checkCycle = System.nanoTime();
@@ -172,27 +181,27 @@ public class mySkylineInBlock {
                                 // checkCycle;
                                 if (!isCycle) {
                                     if (np.endNode.equals(destination)) {
-                                        long mrt = System.nanoTime();
+//                                        long mrt = System.nanoTime();
                                         addToSkylineResult(np);
-                                        long emrt = System.nanoTime() - mrt;
-                                        usedInMain = usedInMain + emrt;
+//                                        long emrt = System.nanoTime() - mrt;
+//                                        usedInMain = usedInMain + emrt;
                                         // System.out.println(" $$$$
                                         // insertToSkyline "+ np);
                                     } else {
                                         String nextid = String.valueOf(np.endNode.getId());
-                                        String mapped_nexid = String.valueOf(np.endNode.getId()+1);
+                                        String mapped_nexid = String.valueOf(np.endNode.getId() + 1);
                                         myNode nextNode = this.processedNodeList.get(nextid);
                                         if (nextNode == null) {
                                             continue;
                                         }
-                                        long nrt = System.nanoTime();
-                                        int[] info = nextNode.addToSkylineResult(np);
-                                        this.insertedPath += info[0];
-                                        this.removedPath += info[1];
-                                        usedInNode = usedInNode + (System.nanoTime() - nrt);
+//                                        long nrt = System.nanoTime();
+                                        nextNode.addToSkylineResult(np);
+//                                        this.insertedPath += info[0];
+//                                        this.removedPath += info[1];
+//                                        usedInNode = usedInNode + (System.nanoTime() - nrt);
                                         //If nextNode is not in the queue, and the next node is in the same block with source node.
                                         //Also, the next node is not a portal node, because destination node is a portal node.
-                                        if (!nextNode.inqueue && pid.equals(partitionInfos.get(mapped_nexid).getValue()) && !this.portals.contains(mapped_nexid));
+                                        if (!nextNode.inqueue && pid.equals(partitionInfos.get(mapped_nexid).getValue()) && !this.portals.contains(mapped_nexid))
                                             mqueue.add(nextNode);
                                     }
                                 }
@@ -208,47 +217,47 @@ public class mySkylineInBlock {
             tx.success();
         }
 
-        Long Pages_3 = getFromManagementBean("Page cache", "Faults", graphdb);
-        Long Pins_3 = getFromManagementBean("Page cache", "Pins", graphdb);
-        Long time_3 = System.currentTimeMillis();
+//        Long Pages_3 = getFromManagementBean("Page cache", "Faults", graphdb);
+//        Long Pins_3 = getFromManagementBean("Page cache", "Pins", graphdb);
+//        Long time_3 = System.currentTimeMillis();
+//
+//        pagecachedInFindNodes = Pages_1;
+//        pagecachedInInital = Pages_2 - Pages_1;
+//        pagecachedInFindSkyPath = Pages_3 - Pages_2;
+//
+//        pinsInFindNodes = Pins_1;
+//        pinsInInital = Pins_2 - Pins_1;
+//        PinsInFindSkyPath = Pins_3 - Pins_2;
+//
+//        long timeInInitial = time_2 - time_1;
+//        long timeInFindSkyPath = time_3 - time_2;
 
-        pagecachedInFindNodes = Pages_1;
-        pagecachedInInital = Pages_2 - Pages_1;
-        pagecachedInFindSkyPath = Pages_3 - Pages_2;
+//        numIters = (long) i;
+//        numAccessedNodes = (long) p_list.size();
 
-        pinsInFindNodes = Pins_1;
-        pinsInInital = Pins_2 - Pins_1;
-        PinsInFindSkyPath = Pins_3 - Pins_2;
-
-        long timeInInitial = time_2 - time_1;
-        long timeInFindSkyPath = time_3 - time_2;
-
-        numIters = (long) i;
-        numAccessedNodes = (long) p_list.size();
-
-        numFinalPath = (long) this.skylinPaths.size();
-        DecimalFormat formatter = new DecimalFormat("#0.00");
+//        numFinalPath = (long) this.skylinPaths.size();
+//        DecimalFormat formatter = new DecimalFormat("#0.00");
         StringBuffer sb = new StringBuffer();
         // long totalRt = (timeInInitial + timeInFindSkyPath) * 1000000;
-        used_In_skyline_operation = used_In_skyline_operation + usedInNode + usedInMain;
+//        used_In_skyline_operation = used_In_skyline_operation + usedInNode + usedInMain;
 
-        sb.append(sourceId + ",").append(destinationId + ",");
-        sb.append(pagecachedInFindNodes).append(",");
-        sb.append(pagecachedInInital).append(",");
-        sb.append(pagecachedInFindSkyPath).append(",");
-        sb.append(pinsInFindNodes).append(",");
-        sb.append(pinsInInital).append(",");
-        sb.append(PinsInFindSkyPath).append(",");
-        sb.append(timeInInitial).append(",");
-        sb.append(timeInFindSkyPath).append(",");
-        sb.append(numIters).append(",");
-        sb.append(numAccessedNodes).append(",");
-        sb.append(numInIPath).append(",");
-        sb.append(numFinalPath).append(",");
-
-        sb.append(formatter.format(usedInDijkstra / 1000000)).append(",");
-        sb.append(formatter.format(usedInExpansion / 1000000)).append(",");
-        sb.append(formatter.format((double) used_In_skyline_operation / 100000)).append(",");
+//        sb.append(sourceId + ",").append(destinationId + ",");
+//        sb.append(pagecachedInFindNodes).append(",");
+//        sb.append(pagecachedInInital).append(",");
+//        sb.append(pagecachedInFindSkyPath).append(",");
+//        sb.append(pinsInFindNodes).append(",");
+//        sb.append(pinsInInital).append(",");
+//        sb.append(PinsInFindSkyPath).append(",");
+//        sb.append(timeInInitial).append(",");
+//        sb.append(timeInFindSkyPath).append(",");
+//        sb.append(numIters).append(",");
+//        sb.append(numAccessedNodes).append(",");
+//        sb.append(numInIPath).append(",");
+//        sb.append(numFinalPath).append(",");
+//
+//        sb.append(formatter.format(usedInDijkstra / 1000000)).append(",");
+//        sb.append(formatter.format(usedInExpansion / 1000000)).append(",");
+//        sb.append(formatter.format((double) used_In_skyline_operation / 100000)).append(",");
 
         // long totalRt = timeInInitial+timeInFindSkyPath*1000000;
         // System.out.println(totalRt);
@@ -271,18 +280,18 @@ public class mySkylineInBlock {
         // (double) used_In_skyline_operation /totalRt));
         // System.out.println(100*(double)(usedInNode + usedInMain +
         // usedInCheckExpand + usedInExpansion) * 1.00 / totalRt);
-        double avg_slr_inNode = 0.00;
-        for (myNode n : this.processedNodeList.values()) {
-            avg_slr_inNode += n.subRouteSkyline.size();
-        }
+//        double avg_slr_inNode = 0.00;
+//        for (myNode n : this.processedNodeList.values()) {
+//            avg_slr_inNode += n.subRouteSkyline.size();
+//        }
 
-        double avg_lenght_in_final = 0.00;
-        for (path n : this.skylinPaths) {
-            avg_lenght_in_final += n.getLenght();
-            if (n.getLenght() > maxLengthOfPath) {
-                maxLengthOfPath = n.getLenght();
-            }
-        }
+//        double avg_lenght_in_final = 0.00;
+//        for (path n : this.skylinPaths) {
+//            avg_lenght_in_final += n.getLenght();
+//            if (n.getLenght() > maxLengthOfPath) {
+//                maxLengthOfPath = n.getLenght();
+//            }
+//        }
 
         // long totalDegree = 0;
         // try (Transaction tx = this.graphdb.beginTx()) {
@@ -294,14 +303,14 @@ public class mySkylineInBlock {
         // }
         //
 
-        sb.append(avg_slr_inNode / numAccessedNodes).append(",");
-        sb.append(this.totalDegree).append(",");
-        sb.append(avg_lenght_in_final / this.skylinPaths.size()).append(",");
-        sb.append(maxLengthOfPath).append(",");
-        sb.append(maxQueueSize).append(",");
-        sb.append(numAccessedNodes).append(",");
-        sb.append(pruningNum).append(",");
-        sb.append(extendedPathNum);
+//        sb.append(avg_slr_inNode / numAccessedNodes).append(",");
+//        sb.append(this.totalDegree).append(",");
+//        sb.append(avg_lenght_in_final / this.skylinPaths.size()).append(",");
+//        sb.append(maxLengthOfPath).append(",");
+//        sb.append(maxQueueSize).append(",");
+//        sb.append(numAccessedNodes).append(",");
+//        sb.append(pruningNum).append(",");
+//        sb.append(extendedPathNum);
         // sb.append(insertedPath).append(",");
         // sb.append(removedPath);
         // System.out.println(sb);
@@ -312,6 +321,8 @@ public class mySkylineInBlock {
         // // System.out.println("---------------");
         // }
         // }
+//        System.out.println("----"+numIters+" "+numAccessedNodes);
+
         return this.skylinPaths;
     }
 
@@ -373,23 +384,23 @@ public class mySkylineInBlock {
     private boolean checkDominated(double[] costs, double[] estimatedCosts) {
         int numberOfLessThan = 0;
         for (int i = 0; i < costs.length; i++) {
-            //double c = (double) Math.round(costs[i] * 1000000d) / 1000000d;
-            //double e = (double) Math.round(estimatedCosts[i] * 1000000d) / 1000000d;
+//            double c = (double) Math.round(costs[i] * 1000000d) / 1000000d;
+//            double e = (double) Math.round(estimatedCosts[i] * 1000000d) / 1000000d;
             double c = costs[i];
             double e = estimatedCosts[i];
             if (c > e) {
                 return false;
             }
 
-            // if (numberOfLessThan == 0 && c < e) {
-            // numberOfLessThan = 1;
-            // }
+//            if (numberOfLessThan == 0 && c < e) {
+//                numberOfLessThan = 1;
+//            }
         }
-        // if (numberOfLessThan == 0) {
-        // return false;
-        // } else {
+//        if (numberOfLessThan == 0) {
+//            return false;
+//        } else {
         return true;
-        // }
+//        }
     }
 
     private boolean isdominatedbySkylineResults(double[] estimatedCosts) {
@@ -412,7 +423,7 @@ public class mySkylineInBlock {
         // System.out.println("=====");
         int i = 0;
         if (skylinPaths.isEmpty()) {
-            this.insertedPath++;
+//            this.insertedPath++;
             this.skylinPaths.add(np);
             // System.out.println("###################");
             // System.out.println("Insert to skyline Paths ArrayList:");
@@ -424,7 +435,7 @@ public class mySkylineInBlock {
             boolean alreadyinsert = false;
             // System.out.println("============================");
             // System.out.println(this.skylinPaths.size());
-            for (; i < skylinPaths.size();) {
+            for (; i < skylinPaths.size(); ) {
                 // System.out.println(printCosts(skylinPaths.get(i).getCosts())
                 // + " " + printCosts(np.getCosts()) + " "
                 // + checkDominated(skylinPaths.get(i).getCosts(),
@@ -435,7 +446,7 @@ public class mySkylineInBlock {
                 if (checkDominated(skylinPaths.get(i).getCosts(), np.getCosts())) {
                     if (alreadyinsert && i != this.skylinPaths.size() - 1) {
                         this.skylinPaths.remove(this.skylinPaths.size() - 1);
-                        this.removedPath++;
+//                        this.removedPath++;
                     }
                     // System.out.println("Jump it and break, because it already
                     // is dominated by this record "
@@ -445,7 +456,7 @@ public class mySkylineInBlock {
                     if (checkDominated(np.getCosts(), skylinPaths.get(i).getCosts())) {
                         // System.out.println("remove the old one and insert
                         // it");
-                        this.removedPath++;
+//                        this.removedPath++;
                         this.skylinPaths.remove(i);
                     } else {
                         i++;
@@ -454,7 +465,7 @@ public class mySkylineInBlock {
                         // System.out.println("insert it because it does not
                         // dominated each other");
                         this.skylinPaths.add(np);
-                        this.insertedPath++;
+//                        this.insertedPath++;
                         alreadyinsert = true;
                     }
 
@@ -503,11 +514,12 @@ public class mySkylineInBlock {
 
             for (Pair<myNode, Double> p : expensions) {
                 myNode nextNode = p.getKey();
-                String mapped_next_node_id = String.valueOf(Integer.parseInt(nextNode.id)+1);
+                String mapped_next_node_id = String.valueOf(Integer.parseInt(nextNode.id) + 1);
 
-                if(!pid.equals(this.partitionInfos.get(mapped_next_node_id).getValue()) || portals.contains(mapped_next_node_id))
-                {
-                    continue;
+                if (!nextNode.id.equals(String.valueOf(source.getId()))) {
+                    if (!pid.equals(this.partitionInfos.get(mapped_next_node_id).getValue())) {
+                        continue;
+                    }
                 }
                 // System.out.println(" nextNode:"+nextNode.id);
 
