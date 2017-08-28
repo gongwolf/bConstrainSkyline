@@ -21,7 +21,7 @@ import java.util.Map;
 public class myskylinePartition {
 
     private  GraphDatabaseService graphdb;
-    private  myNodePriorityQueue mqueue;
+    private  PortalPriorityQueue mqueue;
     private  HashMap<String, Pair<String, String>> partitionInfos;
     private  ArrayList<String> portals;
     private  mySkylineInBlock msib;
@@ -32,12 +32,16 @@ public class myskylinePartition {
 
     public myskylinePartition(GraphDatabaseService graphdb, HashMap<String, Pair<String, String>> partitionInfos, ArrayList<String> portals, HashMap<String, HashMap<String, HashMap<String, String>>> pMapping) {
         this.graphdb = graphdb;
-        mqueue = new myNodePriorityQueue();
+        mqueue = new PortalPriorityQueue();
         this.partitionInfos = partitionInfos;
         this.portals = portals;
         this.pMapping = pMapping;
         this.msib = new mySkylineInBlock(graphdb, partitionInfos, portals);
         this.portalsObj = new Portal[16];
+        for(int i=0; i<portalsObj.length;i++)
+        {
+            portalsObj[i] = new Portal();
+        }
     }
 
     private void initailPortals(String mapped_did) {
@@ -125,22 +129,39 @@ public class myskylinePartition {
         initailPortals(mapped_did);
 
         //mapped_sid is not a portal.
+        String spid = this.partitionInfos.get(mapped_sid).getValue();
+        int int_pid = Integer.valueOf(spid);
         if (!isPortals(mapped_sid)) {
-            String spid = this.partitionInfos.get(mapped_sid).getValue();
+
             System.out.println(spid);
-            findPathToPorals(source, spid);
+            findPathToPortals(source, spid);
         }else
         {
             path iniPath = new path(source, source);
-            addToSkylineResult(iniPath);
+            portalsObj[int_pid].addToSkylineResult(iniPath);
         }
-        System.out.println("find " + skylinPaths.size() + " paths from " + sid + " to portals");
+
+
+        this.mqueue.add(this.portalsObj[int_pid]);
+        System.out.println("find " + portalsObj[int_pid].skylinPaths.size() + " paths from " + sid + " to portals");
+
+        while(!this.mqueue.isEmpty())
+        {
+            Portal por = mqueue.pop();
+
+            for(path p:por.skylinPaths)
+            {
+                System.out.println(p.endNode);
+
+            }
+        }
 
 
 
     }
 
-    private void findPathToPorals(Node source, String spid) {
+    private void findPathToPortals(Node source, String spid) {
+        int int_pid = Integer.parseInt(spid);
         for (Map.Entry<String, String> portals : this.pMapping.get("1").get(spid).entrySet()) {
             if (portals.getValue().endsWith("1")) {
                 try (Transaction tx = this.graphdb.beginTx()) {
@@ -148,7 +169,7 @@ public class myskylinePartition {
                     ArrayList<path> iniSkylinePath = msib.getSkylinePath(source, destination, spid);
 //                    System.out.println(iniSkylinePath.size());
                     for (path p : iniSkylinePath) {
-                        addToSkylineResult(p);
+                        this.portalsObj[int_pid].addToSkylineResult(p);
 //                    System.out.println(p);
                     }
                 }
@@ -194,61 +215,31 @@ public class myskylinePartition {
     }
 
     private void addToSkylineResult(path np) {
-        // System.out.println(np);
-        // System.out.println(printCosts(np.getCosts()));
-        // System.out.println("=====");
         int i = 0;
         if (skylinPaths.isEmpty()) {
-//            this.insertedPath++;
             this.skylinPaths.add(np);
-            // System.out.println("###################");
-            // System.out.println("Insert to skyline Paths ArrayList:");
-            // System.out.println(np);
-            // System.out.println(printCosts(np.getCosts()));
-            // System.out.println("end the insert to skyline");
-            // System.out.println("###################");
         } else {
             boolean alreadyinsert = false;
-            // System.out.println("============================");
-            // System.out.println(this.skylinPaths.size());
             for (; i < skylinPaths.size(); ) {
-                // System.out.println(printCosts(skylinPaths.get(i).getCosts())
-                // + " " + printCosts(np.getCosts()) + " "
-                // + checkDominated(skylinPaths.get(i).getCosts(),
-                // np.getCosts()));
-                //
-                //
-                // if p dominate new path np,
                 if (checkDominated(skylinPaths.get(i).getCosts(), np.getCosts())) {
                     if (alreadyinsert && i != this.skylinPaths.size() - 1) {
                         this.skylinPaths.remove(this.skylinPaths.size() - 1);
 //                        this.removedPath++;
                     }
-                    // System.out.println("Jump it and break, because it already
-                    // is dominated by this record "
-                    // + this.skylinPaths.size());
                     break;
                 } else {
                     if (checkDominated(np.getCosts(), skylinPaths.get(i).getCosts())) {
-                        // System.out.println("remove the old one and insert
-                        // it");
-//                        this.removedPath++;
                         this.skylinPaths.remove(i);
                     } else {
                         i++;
                     }
                     if (!alreadyinsert) {
-                        // System.out.println("insert it because it does not
-                        // dominated each other");
                         this.skylinPaths.add(np);
-//                        this.insertedPath++;
                         alreadyinsert = true;
                     }
 
                 }
             }
-            // System.out.println(this.skylinPaths.size());
-            // System.out.println("===========================");
         }
     }
 

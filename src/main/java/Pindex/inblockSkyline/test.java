@@ -28,7 +28,7 @@ public class test {
 
     public static void main(String args[])
     {
-        connector n = new connector("/home/gqxwolf/neo4j/neo4j-community-3.2.3/testdb/databases/graph.db");
+        connector n = new connector("/home/gqxwolf/neo4j323/testdb/databases/graph.db");
         // connector n = new connector();
         n.startDB();
         GraphDatabaseService graphdb = n.getDBObject();

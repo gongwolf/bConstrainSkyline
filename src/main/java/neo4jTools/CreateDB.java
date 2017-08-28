@@ -21,8 +21,7 @@ public class CreateDB {
     }
 
     public void createDatabase() {
-        connector nconn = new connector("/home/gqxwolf/neo4j/neo4j-community-3.2.3/testdb/databases/graph.db");
-//        connector nconn = new connector();
+        connector nconn = new connector("/home/gqxwolf/neo4j323/testdb/databases/graph.db");
         nconn.deleteDB();
         nconn.startDB();
         this.graphdb = nconn.getDBObject();
@@ -61,9 +60,6 @@ public class CreateDB {
             e.printStackTrace();
         }
 
-
-//        System.out.println("there are "+nconn.getNumberofNodes()+" nodes");
-//        System.out.println("there are "+nconn.getNumberofRelations()+" relationships");
         nconn.shutdownDB();
     }
 
