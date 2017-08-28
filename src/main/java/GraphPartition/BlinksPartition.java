@@ -10,14 +10,14 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class BlinksPartition {
-    String PathBase = "/home/gqxwolf/mydata/projectData/testGraph2/data/";
+    String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
     String EdgesInfoPath = PathBase + "SegInfo.txt";
     String nodeMappingBase = PathBase + "mapping/";
     private ArrayList<Pair<String, String>> connectionInfos = new ArrayList<>();
     private HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
     private HashMap<String, HashMap<String, Integer>> numberOfPartitions = new HashMap<>();
 
-    public int NodeNum = 25;
+    public int NodeNum = 320;
 
     public static void main(String args[]) {
         BlinksPartition bp = new BlinksPartition();
@@ -60,6 +60,7 @@ public class BlinksPartition {
         HashSet<String> P = new HashSet<>();
 //
         for (Pair<String, String> ep : connectionInfos) {
+            System.out.println(ep);
 
             if (isCutterEdge(ep)) {
                 S.add(ep);
@@ -184,10 +185,13 @@ public class BlinksPartition {
 
     public void loadPartitionsInfo() {
         String paritionFile = PathBase + "partitions_info.txt";
+        System.out.println(paritionFile);
         File pFile = new File(paritionFile);
         if (pFile.exists()) {
+            System.out.println("read partition infos");
             readPartionsInfo(paritionFile);
         } else {
+            System.out.println("write and read partition infos");
             writePartionsInfo(paritionFile);
         }
 
@@ -277,7 +281,7 @@ public class BlinksPartition {
 
     private int getPid_inC(int cid, long mapped_id) {
         int pid = -1;
-        String partFile = nodeMappingBase + "mapped_metis_" + cid + ".graph.part.3";
+        String partFile = nodeMappingBase + "mapped_metis_" + cid + ".graph.part.16";
 //        String partFile = PathBase + "mapped_metis_" + cid + ".graph.part.10";
         try {
             BufferedReader br = new BufferedReader(new FileReader(partFile));

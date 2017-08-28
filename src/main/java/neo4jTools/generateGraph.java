@@ -7,13 +7,13 @@ import java.io.*;
 import java.util.*;
 
 public class generateGraph {
-    String DBBase = "/home/gqxwolf/mydata/projectData/VCTest/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
     String EdgesPath = DBBase + "SegInfo.txt";
     String NodePath = DBBase + "NodeInfo.txt";
 
     public static void main(String args[]) {
-        int numberNodes = 10;
-        int numberofEdges = 15;
+        int numberNodes = 320;
+        int numberofEdges = 640;
         int numberofDimen = 3;
         generateGraph g = new generateGraph();
         g.generateG(numberNodes, numberofEdges, numberofDimen);
@@ -71,7 +71,7 @@ public class generateGraph {
 
                 String[] costs = new String[numberofDimens];
                 for (int j = 0; j < numberofDimens; j++) {
-                    costs[j] = String.valueOf(getRandomNumberInRange(1, 100));
+                    costs[j] = String.valueOf(getRandomNumberInRange(1, 200));
                 }
 
                 Edges.put(new Pair(startNode, endNode), costs);
@@ -91,6 +91,7 @@ public class generateGraph {
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
             for (Map.Entry<Pair<String, String>, String[]> node : edges.entrySet()) {
+                System.out.println(EdgesPath);
                 StringBuffer sb = new StringBuffer();
                 String snodeId = node.getKey().getKey();
                 String enodeId = node.getKey().getValue();
@@ -110,6 +111,7 @@ public class generateGraph {
         try (FileWriter fw = new FileWriter(NodePath, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
+            System.out.println(NodePath);
             TreeMap<String, String[]> tm = new TreeMap<String, String[]>(new StringComparator());
             tm.putAll(nodes);
             for (Map.Entry<String, String[]> node : tm.entrySet()) {

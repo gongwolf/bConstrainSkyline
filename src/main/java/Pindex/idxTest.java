@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class idxTest {
     public HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
 
-    public static String PathBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/";
+    public static String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
     public static String paritionFile = PathBase + "partitions_info.txt";
     public static String portalListFile = PathBase+"portalList.txt";
 

@@ -89,7 +89,7 @@ public class path {
     }
 
     public int getNumberOfProperties() {
-        Iterable<Relationship> rels = this.startNode.getRelationships(Line.Linked, Direction.OUTGOING);
+        Iterable<Relationship> rels = this.startNode.getRelationships(Line.Linked, Direction.BOTH);
         if (rels.iterator().hasNext()) {
             Relationship rel = rels.iterator().next();
             return rel.getAllProperties().size();

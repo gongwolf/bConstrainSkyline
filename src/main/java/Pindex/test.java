@@ -26,10 +26,17 @@ import Pindex.path;
 public class test {
     HashMap<String, HashMap<String, HashMap<String, String>>> pMapping = new HashMap<>();
     public HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
-    public static String PathBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/";
+    public static String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
     public static String paritionFile = PathBase + "partitions_info.txt";
+    public static String portalListFile = PathBase+"portalList.txt";
+
+    ArrayList<String> portals = new ArrayList<>();
 
     public static void main(String args[]) {
+        connector n = new connector("/home/gqxwolf/neo4j/neo4j-community-3.2.3/testdb/databases/graph.db");
+        n.startDB();
+        GraphDatabaseService graphDB = n.getDBObject();
+        
         test t = new test();
 //         String sid = "1";
 //         String eid = "99";
@@ -53,16 +60,15 @@ public class test {
 
 //        connector n = new connector();
 
-        connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
-        n.startDB();
-        GraphDatabaseService graphdb = n.getDBObject();
-        t.buildIndex(graphdb);
+
+//        GraphDatabaseService graphdb = n.getDBObject();
+        t.buildIndex(graphDB);
         n.shutdownDB();
     }
 
     private void buildIndex(GraphDatabaseService graphdb) {
-        String innerP = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/Pairs/pairs.inner";
-        String interP = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/Pairs/pairs.inter";
+        String innerP = PathBase+"Pairs/pairs.inner";
+        String interP = PathBase+"Pairs/pairs.inter";
 
         int i = 1;
         System.out.println("Building inner index is processing");
@@ -74,7 +80,7 @@ public class test {
                  String pid = infos[1];
                  String sid = infos[2];
                  String eid = infos[3];
-                 ArrayList<path> skyR = this.runUseNodeFinal(sid, eid,graphdb,pid);
+                 ArrayList<path> skyR = this.runSkylineInBlock(sid, eid,pid,graphdb);
                  if (skyR!=null && skyR.size() != 0 ) {
                      removePathNotWithinBlock(pid, skyR);
                      if (skyR.size() != 0) {
@@ -120,7 +126,7 @@ public class test {
     }
 
     private void writeToDisk(String cid, String pid, String sid, String eid, double[] costs) {
-        String fpath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/indexes/inter/" + cid + "/";
+        String fpath = PathBase+"indexes/inter/" + cid + "/";
         File f = new File(fpath);
         if (!f.exists()) {
             f.mkdirs();
@@ -145,7 +151,7 @@ public class test {
     }
 
     private void writeToDisk(String cid, String pid, pairSer ps) {
-        String fpath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/indexes/inner/" + cid + "/" + pid
+        String fpath = PathBase+"indexes/inner/" + cid + "/" + pid
                 + "_idx/";
         File f = new File(fpath);
         if (!f.exists()) {
@@ -170,7 +176,7 @@ public class test {
     }
 
     private void writePairToDisk(String cid, String pid, String sid, String eid, String indexType) {
-        String fpath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/Pairs/";
+        String fpath = PathBase+"Pairs/";
         File fFile = new File(fpath);
         if (!fFile.exists()) {
             fFile.mkdirs();
@@ -276,7 +282,7 @@ public class test {
 
     }
 
-    public ArrayList<path> runUseNodeFinal(String sid, String did, GraphDatabaseService graphdb, String pid) {
+    public ArrayList<path> runSkylineInBlock(String sid, String did, String pid, GraphDatabaseService graphdb) {
 //        connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
         Node Source;
         Node Destination;
@@ -285,8 +291,8 @@ public class test {
             Destination = graphdb.findNode(BNode.BusNode, "name", did);
             tx.success();
         }
-        myshortestPathUseNodeFinal mspNode = new myshortestPathUseNodeFinal(graphdb);
-        ArrayList<path> r = mspNode.getSkylinePath(Source, Destination);
+        mySkylineInBlock ibNode = new mySkylineInBlock(graphdb,this.partitionInfos,this.portals);
+        ArrayList<path> r = ibNode.getSkylinePath(Source, Destination, pid);
         return r;
     }
 
@@ -337,7 +343,7 @@ public class test {
 
     public void readPartitionInfo() {
         this.pMapping.clear();
-        String partitionInfoPath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/portals/";
+        String partitionInfoPath = this.PathBase+"portals/";
         File parFile = new File(partitionInfoPath);
         for (File cFile : parFile.listFiles()) {
             // System.out.println(cFile.getName());
@@ -435,6 +441,18 @@ public class test {
                 i++;
             }
         }
+    }
 
+    private void loadPortals() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(portalListFile));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                String StartNode = line.trim();
+                this.portals.add(StartNode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
