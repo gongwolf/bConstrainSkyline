@@ -47,6 +47,24 @@ public class myPath {
         calculateCosts();
     }
 
+    public myPath(myPath p_de, myPath p_next) {
+        this.startNode = p_de.startNode;
+        this.endNode = p_next.endNode;
+        this.NumberOfProperties = getNumberOfProperties();
+        this.cost = new double[this.NumberOfProperties];
+
+        this.Nodes = new ArrayList<>(p_de.Nodes);
+        this.Nodes.remove(this.Nodes.size() - 1);
+        this.Nodes.addAll(p_next.Nodes);
+
+
+        this.relationships = new ArrayList<>(p_de.relationships);
+        this.relationships.addAll(p_next.relationships);
+
+        calculateCosts();
+
+    }
+
     public int getNumberOfProperties() {
         Iterable<Relationship> rels = this.startNode.getRelationships(Line.Linked, Direction.BOTH);
         if (rels.iterator().hasNext()) {
@@ -70,11 +88,12 @@ public class myPath {
                 this.cost[i] = 0;
             }
         } else {
-            Relationship r = this.relationships.get(0);
-            int i = 0;
-            for (String pname : this.propertiesName) {
-                this.cost[i] += Double.parseDouble(r.getProperty(pname).toString());
-                i++;
+            for (Relationship r : this.relationships) {
+                int i = 0;
+                for (String pname : this.propertiesName) {
+                    this.cost[i] += Double.parseDouble(r.getProperty(pname).toString());
+                    i++;
+                }
             }
         }
     }

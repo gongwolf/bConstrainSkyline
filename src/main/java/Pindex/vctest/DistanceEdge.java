@@ -27,6 +27,27 @@ public class DistanceEdge {
         addToSkylineResult(p);
     }
 
+    public DistanceEdge(DistanceEdge de, DistanceEdge next_de) {
+
+        this.startNode = de.startNode;
+        this.endNode=next_de.endNode;
+        for(myPath p_de : de.paths)
+        {
+            for(myPath p_next : next_de.paths)
+            {
+                myPath p = new myPath(p_de,p_next);
+                addToSkylineResult(p);
+            }
+        }
+
+    }
+
+    public DistanceEdge(DistanceEdge de) {
+        this.startNode = de.startNode;
+        this.endNode = de.endNode;
+        this.paths = new ArrayList<>(de.paths);
+    }
+
     @Override
     public boolean equals(Object o) {
 

@@ -1,7 +1,5 @@
 package Pindex.vctest;
 
-import Pindex.myNode;
-import javafx.util.Pair;
 import neo4jTools.Line;
 import org.neo4j.graphdb.*;
 
@@ -14,6 +12,7 @@ public class VCNode {
     DistanceGraph dg;
     private GraphDatabaseService graphdb;
     private int threshold;
+    private ArrayList<VCNode> children;
 
     public VCNode(GraphDatabaseService graphdb) {
         this.graphdb = graphdb;
@@ -44,6 +43,9 @@ public class VCNode {
 //        System.out.println(count);
 
             if (this.dg.numberOfNodes() > this.threshold) {
+                System.out.println("generate subTree");
+                System.out.println(this.dg.edges.size());
+                System.out.println(this.dg.nodes.size());
                 GrowTheTree(this);
             }
             tx.success();
@@ -53,12 +55,18 @@ public class VCNode {
     }
 
     private void GrowTheTree(VCNode parent) {
+        this.children = new ArrayList<>();
         ArrayList<Node> S = new ArrayList<>(parent.dg.nodes);
 
         while (!S.isEmpty()) {
             VCNode child = new VCNode(parent.graphdb);
             child.parent = parent;
             child.buildDistanceGraph(parent.dg, parent.threshold, S);
+            this.children.add(child);
+//            System.out.println(child.dg.numberOfNodes());
+            if (child.dg.numberOfNodes() > this.threshold) {
+                GrowTheTree(child);
+            }
         }
 
 
@@ -110,6 +118,7 @@ public class VCNode {
     }
 
     private void CreateDisEdges(ArrayList<DistanceEdge> result, DistanceEdge de) {
+        //if it all real has the edges
         if (result.contains(de)) {
             DistanceEdge tmpde = result.get(result.indexOf(de));
             createCombindDe(tmpde, de);
@@ -119,7 +128,9 @@ public class VCNode {
     }
 
     private DistanceEdge createCombindDe(DistanceEdge tmpde, DistanceEdge de) {
-        tmpde.addToSkylineResult(de.paths.get(0));
+        for (myPath p : de.paths) {
+            tmpde.addToSkylineResult(p);
+        }
         return tmpde;
     }
 
@@ -130,6 +141,7 @@ public class VCNode {
             while (!copyRels.isEmpty()) {
 //                System.out.println(copyRels.size());
                 Relationship r = copyRels.get(0);
+                copyRels.remove(0);
 
                 vc_nodes.add(r.getStartNode());
                 vc_nodes.add(r.getEndNode());
@@ -160,28 +172,77 @@ public class VCNode {
         this.threshold = threshold;
         try (Transaction tx = this.graphdb.beginTx()) {
             ArrayList<Node> VCNodes = getVCNodes(graph, S);
-//            ArrayList<DistanceEdge> VCEdges = CreateEdges(VCNodes);
-//            this.dg = new DistanceGraph(VCNodes, VCEdges);
+            ArrayList<DistanceEdge> VCEdges = CreateEdgesDistance(VCNodes);
+            System.out.println("------------------");
+            System.out.println(VCNodes.size());
+            System.out.println(VCEdges.size());
+            this.dg = new DistanceGraph(VCNodes, VCEdges);
             tx.success();
         }
     }
 
+    private ArrayList<DistanceEdge> CreateEdgesDistance(ArrayList<Node> vcNodes) {
+        ArrayList<DistanceEdge> result = new ArrayList<>();
+        for (Node n : vcNodes) {
+            ArrayList<DistanceEdge> outging_edges = getOutGoingEdges(n);
+            for (DistanceEdge de : outging_edges) {
+                DistanceEdge new_edges = null;
+                Node nextNode = de.endNode;
+                if (vcNodes.contains(nextNode) && nextNode != n) {
+                    new_edges = new DistanceEdge(de);
+                } else if (!vcNodes.contains(nextNode) && nextNode.getId() != n.getId()) {
+                    ArrayList<DistanceEdge> nextList = getOutGoingEdges(nextNode);
+                    for (DistanceEdge next_de : nextList) {
+                        new_edges = new DistanceEdge(de, next_de);
+                    }
+
+                }
+                if (new_edges != null) {
+                    CreateDisEdges(result, de);
+                }
+
+            }
+
+        }
+        return result;
+    }
+
+    private ArrayList<DistanceEdge> getOutGoingEdges(Node n) {
+        ArrayList<DistanceEdge> result = new ArrayList<>();
+        for (DistanceEdge de : parent.dg.edges) {
+            if (de.startNode.getId() == n.getId()) {
+                result.add(de);
+            }
+        }
+        return result;
+    }
+
     private ArrayList<Node> getVCNodes(DistanceGraph graph, ArrayList<Node> s) {
         ArrayList<DistanceEdge> copyRels = new ArrayList<>(graph.edges);
+//        System.out.println("---------");
+//        System.out.println(copyRels.size());
         HashSet<Node> vc_nodes = new HashSet<>();
+//        int i = 0 ;
         try (Transaction tx = graphdb.beginTx()) {
             {
-
-
                 while (!copyRels.isEmpty()) {
-                    DistanceEdge deContainsSnode;
-                    if(!s.isEmpty())
-                        deContainsSnode = getEdgeContainSnode(graph, s.get(0));
-                    else
-                        deContainsSnode = copyRels.get(0);
+//                    System.out.println(copyRels.size()+" "+s.size());
+                    DistanceEdge deContainsSnode = null;
+                    /**
+                     * if s still has some node, find the edge start or end with this node
+                     * if s is empty, read any of the edge from copy of Rels.
+                     */
+                    if (!s.isEmpty()) {
+//                        System.out.println("get from s");
+                        deContainsSnode = getEdgeContainSnode(graph, s.get(0), copyRels);
+//                        s.remove(0);
+                    }
 
-//                    if (deContainsSnode == null)
-//                System.out.println(copyRels.size());
+                    if (deContainsSnode == null) {
+                        deContainsSnode = copyRels.get(0);
+                        copyRels.remove(0);
+                    }
+
 
                     vc_nodes.add(deContainsSnode.startNode);
                     vc_nodes.add(deContainsSnode.endNode);
@@ -195,11 +256,11 @@ public class VCNode {
                     removeEdges(copyRels, sRels, s);
                     removeEdges(copyRels, eRels, s);
 
-
                 }
                 tx.success();
             }
         }
+//        System.out.println(i);
         return new ArrayList<>(vc_nodes);
     }
 
@@ -210,19 +271,23 @@ public class VCNode {
             }
     }
 
-    private ArrayList<DistanceEdge> getNeighborEdges(Node startNode) {
+    private ArrayList<DistanceEdge> getNeighborEdges(Node node) {
         ArrayList<DistanceEdge> outgoingEdges = new ArrayList<>();
-        for (DistanceEdge de : this.dg.edges) {
-            if (de.startNode.getId() == startNode.getId()) {
-                outgoingEdges.add(de);
+        try {
+            for (DistanceEdge de : parent.dg.edges) {
+                if (de.startNode.getId() == node.getId() || de.endNode.getId() == node.getId()) {
+                    outgoingEdges.add(de);
+                }
             }
+        } catch (Exception e) {
+            System.out.println(node + " " + this.dg.edges.size());
         }
         return outgoingEdges;
     }
 
-    private DistanceEdge getEdgeContainSnode(DistanceGraph graph, Node n) {
+    private DistanceEdge getEdgeContainSnode(DistanceGraph graph, Node n, ArrayList<DistanceEdge> copyRels) {
         for (DistanceEdge de : graph.edges) {
-            if (de.endNode.getId() == n.getId() || de.startNode.getId() == n.getId()) {
+            if (copyRels.contains(de) && (de.endNode.getId() == n.getId() || de.startNode.getId() == n.getId())) {
                 return de;
             }
         }
