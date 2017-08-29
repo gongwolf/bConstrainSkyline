@@ -7,13 +7,13 @@ import java.io.*;
 import java.util.*;
 
 public class generateGraph {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph1/data/";
     String EdgesPath = DBBase + "SegInfo.txt";
     String NodePath = DBBase + "NodeInfo.txt";
 
     public static void main(String args[]) {
-        int numberNodes = 320;
-        int numberofEdges = 640;
+        int numberNodes = 40;
+        int numberofEdges = 80;
         int numberofDimen = 3;
         generateGraph g = new generateGraph();
         g.generateG(numberNodes, numberofEdges, numberofDimen);
@@ -49,7 +49,7 @@ public class generateGraph {
 
             String[] costs = new String[numberofDimens];
             for (int j = 0; j < numberofDimens; j++) {
-                costs[j] = String.valueOf(getRandomNumberInRange(1, 100));
+                costs[j] = String.valueOf(getRandomNumberInRange(1, 200));
             }
 
             Edges.put(new Pair(startNode, endNode), costs);

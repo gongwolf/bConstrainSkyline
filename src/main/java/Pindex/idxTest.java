@@ -41,7 +41,7 @@ public class idxTest {
 //        System.out.println("running time "+ (System.nanoTime() - ct) / 1000000);
 
 
-        connector n = new connector("/home/gqxwolf/neo4j323/csldb/databases/graph.db");
+        connector n = new connector("/home/gqxwolf/neo4j323/testdb/databases/graph.db");
         readPartionsInfo(paritionFile);
         loadPortals();
         n.startDB();
@@ -52,11 +52,11 @@ public class idxTest {
 
         System.out.println("============================");
         long run1 = System.nanoTime();
-        ArrayList<path> r1 = runUseNodeFinal(sid, eid, graphdb);
+        ArrayList<path> r1 = runUseNodeFinal("0", "300", graphdb);
         System.out.println(r1.size());
-        removePathNotWithinBlock(pid, r1);
+//        removePathNotWithinBlock(pid, r1);
         run1 = (System.nanoTime()-run1)/1000000;
-        System.out.println(r1.size());
+//        System.out.println(r1.size());
 //        for(path p2:r1)
 //        {
 //            System.out.println(p2);
@@ -70,13 +70,13 @@ public class idxTest {
 //
 //        }
 
-        System.out.println("============================");
-        long run2 = System.nanoTime();
-        ArrayList<path> r2 = runSkylineInBlock(sid, eid, pid, graphdb);
-        System.out.println(r2.size());
-        removePathNotWithinBlock(pid,r2);
-        run2 = (System.nanoTime()-run2)/1000000;
-        System.out.println(r2.size());
+//        System.out.println("============================");
+//        long run2 = System.nanoTime();
+//        ArrayList<path> r2 = runSkylineInBlock(sid, eid, pid, graphdb);
+//        System.out.println(r2.size());
+//        removePathNotWithinBlock(pid,r2);
+//        run2 = (System.nanoTime()-run2)/1000000;
+//        System.out.println(r2.size());
 //        for(path p2:r2)
 //        {
 //            System.out.println(p2);
@@ -89,9 +89,11 @@ public class idxTest {
 //
 //        }
 
-        System.out.println("============================");
-        System.out.println(run1 + "   " + run2);
-        System.out.println(statistic.checkPathResultEquation(r1,r2));
+//        System.out.println("============================");
+//        System.out.println(run1 + "   " + run2);
+
+        System.out.println(run1);
+//        System.out.println(statistic.checkPathResultEquation(r1,r2));
         n.shutdownDB();
     }
 

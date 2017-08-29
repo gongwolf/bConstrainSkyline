@@ -65,7 +65,9 @@ public class DistanceEdge {
         DistanceEdge c = (DistanceEdge) o;
 
         // Compare the data members and return accordingly
-        return this.endNode.getId()==c.endNode.getId()&&this.startNode.getId()==c.startNode.getId();
+        boolean f1= (this.endNode.getId()==c.endNode.getId())&& (this.startNode.getId()==c.startNode.getId());
+//        boolean f2= this.startNode.getId()==c.endNode.getId()&&this.endNode.getId()==c.startNode.getId();
+        return f1 ;
     }
 
     public void addToSkylineResult(myPath np) {
@@ -110,4 +112,8 @@ public class DistanceEdge {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return this.startNode+"->"+this.endNode;
+    }
 }
