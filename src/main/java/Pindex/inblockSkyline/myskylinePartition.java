@@ -20,13 +20,13 @@ import java.util.Map;
 
 public class myskylinePartition {
 
-    private  GraphDatabaseService graphdb;
-    private  PortalPriorityQueue mqueue;
-    private  HashMap<String, Pair<String, String>> partitionInfos;
-    private  ArrayList<String> portals;
-    private  mySkylineInBlock msib;
-    private  HashMap<String, HashMap<String, HashMap<String, String>>> pMapping;
-    private  Portal[] portalsObj;
+    private GraphDatabaseService graphdb;
+    private PortalPriorityQueue mqueue;
+    private HashMap<String, Pair<String, String>> partitionInfos;
+    private ArrayList<String> portals;
+    private mySkylineInBlock msib;
+    private HashMap<String, HashMap<String, HashMap<String, String>>> pMapping;
+    private Portal[] portalsObj;
     ArrayList<path> skylinPaths = new ArrayList<>();
 
 
@@ -38,14 +38,13 @@ public class myskylinePartition {
         this.pMapping = pMapping;
         this.msib = new mySkylineInBlock(graphdb, partitionInfos, portals);
         this.portalsObj = new Portal[16];
-        for(int i=0; i<portalsObj.length;i++)
-        {
+        for (int i = 0; i < portalsObj.length; i++) {
             portalsObj[i] = new Portal();
         }
     }
 
     private void initailPortals(String mapped_did) {
-        HashMap<Pair<String,String>,Double[]> costMap=new HashMap<>();
+        HashMap<Pair<String, String>, Double[]> costMap = new HashMap<>();
         String pFile = "/home/gqxwolf/mydata/projectData/testGraph/data/indexes/inter/1/pid.inter.idx";
         int lines = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(pFile))) {
@@ -56,23 +55,21 @@ public class myskylinePartition {
                 String sid = infos[2];
                 String eid = infos[3];
 
-                int n = infos.length-4;
+                int n = infos.length - 4;
                 Double cost[] = new Double[n];
-                for(int i=4;i<infos.length;i++)
-                {
-                    cost[i-4]=Double.parseDouble(infos[i]);
+                for (int i = 4; i < infos.length; i++) {
+                    cost[i - 4] = Double.parseDouble(infos[i]);
                 }
-                costMap.put(new Pair<>(sid,eid),cost);
+                costMap.put(new Pair<>(sid, eid), cost);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(lines+"  "+costMap.size());
+        System.out.println(lines + "  " + costMap.size());
         Integer pid = Integer.parseInt(this.partitionInfos.get(mapped_did).getValue());
-        for(int i=0;i<this.portalsObj.length;i++)
-        {
-            if(pid!=i) {
-                double[] cost = getLowerBound(pid,i,costMap);
+        for (int i = 0; i < this.portalsObj.length; i++) {
+            if (pid != i) {
+                double[] cost = getLowerBound(pid, i, costMap);
             }
         }
     }
@@ -80,26 +77,21 @@ public class myskylinePartition {
     private double[] getLowerBound(Integer epid, int i, HashMap<Pair<String, String>, Double[]> costMap) {
         double[] result = new double[3];
 
-        for(int j = 0 ; j<result.length;j++)
-        {
-            result[j]= -Double.MAX_VALUE;
+        for (int j = 0; j < result.length; j++) {
+            result[j] = -Double.MAX_VALUE;
         }
 
 //        HashMap<String, String> qq = this.pMapping.get("1").get(i);
-        System.out.println(i+" "+epid);
+        System.out.println(i + " " + epid);
         String iid = String.valueOf(i);
         String str_epid = String.valueOf(epid);
-        for(Map.Entry<String,String> iportal:this.pMapping.get("1").get(iid).entrySet())
-        {
-            if(iportal.getValue().endsWith("1"))
-            {
-                for(Map.Entry<String,String> eportal :this.pMapping.get("1").get(str_epid).entrySet())
-                {
-                    if(eportal.getValue().startsWith("1"))
-                    {
-                        String sid = String.valueOf(Long.parseLong(iportal.getKey())-1);
-                        String eid = String.valueOf(Long.parseLong(eportal.getKey())-1);
-                        if(!sid.equals(eid)) {
+        for (Map.Entry<String, String> iportal : this.pMapping.get("1").get(iid).entrySet()) {
+            if (iportal.getValue().endsWith("1")) {
+                for (Map.Entry<String, String> eportal : this.pMapping.get("1").get(str_epid).entrySet()) {
+                    if (eportal.getValue().startsWith("1")) {
+                        String sid = String.valueOf(Long.parseLong(iportal.getKey()) - 1);
+                        String eid = String.valueOf(Long.parseLong(eportal.getKey()) - 1);
+                        if (!sid.equals(eid)) {
                             Pair<String, String> key = new Pair<>(sid, eid);
 //                            System.out.println("--->" + sid + "   " + eid);
                             Double[] cost = costMap.get(key);
@@ -135,8 +127,7 @@ public class myskylinePartition {
 
             System.out.println(spid);
             findPathToPortals(source, spid);
-        }else
-        {
+        } else {
             path iniPath = new path(source, source);
             portalsObj[int_pid].addToSkylineResult(iniPath);
         }
@@ -145,17 +136,14 @@ public class myskylinePartition {
         this.mqueue.add(this.portalsObj[int_pid]);
         System.out.println("find " + portalsObj[int_pid].skylinPaths.size() + " paths from " + sid + " to portals");
 
-        while(!this.mqueue.isEmpty())
-        {
+        while (!this.mqueue.isEmpty()) {
             Portal por = mqueue.pop();
 
-            for(path p:por.skylinPaths)
-            {
+            for (path p : por.skylinPaths) {
                 System.out.println(p.endNode);
 
             }
         }
-
 
 
     }

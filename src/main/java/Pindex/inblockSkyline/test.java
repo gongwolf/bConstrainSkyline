@@ -22,12 +22,11 @@ public class test {
 
     public static String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
     public static String paritionFile = PathBase + "partitions_info.txt";
-    public static String portalListFile = PathBase+"portalList.txt";
+    public static String portalListFile = PathBase + "portalList.txt";
     ArrayList<String> portals = new ArrayList<>();
 
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         connector n = new connector("/home/gqxwolf/neo4j323/testdb/databases/graph.db");
         // connector n = new connector();
         n.startDB();
@@ -35,7 +34,7 @@ public class test {
         String src = "0";
         String dest = "62";
         test t = new test();
-        t.runUseNode(src,dest,graphdb);
+        t.runUseNode(src, dest, graphdb);
         t.readPartionsInfo(paritionFile);
         t.loadPortals();
 
@@ -44,7 +43,7 @@ public class test {
 
 //        HashMap<String, String> qq = t.pMapping.get("1").get("0");
 //        System.out.println(0+" "+(qq==null));
-        t.runInBlock(src, dest,graphdb);
+        t.runInBlock(src, dest, graphdb);
 
         n.shutdownDB();
 
@@ -54,7 +53,7 @@ public class test {
         long run1 = System.nanoTime();
         ArrayList<path> r1 = runUseNodeFinal(sid, eid, graphdb);
         System.out.println(r1.size());
-        run1 = (System.nanoTime()-run1)/1000000;
+        run1 = (System.nanoTime() - run1) / 1000000;
         System.out.println(run1);
         System.out.println("==============================");
     }
@@ -72,9 +71,9 @@ public class test {
         }
 
 
-        myskylinePartition mspNode = new myskylinePartition(graphdb,partitionInfos,portals,pMapping);
+        myskylinePartition mspNode = new myskylinePartition(graphdb, partitionInfos, portals, pMapping);
         mspNode.getSkylinePath(Source, Destination);
-        run1 = (System.nanoTime()-run1)/1000000;
+        run1 = (System.nanoTime() - run1) / 1000000;
         System.out.println(run1);
 
 
@@ -137,7 +136,7 @@ public class test {
 
             boolean flag = true;
             for (Node n : p.Nodes) {
-                if (n.getId() != sid && n.getId() != eid ) {
+                if (n.getId() != sid && n.getId() != eid) {
                     String nid = String.valueOf(n.getId() + 1);
                     String n_pid = this.partitionInfos.get(nid).getValue();
                     if (!n_pid.equals(pid) || this.portals.contains(nid)) {
@@ -159,7 +158,7 @@ public class test {
 
     public void readPartitionInfo() {
 //        this.pMapping.clear();
-        String partitionInfoPath = this.PathBase+"portals/";
+        String partitionInfoPath = this.PathBase + "portals/";
         File parFile = new File(partitionInfoPath);
         for (File cFile : parFile.listFiles()) {
 //             System.out.println(cFile.getName());

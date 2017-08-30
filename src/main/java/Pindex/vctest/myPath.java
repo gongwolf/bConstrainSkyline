@@ -65,6 +65,16 @@ public class myPath {
 
     }
 
+    public myPath(Node s) {
+        this.startNode = s;
+        this.endNode = s;
+        this.NumberOfProperties = getNumberOfProperties();
+        this.cost = new double[this.NumberOfProperties];
+        this.Nodes = new ArrayList<>();
+        this.Nodes.add(s);
+        this.relationships = new ArrayList<>();
+    }
+
     public int getNumberOfProperties() {
         Iterable<Relationship> rels = this.startNode.getRelationships(Line.Linked, Direction.BOTH);
         if (rels.iterator().hasNext()) {
@@ -100,5 +110,9 @@ public class myPath {
 
     public double[] getCosts() {
         return this.cost;
+    }
+
+    public boolean hasCycle() {
+        return false;
     }
 }

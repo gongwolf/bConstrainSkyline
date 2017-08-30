@@ -13,29 +13,27 @@ public class DistanceEdge {
     ArrayList<myPath> paths = new ArrayList<>();
 
 
-    public DistanceEdge(Node ns,Relationship rel1, Node nextNode,Relationship rel2, Node tarNode) {
-        this.startNode=ns;
-        this.endNode=tarNode;
-        myPath p = new myPath( ns, rel1,  nextNode, rel2,  tarNode);
+    public DistanceEdge(Node ns, Relationship rel1, Node nextNode, Relationship rel2, Node tarNode) {
+        this.startNode = ns;
+        this.endNode = tarNode;
+        myPath p = new myPath(ns, rel1, nextNode, rel2, tarNode);
         addToSkylineResult(p);
     }
 
     public DistanceEdge(Node src, Node dest, Relationship rel) {
-        this.startNode=src;
-        this.endNode=dest;
-        myPath p = new myPath( src,  dest,  rel);
+        this.startNode = src;
+        this.endNode = dest;
+        myPath p = new myPath(src, dest, rel);
         addToSkylineResult(p);
     }
 
     public DistanceEdge(DistanceEdge de, DistanceEdge next_de) {
 
         this.startNode = de.startNode;
-        this.endNode=next_de.endNode;
-        for(myPath p_de : de.paths)
-        {
-            for(myPath p_next : next_de.paths)
-            {
-                myPath p = new myPath(p_de,p_next);
+        this.endNode = next_de.endNode;
+        for (myPath p_de : de.paths) {
+            for (myPath p_next : next_de.paths) {
+                myPath p = new myPath(p_de, p_next);
                 addToSkylineResult(p);
             }
         }
@@ -65,9 +63,9 @@ public class DistanceEdge {
         DistanceEdge c = (DistanceEdge) o;
 
         // Compare the data members and return accordingly
-        boolean f1= (this.endNode.getId()==c.endNode.getId())&& (this.startNode.getId()==c.startNode.getId());
+        boolean f1 = (this.endNode.getId() == c.endNode.getId()) && (this.startNode.getId() == c.startNode.getId());
 //        boolean f2= this.startNode.getId()==c.endNode.getId()&&this.endNode.getId()==c.startNode.getId();
-        return f1 ;
+        return f1;
     }
 
     public void addToSkylineResult(myPath np) {
@@ -114,6 +112,6 @@ public class DistanceEdge {
 
     @Override
     public String toString() {
-        return this.startNode+"->"+this.endNode;
+        return this.startNode + "->" + this.endNode;
     }
 }

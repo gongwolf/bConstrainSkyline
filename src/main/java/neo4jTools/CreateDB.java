@@ -10,9 +10,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class CreateDB {
-    String DBBase  = "/home/gqxwolf/mydata/projectData/testGraph1/data/";
-    String NodesPath = DBBase+"NodeInfo.txt";
-    String SegsPath = DBBase+"SegInfo.txt";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph1/data/";
+    String NodesPath = DBBase + "NodeInfo.txt";
+    String SegsPath = DBBase + "SegInfo.txt";
     private GraphDatabaseService graphdb = null;
 
     public static void main(String args[]) {
@@ -27,8 +27,7 @@ public class CreateDB {
         this.graphdb = nconn.getDBObject();
 
 
-
-        try(Transaction tx = this.graphdb.beginTx()) {
+        try (Transaction tx = this.graphdb.beginTx()) {
             BufferedReader br = new BufferedReader(new FileReader(NodesPath));
             String line = null;
             while ((line = br.readLine()) != null) {
@@ -38,7 +37,7 @@ public class CreateDB {
                 String id = attrs[0];
                 double lat = Double.parseDouble(attrs[1]);
                 double log = Double.parseDouble(attrs[2]);
-                Node n = createNode(id,lat,log);
+                Node n = createNode(id, lat, log);
             }
 
             br = new BufferedReader(new FileReader(SegsPath));
@@ -55,7 +54,7 @@ public class CreateDB {
             }
 
             tx.success();
-        }  catch(IOException e) {
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -64,17 +63,17 @@ public class CreateDB {
     }
 
     private void createRelation(String src, String des, double eDistence, double metersDistance, double runningTime) {
-        Node srcNode = this.graphdb.findNode(BNode.BusNode,"name",src);
-        Node desNode = this.graphdb.findNode(BNode.BusNode,"name",des);
-        Relationship rel = srcNode.createRelationshipTo(desNode,Line.Linked);
+        Node srcNode = this.graphdb.findNode(BNode.BusNode, "name", src);
+        Node desNode = this.graphdb.findNode(BNode.BusNode, "name", des);
+        Relationship rel = srcNode.createRelationshipTo(desNode, Line.Linked);
         rel.setProperty("EDistence", eDistence);
         rel.setProperty("MetersDistance", metersDistance);
         rel.setProperty("RunningTime", runningTime);
     }
 
-    private Node createNode(String id,double lat, double log) {
+    private Node createNode(String id, double lat, double log) {
         Node n = this.graphdb.createNode(BNode.BusNode);
-        n.setProperty("name",id);
+        n.setProperty("name", id);
         n.setProperty("lat", lat);
         n.setProperty("log", log);
         return n;

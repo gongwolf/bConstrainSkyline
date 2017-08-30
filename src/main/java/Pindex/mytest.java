@@ -50,10 +50,10 @@ public class mytest {
         //Long MiddlePages = getFromManagementBean("Page cache", "Faults", graphdb);
         //System.out.println("Pins : "+getFromManagementBean("Page cache", "Pins",graphdb));
         //System.out.println(MiddlePages - BeforePages);
-        
+
         myshortestPathUseNode mspNode = new myshortestPathUseNode(graphdb);
         mspNode.getSkylinePath(Source, Destination);
-        
+
         //Long AfterPages = getFromManagementBean("Page cache", "Faults", graphdb);
         //System.out.println(AfterPages - MiddlePages);
         //System.out.println(getStartdate(graphdb));

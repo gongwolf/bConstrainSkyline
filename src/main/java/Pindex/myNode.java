@@ -6,6 +6,7 @@ import org.neo4j.graphdb.Direction;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import javafx.util.Pair;
 
 import Pindex.path;
@@ -122,7 +123,7 @@ public class myNode {
         } else {
             boolean alreadyinsert = false;
             boolean needToRemove = false;
-            for (; i < subRouteSkyline.size();) {
+            for (; i < subRouteSkyline.size(); ) {
                 if (checkDominated(subRouteSkyline.get(i).getCosts(), np.getCosts())) {
                     // if (alreadyinsert && i != this.subRouteSkyline.size() -
                     // 1) {
@@ -170,7 +171,7 @@ public class myNode {
 
         }
         //if (numberOfLessThan == 1)
-            return true;
+        return true;
         //else
         //    return false;
     }

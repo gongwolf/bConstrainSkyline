@@ -158,13 +158,11 @@ public class indexSkyline {
                         ArrayList<path> tmpR = runUseNodeFinal(orig_sid, pnode, this.graphdb);
                         if (tmpR != null) {
                             System.out.println("     " + tmpR.size());
-                            removePathNotWithinBlock(pid_sid,tmpR);
+                            removePathNotWithinBlock(pid_sid, tmpR);
                             int aftersize = tmpR.size();
-                            if(aftersize!=0)
-                            {
-                                System.out.println(1111 + "    "+tmpR.size());
-                                for(path p:tmpR)
-                                {
+                            if (aftersize != 0) {
+                                System.out.println(1111 + "    " + tmpR.size());
+                                for (path p : tmpR) {
                                     TskylinPaths.add(p);
                                 }
                             }

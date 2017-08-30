@@ -5,7 +5,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.util.ArrayList;
 
-public class DistanceGraph  {
+public class DistanceGraph {
 
     public ArrayList<DistanceEdge> edges;
     public ArrayList<Node> nodes;
@@ -16,12 +16,12 @@ public class DistanceGraph  {
     }
 
 
-    public long numberOfNodes(){
-        return (long)nodes.size();
+    public long numberOfNodes() {
+        return (long) nodes.size();
     }
 
 
-    public long numberOfEdges(){
-        return (long)edges.size();
+    public long numberOfEdges() {
+        return (long) edges.size();
     }
 }

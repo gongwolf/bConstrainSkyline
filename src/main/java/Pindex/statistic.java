@@ -75,7 +75,7 @@ public class statistic {
 //                    int numberOfIn = countinfos[1];
 //                    int numberOfOut = countinfos[2];
 //                    System.out.println("            pid:" + pe.getKey() + "  - size:" + numberofNodes.size()+" "+number+" "+numberOfIn+" "+numberOfOut );
-                    System.out.println("            pid:" + pe.getKey() + "  - size:" + numberofNodes.size()+" ");
+                    System.out.println("            pid:" + pe.getKey() + "  - size:" + numberofNodes.size() + " ");
                 }
             }
         }
@@ -85,22 +85,20 @@ public class statistic {
     private int[] countIncommingPortal(int cid, String pid) {
         int numberofIn = 0;
         int numberofOut = 0;
-        int number=0;
-        String filename = PathBase+"portals/"+cid+"/"+pid;
+        int number = 0;
+        String filename = PathBase + "portals/" + cid + "/" + pid;
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line = null;
             while ((line = br.readLine()) != null) {
 
                 line = line.trim().split(" ")[1];
-                if(line.startsWith("1"))
-                {
+                if (line.startsWith("1")) {
 //                    System.out.println("In");
                     numberofIn++;
                 }
 
-                if(line.endsWith("1"))
-                {
+                if (line.endsWith("1")) {
 //                    System.out.println("Out");
                     numberofOut++;
                 }
@@ -114,7 +112,7 @@ public class statistic {
             e.printStackTrace();
         }
 
-        return new int[]{number,numberofIn,numberofOut};
+        return new int[]{number, numberofIn, numberofOut};
     }
 
     private boolean isContains(String nodeid, String cid, String pid) {

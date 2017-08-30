@@ -114,7 +114,7 @@ public class myshortestPathUseNode {
                 // System.out.println("From node: " + vs.current);
 
                 int index = 0;
-                for (; index < vs.subRouteSkyline.size();) {
+                for (; index < vs.subRouteSkyline.size(); ) {
                     path p = vs.subRouteSkyline.get(index);
 
                     if (!p.processed_flag) {
@@ -153,7 +153,7 @@ public class myshortestPathUseNode {
                                         if (this.processedNodeList.containsKey(nextid)) {
                                             nextNode = processedNodeList.get(nextid);
                                         } else {
-                                            nextNode = new myNode(source, np.endNode,this.NumberOfProperties);
+                                            nextNode = new myNode(source, np.endNode, this.NumberOfProperties);
                                         }
                                         long nrt = System.nanoTime();
                                         nextNode.addToSkylineResult(np);
@@ -469,7 +469,7 @@ public class myshortestPathUseNode {
             boolean alreadyinsert = false;
             // System.out.println("============================");
             // System.out.println(this.skylinPaths.size());
-            for (; i < skylinPaths.size();) {
+            for (; i < skylinPaths.size(); ) {
                 // System.out.println(printCosts(skylinPaths.get(i).getCosts())
                 // + " " + printCosts(np.getCosts()) + " "
                 // + checkDominated(skylinPaths.get(i).getCosts(),

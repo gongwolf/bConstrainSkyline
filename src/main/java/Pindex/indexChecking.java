@@ -14,19 +14,18 @@ import java.util.HashMap;
 
 public class indexChecking {
     public static String PathBase = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/";
-    static String backupInnerIndex = PathBase+"/backup/indexes/inner";
+    static String backupInnerIndex = PathBase + "/backup/indexes/inner";
     public static String paritionFile = PathBase + "partitions_info.txt";
-    public static String portalListFile = PathBase+"portalList.txt";
+    public static String portalListFile = PathBase + "portalList.txt";
 
     public HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
     ArrayList<String> portals = new ArrayList<>();
 
-    public long Prt ;
-    public long Srt ;
+    public long Prt;
+    public long Srt;
 
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         indexChecking inc = new indexChecking();
         inc.checking(backupInnerIndex);
 
@@ -59,34 +58,27 @@ public class indexChecking {
 
         int i = 0;
         File f = new File(backupInnerIndex);
-        for(File cfile:f.listFiles())
-        {
+        for (File cfile : f.listFiles()) {
             String cid = cfile.getName();
-            for(File pfile:cfile.listFiles())
-            {
-                String pid = pfile.getName().substring(0,pfile.getName().indexOf("_"));
-                for(File iFile : pfile.listFiles(new indexFilter()))
-                {
+            for (File pfile : cfile.listFiles()) {
+                String pid = pfile.getName().substring(0, pfile.getName().indexOf("_"));
+                for (File iFile : pfile.listFiles(new indexFilter())) {
                     i++;
 
                     long a1 = System.nanoTime();
-                    pairSer p = DesTopairSer(iFile,pid);
-                    this.Prt += ((System.nanoTime()-a1)/1000000);
-                    if(p==null)
-                    {
+                    pairSer p = DesTopairSer(iFile, pid);
+                    this.Prt += ((System.nanoTime() - a1) / 1000000);
+                    if (p == null) {
                         System.out.println(iFile.getName());
-                    }else
-                    {
+                    } else {
                         boolean rf = checkingPaths(p, pid, graphdb);
-                        if(!rf)
-                        {
-                            System.out.println(cid+" "+pid+" "+p.startNode+" "+p.endNode);
+                        if (!rf) {
+                            System.out.println(cid + " " + pid + " " + p.startNode + " " + p.endNode);
                         }
                     }
 
-                    if(i%1000==0)
-                    {
-                        System.out.println(i+".................");
+                    if (i % 1000 == 0) {
+                        System.out.println(i + ".................");
                     }
 
                 }
@@ -94,9 +86,9 @@ public class indexChecking {
             }
         }
 
-        System.out.println("Total files:"+i);
-        System.out.println("Total time to read index file :"+(this.Prt/1000)+"s    avg time:"+((double)this.Prt/i)+"ms");
-        System.out.println("Total time to get the skyline in node :"+(this.Srt/1000)+"s   avg time:"+((double)this.Srt/i)+"ms");
+        System.out.println("Total files:" + i);
+        System.out.println("Total time to read index file :" + (this.Prt / 1000) + "s    avg time:" + ((double) this.Prt / i) + "ms");
+        System.out.println("Total time to get the skyline in node :" + (this.Srt / 1000) + "s   avg time:" + ((double) this.Srt / i) + "ms");
         n.shutdownDB();
         System.out.println("shut down success");
 
@@ -108,24 +100,23 @@ public class indexChecking {
         String eid = p.endNode;
         long a1 = System.nanoTime();
         ArrayList<path> r2 = runSkylineInBlock(sid, eid, pid, graphdb);
-        removePathNotWithinBlockOrig(pid,r2);
+        removePathNotWithinBlockOrig(pid, r2);
 //        System.out.println(r2.size());
-        removePathNotWithinBlockDisk(pid,p.pathinfos);
-        this.Srt += ((System.nanoTime()-a1)/1000000);
+        removePathNotWithinBlockDisk(pid, p.pathinfos);
+        this.Srt += ((System.nanoTime() - a1) / 1000000);
 
-        return checkPathResultEquation(r2,p.pathinfos);
+        return checkPathResultEquation(r2, p.pathinfos);
     }
 
     private pairSer DesTopairSer(File iFile, String pid) {
-        pairSer r=null;
-        try
-        {
+        pairSer r = null;
+        try {
             // Reading the object from a file
             FileInputStream file = new FileInputStream(iFile);
             ObjectInputStream in = new ObjectInputStream(file);
 
             // Method for deserialization of object
-            r = (pairSer)in.readObject();
+            r = (pairSer) in.readObject();
 
             in.close();
             file.close();
@@ -134,14 +125,10 @@ public class indexChecking {
 //            System.out.println(r.startNode+"  "+r.endNode);
 //            System.out.println(r.pathinfos.size());
 
-        }catch(IOException ex)
-        {
+        } catch (IOException ex) {
             ex.printStackTrace();
             return null;
-        }
-
-        catch(ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             System.out.println("ClassNotFoundException is caught");
             return null;
         }
@@ -157,7 +144,7 @@ public class indexChecking {
             Destination = graphdb.findNode(BNode.BusNode, "name", did);
             tx.success();
         }
-        mySkylineInBlock ibNode = new mySkylineInBlock(graphdb,this.partitionInfos,this.portals);
+        mySkylineInBlock ibNode = new mySkylineInBlock(graphdb, this.partitionInfos, this.portals);
         ArrayList<path> r = ibNode.getSkylinePath(Source, Destination, pid);
         return r;
     }
@@ -195,7 +182,7 @@ public class indexChecking {
                 if (n.getId() != sid && n.getId() != eid) {
                     String nid = String.valueOf(n.getId() + 1);
                     String n_pid = this.partitionInfos.get(nid).getValue();
-                    if (!n_pid.equals(pid)||this.portals.contains(nid)) {
+                    if (!n_pid.equals(pid) || this.portals.contains(nid)) {
                         flag = false;
                         break;
                     }
@@ -223,12 +210,12 @@ public class indexChecking {
             // System.out.println(printCosts(p.getCosts()));
 
             String sid = p.nodes.get(0);
-            String eid = p.nodes.get(p.nodes.size()-1);
+            String eid = p.nodes.get(p.nodes.size() - 1);
 
             boolean flag = true;
             for (String n : p.nodes) {
                 if (!n.equals(sid) && !n.equals(eid)) {
-                    String mapped_nID = String.valueOf(Long.parseLong(n)+1);
+                    String mapped_nID = String.valueOf(Long.parseLong(n) + 1);
                     String n_pid = this.partitionInfos.get(mapped_nID).getValue();
                     if (!n_pid.equals(pid) || this.portals.contains(mapped_nID)) {
                         flag = false;

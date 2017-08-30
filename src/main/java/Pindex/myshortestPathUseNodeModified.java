@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.management.ObjectName;
+
 import Pindex.myNode;
 import org.neo4j.graphalgo.GraphAlgoFactory;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -102,9 +103,9 @@ public class myshortestPathUseNodeModified {
             while (!mqueue.isEmpty()) {
                 myNode vs = mqueue.pop();
                 i++;
-                this.processedNodeList.put(vs.id,vs);
+                this.processedNodeList.put(vs.id, vs);
                 int index = 0;
-                for (; index < vs.subRouteSkyline.size();) {
+                for (; index < vs.subRouteSkyline.size(); ) {
                     path p = vs.subRouteSkyline.get(index);
                     if (!p.processed_flag) {
                         p.processed_flag = true;
@@ -188,8 +189,8 @@ public class myshortestPathUseNodeModified {
         StringBuffer sb = new StringBuffer();
         long totalRt = (timeInInitial + timeInFindSkyPath) * 1000000;
         used_In_skyline_operation = used_In_skyline_operation + usedInNode + usedInMain;
-        
-        
+
+
         sb.append(sourceId + ",").append(destinationId + ",");
         sb.append(pagecachedInFindNodes).append(",");
         sb.append(pagecachedInInital).append(",");
@@ -203,23 +204,22 @@ public class myshortestPathUseNodeModified {
         sb.append(numAccessedNodes).append(",");
         sb.append(numInIPath).append(",");
         sb.append(numFinalPath).append(",");
-        
-        
-        sb.append(formatter.format(100 * (double) usedInDijkstra / totalRt)).append(",");
-        sb.append(formatter.format(100 * (double) usedInExpansion/totalRt)).append(",");
-        sb.append(formatter.format(100 * (double) used_In_skyline_operation/totalRt)).append(",");
 
+
+        sb.append(formatter.format(100 * (double) usedInDijkstra / totalRt)).append(",");
+        sb.append(formatter.format(100 * (double) usedInExpansion / totalRt)).append(",");
+        sb.append(formatter.format(100 * (double) used_In_skyline_operation / totalRt)).append(",");
 
 
         System.out.println(totalRt);
         System.out.println("usedInNode:" + usedInNode / 1000000 + "  " + formatter.format(100 * (double) usedInNode / totalRt));
         System.out.println("usedInMain:" + usedInMain / 1000000 + "  " + formatter.format(100 * (double) usedInMain / totalRt));
-        System.out.println("usedInCheckExpand:" + usedInCheckExpand / 1000000 + "     "+ formatter.format(100 * (double) usedInCheckExpand / totalRt));
-        System.out.println("    usedInRead:" + usedInRead / 1000000 + "     "+ formatter.format(100 * (double) usedInRead / totalRt));
-        System.out.println("    usedInWrite:" + usedInWrite / 1000000 + "     "+ formatter.format(100 * (double) usedInWrite / totalRt));
-        System.out.println("    usedInDijkstra:" + usedInDijkstra / 1000000 + "     "+ formatter.format(100 * (double) usedInDijkstra / totalRt));
-        System.out.println("usedInExpansion:" + usedInExpansion / 1000000 + "     "+ formatter.format(100 * (double) usedInExpansion / totalRt));
-        System.out.println("used_In_skyline_operation:" + used_In_skyline_operation / 1000000 + "     "+ formatter.format(100 * (double) used_In_skyline_operation / totalRt));
+        System.out.println("usedInCheckExpand:" + usedInCheckExpand / 1000000 + "     " + formatter.format(100 * (double) usedInCheckExpand / totalRt));
+        System.out.println("    usedInRead:" + usedInRead / 1000000 + "     " + formatter.format(100 * (double) usedInRead / totalRt));
+        System.out.println("    usedInWrite:" + usedInWrite / 1000000 + "     " + formatter.format(100 * (double) usedInWrite / totalRt));
+        System.out.println("    usedInDijkstra:" + usedInDijkstra / 1000000 + "     " + formatter.format(100 * (double) usedInDijkstra / totalRt));
+        System.out.println("usedInExpansion:" + usedInExpansion / 1000000 + "     " + formatter.format(100 * (double) usedInExpansion / totalRt));
+        System.out.println("used_In_skyline_operation:" + used_In_skyline_operation / 1000000 + "     " + formatter.format(100 * (double) used_In_skyline_operation / totalRt));
         System.out.println((usedInNode + usedInMain + usedInCheckExpand + usedInExpansion) * 1.00 / totalRt);
         double avg_slr_inNode = 0.00;
         for (myNode n : this.processedNodeList.values()) {
@@ -439,7 +439,7 @@ public class myshortestPathUseNodeModified {
             boolean alreadyinsert = false;
             // System.out.println("============================");
             // System.out.println(this.skylinPaths.size());
-            for (; i < skylinPaths.size();) {
+            for (; i < skylinPaths.size(); ) {
                 // System.out.println(printCosts(skylinPaths.get(i).getCosts())
                 // + " " + printCosts(np.getCosts()) + " "
                 // + checkDominated(skylinPaths.get(i).getCosts(),

@@ -19,7 +19,7 @@ public class idxTest {
 
     public static String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
     public static String paritionFile = PathBase + "partitions_info.txt";
-    public static String portalListFile = PathBase+"portalList.txt";
+    public static String portalListFile = PathBase + "portalList.txt";
 
     ArrayList<String> portals = new ArrayList<>();
 
@@ -55,7 +55,7 @@ public class idxTest {
         ArrayList<path> r1 = runUseNodeFinal("0", "300", graphdb);
         System.out.println(r1.size());
 //        removePathNotWithinBlock(pid, r1);
-        run1 = (System.nanoTime()-run1)/1000000;
+        run1 = (System.nanoTime() - run1) / 1000000;
 //        System.out.println(r1.size());
 //        for(path p2:r1)
 //        {
@@ -135,7 +135,7 @@ public class idxTest {
             Destination = graphdb.findNode(BNode.BusNode, "name", did);
             tx.success();
         }
-        mySkylineInBlock ibNode = new mySkylineInBlock(graphdb,this.partitionInfos,this.portals);
+        mySkylineInBlock ibNode = new mySkylineInBlock(graphdb, this.partitionInfos, this.portals);
         ArrayList<path> r = ibNode.getSkylinePath(Source, Destination, pid);
         return r;
     }
@@ -204,7 +204,7 @@ public class idxTest {
 
             boolean flag = true;
             for (Node n : p.Nodes) {
-                if (n.getId() != sid && n.getId() != eid ) {
+                if (n.getId() != sid && n.getId() != eid) {
                     String nid = String.valueOf(n.getId() + 1);
                     String n_pid = this.partitionInfos.get(nid).getValue();
                     if (!n_pid.equals(pid) || this.portals.contains(nid)) {

@@ -83,7 +83,7 @@ public class BlinksPartition {
         for (Pair<String, String> sp : S) {
 
 
-            if(copyOfS.contains(sp)) {
+            if (copyOfS.contains(sp)) {
                 aa++;
                 String startNode = sp.getKey();
                 String endNode = sp.getValue();
@@ -103,9 +103,9 @@ public class BlinksPartition {
 
                 int SNumOfBlocks = this.numberOfPartitions.get(Scid).get(Spid);
                 int ENumOfBlocks = this.numberOfPartitions.get(Ecid).get(Epid);
-                System.out.println("   :"+sp + "  --> "+ Sincs.size()+"+"+SNumOfBlocks+"="+(Sincs.size() + SNumOfBlocks)+"  ===>  "+Eincs.size()+"+"+ENumOfBlocks+"="+(Eincs.size() + ENumOfBlocks));
+                System.out.println("   :" + sp + "  --> " + Sincs.size() + "+" + SNumOfBlocks + "=" + (Sincs.size() + SNumOfBlocks) + "  ===>  " + Eincs.size() + "+" + ENumOfBlocks + "=" + (Eincs.size() + ENumOfBlocks));
 
-                if ((Sincs.size() + 0.1*SNumOfBlocks) >= (0.1*ENumOfBlocks + Eincs.size())) {
+                if ((Sincs.size() + 0.1 * SNumOfBlocks) >= (0.1 * ENumOfBlocks + Eincs.size())) {
                     P.add(startNode);
                     removeFromSpeEdges(copyOfS, Sincs);
                 } else {
@@ -115,7 +115,7 @@ public class BlinksPartition {
                 System.out.println(copyOfS.size());
             }
         }
-        System.out.println("aa:"+aa);
+        System.out.println("aa:" + aa);
         return new ArrayList<>(P);
     }
 

@@ -382,4 +382,19 @@ public class VCNode {
 
         return r.nextInt((max - min) + 1) + min;
     }
+
+    public ArrayList<myPath> expand_in_dg(myPath p) {
+        Node n = p.endNode;
+        ArrayList<myPath> result = new ArrayList<>();
+        for (DistanceEdge de : this.dg.edges) {
+            if (de.startNode.getId() == n.getId()) {
+                for (myPath sp : de.paths) {
+                    myPath new_p = new myPath(p, sp);
+                    result.add(new_p);
+                }
+            }
+
+        }
+        return result;
+    }
 }

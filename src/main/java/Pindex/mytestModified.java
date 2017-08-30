@@ -1,7 +1,9 @@
 package Pindex;
 
 import neo4jTools.*;
+
 import javax.management.ObjectName;
+
 import org.neo4j.graphalgo.GraphAlgoFactory;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Direction;
@@ -83,25 +85,25 @@ public class mytestModified {
             long startTime = System.nanoTime();
             PathFinder<WeightedPath> finder = GraphAlgoFactory
                     .dijkstra(PathExpanders.forTypeAndDirection(Line.Linked, Direction.OUTGOING), "RunningTime");
-            WeightedPath paths = finder.findSinglePath(Source,Destination);
-            System.out.println(System.nanoTime()-startTime);
+            WeightedPath paths = finder.findSinglePath(Source, Destination);
+            System.out.println(System.nanoTime() - startTime);
             Long AfterPages = getFromManagementBean("Page cache", "Faults", graphdb);
             System.out.println(paths.nodes());
             System.out.println(AfterPages - BeforePages);
             System.out.println(getStartdate(graphdb));
-            
-            
+
+
             System.out.println("========================");
             BeforePages = getFromManagementBean("Page cache", "Faults", graphdb);
             myshortestPathUseNodeFinal mspNode = new myshortestPathUseNodeFinal(graphdb);
             startTime = System.nanoTime();
-            Double weight = mspNode.myDijkstra(Source,Destination,"RunningTime");
-            System.out.println(System.nanoTime()-startTime);
+            Double weight = mspNode.myDijkstra(Source, Destination, "RunningTime");
+            System.out.println(System.nanoTime() - startTime);
             AfterPages = getFromManagementBean("Page cache", "Faults", graphdb);
             System.out.println(paths.weight());
             System.out.println(weight);
-            System.out.println(AfterPages-BeforePages);
-            System.out.println("result is right ?"+ (paths.weight()==weight));
+            System.out.println(AfterPages - BeforePages);
+            System.out.println("result is right ?" + (paths.weight() == weight));
             tx.success();
         }
 

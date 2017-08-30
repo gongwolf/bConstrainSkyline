@@ -37,33 +37,106 @@ public class vctest {
             System.out.println("Index building success in " + (System.nanoTime() - building) / 1000000 + "ms ");
 //        retrivalTree(root);
             VCNode src_lowestNode = getLowestNode(root, "0");
+
             VCNode Dest_lowestNode = getLowestNode(root, "220");
             if (src_lowestNode != null) {
                 System.out.println(src_lowestNode.level);
+                Query(root, src_lowestNode, "0");
             } else {
                 System.out.println("not a vc not");
             }
 
-            System.out.println("-----------------------------");
-
-            if (Dest_lowestNode != null) {
-                System.out.println(Dest_lowestNode.level);
-            } else {
-                System.out.println("not a vc not");
-                HashSet<Node> ns = getNeighbor(graphdb, "220");
-                System.out.println(ns.size());
-                for (Node nn : ns) {
-                    VCNode dAdj = getLowestNode(root, nn);
-                    if (dAdj != null) {
-                        System.out.println(dAdj.level);
-                    } else {
-                        System.out.println("not a vc not");
-                    }
-                }
-            }
+//            System.out.println("-----------------------------");
+//
+//            if (Dest_lowestNode != null) {
+//                System.out.println(Dest_lowestNode.level);
+//            } else {
+//                System.out.println("not a vc not");
+//                HashSet<Node> ns = getNeighbor(graphdb, "220");
+//                System.out.println(ns.size());
+//                for (Node nn : ns) {
+//                    VCNode dAdj = getLowestNode(root, nn);
+//                    if (dAdj != null) {
+//                        System.out.println(dAdj.level);
+//                    } else {
+//                        System.out.println("not a vc not");
+//                    }
+//                }
+//            }
             tx.success();
         }
         n.shutdownDB();
+    }
+
+    private void Query(VCNode root, VCNode src_lowestNode, String sid) {
+        System.out.println("Begin to query");
+        VCNode node = src_lowestNode;
+        ArrayList<Node> processedNodes = new ArrayList<>();
+        Skyline_Query_leaf(src_lowestNode, sid, root.graphdb);
+//        while(node.parent!=null)
+//        {
+//            ArrayList<Node> Dg_nodes = node.dg.nodes;
+//            int size_pre = processedNodes.size();
+//            for(Node n:Dg_nodes)
+//            {
+//                if(!processedNodes.contains(n))
+//                {
+//                    processedNodes.add(n);
+//                }
+//            }
+//            int size_after = processedNodes.size();
+//            System.out.println(node.level+" has "+(size_after-size_pre)+" nodes ");
+//
+//
+//            node = node.parent;
+//
+//        }
+
+    }
+
+    private void Skyline_Query_leaf(VCNode src_lowestNode, String sid, GraphDatabaseService graphdb) {
+        myNodePriorityQueue mqueue = new myNodePriorityQueue();
+        Node s = graphdb.findNode(BNode.BusNode, "name", sid);
+        myNode source = new myNode(s, true);
+        mqueue.add(source);
+        HashMap<String, myNode> ProcessedNode = new HashMap<>();
+        source.inqueue = true;
+        ProcessedNode.put(source.id, source);
+
+
+        while (!mqueue.isEmpty()) {
+            myNode n = mqueue.pop();
+            ProcessedNode.put(n.id, n);
+            n.inqueue = false;
+            int index = 0;
+            for (; index < n.subRouteSkyline.size(); ) {
+                myPath p = n.subRouteSkyline.get(index);
+                if (!p.processed_flag) {
+                    p.processed_flag = true;
+                    ArrayList<myPath> paths = src_lowestNode.expand_in_dg(p);
+                    for (myPath np : paths) {
+                        myNode n_node = null;
+                        String nextID = String.valueOf(np.endNode.getId());
+                        if (ProcessedNode.containsKey(nextID)) {
+                            n_node = ProcessedNode.get(nextID);
+                        } else {
+                            n_node = new myNode(np.endNode, false);
+                        }
+                        n_node.addToSkylineResult(np);
+
+                        if (!n_node.inqueue) {
+                            mqueue.add(n_node);
+                            n_node.inqueue = true;
+                        }
+                    }
+                    index++;
+                } else {
+                    index++;
+                }
+            }
+        }
+        System.out.println("Finished Query");
+
     }
 
     private HashSet<Node> getNeighbor(GraphDatabaseService graphdb, String id) {

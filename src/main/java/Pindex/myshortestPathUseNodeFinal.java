@@ -27,10 +27,10 @@ public class myshortestPathUseNodeFinal {
     myNodePriorityQueue mqueue;
     ArrayList<path> skylinPaths = new ArrayList<>();
     HashMap<String, myNode> processedNodeList = new HashMap<>();
-//    ArrayList<String> p_list = new ArrayList<>();
+    //    ArrayList<String> p_list = new ArrayList<>();
 //    ArrayList<path> ppp = new ArrayList<>();
     int NumberOfProperties = 0;
-//    long usedInDijkstra = 0;
+    //    long usedInDijkstra = 0;
 //    long qTime = 0;
 //    long used_In_skyline_operation = 0;
     double[] iniLowerBound = null;
@@ -389,7 +389,7 @@ public class myshortestPathUseNodeFinal {
 //        if (numberOfLessThan == 0) {
 //            return false;
 //        } else {
-            return true;
+        return true;
 //        }
     }
 

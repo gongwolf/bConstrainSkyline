@@ -47,7 +47,7 @@ public class path {
         // System.out.println(startNode+"##"+endNode+"###"+
         // (startNode==endNode));
         this.Nodes.add(rel.getEndNode());
-        System.arraycopy(oldpath.cost,0,this.cost,0,this.cost.length);
+        System.arraycopy(oldpath.cost, 0, this.cost, 0, this.cost.length);
         calculateCosts(rel);
     }
 
@@ -125,10 +125,9 @@ public class path {
         }
     }
 
-    public ArrayList<String> getPropertiesName()
-    {
+    public ArrayList<String> getPropertiesName() {
         return this.propertiesName;
-    } 
+    }
 
     private void calculateCosts() {
         if (this.startNode == this.endNode) {
@@ -198,17 +197,14 @@ public class path {
         return sb.toString();
     }
 
-    public int getLenght()
-    {
+    public int getLenght() {
         return this.relationships.size();
     }
 
-    public long totalDegree()
-    { 
-        long totalDegree = 0 ;
-        for(Node n: this.Nodes)
-        {
-            totalDegree+=n.getDegree(Direction.OUTGOING);
+    public long totalDegree() {
+        long totalDegree = 0;
+        for (Node n : this.Nodes) {
+            totalDegree += n.getDegree(Direction.OUTGOING);
         }
         return totalDegree;
     }

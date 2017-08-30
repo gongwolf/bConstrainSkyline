@@ -13,28 +13,23 @@ public class myNodePriorityQueue {
         this.queue = new PriorityQueue<>(mc);
     }
 
-    public boolean add(myNode p)
-    {
+    public boolean add(myNode p) {
         return this.queue.add(p);
     }
 
-    public int size()
-    {
+    public int size() {
         return this.queue.size();
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return this.queue.isEmpty();
     }
 
-    public myNode pop()
-    {
+    public myNode pop() {
         return this.queue.poll();
     }
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         myNodePriorityQueue myqueue = new myNodePriorityQueue();
         System.out.println(myqueue.size());
 
@@ -43,11 +38,11 @@ public class myNodePriorityQueue {
 
 class mycomparator implements Comparator<myNode> {
     public int compare(myNode x, myNode y) {
-        if(x.EduDist == y.EduDist){
+        if (x.EduDist == y.EduDist) {
             return 0;
-        }else if(x.EduDist > y.EduDist){
+        } else if (x.EduDist > y.EduDist) {
             return 1;
-        }else{
+        } else {
             return -1;
         }
     }
@@ -56,85 +51,72 @@ class mycomparator implements Comparator<myNode> {
 
 class mycomparatorwithTotal implements Comparator<myNode> {
     public int compare(myNode x, myNode y) {
-        double xp,yp;
-        xp=yp=0;
+        double xp, yp;
+        xp = yp = 0;
 
 
-        for(double d:x.lowerBound)
-        {
+        for (double d : x.lowerBound) {
             xp += d;
         }
 
-        for(double d:y.lowerBound)
-        {
+        for (double d : y.lowerBound) {
             yp += d;
         }
 
-        if(xp==yp)
-        {
+        if (xp == yp) {
             return 0;
-        }else if(xp>yp){
+        } else if (xp > yp) {
             return 1;
-        }else{
+        } else {
             return -1;
         }
     }
 }
 
 
-
 class mycomparatorwithMin implements Comparator<myNode> {
     public int compare(myNode x, myNode y) {
-        double xp,yp;
-        xp=yp=0;
+        double xp, yp;
+        xp = yp = 0;
         int n = x.lowerBound.length;
 
         double xm[] = new double[n];
         double ym[] = new double[n];
 
 
-        for(path p:x.subRouteSkyline)
-        {
-            int xi=0;
-            for(double d:p.getCosts())
-            {
-                if(d<xm[xi])
-                {
-                    xm[xi]=d;
+        for (path p : x.subRouteSkyline) {
+            int xi = 0;
+            for (double d : p.getCosts()) {
+                if (d < xm[xi]) {
+                    xm[xi] = d;
                 }
                 xi++;
             }
         }
 
-        for(path p:y.subRouteSkyline)
-        {
-            int yi=0;
-            for(double d:p.getCosts())
-            {
-                if(d<xm[yi])
-                {
-                    xm[yi]=d;
+        for (path p : y.subRouteSkyline) {
+            int yi = 0;
+            for (double d : p.getCosts()) {
+                if (d < xm[yi]) {
+                    xm[yi] = d;
                 }
                 yi++;
             }
         }
 
-        for(double d:ym)
-        {
+        for (double d : ym) {
             yp += d;
         }
 
-        for(double d:xm)
-        {
+        for (double d : xm) {
             xp += d;
         }
 
-        if(xp==yp)
-        {
+        if (xp == yp) {
             return 0;
-        }else if(xp>yp){
+        } else if (xp > yp) {
             return 1;
-        }else{
+        } else {
             return -1;
         }
     }

@@ -30,10 +30,10 @@ public class mySkylineInBlock {
     myNodePriorityQueue mqueue;
     ArrayList<path> skylinPaths = new ArrayList<>();
     HashMap<String, myNode> processedNodeList = new HashMap<>();
-//    ArrayList<String> p_list = new ArrayList<>();
+    //    ArrayList<String> p_list = new ArrayList<>();
 //    ArrayList<path> ppp = new ArrayList<>();
     int NumberOfProperties = 0;
-//    long usedInDijkstra = 0;
+    //    long usedInDijkstra = 0;
 //    long qTime = 0;
     long used_In_skyline_operation = 0;
     double[] iniLowerBound = null;

@@ -28,7 +28,7 @@ public class test {
     public HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
     public static String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
     public static String paritionFile = PathBase + "partitions_info.txt";
-    public static String portalListFile = PathBase+"portalList.txt";
+    public static String portalListFile = PathBase + "portalList.txt";
 
     ArrayList<String> portals = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class test {
         connector n = new connector("/home/gqxwolf/neo4j/neo4j-community-3.2.3/testdb/databases/graph.db");
         n.startDB();
         GraphDatabaseService graphDB = n.getDBObject();
-        
+
         test t = new test();
 //         String sid = "1";
 //         String eid = "99";
@@ -67,40 +67,40 @@ public class test {
     }
 
     private void buildIndex(GraphDatabaseService graphdb) {
-        String innerP = PathBase+"Pairs/pairs.inner";
-        String interP = PathBase+"Pairs/pairs.inter";
+        String innerP = PathBase + "Pairs/pairs.inner";
+        String interP = PathBase + "Pairs/pairs.inter";
 
         int i = 1;
         System.out.println("Building inner index is processing");
-         try (BufferedReader br = new BufferedReader(new FileReader(innerP))) {
-             String line = null;
-             while ((line = br.readLine()) != null) {
-                 String[] infos = line.split(" ");
-                 String cid = infos[0];
-                 String pid = infos[1];
-                 String sid = infos[2];
-                 String eid = infos[3];
-                 ArrayList<path> skyR = this.runSkylineInBlock(sid, eid,pid,graphdb);
-                 if (skyR!=null && skyR.size() != 0 ) {
-                     removePathNotWithinBlock(pid, skyR);
-                     if (skyR.size() != 0) {
-                         double[] costs = getShortestCost(sid, eid,graphdb);
-                         if (costs[0] != -1) {
-                             pairSer ps = new pairSer(sid, eid, skyR, costs);
-                             writeToDisk(cid, pid, ps);
-                         }
-                     }
-                 }
+        try (BufferedReader br = new BufferedReader(new FileReader(innerP))) {
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                String[] infos = line.split(" ");
+                String cid = infos[0];
+                String pid = infos[1];
+                String sid = infos[2];
+                String eid = infos[3];
+                ArrayList<path> skyR = this.runSkylineInBlock(sid, eid, pid, graphdb);
+                if (skyR != null && skyR.size() != 0) {
+                    removePathNotWithinBlock(pid, skyR);
+                    if (skyR.size() != 0) {
+                        double[] costs = getShortestCost(sid, eid, graphdb);
+                        if (costs[0] != -1) {
+                            pairSer ps = new pairSer(sid, eid, skyR, costs);
+                            writeToDisk(cid, pid, ps);
+                        }
+                    }
+                }
 
-                 if (i % 10000 == 0) {
-                     System.out.println(i + "..........");
-                 }
-                 i++;
+                if (i % 10000 == 0) {
+                    System.out.println(i + "..........");
+                }
+                i++;
 
-             }
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         long i_ter = 1;
         System.out.println("Building inter index is processing");
@@ -113,7 +113,7 @@ public class test {
                 String sid = infos[2];
                 String eid = infos[3];
 
-                double[] costs = getShortestCost(sid, eid,graphdb);
+                double[] costs = getShortestCost(sid, eid, graphdb);
                 writeToDisk(cid, pid, sid, eid, costs);
                 if (i_ter % 400000 == 0) {
                     System.out.println(i_ter + "..........");
@@ -126,15 +126,15 @@ public class test {
     }
 
     private void writeToDisk(String cid, String pid, String sid, String eid, double[] costs) {
-        String fpath = PathBase+"indexes/inter/" + cid + "/";
+        String fpath = PathBase + "indexes/inter/" + cid + "/";
         File f = new File(fpath);
         if (!f.exists()) {
             f.mkdirs();
         }
         String interpath = fpath + "pid.inter.idx";
         try (FileWriter fw = new FileWriter(interpath, true);
-                BufferedWriter bw = new BufferedWriter(fw);
-                PrintWriter out = new PrintWriter(bw)) {
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
             String result = "";
             result = result + cid + " ";
             result = result + pid + " ";
@@ -151,7 +151,7 @@ public class test {
     }
 
     private void writeToDisk(String cid, String pid, pairSer ps) {
-        String fpath = PathBase+"indexes/inner/" + cid + "/" + pid
+        String fpath = PathBase + "indexes/inner/" + cid + "/" + pid
                 + "_idx/";
         File f = new File(fpath);
         if (!f.exists()) {
@@ -176,7 +176,7 @@ public class test {
     }
 
     private void writePairToDisk(String cid, String pid, String sid, String eid, String indexType) {
-        String fpath = PathBase+"Pairs/";
+        String fpath = PathBase + "Pairs/";
         File fFile = new File(fpath);
         if (!fFile.exists()) {
             fFile.mkdirs();
@@ -188,8 +188,8 @@ public class test {
         }
 
         try (FileWriter fw = new FileWriter(fpath, true);
-                BufferedWriter bw = new BufferedWriter(fw);
-                PrintWriter out = new PrintWriter(bw)) {
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
             String result = "";
             result = result + cid + " ";
             result = result + pid + " ";
@@ -291,7 +291,7 @@ public class test {
             Destination = graphdb.findNode(BNode.BusNode, "name", did);
             tx.success();
         }
-        mySkylineInBlock ibNode = new mySkylineInBlock(graphdb,this.partitionInfos,this.portals);
+        mySkylineInBlock ibNode = new mySkylineInBlock(graphdb, this.partitionInfos, this.portals);
         ArrayList<path> r = ibNode.getSkylinePath(Source, Destination, pid);
         return r;
     }
@@ -343,7 +343,7 @@ public class test {
 
     public void readPartitionInfo() {
         this.pMapping.clear();
-        String partitionInfoPath = this.PathBase+"portals/";
+        String partitionInfoPath = this.PathBase + "portals/";
         File parFile = new File(partitionInfoPath);
         for (File cFile : parFile.listFiles()) {
             // System.out.println(cFile.getName());
@@ -413,7 +413,7 @@ public class test {
     public void removePathNotWithinBlock(String pid, ArrayList<path> paths) {
 
         int i = 0;
-        for (; i < paths.size();) {
+        for (; i < paths.size(); ) {
             path p = paths.get(i);
 
             // System.out.println(p);

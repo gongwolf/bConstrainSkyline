@@ -61,8 +61,7 @@ public class connector {
 
     public void clean() {
         startDB();
-        if (this.graphDB != null)
-        {
+        if (this.graphDB != null) {
             System.out.println("Connect the db successfully");
         }
         try (Transaction tx = this.graphDB.beginTx()) {
@@ -76,8 +75,7 @@ public class connector {
 
     public void test() {
         startDB();
-        if (this.graphDB != null)
-        {
+        if (this.graphDB != null) {
             System.out.println("Connect the db successfully");
         }
         try (Transaction tx = this.graphDB.beginTx()) {

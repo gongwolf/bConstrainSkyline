@@ -12,28 +12,23 @@ public class PortalPriorityQueue {
         this.queue = new PriorityQueue<>();
     }
 
-    public boolean add(Portal p)
-    {
+    public boolean add(Portal p) {
         return this.queue.add(p);
     }
 
-    public int size()
-    {
+    public int size() {
         return this.queue.size();
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return this.queue.isEmpty();
     }
 
-    public Portal pop()
-    {
+    public Portal pop() {
         return this.queue.poll();
     }
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         PortalPriorityQueue myqueue = new PortalPriorityQueue();
         System.out.println(myqueue.size());
 

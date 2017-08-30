@@ -16,31 +16,28 @@ public class LandMarkIndex {
     private String nodesFilePath = "/home/gqxwolf/mydata/projectData/ConstrainSkyline/data/NodeInfo.txt";
     private connector conn;
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         LandMarkIndex lmd = new LandMarkIndex();
         lmd.buildIndex();
     }
 
-    public void buildIndex()
-    {
+    public void buildIndex() {
         buildConnection();
         loadNodesDegrees();
         DestroyConnection();
     }
 
     private void loadNodesDegrees() {
-        try (BufferedReader br = new BufferedReader(new FileReader(nodesFilePath));){
+        try (BufferedReader br = new BufferedReader(new FileReader(nodesFilePath));) {
             String line = null;
             while ((line = br.readLine()) != null) {
                 String node_id = line.split(",")[0];
-                try(Transaction tx = this.graphdb.beginTx())
-                {
+                try (Transaction tx = this.graphdb.beginTx()) {
                     Node n = graphdb.findNode(BNode.BusNode, "name", "2");
                     int outgoing_degree = n.getDegree(Direction.OUTGOING);
                     int in_comming_degree = n.getDegree(Direction.INCOMING);
                     int total_degree = n.getDegree();
-                    System.out.println(outgoing_degree+"  "+in_comming_degree+" "+total_degree);
+                    System.out.println(outgoing_degree + "  " + in_comming_degree + " " + total_degree);
                     tx.success();
                 }
 
@@ -54,12 +51,12 @@ public class LandMarkIndex {
 
     private void buildConnection() {
         connector n = new connector("/home/gqxwolf/neo4j/csldb/databases/graph.db");
-        this.conn = n ;
+        this.conn = n;
         this.conn.startDB();
         this.graphdb = n.getDBObject();
     }
 
-    private void DestroyConnection(){
+    private void DestroyConnection() {
         this.conn.shutdownDB();
     }
 

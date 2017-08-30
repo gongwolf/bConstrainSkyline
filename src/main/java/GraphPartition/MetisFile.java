@@ -6,11 +6,11 @@ import java.io.*;
 import java.util.*;
 
 public class MetisFile {
-    String DBBase  = "/home/gqxwolf/mydata/projectData/testGraph/data/";
-    String NodePath = DBBase+"NodeInfo.txt";
-    String EdgePath = DBBase+"SegInfo.txt";
-    String metisGraphFile = DBBase+"metisFormatFile.csv";
-    String mappingPath = DBBase+"mapping/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
+    String NodePath = DBBase + "NodeInfo.txt";
+    String EdgePath = DBBase + "SegInfo.txt";
+    String metisGraphFile = DBBase + "metisFormatFile.csv";
+    String mappingPath = DBBase + "mapping/";
     String mappedGraphFileName = "mapped_metis_1.graph";
 
 
@@ -21,7 +21,7 @@ public class MetisFile {
     ArrayList<HashMap<String, ArrayList<String[]>>> connectionSets = new ArrayList<>();
 
     public MetisFile(String mappedGraphFileName) {
-        this.mappedGraphFileName = mappingPath+mappedGraphFileName;
+        this.mappedGraphFileName = mappingPath + mappedGraphFileName;
     }
 
     public static void main(String args[]) {
@@ -107,7 +107,7 @@ public class MetisFile {
             //Node nid belong to this connection component
             //Adj nodes of the nid, String[]{adj nid, cost1, cost2....}
             HashMap<String, ArrayList<String[]>> set = runDFS(nodeid);
-            System.out.println(id+ " " +set.size());
+            System.out.println(id + " " + set.size());
             this.connectionSets.add(set);
             mappingToMetisFormat(set, id);
             id++;
@@ -305,8 +305,8 @@ public class MetisFile {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(EdgesNum/2);
+        System.out.println(EdgesNum / 2);
 
-        return EdgesNum/2;
+        return EdgesNum / 2;
     }
 }
