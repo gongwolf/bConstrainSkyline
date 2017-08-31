@@ -33,7 +33,7 @@ public class test {
     ArrayList<String> portals = new ArrayList<>();
 
     public static void main(String args[]) {
-        connector n = new connector("/home/gqxwolf/neo4j/neo4j-community-3.2.3/testdb/databases/graph.db");
+        connector n = new connector("/home/gqxwolf/neo4j323/testdb/databases/graph.db");
         n.startDB();
         GraphDatabaseService graphDB = n.getDBObject();
 
@@ -62,7 +62,9 @@ public class test {
 
 
 //        GraphDatabaseService graphdb = n.getDBObject();
+        long run =System.nanoTime();
         t.buildIndex(graphDB);
+        System.out.println((System.nanoTime()-run)/1000000);
         n.shutdownDB();
     }
 
@@ -72,10 +74,13 @@ public class test {
 
         int i = 1;
         System.out.println("Building inner index is processing");
+        int linenum = 0;
+        int skyline_num = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(innerP))) {
             String line = null;
             while ((line = br.readLine()) != null) {
                 String[] infos = line.split(" ");
+                linenum++;
                 String cid = infos[0];
                 String pid = infos[1];
                 String sid = infos[2];
@@ -87,6 +92,7 @@ public class test {
                         double[] costs = getShortestCost(sid, eid, graphdb);
                         if (costs[0] != -1) {
                             pairSer ps = new pairSer(sid, eid, skyR, costs);
+                            skyline_num+=skyR.size();
                             writeToDisk(cid, pid, ps);
                         }
                     }
@@ -101,6 +107,9 @@ public class test {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        System.out.println("there are total "+linenum+" inner pairs");
+        System.out.println("there are total "+skyline_num+" skyline index found");
 
         long i_ter = 1;
         System.out.println("Building inter index is processing");

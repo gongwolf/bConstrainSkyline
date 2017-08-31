@@ -6,6 +6,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class myPath {
     public Node startNode;
@@ -22,11 +23,14 @@ public class myPath {
         this.startNode = src;
         this.endNode = dest;
         this.NumberOfProperties = getNumberOfProperties();
+        this.setPropertiesName();
         this.cost = new double[this.NumberOfProperties];
         // System.out.println("hahahha "+this.cost.length);
         this.Nodes = new ArrayList<>();
+
         this.relationships = new ArrayList<>();
         this.relationships.add(rel);
+
         this.Nodes.add(startNode);
         this.Nodes.add(endNode);
         calculateCosts();
@@ -44,6 +48,7 @@ public class myPath {
         this.Nodes.add(startNode);
         this.Nodes.add(nextNode);
         this.Nodes.add(endNode);
+        this.setPropertiesName();
         calculateCosts();
     }
 
@@ -60,8 +65,13 @@ public class myPath {
 
         this.relationships = new ArrayList<>(p_de.relationships);
         this.relationships.addAll(p_next.relationships);
+        this.propertiesName = new ArrayList<>(p_de.propertiesName);
 
-        calculateCosts();
+
+        for(int i=0;i<this.NumberOfProperties;i++)
+        {
+            this.cost[i]=p_de.getCosts()[i]+p_next.getCosts()[i];
+        }
 
     }
 
@@ -93,7 +103,7 @@ public class myPath {
     }
 
     private void calculateCosts() {
-        if (this.startNode == this.endNode) {
+        if (this.startNode.getId() == this.endNode.getId()) {
             for (int i = 0; i < this.cost.length; i++) {
                 this.cost[i] = 0;
             }
@@ -101,7 +111,8 @@ public class myPath {
             for (Relationship r : this.relationships) {
                 int i = 0;
                 for (String pname : this.propertiesName) {
-                    this.cost[i] += Double.parseDouble(r.getProperty(pname).toString());
+                    double value = Double.parseDouble(r.getProperty(pname).toString());
+                    this.cost[i] += value;
                     i++;
                 }
             }
@@ -113,6 +124,70 @@ public class myPath {
     }
 
     public boolean hasCycle() {
-        return false;
+//        System.out.println(this.startNode+" "+this.endNode);
+//        for(Node n:this.Nodes)
+//        {
+//            System.out.println(n);
+//        }
+//
+//        for(Node n1:this.Nodes)
+//        {
+//            if(n1.getId()!=this.startNode.getId() && n1.getId()!=this.endNode.getId()) {
+//                for (Node n2 : this.Nodes) {
+//                    if (n2.getId() == n1.getId()) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+        return  this.startNode.getId()==this.endNode.getId();
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        if (this.relationships.isEmpty()) {
+            sb.append("(" + this.startNode.getId() + ")");
+        } else {
+            int i;
+            for (i = 0; i < this.Nodes.size() - 1; i++) {
+                sb.append("(" + this.Nodes.get(i).getId() + ")");
+                // sb.append("-[Linked," + this.relationships.get(i).getId() +
+                // "]->");
+                sb.append("-[" + this.relationships.get(i).getId() + "]-");
+            }
+            sb.append("(" + this.Nodes.get(i).getId() + ")");
+        }
+        return sb.toString();
+    }
+
+    public String printCosts() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        int i = 0;
+        for (; i < cost.length - 1; i++) {
+            sb.append(cost[i] + ",");
+        }
+        sb.append(cost[i] + "]");
+        return sb.toString();
+    }
+
+    public void setPropertiesName() {
+        Iterable<Relationship> rels = this.startNode.getRelationships(Line.Linked, Direction.OUTGOING);
+        if (rels.iterator().hasNext()) {
+            Relationship rel = rels.iterator().next();
+            Map<String, Object> pnamemap = rel.getAllProperties();
+            for (Map.Entry<String, Object> entry : pnamemap.entrySet()) {
+                this.propertiesName.add(entry.getKey());
+            }
+        } else {
+            rels = this.startNode.getRelationships(Line.Linked, Direction.INCOMING);
+            if (rels.iterator().hasNext()) {
+                Relationship rel = rels.iterator().next();
+                Map<String, Object> pnamemap = rel.getAllProperties();
+                for (Map.Entry<String, Object> entry : pnamemap.entrySet()) {
+                    this.propertiesName.add(entry.getKey());
+                }
+            }
+        }
     }
 }

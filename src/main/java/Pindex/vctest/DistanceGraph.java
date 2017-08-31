@@ -1,7 +1,6 @@
 package Pindex.vctest;
 
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 
 import java.util.ArrayList;
 
@@ -23,5 +22,22 @@ public class DistanceGraph {
 
     public long numberOfEdges() {
         return (long) edges.size();
+    }
+
+    public long totalPaths() {
+        long result = 0;
+        for (DistanceEdge de : this.edges) {
+            result += de.paths.size();
+        }
+        return result;
+    }
+
+    public ArrayList<myPath> getIncomingEdges(Node n) {
+        ArrayList<myPath> result = new ArrayList<>();
+        for (DistanceEdge de : this.edges) {
+            if (de.endNode.getId() == n.getId())
+                result.addAll(de.paths);
+        }
+        return result;
     }
 }

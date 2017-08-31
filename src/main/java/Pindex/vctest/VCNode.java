@@ -17,6 +17,8 @@ public class VCNode {
     private int threshold;
     public ArrayList<VCNode> children;
     int level;
+    public boolean isRoot = false;
+
 
     public VCNode(GraphDatabaseService graphdb) {
         this.graphdb = graphdb;
@@ -26,6 +28,7 @@ public class VCNode {
 
 
     public void buildDistanceGraph(Graph graph, int threshold) {
+        this.isRoot=true;
         this.threshold = threshold;
         this.level = 0;
         try (Transaction tx = this.graphdb.beginTx()) {
@@ -65,6 +68,7 @@ public class VCNode {
             VCNode child = new VCNode(parent.graphdb);
             child.parent = parent;
             child.level = parent.level + 1;
+            int prv_size = S.size();
             child.buildDistanceGraph(parent.dg, parent.threshold, S);
 //            if(child.level==3)
 //            {
@@ -77,6 +81,11 @@ public class VCNode {
 //              System.out.println(child.dg.numberOfNodes());
                 if (child.dg.numberOfNodes() > this.threshold) {
                     GrowTheTree(child);
+                }
+                int aft_size = S.size();
+                if((double)aft_size/prv_size>0.8)
+                {
+                    S.clear();
                 }
             } else {
 //                System.out.println("is null");
@@ -115,6 +124,7 @@ public class VCNode {
                 //if nextnode is a vc node
                 if (vcNodes.contains(nextNode) && nextNode != ns) {
                     de = new DistanceEdge(ns, nextNode, rel);
+//                    System.out.println("  "+de.startNode+" "+de.endNode+" "+de.paths.get(0).printCosts());
 //                        System.out.println(ns + "-----" + nextNode + "  " + (ns.getId()) + ":" + nextNode.getId() + "->" + (ns.getId() == nextNode.getId()));
                 }//if next node is a non-vc-node,jump to next-next node, it should be a vc node.
                 else if (!vcNodes.contains(nextNode) && nextNode.getId() != ns.getId()) {
@@ -202,21 +212,21 @@ public class VCNode {
         try (Transaction tx = this.graphdb.beginTx()) {
 
             ArrayList<Node> VCNodes = new ArrayList<>();
-            ArrayList<DistanceEdge> VCEdges = new ArrayList<>();
+            ArrayList<DistanceEdge> VCEdges;
 
             int trys = 0;
-            while (trys != 10) {
+            while (trys != 5) {
                 S.clear();
                 S.addAll(Sor);
                 VCNodes = getVCNodes(graph, S);
-                if (VCNodes.size() != this.parent.dg.numberOfNodes()) {
+                if ((VCNodes.size()<(parent.dg.numberOfNodes()*0.9))) {
                     break;
                 }
                 trys++;
 
             }
 
-            if (trys != 10) {
+            if (trys != 5) {
                 VCEdges = CreateEdgesDistance(VCNodes);
 //                System.out.println("------------------");
 //                System.out.println(VCNodes.size());
@@ -387,14 +397,20 @@ public class VCNode {
         Node n = p.endNode;
         ArrayList<myPath> result = new ArrayList<>();
         for (DistanceEdge de : this.dg.edges) {
-            if (de.startNode.getId() == n.getId()) {
+            if (de.startNode.getId()==n.getId()) {
+//                System.out.println(de);
                 for (myPath sp : de.paths) {
                     myPath new_p = new myPath(p, sp);
-                    result.add(new_p);
+//                    System.out.println(new_p.hasCycle()+"    "+new_p);
+                    if(!new_p.hasCycle()){
+                        result.add(new_p);
+                    }
                 }
             }
 
         }
         return result;
     }
+
+
 }

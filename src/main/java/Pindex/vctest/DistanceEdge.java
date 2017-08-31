@@ -24,6 +24,7 @@ public class DistanceEdge {
         this.startNode = src;
         this.endNode = dest;
         myPath p = new myPath(src, dest, rel);
+//        System.out.println(p.printCosts());
         addToSkylineResult(p);
     }
 

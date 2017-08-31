@@ -7,26 +7,34 @@ import java.util.ArrayList;
 public class myNode {
     public ArrayList<myPath> subRouteSkyline = new ArrayList<>();
     String id;
-    public boolean inqueue;
+    Node node;
+    public boolean inqueue=false;
 
     public myNode(Node s, boolean isSource) {
         this.id = String.valueOf(s.getId());
+        this.node = s;
         if (isSource) {
             myPath initPath = new myPath(s);
             this.subRouteSkyline.add(initPath);
         }
     }
 
-    public void addToSkylineResult(myPath np) {
+    public boolean addToSkylineResult(myPath np) {
 //        int removedPath = 0;
 //        int insertedPath = 0;
         int i = 0;
         if (this.subRouteSkyline.isEmpty()) {
 //            insertedPath++;
             this.subRouteSkyline.add(np);
+//            System.out.println("    add to skyline:"+np);
+            return true;
+
         } else if (this.subRouteSkyline.get(0).getCosts()[0] == 0 && this.subRouteSkyline.size() == 1) {
             this.subRouteSkyline.remove(0);
             this.subRouteSkyline.add(np);
+//            System.out.println("   add to skyline:"+np);
+            return true;
+
 //            removedPath++;
 //            insertedPath++;
         } else {
@@ -57,10 +65,13 @@ public class myNode {
 
             if (!needToRemove && alreadyinsert) {
                 this.subRouteSkyline.add(np);
+//                System.out.println("   add to skyline:"+np);
+                return true;
             }
         }
 //        int[] result = new int[] { insertedPath, removedPath };
 //        return result;
+        return false;
     }
 
     private boolean checkDominated(double[] costs, double[] estimatedCosts) {

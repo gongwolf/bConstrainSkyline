@@ -54,6 +54,7 @@ public class myshortestPathUseNodeFinal {
 //        Long pinsInInital = 0L;
 //        Long PinsInFindSkyPath = 0L;
         Long numInIPath = 0L;
+        long run2;
 //        Long numFinalPath = 0L;
 //        Long numIters = 0L;
 //        Long numAccessedNodes = 0L;
@@ -96,11 +97,14 @@ public class myshortestPathUseNodeFinal {
             // }
             // System.out.println("initilzed the sky line path");
 //            long a1 = System.nanoTime();
+            long run1 = System.nanoTime();
             for (String p_type : iniPath.getPropertiesName()) {
                 myDijkstra(source, destination, p_type);
             }
-//            System.out.println((System.nanoTime()-a1)/1000000);
 
+            System.out.println("run1:"+(System.nanoTime()-run1)/1000000);
+
+            run2 = System.nanoTime();
             myNode start = processedNodeList.get(String.valueOf(source.getId()));
             if (start != null) {
                 mqueue.add(start);
@@ -206,6 +210,7 @@ public class myshortestPathUseNodeFinal {
             }
             tx.success();
         }
+        System.out.println("run2:"+(System.nanoTime()-run2)/1000000);
 
 //        Long Pages_3 = getFromManagementBean("Page cache", "Faults", graphdb);
 //        Long Pins_3 = getFromManagementBean("Page cache", "Pins", graphdb);

@@ -115,11 +115,11 @@ public class myNode {
         if (this.subRouteSkyline.isEmpty()) {
 //            insertedPath++;
             this.subRouteSkyline.add(np);
-        } else if (this.subRouteSkyline.get(0).getCosts()[0] == 0 && this.subRouteSkyline.size() == 1) {
-            this.subRouteSkyline.remove(0);
-            this.subRouteSkyline.add(np);
-//            removedPath++;
-//            insertedPath++;
+//        } else if (this.subRouteSkyline.get(0).getCosts()[0] == 0 && this.subRouteSkyline.size() == 1) {
+//            this.subRouteSkyline.remove(0);
+//            this.subRouteSkyline.add(np);
+////            removedPath++;
+////            insertedPath++;
         } else {
             boolean alreadyinsert = false;
             boolean needToRemove = false;

@@ -52,15 +52,15 @@ public class idxTest {
 
         System.out.println("============================");
         long run1 = System.nanoTime();
-        ArrayList<path> r1 = runUseNodeFinal("0", "300", graphdb);
+        ArrayList<path> r1 = runUseNodeFinal("0", "220", graphdb);
         System.out.println(r1.size());
 //        removePathNotWithinBlock(pid, r1);
         run1 = (System.nanoTime() - run1) / 1000000;
 //        System.out.println(r1.size());
-//        for(path p2:r1)
-//        {
-//            System.out.println(p2);
-//        }
+        for(path p2:r1)
+        {
+            System.out.println(p2);
+        }
 //        System.out.println(r1.get(0));
 
 //        for(Node n1s:r1.get(1).Nodes)
