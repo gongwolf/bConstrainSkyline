@@ -53,9 +53,14 @@ public class myPath {
     }
 
     public myPath(myPath p_de, myPath p_next) {
+
+        if(p_de.endNode.getId()!=p_next.startNode.getId())
+        {
+            System.out.println("concatenate error");
+        }
         this.startNode = p_de.startNode;
         this.endNode = p_next.endNode;
-        this.NumberOfProperties = getNumberOfProperties();
+        this.NumberOfProperties = p_de.NumberOfProperties;
         this.cost = new double[this.NumberOfProperties];
 
         this.Nodes = new ArrayList<>(p_de.Nodes);
@@ -65,6 +70,7 @@ public class myPath {
 
         this.relationships = new ArrayList<>(p_de.relationships);
         this.relationships.addAll(p_next.relationships);
+
         this.propertiesName = new ArrayList<>(p_de.propertiesName);
 
 

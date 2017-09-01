@@ -35,8 +35,10 @@ public class DistanceGraph {
     public ArrayList<myPath> getIncomingEdges(Node n) {
         ArrayList<myPath> result = new ArrayList<>();
         for (DistanceEdge de : this.edges) {
-            if (de.endNode.getId() == n.getId())
-                result.addAll(de.paths);
+            for (myPath p : de.paths) {
+                if (p.endNode.getId() == n.getId())
+                    result.add(p);
+            }
         }
         return result;
     }

@@ -253,23 +253,50 @@ public class VCNode {
         for (Node n : vcNodes) {
             ArrayList<DistanceEdge> outging_edges = getOutGoingEdges(n);
             for (DistanceEdge de : outging_edges) {
+//                if(de.startNode.getId()==22)
+//                {
+//                    System.out.println(this.level+":"+de);
+//                }
                 DistanceEdge new_edges = null;
                 Node nextNode = de.endNode;
-                if (vcNodes.contains(nextNode) && nextNode != n) {
-//                    System.out.println("Create edge (next is vc)"+ n+" "+nextNode);
+                if (vcNodes.contains(nextNode) && nextNode.getId() != n.getId()) {
+//                    if(de.startNode.getId()==22)
+//                    {
+//                        System.out.println("Create edge (next is vc)"+ n+" "+nextNode);
+//                    }
                     new_edges = new DistanceEdge(de);
+//                    if(de.startNode.getId()==22)
+//                    {
+//                        System.out.println(new_edges==null);
+//                        System.out.println(new_edges);
+//                    }
+
+                    if (new_edges != null) {
+                        CreateDisEdges(result, new_edges);
+                    }
                 } else if (!vcNodes.contains(nextNode) && nextNode.getId() != n.getId()) {
                     ArrayList<DistanceEdge> nextList = getOutGoingEdges(nextNode);
                     for (DistanceEdge next_de : nextList) {
-//                        System.out.println("Create edge (next is non-vc)"+ de.startNode+" "+de.endNode+" "+next_de.endNode);
+//                        if(de.startNode.getId()==22)
+//                        {
+//                            System.out.println("Create edge (next is non-vc)"+ de.startNode+" "+de.endNode+" "+next_de.endNode);
+//                        }
                         if (n.getId() != next_de.endNode.getId()) {
                             new_edges = new DistanceEdge(de, next_de);
+//                            if(de.startNode.getId()==22)
+//                            {
+//                                System.out.println(new_edges==null);
+//                                System.out.println(new_edges);
+//                            }
+
+                            if (new_edges != null) {
+                                CreateDisEdges(result, new_edges);
+                            }
                         }
                     }
                 }
-                if (new_edges != null) {
-                    CreateDisEdges(result, new_edges);
-                }
+
+
 
             }
 

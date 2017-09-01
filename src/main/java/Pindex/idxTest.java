@@ -52,7 +52,7 @@ public class idxTest {
 
         System.out.println("============================");
         long run1 = System.nanoTime();
-        ArrayList<path> r1 = runUseNodeFinal("0", "220", graphdb);
+        ArrayList<path> r1 = runUseNodeFinal("2", "35", graphdb);
         System.out.println(r1.size());
 //        removePathNotWithinBlock(pid, r1);
         run1 = (System.nanoTime() - run1) / 1000000;

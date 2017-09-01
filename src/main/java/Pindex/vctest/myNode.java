@@ -29,11 +29,11 @@ public class myNode {
 //            System.out.println("    add to skyline:"+np);
             return true;
 
-        } else if (this.subRouteSkyline.get(0).getCosts()[0] == 0 && this.subRouteSkyline.size() == 1) {
-            this.subRouteSkyline.remove(0);
-            this.subRouteSkyline.add(np);
-//            System.out.println("   add to skyline:"+np);
-            return true;
+//        } else if (this.subRouteSkyline.get(0).getCosts()[0] == 0 && this.subRouteSkyline.size() == 1) {
+//            this.subRouteSkyline.remove(0);
+//            this.subRouteSkyline.add(np);
+////            System.out.println("   add to skyline:"+np);
+//            return true;
 
 //            removedPath++;
 //            insertedPath++;

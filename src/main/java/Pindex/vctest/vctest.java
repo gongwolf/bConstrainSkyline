@@ -45,17 +45,19 @@ public class vctest {
             System.out.println("Index building success in " + (System.nanoTime() - building) / 1000000 + "ms ");
             System.out.println("Total depth is " + getHigh(root));
             long traveralTime = System.nanoTime();
-            retrivalTree(root);
+//            retrivalTree(root);
             System.out.println("Traveral Used " + (System.nanoTime() - traveralTime) / 1000000 + "ms ");
-            VCNode src_lowestNode = getLowestNode(root, "0");
+            String sid = "0";
+            String did = "220";
+            VCNode src_lowestNode = getLowestNode(root, sid);
 
-            VCNode Dest_lowestNode = getLowestNode(root, "220");
+            VCNode Dest_lowestNode = getLowestNode(root, did);
             if (src_lowestNode != null) {
                 long run2 = System.nanoTime();
                 System.out.println("src is in the " + src_lowestNode.level + " level");
                 System.out.println("Query in " + (System.nanoTime() - run2) / 1000000 + "ms ");
             } else {
-                System.out.println("not a vc not");
+                System.out.println("src not a vc not");
             }
 
             System.out.println("-----------------------------");
@@ -65,11 +67,15 @@ public class vctest {
                 System.out.println(Dest_lowestNode.level);
             } else {
                 System.out.println("dest is not a vc not");
-                ns_dest = getNeighbor(graphdb, "220");
+                ns_dest = getNeighbor(graphdb, did);
                 System.out.println("find " + ns_dest.size() + " neighbor nodes");
             }
+//
+//            for(int j=0;j<20;j++)
+//            {
+            Query(root, src_lowestNode, ns_dest, sid);
 
-            Query(root, src_lowestNode, ns_dest, "0");
+//            }
             tx.success();
         }
         n.shutdownDB();
@@ -121,6 +127,7 @@ public class vctest {
             Skyline_Query_leaf(c_node, sid, root.graphdb, ProcessedNode);
 
         }
+
         for (Node nn : ns_dest) {
             String did = String.valueOf(nn.getId());
             ProcessedNode.clear();
@@ -130,21 +137,19 @@ public class vctest {
             System.out.println("Find one: " + (System.nanoTime() - run1) / 1000000 + " ms");
 //            System.out.println(ProcessedNode.get(did));
             if (ProcessedNode.containsKey(did)) {
-                for(myPath p:ProcessedNode.get(did).subRouteSkyline)
-                {
+                for (myPath p : ProcessedNode.get(did).subRouteSkyline) {
                     System.out.println(p);
                 }
                 System.out.println("        ======      ");
             }
 
 
-            run1 = System.nanoTime();
             ProcessedNode.clear();
+            run1 = System.nanoTime();
             Skyline_Buttom_to_Top(sid, did, graphdb, ProcessedNode);
-            System.out.println((System.nanoTime() - run1) / 1000000);
+            System.out.println("Skyline_Buttom_to_Top"+(System.nanoTime() - run1) / 1000000+"ms");
             System.out.println("--------------------------------------");
-
-
+//            break;
         }
     }
 
@@ -155,14 +160,16 @@ public class vctest {
         VCNode src_lowestNode = getLowestNode(root, sid);
         VCNode temp_node = src_lowestNode;
         Skyline_Query_leaf(src_lowestNode, sid, graphdb, processedNode);
-        while (!processedNode.containsKey(did)) {
-            System.out.println("In the level :"+temp_node.level);
+        while (!processedNode.containsKey(did) && !temp_node.isRoot) {
+//            System.out.println("In the level :" + temp_node.level);
             temp_node = expand_in_parent(temp_node, processedNode);
         }
         System.out.println("end:---- Skyline Buttom to Top:");
-        System.out.println("    ---- Find skyline from "+sid+" to "+did+" that contains "+ processedNode.get(did).subRouteSkyline.size());
-        for(myPath p:processedNode.get(did).subRouteSkyline) {
-            System.out.println("    ----:" + p);
+        if (processedNode.containsKey(did)) {
+            System.out.println("    ---- Find skyline from " + sid + " to " + did + " that contains " + processedNode.get(did).subRouteSkyline.size());
+            for (myPath p : processedNode.get(did).subRouteSkyline) {
+                System.out.println("    ----:" + p + "  " + p.printCosts());
+            }
         }
     }
 
@@ -243,20 +250,44 @@ public class vctest {
         VCNode parentNode = tmpNode.parent;
 
         for (Node n : parentNode.dg.nodes) {
-            if (!processedNode.containsKey(String.valueOf(n.getId()))) {
+            //if n is not processed.
+            if (!tmpNode.dg.nodes.contains(n)) {
+                //create a new myNode
                 myNode new_node = new myNode(n, false);
 
+//            System.out.println(new_node+" is null");
                 ArrayList<myPath> paths = parentNode.dg.getIncomingEdges(n);
                 for (myPath ep : paths) {
-                    myNode startNode = processedNode.get(String.valueOf(ep.startNode.getId()));
-                    if (startNode != null) {
-                        for (myPath sp : startNode.subRouteSkyline) {
-                            myPath new_p = new myPath(sp, ep);
-                            new_node.addToSkylineResult(new_p);
+                    try {
+                        myNode startNode = processedNode.get(String.valueOf(ep.startNode.getId()));
+                        if (startNode != null) {
+                            for (myPath sp : startNode.subRouteSkyline) {
+                                myPath new_p = new myPath(sp, ep);
+                                new_node.addToSkylineResult(new_p);
+                            }
                         }
+                    } catch (Exception e) {
+                        System.out.println("==========================");
+
+                        for (Map.Entry<String, myNode> mn : processedNode.entrySet()) {
+                            System.out.println(mn.getKey() + "   " + mn.getValue().subRouteSkyline.size());
+
+                        }
+
+
+                        System.out.println(n + "  " + ep);
+
+                        for (Node nindg : tmpNode.dg.nodes) {
+                            System.out.println(nindg);
+                        }
+
+                        for (DistanceEdge nindg : tmpNode.dg.edges) {
+                            System.out.println(nindg);
+                        }
+                        System.exit(0);
+                        System.out.println("==========================");
                     }
                 }
-
                 processedNode.put(new_node.id, new_node);
             }
         }
@@ -306,6 +337,10 @@ public class vctest {
 //                    }
 
                     for (myPath np : paths) {
+//                        if(np.startNode.getId()==0)
+//                        {
+//                            System.out.println(np);
+//                        }
 
                         myNode n_node = null;
                         String nextID = String.valueOf(np.endNode.getId());
@@ -313,13 +348,13 @@ public class vctest {
                             n_node = ProcessedNode.get(nextID);
                         } else {
                             n_node = new myNode(np.endNode, false);
-                            ProcessedNode.put(nextID,n_node);
+                            ProcessedNode.put(nextID, n_node);
                         }
 
-                        boolean insertflag =  n_node.addToSkylineResult(np);
+                        boolean insertflag = n_node.addToSkylineResult(np);
 //                        System.out.println("     "+np+" "+np.printCosts()+ "  "+insertflag+" "+n_node.inqueue);
 
-                        if (!n_node.inqueue && insertflag) {
+                        if (!n_node.inqueue) {
                             mqueue.add(n_node);
 //                            System.out.println("    pop in "+n_node.id);
                             n_node.inqueue = true;
@@ -331,7 +366,15 @@ public class vctest {
                 }
             }
         }
-        System.out.println("Finished Query in " + (System.nanoTime() - runtime) / 1000000 + " ms,  processNode size is "+ ProcessedNode.keySet().size());
+//        for(Map.Entry<String,myNode> e:ProcessedNode.entrySet())
+//        {
+//            System.out.println(e.getKey()+"  "+e.getValue());
+//
+//        }
+
+
+        System.out.println("Finished Query in " + (System.nanoTime() - runtime) / 1000000 + " ms,  processNode size is " + ProcessedNode.keySet().size());
+
 
     }
 
@@ -369,23 +412,24 @@ public class vctest {
                     ArrayList<myPath> paths = src_lowestNode.expand_in_dg(p);
                     for (myPath np : paths) {
 //                        System.out.println("     "+np+" "+np.printCosts());
-                        myNode n_node = null;
+                        myNode n_node;
                         String nextID = String.valueOf(np.endNode.getId());
 
                         if (ProcessedNode.containsKey(nextID)) {
                             n_node = ProcessedNode.get(nextID);
                         } else {
                             n_node = new myNode(np.endNode, false);
-                            ProcessedNode.put(nextID,n_node);
+                            ProcessedNode.put(nextID, n_node);
                         }
 
-                        if(nextID.equals(did))
-                        {
+                        if (nextID.equals(did)) {
                             n_node.addToSkylineResult(np);
+                            continue;
                         }
 
 
-                        if (!n_node.inqueue && n_node.addToSkylineResult(np)) {
+                        n_node.addToSkylineResult(np);
+                        if (!n_node.inqueue) {
                             mqueue.add(n_node);
 //                            System.out.println("    pop in "+n_node.id);
                             n_node.inqueue = true;
@@ -427,6 +471,8 @@ public class vctest {
         Node Source = null;
         int maxlevel = Integer.MIN_VALUE;
         VCNode tmpNode = null;
+        ArrayList<VCNode> visited = new ArrayList<>();
+
 
         try (Transaction tx = root.graphdb.beginTx()) {
             Source = root.graphdb.findNode(BNode.BusNode, "name", sid);
@@ -437,7 +483,7 @@ public class vctest {
         q.add(root);
         while (!q.isEmpty()) {
             VCNode node = q.pop();
-            String tabStr = "    ";
+            visited.add(node);
 
 
             if (node.level > maxlevel && node.dg.nodes.contains(Source)) {
@@ -445,9 +491,9 @@ public class vctest {
                 tmpNode = node;
             }
 
-            if (node.children != null) {
+            if (node.children != null && node.children.size() != 0) {
                 for (VCNode vc : node.children) {
-                    if (vc.dg.nodes.contains(Source)) {
+                    if (vc.dg.nodes.contains(Source) && !visited.contains(vc)) {
                         q.add(vc);
                     }
                 }
@@ -503,6 +549,21 @@ public class vctest {
         while (!q.isEmpty()) {
 
             VCNode node = q.pop();
+
+
+//            String tabStr = "\t";
+//            System.out.println(new String(new char[node.level]).replace("\0", tabStr) + " " + node.level);
+//            for (Node n : node.dg.nodes) {
+//                System.out.println(new String(new char[node.level]).replace("\0", tabStr) + " " + n);
+//            }
+//            for (DistanceEdge de : node.dg.edges) {
+//                System.out.println(new String(new char[node.level]).replace("\0", tabStr) + " " + de);
+//                for (myPath mp : de.paths) {
+//                    System.out.println(new String(new char[node.level]).replace("\0", tabStr) + "       " + mp + " " + mp.printCosts());
+//
+//                }
+//            }
+
 
             if (vcnodeInLevelCounts.containsKey(node.level)) {
                 long num = vcnodeInLevelCounts.get(node.level);
