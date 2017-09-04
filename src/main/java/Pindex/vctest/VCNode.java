@@ -4,10 +4,7 @@ import neo4jTools.Line;
 import org.neo4j.graphdb.*;
 
 import java.security.spec.DSAGenParameterSpec;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 public class VCNode {
     private final Random r;
@@ -28,13 +25,13 @@ public class VCNode {
 
 
     public void buildDistanceGraph(Graph graph, int threshold) {
-        this.isRoot=true;
+        this.isRoot = true;
         this.threshold = threshold;
         this.level = 0;
         try (Transaction tx = this.graphdb.beginTx()) {
             ArrayList<Node> VCNodes = getVCNodes(graph);
             System.out.println(VCNodes.size());
-            ArrayList<DistanceEdge> VCEdges = CreateEdges(VCNodes);
+            ArrayList<DistanceEdge> VCEdges = CreateEdges(VCNodes, graph);
             this.dg = new DistanceGraph(VCNodes, VCEdges);
             System.out.println("dg information " + dg.numberOfEdges() + " edges   " + dg.numberOfNodes() + " nodes");
 
@@ -77,14 +74,17 @@ public class VCNode {
 
             if (child.dg != null) {
                 parent.children.add(child);
+//                if (child.level % 1000 == 0) {
+//                    System.out.println("Create child in level " + child.level);
+//                }
 //                System.out.println(parent.level + " add children level " + child.level + " : " + child.dg.numberOfNodes() + " " + child.dg.numberOfEdges());
 //              System.out.println(child.dg.numberOfNodes());
                 if (child.dg.numberOfNodes() > this.threshold) {
                     GrowTheTree(child);
                 }
+
                 int aft_size = S.size();
-                if((double)aft_size/prv_size>0.8)
-                {
+                if ((double) aft_size / prv_size > 0.8) {
                     S.clear();
                 }
             } else {
@@ -105,34 +105,28 @@ public class VCNode {
 
     }
 
-    private ArrayList<DistanceEdge> CreateEdges(ArrayList<Node> vcNodes) {
+    private ArrayList<DistanceEdge> CreateEdges(ArrayList<Node> vcNodes, Graph graph) {
         ArrayList<DistanceEdge> result = new ArrayList<>();
 
         for (Node ns : vcNodes) {
             // Find neighbor nodes of ns.
 //            Iterable<Relationship> rels = ns.getRelationships(Line.Linked, Direction.OUTGOING);
-            Iterable<Relationship> rels = ns.getRelationships(Line.Linked, Direction.OUTGOING);
-            Iterator<Relationship> rel_Iter = rels.iterator();
+            LinkedList<Relationship> list = graph.getOutGoingRels(ns);
 
 //            if (ns.getId() == 305) {
-            while (rel_Iter.hasNext()) {
+            for (Relationship rel : list) {
 
                 DistanceEdge de = null;
-                Relationship rel = rel_Iter.next();
                 Node nextNode = rel.getEndNode();
 
                 //if nextnode is a vc node
                 if (vcNodes.contains(nextNode) && nextNode != ns) {
                     de = new DistanceEdge(ns, nextNode, rel);
-//                    System.out.println("  "+de.startNode+" "+de.endNode+" "+de.paths.get(0).printCosts());
-//                        System.out.println(ns + "-----" + nextNode + "  " + (ns.getId()) + ":" + nextNode.getId() + "->" + (ns.getId() == nextNode.getId()));
                 }//if next node is a non-vc-node,jump to next-next node, it should be a vc node.
                 else if (!vcNodes.contains(nextNode) && nextNode.getId() != ns.getId()) {
-                    Iterable<Relationship> next_rels = nextNode.getRelationships(Line.Linked, Direction.OUTGOING);
-                    Iterator<Relationship> next_rel_Iter = next_rels.iterator();
+                    LinkedList<Relationship> next_list = graph.getOutGoingRels(nextNode);
 
-                    while (next_rel_Iter.hasNext()) {
-                        Relationship nextRel = next_rel_Iter.next();
+                    for (Relationship nextRel : next_list) {
                         Node tarNode = nextRel.getEndNode();
                         if (ns.getId() != tarNode.getId()) {
                             de = new DistanceEdge(ns, rel, nextNode, nextRel, tarNode);
@@ -219,7 +213,7 @@ public class VCNode {
                 S.clear();
                 S.addAll(Sor);
                 VCNodes = getVCNodes(graph, S);
-                if ((VCNodes.size()<(parent.dg.numberOfNodes()*0.9))) {
+                if ((VCNodes.size() < (parent.dg.numberOfNodes() * 0.9))) {
                     break;
                 }
                 trys++;
@@ -295,7 +289,6 @@ public class VCNode {
                         }
                     }
                 }
-
 
 
             }
@@ -397,17 +390,25 @@ public class VCNode {
     }
 
     private DistanceEdge getEdgeContainSnode(DistanceGraph graph, Node n, ArrayList<DistanceEdge> copyRels) {
-        ArrayList<DistanceEdge> tmpR = new ArrayList<>();
-        for (DistanceEdge de : graph.edges) {
-            if (copyRels.contains(de) && (de.endNode.getId() == n.getId() || de.startNode.getId() == n.getId())) {
-                tmpR.add(de);
-            }
+        HashSet<DistanceEdge> tmpR = new HashSet<>();
+        LinkedList<DistanceEdge> ogRels = graph.getOutGoingRels(n);
+        LinkedList<DistanceEdge> icRels = graph.getIncommingRels(n);
+
+        if (ogRels!=null) {
+            tmpR.addAll(ogRels);
         }
-        if (tmpR.isEmpty()) {
+
+        if (icRels!=null) {
+            tmpR.addAll(icRels);
+        }
+
+        ArrayList<DistanceEdge> result = new ArrayList<>(tmpR);
+        tmpR.clear();
+
+        if (result.isEmpty()) {
             return null;
-        }
-        {
-            return tmpR.get(getRandomNumberInRange(0, tmpR.size() - 1));
+        } else {
+            return result.get(getRandomNumberInRange(0, result.size() - 1));
         }
     }
 
@@ -424,17 +425,16 @@ public class VCNode {
         Node n = p.endNode;
         ArrayList<myPath> result = new ArrayList<>();
         for (DistanceEdge de : this.dg.edges) {
-            if (de.startNode.getId()==n.getId()) {
+            if (de.startNode.getId() == n.getId()) {
 //                System.out.println(de);
                 for (myPath sp : de.paths) {
                     myPath new_p = new myPath(p, sp);
 //                    System.out.println(new_p.hasCycle()+"    "+new_p);
-                    if(!new_p.hasCycle()){
+                    if (!new_p.hasCycle()) {
                         result.add(new_p);
                     }
                 }
             }
-
         }
         return result;
     }

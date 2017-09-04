@@ -70,9 +70,9 @@ public class vctest {
                 ns_dest = getNeighbor(graphdb, did);
                 System.out.println("find " + ns_dest.size() + " neighbor nodes");
             }
-//
-//            for(int j=0;j<20;j++)
-//            {
+////
+////            for(int j=0;j<20;j++)
+////            {
             Query(root, src_lowestNode, ns_dest, sid);
 
 //            }
@@ -147,7 +147,7 @@ public class vctest {
             ProcessedNode.clear();
             run1 = System.nanoTime();
             Skyline_Buttom_to_Top(sid, did, graphdb, ProcessedNode);
-            System.out.println("Skyline_Buttom_to_Top"+(System.nanoTime() - run1) / 1000000+"ms");
+            System.out.println("Skyline_Buttom_to_Top" + (System.nanoTime() - run1) / 1000000 + "ms");
             System.out.println("--------------------------------------");
 //            break;
         }
@@ -638,10 +638,15 @@ public class vctest {
 
     private ArrayList<Node> getNodes(GraphDatabaseService graphdb) {
         ArrayList<Node> nodes = new ArrayList<>();
+        int i = 0;
         try (Transaction tx = graphdb.beginTx();
              BufferedReader br = new BufferedReader(new FileReader(nodesPath))) {
             String line = null;
             while ((line = br.readLine()) != null) {
+                i++;
+                if (i % 5000 == 0) {
+                    System.out.println(i + ".......");
+                }
 //                System.out.println(line.substring(0,line.indexOf(" ")));
                 Node node = graphdb.findNode(BNode.BusNode, "name", line.substring(0, line.indexOf(" ")));
                 nodes.add(node);
@@ -665,8 +670,11 @@ public class vctest {
                     i++;
                     Relationship item = iterator.next();
                     Rels.add(item);
+                    if (i % 5000 == 0) {
+                        System.out.println("-----------" + i);
+                    }
                 }
-//                System.out.println("-----------"+i);
+
             } finally {
                 iterator.close();
             }
