@@ -30,10 +30,10 @@ public class VCNode {
         this.level = 0;
         try (Transaction tx = this.graphdb.beginTx()) {
             ArrayList<Node> VCNodes = getVCNodes(graph);
-            System.out.println(VCNodes.size());
+//            System.out.println(VCNodes.size());
             ArrayList<DistanceEdge> VCEdges = CreateEdges(VCNodes, graph);
             this.dg = new DistanceGraph(VCNodes, VCEdges);
-            System.out.println("dg information " + dg.numberOfEdges() + " edges   " + dg.numberOfNodes() + " nodes");
+//            System.out.println("dg information " + dg.numberOfEdges() + " edges   " + dg.numberOfNodes() + " nodes");
 
 
 //            for (DistanceEdge de : this.dg.edges) {
@@ -45,15 +45,13 @@ public class VCNode {
 //            }
 
             if (this.dg.numberOfNodes() > this.threshold) {
-                System.out.println("generate subTree");
-                System.out.println("there are " + this.dg.edges.size() + " edges in root distance graph");
-                System.out.println("there are " + this.dg.nodes.size() + " edges in root distance graph");
+//                System.out.println("generate subTree");
+//                System.out.println("there are " + this.dg.edges.size() + " edges in root distance graph");
+//                System.out.println("there are " + this.dg.nodes.size() + " edges in root distance graph");
                 GrowTheTree(this);
             }
             tx.success();
         }
-
-
     }
 
     private void GrowTheTree(VCNode parent) {
@@ -84,9 +82,10 @@ public class VCNode {
                 }
 
                 int aft_size = S.size();
-                if ((double) aft_size / prv_size > 0.8) {
-                    S.clear();
-                }
+                S.clear();
+//                if ((double) aft_size / prv_size > 0.8) {
+//                    S.clear();
+//                }
             } else {
 //                System.out.println("is null");
                 S.clear();
@@ -113,6 +112,8 @@ public class VCNode {
 //            Iterable<Relationship> rels = ns.getRelationships(Line.Linked, Direction.OUTGOING);
             LinkedList<Relationship> list = graph.getOutGoingRels(ns);
 
+            if (list == null)
+                continue;
 //            if (ns.getId() == 97 || ns.getId() == 235) {
 //                for (Relationship rel : list) {
 //                    System.out.println(rel);
@@ -122,8 +123,6 @@ public class VCNode {
 
 //            if (ns.getId() == 305) {
             for (Relationship rel : list) {
-
-
                 DistanceEdge de = null;
                 Node nextNode = rel.getEndNode();
 
@@ -135,6 +134,9 @@ public class VCNode {
                 }//if next node is a non-vc-node,jump to next-next node, it should be a vc node.
                 else if (!vcNodes.contains(nextNode) && nextNode.getId() != ns.getId()) {
                     LinkedList<Relationship> next_list = graph.getOutGoingRels(nextNode);
+
+                    if (next_list == null)
+                        continue;
 
                     for (Relationship nextRel : next_list) {
 
@@ -269,6 +271,8 @@ public class VCNode {
         ArrayList<DistanceEdge> result = new ArrayList<>();
         for (Node n : vcNodes) {
             ArrayList<DistanceEdge> outging_edges = getOutGoingEdges(n);
+            if (outging_edges == null)
+                continue;
             for (DistanceEdge de : outging_edges) {
 //                if(de.startNode.getId()==22)
 //                {

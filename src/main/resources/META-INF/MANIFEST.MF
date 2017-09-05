@@ -1,31 +1,32 @@
 Manifest-Version: 1.0
-Class-Path: scala-library-2.11.8.jar neo4j-management-3.2.3.jar neo4j-
- jmx-3.2.3.jar neo4j-com-3.2.3.jar metrics-graphite-3.1.2.jar commons-
- beanutils-1.8.3.jar neo4j-backup-3.2.3.jar neo4j-logging-3.2.3.jar ne
- o4j-query-logging-3.2.3.jar neo4j-auth-plugin-api-3.2.3.jar neo4j-gra
- ph-matching-3.1.3.jar bcprov-jdk15on-1.53.jar neo4j-ha-3.2.3.jar neo4
- j-graphdb-api-3.2.3.jar shiro-core-1.3.2.jar neo4j-collections-3.2.3.
- jar neo4j-cluster-3.2.3.jar neo4j-kernel-3.2.3.jar neo4j-ssl-3.2.3.ja
- r neo4j-3.2.3.jar metrics-core-3.1.2.jar concurrentlinkedhashmap-lru-
- 1.4.2.jar lucene-core-5.5.0.jar commons-lang3-3.3.2.jar neo4j-graph-a
- lgo-3.2.3.jar neo4j-unsafe-3.2.3.jar neo4j-enterprise-kernel-3.2.3.ja
- r neo4j-resource-3.2.3.jar bcpkix-jdk15on-1.53.jar neo4j-codegen-3.2.
- 3.jar neo4j-cypher-frontend-2.3-2.3.11.jar neo4j-cypher-3.2.3.jar neo
- 4j-udc-3.2.3.jar neo4j-cypher-ir-3.2-3.2.3.jar neo4j-csv-3.2.3.jar ne
- o4j-cypher-compiler-2.3-2.3.11.jar commons-compress-1.12.jar neo4j-db
- ms-3.2.3.jar neo4j-metrics-3.2.3.jar asm-5.2.jar lucene-analyzers-com
- mon-5.5.0.jar netty-all-4.1.8.Final.jar lucene-backward-codecs-5.5.0.
- jar lucene-codecs-5.5.0.jar neo4j-import-tool-3.2.3.jar commons-io-2.
- 5.jar neo4j-command-line-3.2.3.jar neo4j-enterprise-3.2.3.jar neo4j-s
- ecurity-enterprise-3.2.3.jar neo4j-security-3.2.3.jar neo4j-configura
- tion-3.2.3.jar parboiled-core-1.1.7.jar scala-reflect-2.11.8.jar caff
- eine-2.3.3.jar neo4j-consistency-check-3.2.3.jar lucene-queryparser-5
- .5.0.jar neo4j-index-3.2.3.jar parboiled-scala_2.11-1.1.7.jar neo4j-c
- ypher-compiler-3.1-3.1.5.jar neo4j-cypher-compiler-3.2-3.2.3.jar neo4
- j-causal-clustering-3.2.3.jar neo4j-cypher-frontend-3.2-3.2.3.jar neo
- 4j-cypher-frontend-3.1-3.1.5.jar neo4j-lucene-index-3.2.3.jar slf4j-a
- pi-1.7.7.jar neo4j-primitive-collections-3.2.3.jar neo4j-lucene-upgra
- de-3.2.3.jar opencsv-2.3.jar neo4j-common-3.2.3.jar hazelcast-all-3.7
- .5.jar slf4j-nop-1.7.22.jar neo4j-io-3.2.3.jar netty-3.9.9.Final.jar
-Main-Class: Pindex.indexChecking
+Class-Path: neo4j-jmx-3.2.3.jar neo4j-primitive-collections-3.2.3.jar 
+ opencsv-2.3.jar neo4j-cypher-3.2.3.jar neo4j-metrics-3.2.3.jar neo4j-
+ security-3.2.3.jar caffeine-2.3.3.jar neo4j-io-3.2.3.jar netty-all-4.
+ 1.8.Final.jar neo4j-cypher-compiler-3.2-3.2.3.jar parboiled-scala_2.1
+ 1-1.1.7.jar neo4j-lucene-index-3.2.3.jar slf4j-nop-1.7.22.jar neo4j-3
+ .2.3.jar neo4j-cypher-frontend-3.1-3.1.5.jar netty-3.9.9.Final.jar ne
+ o4j-collections-3.2.3.jar metrics-graphite-3.1.2.jar neo4j-cypher-fro
+ ntend-3.2-3.2.3.jar neo4j-configuration-3.2.3.jar hazelcast-all-3.7.5
+ .jar neo4j-ha-3.2.3.jar slf4j-api-1.7.7.jar lucene-codecs-5.5.0.jar c
+ ommons-io-2.5.jar neo4j-ssl-3.2.3.jar neo4j-lucene-upgrade-3.2.3.jar 
+ neo4j-cypher-compiler-2.3-2.3.11.jar neo4j-cypher-ir-3.2-3.2.3.jar ne
+ o4j-common-3.2.3.jar neo4j-unsafe-3.2.3.jar parboiled-core-1.1.7.jar 
+ neo4j-consistency-check-3.2.3.jar neo4j-query-logging-3.2.3.jar neo4j
+ -cypher-compiler-3.1-3.1.5.jar neo4j-udc-3.2.3.jar neo4j-causal-clust
+ ering-3.2.3.jar neo4j-dbms-3.2.3.jar commons-compress-1.12.jar neo4j-
+ enterprise-3.2.3.jar commons-beanutils-1.8.3.jar neo4j-security-enter
+ prise-3.2.3.jar neo4j-cluster-3.2.3.jar neo4j-command-line-3.2.3.jar 
+ bcprov-jdk15on-1.53.jar neo4j-graphdb-api-3.2.3.jar neo4j-com-3.2.3.j
+ ar neo4j-graph-matching-3.1.3.jar bcpkix-jdk15on-1.53.jar lucene-anal
+ yzers-common-5.5.0.jar concurrentlinkedhashmap-lru-1.4.2.jar neo4j-cs
+ v-3.2.3.jar neo4j-index-3.2.3.jar metrics-core-3.1.2.jar neo4j-enterp
+ rise-kernel-3.2.3.jar asm-5.2.jar neo4j-backup-3.2.3.jar neo4j-import
+ -tool-3.2.3.jar neo4j-cypher-frontend-2.3-2.3.11.jar scala-reflect-2.
+ 11.8.jar maven-archetype-quickstart-1.1.jar shiro-core-1.3.2.jar luce
+ ne-queryparser-5.5.0.jar neo4j-graph-algo-3.2.3.jar lucene-backward-c
+ odecs-5.5.0.jar neo4j-codegen-3.2.3.jar neo4j-logging-3.2.3.jar scala
+ -library-2.11.8.jar commons-lang3-3.3.2.jar neo4j-management-3.2.3.ja
+ r neo4j-resource-3.2.3.jar neo4j-auth-plugin-api-3.2.3.jar lucene-cor
+ e-5.5.0.jar neo4j-kernel-3.2.3.jar
+Main-Class: Pindex.vctest.ResultComparesion
 

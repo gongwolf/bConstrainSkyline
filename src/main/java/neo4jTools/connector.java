@@ -34,11 +34,11 @@ public class connector {
 
 
         registerShutdownHook(this.graphDB);
-        if (graphDB == null) {
-            System.out.println("Initialize fault");
-        } else {
-            System.out.println("Initialize success");
-        }
+//        if (graphDB == null) {
+//            System.out.println("Initialize fault");
+//        } else {
+//            System.out.println("Initialize success");
+//        }
     }
 
 

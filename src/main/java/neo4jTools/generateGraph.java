@@ -7,13 +7,13 @@ import java.io.*;
 import java.util.*;
 
 public class generateGraph {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph1/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph2/data/";
     String EdgesPath = DBBase + "SegInfo.txt";
     String NodePath = DBBase + "NodeInfo.txt";
 
     public static void main(String args[]) {
-        int numberNodes = 40;
-        int numberofEdges = 80;
+        int numberNodes = 10000;
+        int numberofEdges = 18000;
         int numberofDimen = 3;
         generateGraph g = new generateGraph();
         g.generateG(numberNodes, numberofEdges, numberofDimen);
@@ -34,8 +34,8 @@ public class generateGraph {
 
         //生成经度和纬度
         for (int i = 0; i < numberNodes; i++) {
-            String cost1 = String.valueOf(getRandomNumberInRange(1, 25));
-            String cost2 = String.valueOf(getRandomNumberInRange(1, 25));
+            String cost1 = String.valueOf(getRandomNumberInRange(1, 180));
+            String cost2 = String.valueOf(getRandomNumberInRange(1, 180));
             Nodes.put(String.valueOf(i), new String[]{cost1, cost2});
         }
 
@@ -49,7 +49,7 @@ public class generateGraph {
 
             String[] costs = new String[numberofDimens];
             for (int j = 0; j < numberofDimens; j++) {
-                costs[j] = String.valueOf(getRandomNumberInRange(1, 200));
+                costs[j] = String.valueOf(getRandomNumberInRange(1, 300));
             }
 
             Edges.put(new Pair(startNode, endNode), costs);
@@ -71,7 +71,7 @@ public class generateGraph {
 
                 String[] costs = new String[numberofDimens];
                 for (int j = 0; j < numberofDimens; j++) {
-                    costs[j] = String.valueOf(getRandomNumberInRange(1, 200));
+                    costs[j] = String.valueOf(getRandomNumberInRange(1, 300));
                 }
 
                 Edges.put(new Pair(startNode, endNode), costs);
@@ -91,7 +91,7 @@ public class generateGraph {
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
             for (Map.Entry<Pair<String, String>, String[]> node : edges.entrySet()) {
-                System.out.println(EdgesPath);
+//                System.out.println(EdgesPath);
                 StringBuffer sb = new StringBuffer();
                 String snodeId = node.getKey().getKey();
                 String enodeId = node.getKey().getValue();

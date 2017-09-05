@@ -52,7 +52,7 @@ public class idxTest {
 
         System.out.println("============================");
         long run1 = System.nanoTime();
-        ArrayList<path> r1 = runUseNodeFinal("88", "278", graphdb);
+        ArrayList<path> r1 = runUseNodeFinal("7", "64", graphdb);
         run1 = (System.nanoTime() - run1) / 1000000;
 
         System.out.println(r1.size());

@@ -77,11 +77,17 @@ public class DistanceGraph {
     }
 
     public LinkedList<DistanceEdge> getOutGoingRels(Node startNode) {
-        return this.Adj_out_List.get(startNode);
+        if (this.Adj_out_List.containsKey(startNode))
+            return this.Adj_out_List.get(startNode);
+        else
+            return new LinkedList<>();
     }
 
     public LinkedList<DistanceEdge> getIncommingRels(Node endNode) {
-        return this.Adj_in_List.get(endNode);
+        if (this.Adj_in_List.containsKey(endNode))
+            return this.Adj_in_List.get(endNode);
+        else
+            return new LinkedList<>();
     }
 
 
