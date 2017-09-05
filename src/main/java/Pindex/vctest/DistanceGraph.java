@@ -32,13 +32,11 @@ public class DistanceGraph {
                 Adj_out_List.put(startNode, list);
             }
 
-            if(Adj_in_List.containsKey(endNode))
-            {
+            if (Adj_in_List.containsKey(endNode)) {
                 LinkedList<DistanceEdge> list = Adj_in_List.get(endNode);
                 list.add(r);
                 Adj_in_List.put(endNode, list);
-            }else
-            {
+            } else {
                 LinkedList<DistanceEdge> list = new LinkedList<>();
                 list.add(r);
                 Adj_in_List.put(endNode, list);
@@ -68,22 +66,21 @@ public class DistanceGraph {
 
     public ArrayList<myPath> getIncomingEdges(Node n) {
         ArrayList<myPath> result = new ArrayList<>();
-        for (DistanceEdge de : this.edges) {
-            for (myPath p : de.paths) {
-                if (p.endNode.getId() == n.getId())
+        if (this.Adj_in_List.containsKey(n)) {
+            for (DistanceEdge de : this.getIncommingRels(n)) {
+                for (myPath p : de.paths) {
                     result.add(p);
+                }
             }
         }
         return result;
     }
 
-    public LinkedList<DistanceEdge> getOutGoingRels(Node startNode)
-    {
+    public LinkedList<DistanceEdge> getOutGoingRels(Node startNode) {
         return this.Adj_out_List.get(startNode);
     }
 
-    public LinkedList<DistanceEdge> getIncommingRels(Node endNode)
-    {
+    public LinkedList<DistanceEdge> getIncommingRels(Node endNode) {
         return this.Adj_in_List.get(endNode);
     }
 

@@ -91,6 +91,20 @@ public class myPath {
         this.relationships = new ArrayList<>();
     }
 
+    public myPath(Relationship rel) {
+        this.startNode = rel.getStartNode();
+        this.endNode  = rel.getEndNode();
+        this.NumberOfProperties = getNumberOfProperties();
+        this.cost = new double[this.NumberOfProperties];
+        this.Nodes = new ArrayList<>();
+        this.Nodes.add(this.startNode);
+        this.Nodes.add(this.endNode);
+        this.relationships = new ArrayList<>();
+        this.relationships.add(rel);
+        this.setPropertiesName();
+        calculateCosts();
+    }
+
     public int getNumberOfProperties() {
         Iterable<Relationship> rels = this.startNode.getRelationships(Line.Linked, Direction.BOTH);
         if (rels.iterator().hasNext()) {
@@ -130,22 +144,6 @@ public class myPath {
     }
 
     public boolean hasCycle() {
-//        System.out.println(this.startNode+" "+this.endNode);
-//        for(Node n:this.Nodes)
-//        {
-//            System.out.println(n);
-//        }
-//
-//        for(Node n1:this.Nodes)
-//        {
-//            if(n1.getId()!=this.startNode.getId() && n1.getId()!=this.endNode.getId()) {
-//                for (Node n2 : this.Nodes) {
-//                    if (n2.getId() == n1.getId()) {
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
         return  this.startNode.getId()==this.endNode.getId();
     }
 

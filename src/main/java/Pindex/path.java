@@ -209,4 +209,15 @@ public class path {
         return totalDegree;
     }
 
+    public String printCosts() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        int i = 0;
+        for (; i < cost.length - 1; i++) {
+            sb.append(cost[i] + ",");
+        }
+        sb.append(cost[i] + "]");
+        return sb.toString();
+    }
+
 }

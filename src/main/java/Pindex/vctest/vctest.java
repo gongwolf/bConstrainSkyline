@@ -1,5 +1,6 @@
 package Pindex.vctest;
 
+import com.sun.org.apache.regexp.internal.RE;
 import neo4jTools.BNode;
 import neo4jTools.Line;
 import neo4jTools.connector;
@@ -18,13 +19,15 @@ public class vctest {
 
     public static void main(String args[]) {
         vctest vt = new vctest();
-        vt.buildVCTree(50);
+        vt.buildVCTree(40);
     }
 
-    private void buildVCTree(int threshold) {
+    private ArrayList<myPath> buildVCTree(int threshold) {
         connector n = new connector("/home/gqxwolf/neo4j323/testdb/databases/graph.db");
         n.startDB();
         GraphDatabaseService graphdb = n.getDBObject();
+        ArrayList<myPath> skyline = new ArrayList<>();
+
         try (Transaction tx = graphdb.beginTx()) {
 
             ArrayList<Node> nodes = getNodes(graphdb);
@@ -33,7 +36,34 @@ public class vctest {
 
             long building = System.nanoTime();
             root = new VCNode(graphdb);
-            root.buildDistanceGraph(new Graph(nodes, edges), threshold);
+            Graph oGraph = new Graph(nodes, edges);
+            root.buildDistanceGraph(oGraph, threshold);
+            Node ssss = graphdb.findNode(BNode.BusNode, "name", "235");
+            Node sssss = graphdb.findNode(BNode.BusNode, "name", "97");
+
+            for (DistanceEdge de : root.dg.edges) {
+                if (de.startNode.getId() == 235) {
+                    System.out.println(de);
+                }
+            }
+
+            System.out.println(root.dg.nodes.contains(ssss));
+            System.out.println(root.dg.nodes.contains(sssss));
+
+            for (Relationship rel : oGraph.getOutGoingRels(ssss)) {
+                System.out.println(rel);
+
+            }
+
+            for (Relationship rel : oGraph.getOutGoingRels(sssss)) {
+                System.out.println(rel);
+
+            }
+
+            for (DistanceEdge rel : root.dg.getOutGoingRels(ssss)) {
+                System.out.println(rel);
+            }
+
 
 //            for(DistanceEdge de:root.dg.edges)
 //            {
@@ -47,38 +77,162 @@ public class vctest {
             long traveralTime = System.nanoTime();
 //            retrivalTree(root);
             System.out.println("Traveral Used " + (System.nanoTime() - traveralTime) / 1000000 + "ms ");
-            String sid = "0";
-            String did = "220";
+            String sid = "88";
+            String did = "278";
             VCNode src_lowestNode = getLowestNode(root, sid);
+            VCNode dest_lowestNode = getLowestNode(root, did);
 
-            VCNode Dest_lowestNode = getLowestNode(root, did);
+            HashSet<Node> src_ns_dest = null;
+
             if (src_lowestNode != null) {
-                long run2 = System.nanoTime();
-                System.out.println("src is in the " + src_lowestNode.level + " level");
-                System.out.println("Query in " + (System.nanoTime() - run2) / 1000000 + "ms ");
+                System.out.println("src is vc node, src is in the " + src_lowestNode.level + " level");
             } else {
+                src_ns_dest = getOutGoingNeighbor(graphdb, sid);
                 System.out.println("src not a vc not");
             }
 
             System.out.println("-----------------------------");
 
-            HashSet<Node> ns_dest = null;
-            if (Dest_lowestNode != null) {
-                System.out.println(Dest_lowestNode.level);
+            HashSet<Node> dest_ns_dest = null;
+            if (dest_lowestNode != null) {
+                System.out.println("dest is vc node, dest is in the " + dest_lowestNode.level + " level");
+                System.out.println(dest_lowestNode.level);
             } else {
                 System.out.println("dest is not a vc not");
-                ns_dest = getNeighbor(graphdb, did);
-                System.out.println("find " + ns_dest.size() + " neighbor nodes");
+                dest_ns_dest = getInComingNeighbor(graphdb, did);
+                System.out.println("find " + dest_ns_dest.size() + " neighbor nodes");
             }
 ////
 ////            for(int j=0;j<20;j++)
 ////            {
-            Query(root, src_lowestNode, ns_dest, sid);
+            if (src_lowestNode == null && dest_lowestNode == null) {
+                ArrayList<myPath> tSkyline = new ArrayList<>();
+                for (Node snode : src_ns_dest) {
+                    ArrayList<myPath> tmpSkyline = Query(root, dest_ns_dest, String.valueOf(snode.getId()));
+                    tSkyline.addAll(tmpSkyline);
+                }
+                skyline.addAll(tSkyline);
+
+                Node sNode = graphdb.findNode(BNode.BusNode, "name", did);
+                myNode smyNode = new myNode(sNode, false);
+                Iterable<Relationship> srels = sNode.getRelationships(Line.Linked, Direction.OUTGOING);
+                Iterator<Relationship> srels_iter = srels.iterator();
+                while (srels_iter.hasNext()) {
+                    myPath sp = new myPath(srels_iter.next());
+//                    System.out.println(eP + " " + eP.printCosts());
+                    for (myPath ep : skyline) {
+                        if (sp.endNode.getId() == ep.startNode.getId()) {
+//                            System.out.println(sp + " " + sp.printCosts());
+                            myPath final_p = new myPath(sp, ep);
+                            smyNode.addToSkylineResult(final_p);
+                        }
+                    }
+                }
+
+
+                Node dNode = graphdb.findNode(BNode.BusNode, "name", did);
+                myNode dmyNode = new myNode(dNode, false);
+                Iterable<Relationship> drels = dNode.getRelationships(Line.Linked, Direction.INCOMING);
+                Iterator<Relationship> drels_iter = drels.iterator();
+                while (drels_iter.hasNext()) {
+                    myPath eP = new myPath(drels_iter.next());
+//                    System.out.println(eP + " " + eP.printCosts());
+                    for (myPath sp : smyNode.subRouteSkyline) {
+                        if (sp.endNode.getId() == eP.startNode.getId()) {
+//                            System.out.println(sp + " " + sp.printCosts());
+                            myPath final_p = new myPath(sp, eP);
+                            dmyNode.addToSkylineResult(final_p);
+                        }
+                    }
+                }
+
+
+                for (myPath p : dmyNode.subRouteSkyline) {
+                    System.out.println(p + " " + p.printCosts());
+                }
+
+                skyline.clear();
+                skyline.addAll(dmyNode.subRouteSkyline);
+
+            } else if (src_lowestNode != null && dest_lowestNode == null) {
+                ArrayList<myPath> tmpSkyline = Query(root, dest_ns_dest, sid);
+
+                skyline.addAll(tmpSkyline);
+                Node dNode = graphdb.findNode(BNode.BusNode, "name", did);
+                myNode dmyNode = new myNode(dNode, false);
+                Iterable<Relationship> rels = dNode.getRelationships(Line.Linked, Direction.INCOMING);
+                Iterator<Relationship> rels_iter = rels.iterator();
+                while (rels_iter.hasNext()) {
+                    myPath eP = new myPath(rels_iter.next());
+//                    System.out.println(eP + " " + eP.printCosts());
+                    for (myPath sp : skyline) {
+                        if (sp.endNode.getId() == eP.startNode.getId()) {
+//                            System.out.println(sp + " " + sp.printCosts());
+                            myPath final_p = new myPath(sp, eP);
+                            dmyNode.addToSkylineResult(final_p);
+                        }
+                    }
+                }
+
+                for (myPath p : dmyNode.subRouteSkyline) {
+                    System.out.println(p + " " + p.printCosts());
+                }
+                skyline.clear();
+                skyline.addAll(dmyNode.subRouteSkyline);
+            } else if (src_lowestNode != null && dest_lowestNode != null) {
+                HashMap<String, myNode> ProcessedNode = new HashMap<>();
+                long run3 = System.nanoTime();
+                ArrayList<myPath> tmpSkyline = Skyline_Buttom_to_Top(sid, did, graphdb, ProcessedNode);
+                System.out.println("Query in " + (System.nanoTime() - run3) / 1000000 + "ms ");
+
+                skyline.addAll(tmpSkyline);
+
+                for (myPath p : skyline) {
+                    System.out.println(p + " " + p.printCosts());
+                }
+                skyline.clear();
+                skyline.addAll(skyline);
+            } else {
+                ArrayList<myPath> tSkyline = new ArrayList<>();
+                for (Node snode : src_ns_dest) {
+                    HashMap<String, myNode> ProcessedNode = new HashMap<>();
+                    ArrayList<myPath> tmpSkyline = Skyline_Buttom_to_Top(String.valueOf(snode.getId()), did, graphdb, ProcessedNode);
+                    tSkyline.addAll(tmpSkyline);
+                }
+                skyline.addAll(tSkyline);
+
+                Node sNode = graphdb.findNode(BNode.BusNode, "name", did);
+                myNode smyNode = new myNode(sNode, false);
+                Iterable<Relationship> srels = sNode.getRelationships(Line.Linked, Direction.OUTGOING);
+                Iterator<Relationship> srels_iter = srels.iterator();
+                while (srels_iter.hasNext()) {
+                    myPath sp = new myPath(srels_iter.next());
+//                    System.out.println(eP + " " + eP.printCosts());
+                    for (myPath ep : skyline) {
+                        if (sp.endNode.getId() == ep.startNode.getId()) {
+//                            System.out.println(sp + " " + sp.printCosts());
+                            myPath final_p = new myPath(sp, ep);
+                            smyNode.addToSkylineResult(final_p);
+                        }
+                    }
+                }
+
+                for (myPath p : smyNode.subRouteSkyline) {
+                    System.out.println(p + " " + p.printCosts());
+                }
+
+                skyline.clear();
+                skyline.addAll(smyNode.subRouteSkyline);
+
+            }
+
 
 //            }
             tx.success();
         }
         n.shutdownDB();
+        return skyline;
+
     }
 
     private int getHigh(VCNode root) {
@@ -107,69 +261,79 @@ public class vctest {
         return maxlevel;
     }
 
-    private void Query(VCNode root, VCNode src_lowestNode, HashSet<Node> ns_dest, String sid) {
+    private ArrayList<myPath> Query(VCNode root, HashSet<Node> ns_dest, String sid) {
         GraphDatabaseService graphdb = root.graphdb;
-        VCNode tmpNode = src_lowestNode;
+//        VCNode tmpNode = src_lowestNode;
         HashMap<String, myNode> ProcessedNode = new HashMap<>();
-        System.out.println("find the lowest node " + sid + " at the VC node at the level " + src_lowestNode.level + " contains " + tmpNode.dg.numberOfNodes() + " nodes and " + tmpNode.dg.numberOfEdges() + " edges");
+//        System.out.println("find the lowest node " + sid + " at the VC node at the level " + src_lowestNode.level + " contains " + tmpNode.dg.numberOfNodes() + " nodes and " + tmpNode.dg.numberOfEdges() + " edges");
 
-        long run2 = System.nanoTime();
-        Skyline_Query_leaf(src_lowestNode, sid, root.graphdb, ProcessedNode);
-        System.out.println("run2: " + (System.nanoTime() - run2) / 1000000 + " ms");
+//        long run2 = System.nanoTime();
+//        Skyline_Query_leaf(src_lowestNode, sid, root.graphdb, ProcessedNode);
+//        System.out.println("run2: " + (System.nanoTime() - run2) / 1000000 + " ms");
 
-        Node s = root.graphdb.findNode(BNode.BusNode, "name", sid);
-        long run1 = System.nanoTime();
-        VCNode c_node = findCommonVCNodes(s, ns_dest);
-        System.out.println("Find all: " + (System.nanoTime() - run1) / 1000000 + " ms");
+//        Node s = root.graphdb.findNode(BNode.BusNode, "name", sid);
+//        long run1 = System.nanoTime();
+//        VCNode c_node = findCommonVCNodes(s, ns_dest);
+//        System.out.println("Find all: " + (System.nanoTime() - run1) / 1000000 + " ms");
+//
+//        if (c_node != null) {
+//            ProcessedNode.clear();
+//            Skyline_Query_leaf(c_node, sid, root.graphdb, ProcessedNode);
+//        }
 
-        if (c_node != null) {
-            ProcessedNode.clear();
-            Skyline_Query_leaf(c_node, sid, root.graphdb, ProcessedNode);
-
-        }
-
+        ArrayList<myPath> result = new ArrayList<>();
         for (Node nn : ns_dest) {
             String did = String.valueOf(nn.getId());
-            ProcessedNode.clear();
-            run1 = System.nanoTime();
-            VCNode nn_ndoe = findCommonVCNodes(s, nn);
-            Skyline_Query_leaf(nn_ndoe, sid, did, graphdb, ProcessedNode);
-            System.out.println("Find one: " + (System.nanoTime() - run1) / 1000000 + " ms");
-//            System.out.println(ProcessedNode.get(did));
-            if (ProcessedNode.containsKey(did)) {
-                for (myPath p : ProcessedNode.get(did).subRouteSkyline) {
-                    System.out.println(p);
-                }
-                System.out.println("        ======      ");
-            }
+//            ProcessedNode.clear();
+//            long run1 = System.nanoTime();
+//            VCNode nn_ndoe = findCommonVCNodes(s, nn);
+//            Skyline_Query_leaf(nn_ndoe, sid, did, graphdb, ProcessedNode);
+//            System.out.println("Find one: " + (System.nanoTime() - run1) / 1000000 + " ms");
+////            System.out.println(ProcessedNode.get(did));
+//            if (ProcessedNode.containsKey(did)) {
+//                for (myPath p : ProcessedNode.get(did).subRouteSkyline) {
+//                    System.out.println(p);
+//                }
+//                System.out.println("        ======      ");
+//            }
 
 
-            ProcessedNode.clear();
-            run1 = System.nanoTime();
-            Skyline_Buttom_to_Top(sid, did, graphdb, ProcessedNode);
-            System.out.println("Skyline_Buttom_to_Top" + (System.nanoTime() - run1) / 1000000 + "ms");
+//            ProcessedNode.clear();
+            long run1 = System.nanoTime();
+            result.addAll(Skyline_Buttom_to_Top(sid, did, graphdb, ProcessedNode));
+            System.out.println("Skyline_Buttom_to_Top: " + (System.nanoTime() - run1) / 1000000 + "ms");
             System.out.println("--------------------------------------");
-//            break;
         }
+
+        return result;
     }
 
-    private void Skyline_Buttom_to_Top(String sid, String did, GraphDatabaseService graphdb, HashMap<String, myNode> processedNode) {
+    private ArrayList<myPath> Skyline_Buttom_to_Top(String sid, String did, GraphDatabaseService graphdb, HashMap<String, myNode> processedNode) {
         System.out.println("start:----Skyline Buttom to Top:" + processedNode.size());
-        Node s = graphdb.findNode(BNode.BusNode, "name", sid);
-        Node d = graphdb.findNode(BNode.BusNode, "name", did);
         VCNode src_lowestNode = getLowestNode(root, sid);
         VCNode temp_node = src_lowestNode;
         Skyline_Query_leaf(src_lowestNode, sid, graphdb, processedNode);
-        while (!processedNode.containsKey(did) && !temp_node.isRoot) {
-//            System.out.println("In the level :" + temp_node.level);
+
+
+
+        while (!temp_node.isRoot) {
             temp_node = expand_in_parent(temp_node, processedNode);
         }
+
+
+
         System.out.println("end:---- Skyline Buttom to Top:");
         if (processedNode.containsKey(did)) {
             System.out.println("    ---- Find skyline from " + sid + " to " + did + " that contains " + processedNode.get(did).subRouteSkyline.size());
             for (myPath p : processedNode.get(did).subRouteSkyline) {
                 System.out.println("    ----:" + p + "  " + p.printCosts());
             }
+        }
+
+        if (processedNode.containsKey(did)) {
+            return processedNode.get(did).subRouteSkyline;
+        } else {
+            return new ArrayList<myPath>();
         }
     }
 
@@ -258,6 +422,7 @@ public class vctest {
 //            System.out.println(new_node+" is null");
                 ArrayList<myPath> paths = parentNode.dg.getIncomingEdges(n);
                 for (myPath ep : paths) {
+//                    System.out.println(ep);
                     try {
                         myNode startNode = processedNode.get(String.valueOf(ep.startNode.getId()));
                         if (startNode != null) {
@@ -456,10 +621,21 @@ public class vctest {
         return sb.toString();
     }
 
-    private HashSet<Node> getNeighbor(GraphDatabaseService graphdb, String id) {
+    private HashSet<Node> getInComingNeighbor(GraphDatabaseService graphdb, String id) {
         HashSet<Node> result = new HashSet<>();
         Node node = graphdb.findNode(BNode.BusNode, "name", id);
         Iterable<Relationship> rels = node.getRelationships(Line.Linked, Direction.INCOMING);
+        Iterator<Relationship> rels_iter = rels.iterator();
+        while (rels_iter.hasNext()) {
+            result.add(rels_iter.next().getStartNode());
+        }
+        return result;
+    }
+
+    private HashSet<Node> getOutGoingNeighbor(GraphDatabaseService graphdb, String id) {
+        HashSet<Node> result = new HashSet<>();
+        Node node = graphdb.findNode(BNode.BusNode, "name", id);
+        Iterable<Relationship> rels = node.getRelationships(Line.Linked, Direction.OUTGOING);
         Iterator<Relationship> rels_iter = rels.iterator();
         while (rels_iter.hasNext()) {
             result.add(rels_iter.next().getStartNode());
