@@ -1,5 +1,6 @@
 package Pindex.vctest;
 
+import com.sun.org.apache.regexp.internal.RE;
 import neo4jTools.Line;
 import org.neo4j.graphdb.*;
 
@@ -15,6 +16,9 @@ public class VCNode {
     public ArrayList<VCNode> children;
     int level;
     public boolean isRoot = false;
+    public ArrayList<Node> nodeInThisLevel = new ArrayList<>();
+    public ArrayList<Node> nodesLeftInRoot = new ArrayList<>();
+    public Graph G = null;
 
 
     public VCNode(GraphDatabaseService graphdb) {
@@ -29,6 +33,7 @@ public class VCNode {
         this.threshold = threshold;
         this.level = 0;
         try (Transaction tx = this.graphdb.beginTx()) {
+            this.G = graph;
             ArrayList<Node> VCNodes = getVCNodes(graph);
 //            System.out.println(VCNodes.size());
             ArrayList<DistanceEdge> VCEdges = CreateEdges(VCNodes, graph);
@@ -45,9 +50,15 @@ public class VCNode {
 //            }
 
             if (this.dg.numberOfNodes() > this.threshold) {
-//                System.out.println("generate subTree");
-//                System.out.println("there are " + this.dg.edges.size() + " edges in root distance graph");
-//                System.out.println("there are " + this.dg.nodes.size() + " edges in root distance graph");
+                System.out.println("generate subTree");
+                System.out.println("there are " + this.dg.edges.size() + " edges in root distance graph");
+                System.out.println("there are " + this.dg.nodes.size() + " edges in root distance graph");
+                for (Node n : graph.nodes) {
+                    if (!this.dg.nodes.contains(n)) {
+                        this.nodesLeftInRoot.add(n);
+                    }
+                }
+                System.out.println("Find " + this.nodesLeftInRoot.size() + " nodes in level 0");
                 GrowTheTree(this);
             }
             tx.success();
@@ -75,7 +86,7 @@ public class VCNode {
 //                if (child.level % 1000 == 0) {
 //                    System.out.println("Create child in level " + child.level);
 //                }
-//                System.out.println(parent.level + " add children level " + child.level + " : " + child.dg.numberOfNodes() + " " + child.dg.numberOfEdges());
+                System.out.println(parent.level + "  " + parent.nodeInThisLevel.size() + " add children level " + child.level + " : " + child.dg.numberOfNodes() + " " + child.dg.numberOfEdges());
 //              System.out.println(child.dg.numberOfNodes());
                 if (child.dg.numberOfNodes() > this.threshold) {
                     GrowTheTree(child);
@@ -88,6 +99,7 @@ public class VCNode {
 //                }
             } else {
 //                System.out.println("is null");
+                child.parent.nodeInThisLevel.addAll(S);
                 S.clear();
             }
 
@@ -257,6 +269,11 @@ public class VCNode {
 //
 //                }
                 this.dg = new DistanceGraph(VCNodes, VCEdges);
+                for (Node n : this.parent.dg.nodes) {
+                    if (!VCNodes.contains(n)) {
+                        this.parent.nodeInThisLevel.add(n);
+                    }
+                }
                 Sor.clear();
                 Sor.addAll(S);
             } else {
@@ -473,4 +490,36 @@ public class VCNode {
     }
 
 
+    public ArrayList<DistanceEdge> getNodesFromGraph(Node node, String direction) {
+        if (direction.equals("Out")) {
+            ArrayList<DistanceEdge> result = new ArrayList<>();
+            for (Relationship rel : this.G.getOutGoingRels(node)) {
+                System.out.println(rel);
+                DistanceEdge de = new DistanceEdge(rel.getStartNode(), rel.getEndNode(), rel);
+                result.add(de);
+            }
+            return result;
+        } else {
+            ArrayList<DistanceEdge> result = new ArrayList<>();
+            for (Relationship rel : this.G.getIncommingRels(node)) {
+                System.out.println(rel);
+                //Todo, Check incoming edges
+                DistanceEdge de = new DistanceEdge(rel.getStartNode(), rel.getEndNode(), rel);
+                result.add(de);
+            }
+            return result;
+        }
+
+    }
+
+    public ArrayList<DistanceEdge> getNodesFromDisGraph(Node node, String direction) {
+//        for(DistanceEdge de:this.dg.getOutGoingRels(node))
+//        {
+//            System.out.println(de);
+//        }
+        if (direction.equals("Out"))
+            return new ArrayList<>(this.dg.getOutGoingRels(node));
+        else
+            return new ArrayList<>(this.dg.getIncommingRels(node));
+    }
 }

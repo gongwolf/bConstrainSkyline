@@ -1,8 +1,10 @@
 package Pindex.vctest;
 
+import javafx.util.Pair;
 import neo4jTools.BNode;
 import neo4jTools.Line;
 import neo4jTools.connector;
+import org.apache.shiro.crypto.hash.Hash;
 import org.neo4j.graphdb.*;
 
 import java.io.BufferedReader;
@@ -19,8 +21,7 @@ public class vctest {
         this.basePath = basepath;
     }
 
-    public  vctest()
-    {
+    public vctest() {
 
     }
 
@@ -31,13 +32,237 @@ public class vctest {
         GraphDatabaseService graphdb = n.getDBObject();
         vctest vt = new vctest();
         VCNode root = vt.buildVCTree(40, graphdb);
+        String sid = "7";
+        String did = "64";
+        vt.CreateLable(root, graphdb, sid, did);
 
         ArrayList<myPath> s = vt.getSkyline("7", "64", graphdb, root);
-        for(myPath p:s)
-        {
-            System.out.println(p+" "+p.printCosts());
+        for (myPath p : s) {
+            System.out.println(p + " " + p.printCosts());
         }
         n.shutdownDB();
+    }
+
+    private void CreateLable(VCNode root, GraphDatabaseService graphdb, String sid, String did) {
+        HashMap<String, HashMap<String, LinkedList<myPath>>> labelings = new HashMap<>();
+        getOutLebel(root, graphdb, sid);
+        getInLbel(root,graphdb,did);
+    }
+
+    private void getInLbel(VCNode root, GraphDatabaseService graphdb, String did) {
+        HashMap<String, LinkedList<myPath>> labelInfos = new HashMap<>();
+        try (Transaction tx = graphdb.beginTx()) {
+
+            Node dest = root.graphdb.findNode(BNode.BusNode, "name", did);
+
+
+//            initial the node self.
+//            LinkedList<myPath> initlist = new LinkedList<>();
+//            initlist.add(new myPath(source));
+//            labelInfos.put(sid, initlist);
+            myNode dnode = new myNode(dest, true);
+
+            HashMap<String, myNode> ProcessedNode = new HashMap<>();
+
+            Queue<myNode> unmarked = new LinkedList<>();
+            unmarked.add(dnode);
+
+
+            int i = 0;
+            while (!unmarked.isEmpty()) {
+                myNode node = unmarked.remove();
+                ProcessedNode.put(node.id, node);
+
+//                if (i == 50) {
+//                    break;
+//                }
+
+                VCNode tmpNode = getLowestNode(root, node.node);
+                ArrayList<DistanceEdge> expand_nodes;
+                if (tmpNode == null) {
+                    expand_nodes = root.getNodesFromGraph(node.node,"In");
+                } else {
+//                    System.out.println(tmpNode.level);
+                    expand_nodes = tmpNode.getNodesFromDisGraph(node.node,"In");
+                }
+
+                if (expand_nodes.size() != 0) {
+                    for (DistanceEdge nextDe : expand_nodes) {
+                        String nextId = String.valueOf(nextDe.endNode.getId());
+                        myNode nextNode;
+                        if (ProcessedNode.containsKey(nextId)) {
+                            nextNode = ProcessedNode.get(nextId);
+                        } else {
+                            nextNode = new myNode(nextDe.endNode, false);
+                        }
+
+
+                        if (tmpNode != null && tmpNode.level >= getLowestNode(root, nextNode.node).level) {
+//                            System.out.println(nextDe+" "+getLowestNode(root, nextNode.node).level + " next one");
+                            continue;
+//                        }else if(tmpNode!=null)
+//                        {
+//                            System.out.println(nextDe+" "+getLowestNode(root, nextNode.node).level +" add to queue");
+
+                        }
+
+
+                        for (myPath sp : node.subRouteSkyline) {
+                            for (myPath ep : nextDe.paths) {
+                                myPath new_path = new myPath(sp, ep);
+                                if (!new_path.hasCycle()) {
+                                    nextNode.addToSkylineResult(new_path);
+                                }
+                            }
+                        }
+                        unmarked.add(nextNode);
+                    }
+                }
+                i++;
+            }
+
+            for(Map.Entry<String,myNode> e:ProcessedNode.entrySet())
+            {
+                System.out.println(e.getKey());
+                for(myPath p:e.getValue().subRouteSkyline)
+                {
+                    System.out.println("        "+p);
+                }
+
+            }
+
+            tx.success();
+        }
+    }
+
+    private void getOutLebel(VCNode root, GraphDatabaseService graphdb, String sid) {
+        HashMap<String, LinkedList<myPath>> labelInfos = new HashMap<>();
+        try (Transaction tx = graphdb.beginTx()) {
+
+            Node source = root.graphdb.findNode(BNode.BusNode, "name", sid);
+
+
+//            initial the node self.
+//            LinkedList<myPath> initlist = new LinkedList<>();
+//            initlist.add(new myPath(source));
+//            labelInfos.put(sid, initlist);
+            myNode src = new myNode(source, true);
+
+            HashMap<String, myNode> ProcessedNode = new HashMap<>();
+
+            Queue<myNode> unmarked = new LinkedList<>();
+            unmarked.add(src);
+
+
+            int i = 0;
+            while (!unmarked.isEmpty()) {
+                myNode node = unmarked.remove();
+                ProcessedNode.put(node.id, node);
+
+//                if (i == 50) {
+//                    break;
+//                }
+
+                VCNode tmpNode = getLowestNode(root, node.node);
+                ArrayList<DistanceEdge> expand_nodes;
+                if (tmpNode == null) {
+                    expand_nodes = root.getNodesFromGraph(node.node,"Out");
+                } else {
+//                    System.out.println(tmpNode.level);
+                    expand_nodes = tmpNode.getNodesFromDisGraph(node.node,"Out");
+                }
+
+
+                //Todo, create path with incoming edges
+                if (expand_nodes.size() != 0) {
+                    for (DistanceEdge nextDe : expand_nodes) {
+                        String nextId = String.valueOf(nextDe.endNode.getId());
+                        myNode nextNode;
+                        if (ProcessedNode.containsKey(nextId)) {
+                            nextNode = ProcessedNode.get(nextId);
+                        } else {
+                            nextNode = new myNode(nextDe.endNode, false);
+                        }
+
+
+                        if (tmpNode != null && tmpNode.level >= getLowestNode(root, nextNode.node).level) {
+//                            System.out.println(nextDe+" "+getLowestNode(root, nextNode.node).level + " next one");
+                            continue;
+//                        }else if(tmpNode!=null)
+//                        {
+//                            System.out.println(nextDe+" "+getLowestNode(root, nextNode.node).level +" add to queue");
+
+                        }
+
+
+                        for (myPath sp : node.subRouteSkyline) {
+                            for (myPath ep : nextDe.paths) {
+                                myPath new_path = new myPath(sp, ep);
+                                if (!new_path.hasCycle()) {
+                                    nextNode.addToSkylineResult(new_path);
+                                }
+                            }
+                        }
+                        unmarked.add(nextNode);
+                    }
+                }
+                i++;
+            }
+
+            for(Map.Entry<String,myNode> e:ProcessedNode.entrySet())
+            {
+                System.out.println(e.getKey());
+                for(myPath p:e.getValue().subRouteSkyline)
+                {
+                    System.out.println("        "+p);
+                }
+
+            }
+
+            tx.success();
+        }
+
+    }
+
+    private void getTheExpansionToNextLevel(Pair<myNode, Boolean> nodePair, VCNode tmpNode) {
+        myNode node = nodePair.getKey();
+        VCNode nextVCNode;
+        if (nodePair.getValue()) {
+            nextVCNode = tmpNode;
+            for (Relationship rel : tmpNode.G.getOutGoingRels(node.node)) {
+                System.out.println(rel + "  " + tmpNode.dg.nodes.contains(rel.getEndNode()));
+            }
+        } else {
+            for (DistanceEdge de : tmpNode.dg.getOutGoingRels(node.node)) {
+                for (myPath p : de.paths) {
+
+                }
+            }
+        }
+
+    }
+
+    private VCNode findTheHighestLevelContains(Node source, VCNode root) {
+        boolean flag = false;
+        VCNode tmpNode = root;
+        if (root.nodesLeftInRoot.contains(source)) {
+            return tmpNode;
+        } else {
+            while (!tmpNode.nodeInThisLevel.contains(source)) {
+                if (tmpNode.children != null) {
+                    tmpNode = tmpNode.children.get(0);
+                } else {
+                    tmpNode = null;
+                    break;
+                }
+
+            }
+        }
+
+
+        return tmpNode;
+
+
     }
 
     public ArrayList<myPath> getSkyline(String src, String dest, GraphDatabaseService graphdb, VCNode root) {
@@ -109,7 +334,6 @@ public class vctest {
 //                System.out.println("-------------------------------");
 
 
-
                 Node dNode = graphdb.findNode(BNode.BusNode, "name", did);
                 myNode dmyNode = new myNode(dNode, false);
                 Iterable<Relationship> drels = dNode.getRelationships(Line.Linked, Direction.INCOMING);
@@ -128,7 +352,6 @@ public class vctest {
                 }
 
 //                System.out.println("-------------------------------");
-
 
 
 //                for (myPath p : dmyNode.subRouteSkyline) {
@@ -269,7 +492,7 @@ public class vctest {
 //            System.out.println("Index building success in " + (System.nanoTime() - building) / 1000000 + "ms ");
 //            System.out.println("Total depth is " + getHigh(root));
 //            long traveralTime = System.nanoTime();
-////            retrivalTree(root);
+//            retrivalTree(t_root);
 //            System.out.println("Traveral Used " + (System.nanoTime() - traveralTime) / 1000000 + "ms ");
 
 
@@ -535,12 +758,12 @@ public class vctest {
 
                 if (!p.processed_flag) {
                     p.processed_flag = true;
-                    ArrayList<myPath> paths=new ArrayList<>();
+                    ArrayList<myPath> paths = new ArrayList<>();
                     try {
                         paths = src_lowestNode.expand_in_dg(p);
                     } catch (Exception e) {
 //                        System.out.println(src_lowestNode.expand_in_dg(p)==null);
-                        System.out.println(src_lowestNode==null);
+                        System.out.println(src_lowestNode == null);
                     }
 //                    System.out.println(src_lowestNode.dg.nodes.contains(p.endNode)+"  "+p.endNode+"  "+paths.size());
 //                    for (DistanceEdge nnnn:src_lowestNode.dg.edges)
@@ -769,6 +992,7 @@ public class vctest {
         HashMap<Integer, Long> numberOfNodesCounts = new HashMap<>();
         HashMap<Integer, Long> numberofEdgesCounts = new HashMap<>();
         HashMap<Integer, Long> SkylineCounts = new HashMap<>();
+        HashMap<Integer, Long> nodeinLevel = new HashMap<>();
 
         Stack<VCNode> q = new Stack<>();
         q.add(root);
@@ -822,6 +1046,18 @@ public class vctest {
                 SkylineCounts.put(node.level, node.dg.totalPaths());
             }
 
+            if (node.nodeInThisLevel != null) {
+                if (nodeinLevel.containsKey(node.level)) {
+                    long num = SkylineCounts.get(node.level);
+                    nodeinLevel.put(node.level, num + node.nodeInThisLevel.size());
+                } else {
+                    nodeinLevel.put(node.level, (long) node.nodeInThisLevel.size());
+                }
+            } else {
+                nodeinLevel.put(node.level, 0L);
+
+            }
+
 
             visited.add(node);
 
@@ -847,6 +1083,7 @@ public class vctest {
             System.out.println("     there are total " + numberOfNodesCounts.get(levelid) + " nodes (" + numberOfNodesCounts.get(levelid) / vc.getValue() + ") and "
                     + numberofEdgesCounts.get(levelid) + " edges (" + numberofEdgesCounts.get(levelid) / vc.getValue() + ") stored in this level");
             System.out.println("     there are total " + SkylineCounts.get(levelid) + " skyline paths (" + (float) SkylineCounts.get(levelid) / numberofEdgesCounts.get(levelid) + ") stored in this level");
+            System.out.println("     there are total " + nodeinLevel.get(levelid) + " nodes (" + (float) nodeinLevel.get(levelid) / numberofEdgesCounts.get(levelid) + ") left in this level");
             totalNumberVCNodes += vc.getValue();
             totalSotredEdges += numberofEdgesCounts.get(levelid);
             totalSotredNodes += numberOfNodesCounts.get(levelid);
