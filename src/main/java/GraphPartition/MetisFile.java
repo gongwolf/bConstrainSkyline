@@ -17,6 +17,7 @@ public class MetisFile {
     //Node_id, the adj nodes of this node id.
     HashMap<String, ArrayList<String[]>> NodeList = new HashMap<>();
 
+
     HashMap<String, Boolean> remainNodes = new HashMap<>();
     ArrayList<HashMap<String, ArrayList<String[]>>> connectionSets = new ArrayList<>();
 
@@ -26,12 +27,17 @@ public class MetisFile {
 
     public static void main(String args[]) {
         MetisFile mf = new MetisFile("mapped_metis_1.graph");
-        mf.generateMetisFile(-1);
-        mf.checkingConnection("1");
-        System.out.println("======================");
+//        mf.generateMetisFile(-1);
+//        mf.checkingConnection("1");
+//        System.out.println("======================");
         mf.countEdges();
     }
 
+    /**
+     * transfer the graph information of the graph from nodepath and edgepath, to the metis formed file.
+     * original node id becomes the id+1 in metis csv file
+     * @param costid the i-th id to include into the metis file
+     */
     public void generateMetisFile(int costid) {
         try {
             FileWriter fw = new FileWriter(metisGraphFile, true);
@@ -41,12 +47,9 @@ public class MetisFile {
             int i = 0;
 
             while ((line = br.readLine()) != null) {
+                // read the node
                 String Nodeid = line.split(" ")[0];
-//                System.out.println(Nodeid);
                 String content = readSegMentInfo(Nodeid, costid);
-//                 System.out.println(content);
-                // bw.write((Long.parseLong(Nodeid) + 1) + " " + content);
-//                break;
                 bw.write(content);
                 i++;
                 if (i % 10000 == 0) {
@@ -62,8 +65,17 @@ public class MetisFile {
         }
     }
 
+    /**
+     * find the edges start ort end with the give node.
+     * cost is -1, means seam the edges as unweighted graph.
+     * else return the i-th cost of the edge as well.
+     *
+     * @param Nodeid the node id that find the edges that directly connect to id
+     * @param costid the i-th cost.
+     * @return: the string of connection information of NodeId.
+     * Such as t1 cost1 t2 cost2 ...... tn costn
+     */
     public String readSegMentInfo(String Nodeid, int costid) {
-        // System.out.println(Nodeid);
         StringBuffer infos = new StringBuffer();
         BufferedReader br = null;
         try {
@@ -71,8 +83,7 @@ public class MetisFile {
             String line = null;
             while ((line = br.readLine()) != null) {
                 String[] segInfo = line.split(" ");
-                // System.out.println(segInfo[0]+"
-                // "+segInfo[1]+Nodeid.equals(segInfo[0]));
+
                 if (Nodeid.equals(segInfo[0])) {
                     infos.append(Long.parseLong(segInfo[1]) + 1).append(" ");
                 } else if (Nodeid.equals(segInfo[1])) {
@@ -88,7 +99,6 @@ public class MetisFile {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // System.out.println(infos.toString());
         return infos.append("\n").toString();
     }
 
@@ -102,7 +112,9 @@ public class MetisFile {
         mappingDir.mkdirs();
 //
         int id = 1;
+        //while there is still some node does not cover by some of the connection component
         while (!remainNodes.isEmpty()) {
+            //get a random node to start the dfs
             String nodeid = getRandomStartNode();
             //Node nid belong to this connection component
             //Adj nodes of the nid, String[]{adj nid, cost1, cost2....}
@@ -122,6 +134,18 @@ public class MetisFile {
         System.out.println(connectionSets.size());
     }
 
+    /**
+     * load node information from metis graph file.
+     * all nodes in remainNodes are <nodeid, false>.
+     * all the adj information are put in NodeList
+     * <nodeId, ArrayList<
+     * String{adj_node_1,cost_i_of_node_1},
+     * String{adj_node_2,cost_i_of_node_2},
+     * ........
+     * String{adj_node_n,cost_i_of_node_n},
+     * >
+     * >
+     */
     public void loadNodeInfo() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(metisGraphFile));
@@ -149,6 +173,11 @@ public class MetisFile {
     }
 
 
+    /**
+     * Get a random node from remainNodes.
+     *
+     * @return a node in the have not been processed randomly.
+     */
     private String getRandomStartNode() {
         Random r = new Random();
         List<String> rList = new ArrayList<>(this.remainNodes.keySet());
@@ -167,6 +196,7 @@ public class MetisFile {
             String cNode = st.pop();
             //neighbor of the cNode
             ArrayList<String[]> s = this.NodeList.get(cNode);
+
             if (!sub_NodeList.containsKey(cNode)) {
                 sub_NodeList.put(cNode, s);
             }
@@ -174,33 +204,36 @@ public class MetisFile {
             this.remainNodes.remove(cNode);
 
             for (int i = 0; i < s.size(); i++) {
+                //n_nodeid is the adj node id of cNode
                 String n_nodeid = s.get(i)[0];
+                //if the n_nodeid is un-visited, add to stack and remove from remainNodes.
                 if (this.remainNodes.containsKey(n_nodeid)) {
                     st.add(n_nodeid);
-                    this.remainNodes.remove(n_nodeid);
                 }
             }
         }
         return sub_NodeList;
     }
 
-
+    /**
+     * @param set the node and its adj information in this connection component
+     * @param id  the id of the connection component
+     */
     private void mappingToMetisFormat(HashMap<String, ArrayList<String[]>> set, int id) {
+        //sort the nodes in this connection component by id
         TreeMap<String, ArrayList<String[]>> tSet = new TreeMap<>(new StringComparator());
         tSet.putAll(set);
 
         int mapping_id = 1;
         HashMap<String, String> node_mapping = new HashMap<>();
 
+        //Given a mapped id to each node in this connection component from 1
         for (Map.Entry<String, ArrayList<String[]>> entry : tSet.entrySet()) {
             String n_id = entry.getKey();
             node_mapping.put(n_id, String.valueOf(mapping_id));
-//            System.out.println(n_id + "--->" + mapping_id);
             mapping_id++;
         }
-//        System.out.println("==========================================");
-//        System.out.println(tSet.size());
-//        printGraphInfo(set);
+
         HashMap<String, ArrayList<String[]>> mapped_set = createMappingEdgeInfo(set, node_mapping);
 //        System.out.println(mapped_set.size());
 //        printGraphInfo(mapped_set);
@@ -209,15 +242,29 @@ public class MetisFile {
         writeToDisk(node_mapping, set, mapped_set, id);
     }
 
+    /**
+     * @param set          the node and its adj information in this connection component
+     * @param node_mapping the mapping of the origin node id to the mapped node id that is in this connection component
+     * @return all the mapped adj information are put in NodeList
+     * <mapped_node_id, ArrayList<
+     * String{mappedID_of_adj_node_1,cost_i_of_node_1},
+     * String{mappedID_of_adj_node_2,cost_i_of_node_2},
+     * ........
+     * String{mappedID_of_adj_node_n,cost_i_of_node_n},
+     * >
+     * >
+     */
     private HashMap<String, ArrayList<String[]>> createMappingEdgeInfo(HashMap<String, ArrayList<String[]>> set, HashMap<String, String> node_mapping) {
         HashMap<String, ArrayList<String[]>> Mapped_node_list = new HashMap<>();
 
         for (Map.Entry<String, ArrayList<String[]>> entry : set.entrySet()) {
             String n_id = entry.getKey();
+            //get the mapped id by the original node id
             String mapped_id = node_mapping.get(n_id);
             ArrayList<String[]> mapped_adj_infos = new ArrayList<>();
             for (String[] adj_infos : entry.getValue()) {
                 String mapped_adj[] = new String[1];
+                //get the mapped id from the original node id of the adj node of n_id
                 mapped_adj[0] = node_mapping.get(adj_infos[0]);
 //                mapped_adj[1] = adj_infos[1];
                 mapped_adj_infos.add(mapped_adj);
@@ -228,6 +275,16 @@ public class MetisFile {
         return Mapped_node_list;
     }
 
+    /**
+     * write the connection component information.
+     * write the mapped adj information of mapped node id from 1 to n to mapped_metis_ +id+.graph.
+     * write the mapping information from original id to mapped id in the file node_mapping_ + id + .txt
+     *
+     * @param node_mapping the mapping of the origin node id to the mapped node id that is in this connection component
+     * @param set          the original node id and its adj information in this connection component
+     * @param mapped_set   the mapped node id and its mapped adj node id information in this connection component
+     * @param id           the id of the connection component
+     */
     private void writeToDisk(HashMap<String, String> node_mapping, HashMap<String, ArrayList<String[]>> set, HashMap<String, ArrayList<String[]>> mapped_set, int id) {
         String node_mapping_path = this.mappingPath + "node_mapping_" + id + ".txt";
         String origin_path = this.mappingPath + "origin_metis_" + id + ".graph";
@@ -246,9 +303,7 @@ public class MetisFile {
         try (FileWriter fw = new FileWriter(mapped_file.getAbsoluteFile(), true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
-            int c_id = 1;
             int max_id = node_mapping.size();
-//        printGraphInfo(mapped_set);
 
             for (int i = 1; i <= max_id; i++) {
                 StringBuffer sb = new StringBuffer();
@@ -256,9 +311,6 @@ public class MetisFile {
                 for (String[] adj_infos : n_infos) {
                     String n_id = adj_infos[0];
                     sb.append(n_id).append(" ");
-
-//                    String n_cost = adj_infos[1];
-//                    sb.append(n_id).append(" ").append(n_cost).append(" ");
                 }
                 out.println(sb);
             }

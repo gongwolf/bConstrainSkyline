@@ -14,18 +14,14 @@ public class BlinksPartition {
     String EdgesInfoPath = PathBase + "SegInfo.txt";
     String nodeMappingBase = PathBase + "mapping/";
     private ArrayList<Pair<String, String>> connectionInfos = new ArrayList<>();
+    //node id, pair<cid,pid>
     private HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
     private HashMap<String, HashMap<String, Integer>> numberOfPartitions = new HashMap<>();
 
-    public int NodeNum = 320;
+    public int NodeNum = 2000;
 
     public static void main(String args[]) {
         BlinksPartition bp = new BlinksPartition();
-//        long[] infos = bp.getC_id(55);
-//        System.out.println(infos[0]);
-//        System.out.println(infos[1]);
-//        int pid = bp.getPid_inC((int) infos[0], infos[1]);
-//        System.out.println(pid);
         ArrayList<String> portals = bp.getPortals();
         System.out.println("===========================");
         System.out.println(portals.size());
@@ -54,13 +50,12 @@ public class BlinksPartition {
         loadnumberinPartition();
         System.out.println(partitionInfos.size());
         System.out.println(this.connectionInfos.size());
-        System.out.println(this.partitionInfos.size());
 //
         ArrayList<Pair<String, String>> S = new ArrayList<>();
         HashSet<String> P = new HashSet<>();
 //
         for (Pair<String, String> ep : connectionInfos) {
-            System.out.println(ep);
+//            System.out.println(ep);
 
             if (isCutterEdge(ep)) {
                 S.add(ep);
@@ -103,7 +98,7 @@ public class BlinksPartition {
 
                 int SNumOfBlocks = this.numberOfPartitions.get(Scid).get(Spid);
                 int ENumOfBlocks = this.numberOfPartitions.get(Ecid).get(Epid);
-                System.out.println("   :" + sp + "  --> " + Sincs.size() + "+" + SNumOfBlocks + "=" + (Sincs.size() + SNumOfBlocks) + "  ===>  " + Eincs.size() + "+" + ENumOfBlocks + "=" + (Eincs.size() + ENumOfBlocks));
+//                System.out.println("   :" + sp + "  --> " + Sincs.size() + "+" + SNumOfBlocks + "=" + (Sincs.size() + SNumOfBlocks) + "  ===>  " + Eincs.size() + "+" + ENumOfBlocks + "=" + (Eincs.size() + ENumOfBlocks));
 
                 if ((Sincs.size() + 0.1 * SNumOfBlocks) >= (0.1 * ENumOfBlocks + Eincs.size())) {
                     P.add(startNode);
@@ -246,9 +241,12 @@ public class BlinksPartition {
         }
     }
 
-    /*
-    * @return value: cid, mapped id
-    * */
+    /**
+     *
+     * @param nodeid the original node id
+     * @return value: cid, mapped id in the connection component.
+     *
+     */
     private long[] getC_id(long nodeid) {
         int C_id = -1;
         File nodeDir = new File(nodeMappingBase);
@@ -279,9 +277,15 @@ public class BlinksPartition {
         return new long[]{-1, -1};
     }
 
+    /**
+     * return the partition id of the node in the specific connection component
+     * @param cid the connection component id
+     * @param mapped_id the mapped node id
+     * @return the partition id
+     */
     private int getPid_inC(int cid, long mapped_id) {
         int pid = -1;
-        String partFile = nodeMappingBase + "mapped_metis_" + cid + ".graph.part.16";
+        String partFile = nodeMappingBase + "mapped_metis_" + cid + ".graph.part.20";
 //        String partFile = PathBase + "mapped_metis_" + cid + ".graph.part.10";
         try {
             BufferedReader br = new BufferedReader(new FileReader(partFile));
@@ -335,12 +339,18 @@ public class BlinksPartition {
 
     private void portalsMapping(ArrayList<String> p) {
         int count = 0;
+        //cid, pair<pid, portal node id>
         HashMap<String, HashMap<String, HashSet<String>>> pMapping = new HashMap<>();
         HashSet<String> cids = new HashSet<>();
+
+        //find the partition id that each portal id need to belong
+        //The portal node need to be the same partition of its neighbor nodes.
         for (String n : p) {
             int nid = Integer.parseInt(n);
+            //get the incomming or outgoing nodes of nid
             ArrayList<String> neighborNodes = getNeighborNodes(nid);
             for (String Nnode : neighborNodes) {
+                //get the cid and pid of the neighborhood nodes
                 String C_id = partitionInfos.get(Nnode).getKey();
                 String P_id = partitionInfos.get(Nnode).getValue();
 
@@ -370,13 +380,8 @@ public class BlinksPartition {
 //        System.out.println(cids);
 
         for (String cid : pMapping.keySet()) {
-            System.out.println(cid);
             for (String pid : pMapping.get(cid).keySet()) {
-                System.out.println("   " + pid + "   " + pMapping.get(cid).get(pid).size());
                 for (String portalNode : pMapping.get(cid).get(pid)) {
-                    if (portalNode.equals("60409")) {
-                        System.out.println("!!!");
-                    }
                     String bits = "";
                     boolean ip = isIncomingPortal(Integer.parseInt(portalNode), pid);
                     boolean op = isOutGoingPortal(Integer.parseInt(portalNode), pid);

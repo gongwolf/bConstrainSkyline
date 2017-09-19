@@ -7,13 +7,13 @@ import java.io.*;
 import java.util.*;
 
 public class generateGraph {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph2/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
     String EdgesPath = DBBase + "SegInfo.txt";
     String NodePath = DBBase + "NodeInfo.txt";
 
     public static void main(String args[]) {
-        int numberNodes = 10000;
-        int numberofEdges = 18000;
+        int numberNodes = 2000;
+        int numberofEdges = 4000;
         int numberofDimen = 3;
         generateGraph g = new generateGraph();
         g.generateG(numberNodes, numberofEdges, numberofDimen);
@@ -55,13 +55,15 @@ public class generateGraph {
             Edges.put(new Pair(startNode, endNode), costs);
         }
 
-
+        //stores all of the start node of the created edges
         HashSet<String> containedNodes = new HashSet<>();
         for (Pair<String, String> p : Edges.keySet()) {
             containedNodes.add(p.getKey());
         }
 
         for (String node : Nodes.keySet()) {
+            //if there is the node does not have any edge start with it
+            //Create edge for it
             if (!containedNodes.contains(node)) {
                 String startNode = String.valueOf(node);
                 String endNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));

@@ -10,7 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class CreateDB {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph2/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
+    String DB_PATH = "/home/gqxwolf/neo4j323/testdb/databases/graph.db";
     String NodesPath = DBBase + "NodeInfo.txt";
     String SegsPath = DBBase + "SegInfo.txt";
     private GraphDatabaseService graphdb = null;
@@ -21,7 +22,8 @@ public class CreateDB {
     }
 
     public void createDatabase() {
-        connector nconn = new connector("/home/gqxwolf/neo4j323/testdb2/databases/graph.db");
+        connector nconn = new connector(DB_PATH);
+        //delete the data base at first
         nconn.deleteDB();
         nconn.startDB();
         this.graphdb = nconn.getDBObject();

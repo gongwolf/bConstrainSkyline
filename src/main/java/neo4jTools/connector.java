@@ -28,7 +28,7 @@ public class connector {
         this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(this.DB_PATH))
 //                .loadPropertiesFromFile(conFile)
                 .setConfig(GraphDatabaseSettings.mapped_memory_page_size, "8k")
-                .setConfig(GraphDatabaseSettings.pagecache_memory, "2G")
+                .setConfig(GraphDatabaseSettings.pagecache_memory, "1G")
                 .newGraphDatabase();
         //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(DB_PATH)).loadPropertiesFromFile("/home/gqxwolf/neo4j/conf/neo4j.properties").newGraphDatabase();
 
