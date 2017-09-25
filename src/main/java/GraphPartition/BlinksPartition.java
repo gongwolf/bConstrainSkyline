@@ -1,6 +1,7 @@
 package GraphPartition;
 
 import javafx.util.Pair;
+import org.neo4j.cypher.internal.frontend.v2_3.ast.In;
 import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Sin;
 
 import java.io.*;
@@ -25,9 +26,55 @@ public class BlinksPartition {
         ArrayList<String> portals = bp.getPortals();
         System.out.println("===========================");
         System.out.println(portals.size());
-        bp.writePoralsToDisk(portals);
-        bp.portalsMapping(portals);
+        bp.cleanFadePortal(portals);
+//        bp.writePoralsToDisk(portals);
+//        bp.portalsMapping(portals);
 
+    }
+
+    private void cleanFadePortal(ArrayList<String> portals) {
+        int count = 0;
+        int count1 = 0;
+        for(String portal:portals)
+        {
+
+            boolean allInportal=true,alloutportal=true;
+            ArrayList<String> outNodes = getOutGoingFromNode(Integer.parseInt(portal));
+            for(String n:outNodes)
+            {
+                if(!portals.contains(n))
+                {
+                    alloutportal=false;
+                    break;
+                }
+            }
+            int numberOfOut = outNodes.size();
+
+            ArrayList<String> inNodes = getIncomingNodeToNode(Integer.parseInt(portal));
+            int numberOfIn = inNodes.size();
+            for(String n:inNodes)
+            {
+                if(!portals.contains(n))
+                {
+                    allInportal=false;
+                    break;
+                }
+            }
+
+            System.out.println(portal+":"+numberOfOut+"  "+numberOfIn+" "+alloutportal+" "+allInportal);
+
+            if(numberOfIn==0 || numberOfOut==0)
+            {
+                count++;
+            }
+
+            //if the node connect two non-portals
+            if(!allInportal && !alloutportal)
+            {
+                count1++;
+            }
+        }
+        System.out.println(count+"  "+count1);
     }
 
     public void writePoralsToDisk(ArrayList<String> portals) {
@@ -59,27 +106,18 @@ public class BlinksPartition {
 
             if (isCutterEdge(ep)) {
                 S.add(ep);
-//                if(ep.getKey().equals("3")||ep.getValue().equals("3"))
-//                {
-//                    System.out.println(ep);
-//                    System.out.println(this.partitionInfos.get(ep.getKey()));
-//                    System.out.println(this.partitionInfos.get(ep.getValue()));
-//                }
             }
-
         }
 
 
         System.out.println("======");
         ArrayList<Pair<String, String>> copyOfS = new ArrayList<>(S);
-        System.out.println(copyOfS.size());
+//        System.out.println(copyOfS.size());
 
-        int aa = 0;
         for (Pair<String, String> sp : S) {
 
 
             if (copyOfS.contains(sp)) {
-                aa++;
                 String startNode = sp.getKey();
                 String endNode = sp.getValue();
 
@@ -107,21 +145,24 @@ public class BlinksPartition {
                     P.add(endNode);
                     removeFromSpeEdges(copyOfS, Eincs);
                 }
-                System.out.println(copyOfS.size());
+//                System.out.println(copyOfS.size());
             }
         }
-        System.out.println("aa:" + aa);
         return new ArrayList<>(P);
     }
 
     private void removeFromSpeEdges(ArrayList<Pair<String, String>> source, ArrayList<Pair<String, String>> sub) {
         for (Pair<String, String> p : sub) {
-            for (int i = 0; i < source.size(); ) {
-                if (source.get(i).equals(p)) {
-                    source.remove(i);
-                } else {
-                    i++;
-                }
+//            for (int i = 0; i < source.size(); ) {
+//                if (source.get(i).equals(p)) {
+//                    source.remove(i);
+//                } else {
+//                    i++;
+//                }
+//            }
+            int index = source.indexOf(p);
+            if(index!=-1) {
+                source.remove(index);
             }
         }
     }
@@ -323,6 +364,12 @@ public class BlinksPartition {
         return false;
     }
 
+    /**
+     *
+     * @param s the collections that contains edges information
+     * @param node specific the node want to find the edges incident to it
+     * @return the collections that contains the edges that incident to the node
+     */
 
     private ArrayList<Pair<String, String>> getIncidentTo(ArrayList<Pair<String, String>> s, String node) {
         ArrayList<Pair<String, String>> incPairs = new ArrayList<>();
@@ -428,7 +475,7 @@ public class BlinksPartition {
         String N_pid = this.partitionInfos.get(N).getValue();
 
 
-        ArrayList<String> outgoingNodes = getOutGoingNodes(nodeid);
+        ArrayList<String> outgoingNodes = getOutGoingFromNode(nodeid);
 //        System.out.println(outgoingNodes.size());
         for (String outgo_node : outgoingNodes) {
             String I_cid = this.partitionInfos.get(outgo_node).getKey();
@@ -453,7 +500,7 @@ public class BlinksPartition {
 
 //        System.out.println(N + " "+ N_cid+ " "+N_pid);
 
-        ArrayList<String> incomingNodes = getInComingNodeList(nodeid);
+        ArrayList<String> incomingNodes = getIncomingNodeToNode(nodeid);
 //        System.out.println(incomingNodes.size());
         for (String income_node : incomingNodes) {
             String I_cid = this.partitionInfos.get(income_node).getKey();
@@ -478,7 +525,7 @@ public class BlinksPartition {
 
 //        System.out.println(N + " "+ N_cid+ " "+N_pid);
 
-        ArrayList<String> outgoingNodes = getOutGoingNodes(nodeid);
+        ArrayList<String> outgoingNodes = getOutGoingFromNode(nodeid);
 //        System.out.println(incomingNodes.size());
         for (String outgo_node : outgoingNodes) {
             String I_cid = this.partitionInfos.get(outgo_node).getKey();
@@ -503,7 +550,7 @@ public class BlinksPartition {
 
 //        System.out.println(N + " "+ N_cid+ " "+N_pid);
 
-        ArrayList<String> incomingNodes = getInComingNodeList(nodeid);
+        ArrayList<String> incomingNodes = getIncomingNodeToNode(nodeid);
 //        System.out.println(incomingNodes.size());
         for (String income_node : incomingNodes) {
             String I_cid = this.partitionInfos.get(income_node).getKey();
@@ -519,7 +566,7 @@ public class BlinksPartition {
         return flag;
     }
 
-    private ArrayList<String> getOutGoingNodes(int nodeid) {
+    private ArrayList<String> getOutGoingFromNode(int nodeid) {
         String N = String.valueOf(nodeid);
         ArrayList<String> outgoingNodes = new ArrayList<>();
         for (Pair<String, String> p : this.connectionInfos) {
@@ -533,7 +580,7 @@ public class BlinksPartition {
     }
 
 
-    private ArrayList<String> getInComingNodeList(int nodeid) {
+    private ArrayList<String> getIncomingNodeToNode(int nodeid) {
         String N = String.valueOf(nodeid);
 //        System.out.println(N);
         ArrayList<String> incomingNodes = new ArrayList<>();
