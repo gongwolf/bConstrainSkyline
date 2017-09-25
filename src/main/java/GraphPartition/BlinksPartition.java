@@ -1,14 +1,12 @@
 package GraphPartition;
 
 import javafx.util.Pair;
+import neo4jTools.StringComparator;
 import org.neo4j.cypher.internal.frontend.v2_3.ast.In;
 import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Sin;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 public class BlinksPartition {
     String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
@@ -21,30 +19,107 @@ public class BlinksPartition {
 
     public int NodeNum = 2000;
 
+    blocks prts = new blocks();
+    int out_port = 1;
+    int in_port = 2;
+
     public static void main(String args[]) {
         BlinksPartition bp = new BlinksPartition();
         ArrayList<String> portals = bp.getPortals();
         System.out.println("===========================");
         System.out.println(portals.size());
         bp.cleanFadePortal(portals);
+        bp.createBlocks(portals);
+
+        System.out.println(bp.prts.blocks.size());
+
+
+        bp.prts.randomSelectLandMark(3);
+        long buildlandmark = System.currentTimeMillis();
+        bp.prts.buildIndexes();
+        System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis()-buildlandmark)+" ms");
+
+        for(String pid:bp.prts.blocks.keySet())
+        {
+            block b = bp.prts.blocks.get(pid);
+            System.out.println(pid+"  "+b.nodes.size()+" "+b.iportals.size()+" "+b.oportals.size()+" "+b.landMarks.size()+" "+b.fromLandMarkIndex.size()+" "+b.toLandMartIndex.size());
+        }
+
+
+
 //        bp.writePoralsToDisk(portals);
 //        bp.portalsMapping(portals);
 
     }
 
+
+
+    private void createBlocks(ArrayList<String> portals) {
+        TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
+        infoTM.putAll(this.partitionInfos);
+        for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
+            int node_id = Integer.parseInt(node.getKey());
+
+            if (portals.contains(node.getKey())) {
+                ArrayList<String> in_nodes = getIncomingNodeToNode(node_id);
+                for (String inode : in_nodes) {
+                    if (!portals.contains(inode)) {
+                        String pid = this.partitionInfos.get(inode).getValue();
+                        //node is a out-going portal of the partition where the inode is located.
+                        addToBlock(node_id, pid, out_port);
+                    }
+                }
+
+                ArrayList<String> out_nodes = getOutGoingFromNode(node_id);
+                for(String onode:out_nodes)
+                {
+                    if(!portals.contains(onode))
+                    {
+                        //get the pid of the onode
+                        String pid = this.partitionInfos.get(onode).getValue();
+                        //node is a in-coming portal of the partition where the onode is located.
+                        addToBlock(node_id,pid,in_port);
+                    }
+                }
+            }else{
+                String pid = node.getValue().getValue();
+                addToBlock(node_id,pid,0);
+            }
+
+        }
+        infoTM.clear();
+    }
+
+    private void addToBlock(int node_id, String pid, int node_type) {
+        String str_nodeID = String.valueOf(node_id);
+        block b= prts.blocks.get(pid);
+        if(b==null)
+        {
+            b = new block();
+            prts.blocks.put(pid,b);
+        }
+
+        b.nodes.add(str_nodeID);
+
+        if(node_type==in_port)
+        {
+            b.iportals.add(str_nodeID);
+        }else if(node_type == out_port)
+        {
+            b.oportals.add(str_nodeID);
+        }
+    }
+
     private void cleanFadePortal(ArrayList<String> portals) {
         int count = 0;
         int count1 = 0;
-        for(String portal:portals)
-        {
+        for (String portal : portals) {
 
-            boolean allInportal=true,alloutportal=true;
+            boolean allInportal = true, alloutportal = true;
             ArrayList<String> outNodes = getOutGoingFromNode(Integer.parseInt(portal));
-            for(String n:outNodes)
-            {
-                if(!portals.contains(n))
-                {
-                    alloutportal=false;
+            for (String n : outNodes) {
+                if (!portals.contains(n)) {
+                    alloutportal = false;
                     break;
                 }
             }
@@ -52,29 +127,25 @@ public class BlinksPartition {
 
             ArrayList<String> inNodes = getIncomingNodeToNode(Integer.parseInt(portal));
             int numberOfIn = inNodes.size();
-            for(String n:inNodes)
-            {
-                if(!portals.contains(n))
-                {
-                    allInportal=false;
+            for (String n : inNodes) {
+                if (!portals.contains(n)) {
+                    allInportal = false;
                     break;
                 }
             }
 
-            System.out.println(portal+":"+numberOfOut+"  "+numberOfIn+" "+alloutportal+" "+allInportal);
+//            System.out.println(portal+":"+numberOfOut+"  "+numberOfIn+" "+alloutportal+" "+allInportal);
 
-            if(numberOfIn==0 || numberOfOut==0)
-            {
+            if (numberOfIn == 0 || numberOfOut == 0) {
                 count++;
             }
 
             //if the node connect two non-portals
-            if(!allInportal && !alloutportal)
-            {
+            if (!allInportal && !alloutportal) {
                 count1++;
             }
         }
-        System.out.println(count+"  "+count1);
+//        System.out.println(count+"  "+count1);
     }
 
     public void writePoralsToDisk(ArrayList<String> portals) {
@@ -161,7 +232,7 @@ public class BlinksPartition {
 //                }
 //            }
             int index = source.indexOf(p);
-            if(index!=-1) {
+            if (index != -1) {
                 source.remove(index);
             }
         }
@@ -283,10 +354,8 @@ public class BlinksPartition {
     }
 
     /**
-     *
      * @param nodeid the original node id
      * @return value: cid, mapped id in the connection component.
-     *
      */
     private long[] getC_id(long nodeid) {
         int C_id = -1;
@@ -320,7 +389,8 @@ public class BlinksPartition {
 
     /**
      * return the partition id of the node in the specific connection component
-     * @param cid the connection component id
+     *
+     * @param cid       the connection component id
      * @param mapped_id the mapped node id
      * @return the partition id
      */
@@ -365,8 +435,7 @@ public class BlinksPartition {
     }
 
     /**
-     *
-     * @param s the collections that contains edges information
+     * @param s    the collections that contains edges information
      * @param node specific the node want to find the edges incident to it
      * @return the collections that contains the edges that incident to the node
      */
