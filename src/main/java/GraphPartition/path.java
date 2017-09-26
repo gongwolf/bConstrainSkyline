@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 
 public class path {
     public Node startNode;
+    public String startID,endID;
     public Node endNode;
     public int NumberOfProperties;
     public ArrayList<String> propertiesName = new ArrayList<>();
@@ -32,6 +33,8 @@ public class path {
         this.relationships = new ArrayList<>();
         this.Nodes.add(startNode);
         calculateCosts();
+        this.startID = String.valueOf(startNode.getId());
+        this.endID = String.valueOf(endNode.getId());
     }
 
     public path(path oldpath, Relationship rel) {
@@ -48,6 +51,8 @@ public class path {
         this.Nodes.add(rel.getEndNode());
         System.arraycopy(oldpath.cost, 0, this.cost, 0, this.cost.length);
         calculateCosts(rel);
+        this.startID = String.valueOf(startNode.getId());
+        this.endID = String.valueOf(endNode.getId());
     }
 
     public path(WeightedPath paths) {
@@ -71,6 +76,8 @@ public class path {
             this.relationships.add(rel_iter.next());
         }
         calculateCosts();
+        this.startID = String.valueOf(startNode.getId());
+        this.endID = String.valueOf(endNode.getId());
     }
 
     public path(Node startNode) {
