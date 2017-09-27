@@ -112,21 +112,12 @@ public class path {
     }
 
     public void setPropertiesName() {
-        Iterable<Relationship> rels = this.startNode.getRelationships(Line.Linked, Direction.OUTGOING);
+        Iterable<Relationship> rels = this.startNode.getRelationships(Line.Linked, Direction.BOTH);
         if (rels.iterator().hasNext()) {
             Relationship rel = rels.iterator().next();
             Map<String, Object> pnamemap = rel.getAllProperties();
             for (Entry<String, Object> entry : pnamemap.entrySet()) {
                 this.propertiesName.add(entry.getKey());
-            }
-        } else {
-            rels = this.startNode.getRelationships(Line.Linked, Direction.INCOMING);
-            if (rels.iterator().hasNext()) {
-                Relationship rel = rels.iterator().next();
-                Map<String, Object> pnamemap = rel.getAllProperties();
-                for (Entry<String, Object> entry : pnamemap.entrySet()) {
-                    this.propertiesName.add(entry.getKey());
-                }
             }
         }
     }
@@ -175,7 +166,6 @@ public class path {
 
     public ArrayList<path> expand() {
         ArrayList<path> result = new ArrayList<>();
-
         Iterable<Relationship> rels = this.endNode.getRelationships(Line.Linked, Direction.OUTGOING);
         Iterator<Relationship> rel_Iter = rels.iterator();
         while (rel_Iter.hasNext()) {

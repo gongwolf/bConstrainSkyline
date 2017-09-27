@@ -7,6 +7,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 
@@ -29,6 +30,7 @@ public class myNode {
     int degree;
     boolean inqueue = false;
     public double priority;
+    public HashMap<String,path> shortestPaths = new HashMap<>();
 
     /**
      *
@@ -212,21 +214,21 @@ public class myNode {
         return result;
     }
 
-    public ArrayList<Pair<myNode, Double>> getAdjNodes(String property_type)
+    public ArrayList<Relationship> getAdjNodes(String property_type)
     {
-        ArrayList<Pair<myNode, Double>> result = new ArrayList<>();
+//        ArrayList<Pair<myNode, Double>> result = new ArrayList<>();
+        ArrayList<Relationship> result = new ArrayList<>();
         Iterable<Relationship> rels = this.current.getRelationships(Line.Linked, Direction.OUTGOING);
         Iterator<Relationship> rel_Iter = rels.iterator();
         while (rel_Iter.hasNext()) {
             Relationship rel = rel_Iter.next();
-            Node nextNode = rel.getEndNode();
-            Double cost = Double.parseDouble(rel.getProperty(property_type).toString());
-            myNode mynextNode = new myNode(this.startNode, nextNode, false);
-            Pair<myNode, Double> pair = new Pair<>(mynextNode, cost);
-            result.add(pair);
+//            Node nextNode = rel.getEndNode();
+//            Double cost = Double.parseDouble(rel.getProperty(property_type).toString());
+//            myNode mynextNode = new myNode(this.startNode, nextNode, false);
+//            Pair<myNode, Double> pair = new Pair<>(mynextNode, cost);
+            result.add(rel);
         }
         return result;
-
     }
 
     public void setComeFromNode(String id) {

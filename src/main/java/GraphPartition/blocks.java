@@ -41,11 +41,16 @@ public class blocks {
         try (Transaction tx = graphDB.beginTx()) {
             for (Map.Entry<String, block> b_obj : blocks.entrySet()) {
                 block b = b_obj.getValue();
-                System.out.println("Build index for partition "+b_obj.getKey());
+                Long run_ms = System.currentTimeMillis();
                 b.buildLandmarkIndex(graphDB);
+                long rms1 = System.currentTimeMillis();
+                long run_ms1 = rms1-run_ms;
                 b.buildInnerSkylineIndex(graphDB);
+                Long run_ms2 = System.currentTimeMillis()-rms1;
+                System.out.print("Build index for partition "+b_obj.getKey()+"  "+run_ms1+" "+run_ms2+" "+(System.currentTimeMillis()-run_ms)+" ms \n");
+//                break;
             }
-            tx.success();
+//            tx.success();
         }
         n.shutdownDB();
 

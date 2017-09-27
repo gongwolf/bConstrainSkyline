@@ -25,7 +25,8 @@ public class BlinksPartition {
 
     public static void main(String args[]) {
         BlinksPartition bp = new BlinksPartition();
-        ArrayList<String> portals = bp.getPortals();
+        ArrayList<String> portals = bp.getPortalsBlinks();
+//        ArrayList<String> portals = bp.getPortalsVertexCover();
         System.out.println("===========================");
         System.out.println(portals.size());
         bp.cleanFadePortal(portals);
@@ -37,14 +38,23 @@ public class BlinksPartition {
         bp.prts.randomSelectLandMark(3);
         long buildlandmark = System.currentTimeMillis();
         bp.prts.buildIndexes();
-        System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis()-buildlandmark)+" ms");
+        System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis() - buildlandmark) + " ms");
 
-        for(String pid:bp.prts.blocks.keySet())
-        {
+        for (String pid : bp.prts.blocks.keySet()) {
             block b = bp.prts.blocks.get(pid);
-            System.out.println(pid+"  "+b.nodes.size()+" "+b.iportals.size()+" "+b.oportals.size()+" "+b.landMarks.size()+" "+b.fromLandMarkIndex.size()+" "+b.toLandMartIndex.size());
-        }
+            System.out.print(pid + "  " + b.nodes.size() + " " + b.iportals.size() + " " + b.oportals.size()
+                    + " " + b.landMarks.size() + " " + b.fromLandMarkIndex.size() + " " + b.toLandMarkIndex.size()
+                    + "  " + b.innerIndex.size());
+            int count = 0;
 
+            for(Map.Entry<Pair<String,String>,ArrayList<path>> p:b.innerIndex.entrySet())
+            {
+                count+=p.getValue().size();
+            }
+
+            System.out.print("  "+count+"\n");
+
+        }
 
 
 //        bp.writePoralsToDisk(portals);
@@ -53,11 +63,11 @@ public class BlinksPartition {
     }
 
 
-
     private void createBlocks(ArrayList<String> portals) {
         TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
         infoTM.putAll(this.partitionInfos);
         for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
+
             int node_id = Integer.parseInt(node.getKey());
 
             if (portals.contains(node.getKey())) {
@@ -71,19 +81,17 @@ public class BlinksPartition {
                 }
 
                 ArrayList<String> out_nodes = getOutGoingFromNode(node_id);
-                for(String onode:out_nodes)
-                {
-                    if(!portals.contains(onode))
-                    {
+                for (String onode : out_nodes) {
+                    if (!portals.contains(onode)) {
                         //get the pid of the onode
                         String pid = this.partitionInfos.get(onode).getValue();
                         //node is a in-coming portal of the partition where the onode is located.
-                        addToBlock(node_id,pid,in_port);
+                        addToBlock(node_id, pid, in_port);
                     }
                 }
-            }else{
+            } else {
                 String pid = node.getValue().getValue();
-                addToBlock(node_id,pid,0);
+                addToBlock(node_id, pid, 0);
             }
 
         }
@@ -92,20 +100,17 @@ public class BlinksPartition {
 
     private void addToBlock(int node_id, String pid, int node_type) {
         String str_nodeID = String.valueOf(node_id);
-        block b= prts.blocks.get(pid);
-        if(b==null)
-        {
+        block b = prts.blocks.get(pid);
+        if (b == null) {
             b = new block();
-            prts.blocks.put(pid,b);
+            prts.blocks.put(pid, b);
         }
 
         b.nodes.add(str_nodeID);
 
-        if(node_type==in_port)
-        {
+        if (node_type == in_port) {
             b.iportals.add(str_nodeID);
-        }else if(node_type == out_port)
-        {
+        } else if (node_type == out_port) {
             b.oportals.add(str_nodeID);
         }
     }
@@ -162,7 +167,7 @@ public class BlinksPartition {
         }
     }
 
-    private ArrayList<String> getPortals() {
+    private ArrayList<String> getPortalsBlinks() {
         loadEdgesInfo();
         loadPartitionsInfo();
         loadnumberinPartition();
@@ -222,21 +227,70 @@ public class BlinksPartition {
         return new ArrayList<>(P);
     }
 
+
+    private ArrayList<String> getPortalsVertexCover() {
+        loadEdgesInfo();
+        loadPartitionsInfo();
+        loadnumberinPartition();
+        System.out.println(partitionInfos.size());
+        System.out.println(this.connectionInfos.size());
+//
+        ArrayList<Pair<String, String>> S = new ArrayList<>();
+        HashSet<String> P = new HashSet<>();
+//
+        for (Pair<String, String> ep : connectionInfos) {
+            if (isCutterEdge(ep)) {
+                S.add(ep);
+            }
+        }
+
+
+        System.out.println("======");
+        ArrayList<Pair<String, String>> copyOfS = new ArrayList<>(S);
+        while (!copyOfS.isEmpty()) {
+            int index = 0;
+            if (copyOfS.size() != 1)
+                 index=getRandomNumberInRange(0, copyOfS.size() - 1);
+            Pair<String, String> cuttingEdge = copyOfS.get(index);
+            String startNode = cuttingEdge.getKey();
+            String endNode = cuttingEdge.getValue();
+
+            ArrayList<Pair<String, String>> Sincs = getIncidentTo(copyOfS, startNode);
+            ArrayList<Pair<String, String>> Eincs = getIncidentTo(copyOfS, endNode);
+
+            String Scid = this.partitionInfos.get(cuttingEdge.getKey()).getKey();
+            String Spid = this.partitionInfos.get(cuttingEdge.getKey()).getValue();
+            String Ecid = this.partitionInfos.get(cuttingEdge.getValue()).getKey();
+            String Epid = this.partitionInfos.get(cuttingEdge.getValue()).getValue();
+
+
+            int SNumOfBlocks = this.numberOfPartitions.get(Scid).get(Spid);
+            int ENumOfBlocks = this.numberOfPartitions.get(Ecid).get(Epid);
+//                System.out.println("   :" + sp + "  --> " + Sincs.size() + "+" + SNumOfBlocks + "=" + (Sincs.size() + SNumOfBlocks) + "  ===>  " + Eincs.size() + "+" + ENumOfBlocks + "=" + (Eincs.size() + ENumOfBlocks));
+
+            if ((Sincs.size() + 0.1 * SNumOfBlocks) >= (0.1 * ENumOfBlocks + Eincs.size())) {
+                P.add(startNode);
+            } else {
+                P.add(endNode);
+            }
+
+            removeFromSpeEdges(copyOfS, Sincs);
+            removeFromSpeEdges(copyOfS, Eincs);
+
+
+        }
+        return new ArrayList<>(P);
+    }
+
     private void removeFromSpeEdges(ArrayList<Pair<String, String>> source, ArrayList<Pair<String, String>> sub) {
         for (Pair<String, String> p : sub) {
-//            for (int i = 0; i < source.size(); ) {
-//                if (source.get(i).equals(p)) {
-//                    source.remove(i);
-//                } else {
-//                    i++;
-//                }
-//            }
             int index = source.indexOf(p);
             if (index != -1) {
                 source.remove(index);
             }
         }
     }
+
 
     private void loadnumberinPartition() {
         for (Map.Entry<String, Pair<String, String>> e : this.partitionInfos.entrySet()) {
@@ -442,11 +496,9 @@ public class BlinksPartition {
 
     private ArrayList<Pair<String, String>> getIncidentTo(ArrayList<Pair<String, String>> s, String node) {
         ArrayList<Pair<String, String>> incPairs = new ArrayList<>();
-//        int counter = 0;
         for (Pair<String, String> p : s) {
             if (node.equals(p.getValue())) {
                 incPairs.add(p);
-//                counter++;
             }
         }
         return incPairs;
@@ -698,6 +750,16 @@ public class BlinksPartition {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private int getRandomNumberInRange(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 
 }
