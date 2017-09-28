@@ -6,12 +6,12 @@ import java.io.*;
 import java.util.*;
 
 public class MetisFile {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph20000/data/";
     String NodePath = DBBase + "NodeInfo.txt";
     String EdgePath = DBBase + "SegInfo.txt";
     String metisGraphFile = DBBase + "metisFormatFile.csv";
     String mappingPath = DBBase + "mapping/";
-    String mappedGraphFileName = "mapped_metis_1.graph";
+//    String mappedGraphFileName = "mapped_metis_10000.graph";
 
 
     //Node_id, the adj nodes of this node id.
@@ -21,16 +21,18 @@ public class MetisFile {
     HashMap<String, Boolean> remainNodes = new HashMap<>();
     ArrayList<HashMap<String, ArrayList<String[]>>> connectionSets = new ArrayList<>();
 
-    public MetisFile(String mappedGraphFileName) {
-        this.mappedGraphFileName = mappingPath + mappedGraphFileName;
+    public MetisFile(){
+
     }
 
+
     public static void main(String args[]) {
-        MetisFile mf = new MetisFile("mapped_metis_1.graph");
-//        mf.generateMetisFile(-1);
-//        mf.checkingConnection("1");
-//        System.out.println("======================");
-        mf.countEdges();
+        MetisFile mf = new MetisFile();
+        mf.generateMetisFile(-1);
+        mf.checkingConnection("1");
+        System.out.println("======================");
+        String mappingfile = "mapped_metis_1.graph";
+        mf.countEdges(mappingfile);
     }
 
     /**
@@ -66,8 +68,8 @@ public class MetisFile {
     }
 
     /**
-     * find the edges start ort end with the give node.
-     * cost is -1, means seam the edges as unweighted graph.
+     * find the edges start or end with the give node.
+     * cost is -1, means take the graph as a unweighted graph, don't consider the weight.
      * else return the i-th cost of the edge as well.
      *
      * @param Nodeid the node id that find the edges that directly connect to id
@@ -342,11 +344,11 @@ public class MetisFile {
         }
     }
 
-    public int countEdges() {
+    public int countEdges(String mappedGraphFileName) {
         int EdgesNum = 0;
         int nodeNum = 0;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(this.mappedGraphFileName));
+            BufferedReader br = new BufferedReader(new FileReader(this.DBBase+"/mapping/"+mappedGraphFileName));
             String line = null;
             while ((line = br.readLine()) != null) {
                 EdgesNum = EdgesNum + (line.split(" ").length);

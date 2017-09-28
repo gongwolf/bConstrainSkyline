@@ -9,19 +9,19 @@ import java.io.*;
 import java.util.*;
 
 public class BlinksPartition {
-    String PathBase = "/home/gqxwolf/mydata/projectData/testGraph/data/";
+    String PathBase = "/home/gqxwolf/mydata/projectData/testGraph20000/data/";
     String EdgesInfoPath = PathBase + "SegInfo.txt";
     String nodeMappingBase = PathBase + "mapping/";
     private ArrayList<Pair<String, String>> connectionInfos = new ArrayList<>();
-    //node id, pair<cid,pid>
-    private HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();
+    private HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();//node id --> pair<cid,pid>
     private HashMap<String, HashMap<String, Integer>> numberOfPartitions = new HashMap<>();
 
-    public int NodeNum = 2000;
+    public int NodeNum = 20000;
 
     blocks prts = new blocks();
     int out_port = 1;
     int in_port = 2;
+    private int num_parts=200;
 
     public static void main(String args[]) {
         BlinksPartition bp = new BlinksPartition();
@@ -102,7 +102,7 @@ public class BlinksPartition {
         String str_nodeID = String.valueOf(node_id);
         block b = prts.blocks.get(pid);
         if (b == null) {
-            b = new block();
+            b = new block(pid);
             prts.blocks.put(pid, b);
         }
 
@@ -169,7 +169,7 @@ public class BlinksPartition {
 
     private ArrayList<String> getPortalsBlinks() {
         loadEdgesInfo();
-        loadPartitionsInfo();
+        loadPartitionsInfo(this.num_parts);
         loadnumberinPartition();
         System.out.println(partitionInfos.size());
         System.out.println(this.connectionInfos.size());
@@ -230,7 +230,7 @@ public class BlinksPartition {
 
     private ArrayList<String> getPortalsVertexCover() {
         loadEdgesInfo();
-        loadPartitionsInfo();
+        loadPartitionsInfo(this.num_parts);
         loadnumberinPartition();
         System.out.println(partitionInfos.size());
         System.out.println(this.connectionInfos.size());
@@ -344,37 +344,36 @@ public class BlinksPartition {
         }
     }
 
-    public void loadPartitionsInfo() {
+    public void loadPartitionsInfo(int num_parts) {
         String paritionFile = PathBase + "partitions_info.txt";
         System.out.println(paritionFile);
         File pFile = new File(paritionFile);
         if (pFile.exists()) {
-            System.out.println("read partition infos");
-            readPartionsInfo(paritionFile);
-        } else {
-            System.out.println("write and read partition infos");
-            writePartionsInfo(paritionFile);
+            System.out.println("delete partition infos");
+            pFile.delete();
         }
 
+        System.out.println("write and read partition infos");
+        writePartionsInfo(paritionFile,num_parts);
     }
 
-    private void readPartionsInfo(String paritionFile) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(paritionFile));
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                String NodeId = line.split(" ")[0];
-                String Cid = line.split(" ")[1];
-                String Pid = line.split(" ")[2];
-                Pair<String, String> p = new Pair<>(Cid, Pid);
-                this.partitionInfos.put(NodeId, p);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void readPartionsInfo(String paritionFile) {
+//        try {
+//            BufferedReader br = new BufferedReader(new FileReader(paritionFile));
+//            String line = null;
+//            while ((line = br.readLine()) != null) {
+//                String NodeId = line.split(" ")[0];
+//                String Cid = line.split(" ")[1];
+//                String Pid = line.split(" ")[2];
+//                Pair<String, String> p = new Pair<>(Cid, Pid);
+//                this.partitionInfos.put(NodeId, p);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    private void writePartionsInfo(String paritionFile) {
+    private void writePartionsInfo(String paritionFile,int num_parts) {
         try (FileWriter fw = new FileWriter(paritionFile, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
@@ -393,7 +392,7 @@ public class BlinksPartition {
 //                } else {
 //                    pid = this.getPid_inC(cid, mapped_id);
                 } else {
-                    pid = this.getPid_inC(cid, mapped_id);
+                    pid = this.getPid_inC(cid, mapped_id,num_parts);
                 }
 
                 Pair<String, String> p = new Pair<>(String.valueOf(cid), String.valueOf(pid));
@@ -448,9 +447,9 @@ public class BlinksPartition {
      * @param mapped_id the mapped node id
      * @return the partition id
      */
-    private int getPid_inC(int cid, long mapped_id) {
+    private int getPid_inC(int cid, long mapped_id,int num_parts) {
         int pid = -1;
-        String partFile = nodeMappingBase + "mapped_metis_" + cid + ".graph.part.20";
+        String partFile = nodeMappingBase + "mapped_metis_" + cid + ".graph.part."+num_parts;
 //        String partFile = PathBase + "mapped_metis_" + cid + ".graph.part.10";
         try {
             BufferedReader br = new BufferedReader(new FileReader(partFile));

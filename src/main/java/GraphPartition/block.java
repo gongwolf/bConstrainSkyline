@@ -13,6 +13,7 @@ import org.neo4j.graphdb.*;
 import java.util.*;
 
 public class block {
+    private final String pid;
     public ArrayList<String> nodes;
     public ArrayList<String> iportals;
     public ArrayList<String> oportals;
@@ -21,7 +22,8 @@ public class block {
     public HashMap<String, HashMap<String, double[]>> fromLandMarkIndex; //nodeid --> <land_mark_node_id --> costs >
     public HashMap<Pair<String,String>, ArrayList<path>> innerIndex;
 
-    public block() {
+    public block(String pid) {
+        this.pid = pid;
         nodes = new ArrayList<>();
         iportals = new ArrayList<>();
         oportals = new ArrayList<>();

@@ -35,7 +35,7 @@ public class blocks {
     }
 
     public void buildIndexes() {
-        connector n = new connector("/home/gqxwolf/neo4j323/testdb/databases/graph.db");
+        connector n = new connector("/home/gqxwolf/neo4j323/testdb20000/databases/graph.db");
         n.startDB();
         GraphDatabaseService graphDB = n.getDBObject();
         try (Transaction tx = graphDB.beginTx()) {
