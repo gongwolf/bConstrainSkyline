@@ -23,8 +23,16 @@ public class BlinksPartition {
     int in_port = 2;
     private int num_parts=200;
 
+    public BlinksPartition(int num_parts) {
+        this.num_parts=num_parts;
+    }
+
     public static void main(String args[]) {
-        BlinksPartition bp = new BlinksPartition();
+        int num_parts = 200;
+        if(args.length==1)
+            num_parts=Integer.parseInt(args[0]);
+
+        BlinksPartition bp = new BlinksPartition(num_parts);
         ArrayList<String> portals = bp.getPortalsBlinks();
 //        ArrayList<String> portals = bp.getPortalsVertexCover();
         System.out.println("===========================");
@@ -168,6 +176,7 @@ public class BlinksPartition {
     }
 
     private ArrayList<String> getPortalsBlinks() {
+        System.out.println("read the "+this.num_parts+" partition file");
         loadEdgesInfo();
         loadPartitionsInfo(this.num_parts);
         loadnumberinPartition();
