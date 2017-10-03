@@ -37,6 +37,7 @@ public class blocks {
     public void buildIndexes(long graphsize, String lowerboundSelector) {
         String DB_PATH="/home/gqxwolf/neo4j323/testdb"+graphsize+"/databases/graph.db";
         connector n = new connector(DB_PATH);
+        System.out.println("Connect to the database : "+DB_PATH);
         n.startDB();
         GraphDatabaseService graphDB = n.getDBObject();
         try (Transaction tx = graphDB.beginTx()) {

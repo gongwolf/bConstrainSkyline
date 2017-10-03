@@ -426,6 +426,7 @@ public class skylineInBlock {
                                     }
                                 }
                             }
+                            index++;
                         }
                     } else {
                         index++;
@@ -433,8 +434,9 @@ public class skylineInBlock {
 
                 }
             }
+            tx.success();
         }
 
-        return null;
+        return skylinPaths;
     }
 }
