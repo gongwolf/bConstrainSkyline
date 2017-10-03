@@ -7,8 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="efad592c-af09-4e67-ab61-007179681ec4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/block.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/block.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -29,11 +30,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BlinksPartition.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BlinksPartition.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="37" column="31" lean-forward="true" selection-start-line="37" selection-start-column="31" selection-end-line="37" selection-end-column="31" />
+            <state relative-caret-position="738">
+              <caret line="71" column="26" lean-forward="false" selection-start-line="71" selection-start-column="26" selection-end-line="71" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -44,7 +45,7 @@
       <file leaf-file-name="myNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Pindex/myNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3870">
+            <state relative-caret-position="887">
               <caret line="225" column="16" lean-forward="false" selection-start-line="225" selection-start-column="16" selection-end-line="225" selection-end-column="16" />
               <folding>
                 <element signature="e#7707#7708#0" expanded="true" />
@@ -57,18 +58,18 @@
       <file leaf-file-name="blocks.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
-              <caret line="49" column="36" lean-forward="true" selection-start-line="49" selection-start-column="36" selection-end-line="49" selection-end-column="36" />
+            <state relative-caret-position="559">
+              <caret line="50" column="30" lean-forward="false" selection-start-line="50" selection-start-column="30" selection-end-line="50" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="block.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="block.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/block.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="631">
-              <caret line="125" column="62" lean-forward="false" selection-start-line="125" selection-start-column="54" selection-end-line="125" selection-end-column="62" />
+            <state relative-caret-position="595">
+              <caret line="123" column="0" lean-forward="false" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -78,7 +79,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="361">
-              <caret line="59" column="32" lean-forward="false" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="32" />
+              <caret line="364" column="27" lean-forward="false" selection-start-line="364" selection-start-column="27" selection-end-line="364" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -87,22 +88,10 @@
       <file leaf-file-name="path.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/path.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3132">
+            <state relative-caret-position="3528">
               <caret line="212" column="13" lean-forward="false" selection-start-line="212" selection-start-column="13" selection-end-line="212" selection-end-column="13" />
               <folding>
                 <marker date="1507005520271" expanded="false" signature="3868:3874" ph=" }" />
-                <marker date="1507005520271" expanded="true" signature="3933:3990" ph="{...}" />
-                <marker date="1507005520271" expanded="true" signature="4038:4134" ph="{...}" />
-                <marker date="1507005520271" expanded="true" signature="4175:4794" ph="{...}" />
-                <marker date="1507005520271" expanded="true" signature="4832:5253" ph="{...}" />
-                <marker date="1507005520271" expanded="false" signature="5303:5314" ph=" { " />
-                <marker date="1507005520271" expanded="false" signature="5341:5347" ph=" }" />
-                <marker date="1507005520271" expanded="true" signature="5383:6022" ph="{...}" />
-                <marker date="1507005520271" expanded="true" signature="6074:6617" ph="{...}" />
-                <marker date="1507005520271" expanded="false" signature="6649:6660" ph=" { " />
-                <marker date="1507005520271" expanded="true" signature="6721:7136" ph="{...}" />
-                <marker date="1507005520271" expanded="true" signature="7167:7781" ph="{...}" />
-                <marker date="1507005520271" expanded="true" signature="7494:7583" ph="//..." />
               </folding>
             </state>
           </provider>
@@ -111,7 +100,7 @@
       <file leaf-file-name="indexTesting.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/indexTesting.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="522">
+            <state relative-caret-position="2286">
               <caret line="132" column="0" lean-forward="false" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
               <folding>
                 <marker date="1507005520271" expanded="true" signature="4954:4960" ph="{...}" />
@@ -123,7 +112,7 @@
       <file leaf-file-name="CreateDB.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1021">
+            <state relative-caret-position="342">
               <caret line="28" column="39" lean-forward="false" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
               <folding />
             </state>
@@ -219,8 +208,8 @@
         <option value="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" />
         <option value="$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java" />
         <option value="$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java" />
-        <option value="$PROJECT_DIR$/src/main/java/GraphPartition/block.java" />
         <option value="$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java" />
+        <option value="$PROJECT_DIR$/src/main/java/GraphPartition/block.java" />
       </list>
     </option>
   </component>
@@ -553,6 +542,79 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Pindex/myNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3870">
+          <caret line="225" column="16" lean-forward="false" selection-start-line="225" selection-start-column="16" selection-end-line="225" selection-end-column="16" />
+          <folding>
+            <element signature="e#7707#7708#0" expanded="true" />
+            <element signature="e#7745#7746#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/block.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2070">
+          <caret line="125" column="62" lean-forward="false" selection-start-line="125" selection-start-column="54" selection-end-line="125" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="49" column="36" lean-forward="true" selection-start-line="49" selection-start-column="36" selection-end-line="49" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="936">
+          <caret line="59" column="32" lean-forward="false" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/path.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3528">
+          <caret line="212" column="13" lean-forward="false" selection-start-line="212" selection-start-column="13" selection-end-line="212" selection-end-column="13" />
+          <folding>
+            <marker date="1507005520271" expanded="false" signature="3868:3874" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/indexTesting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2286">
+          <caret line="132" column="0" lean-forward="false" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+          <folding>
+            <marker date="1507005520271" expanded="true" signature="4954:4960" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="28" column="39" lean-forward="false" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Pindex/mySkylineInBlock.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3330">
@@ -602,18 +664,6 @@
           <caret line="189" column="13" lean-forward="true" selection-start-line="189" selection-start-column="13" selection-end-line="189" selection-end-column="13" />
           <folding>
             <marker date="1507005520271" expanded="false" signature="3868:3874" ph=" }" />
-            <marker date="1507005520271" expanded="true" signature="3933:3990" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="4038:4134" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="4175:4794" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="4832:5253" ph="{...}" />
-            <marker date="1507005520271" expanded="false" signature="5303:5314" ph=" { " />
-            <marker date="1507005520271" expanded="false" signature="5341:5347" ph=" }" />
-            <marker date="1507005520271" expanded="true" signature="5383:6022" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="6074:6617" ph="{...}" />
-            <marker date="1507005520271" expanded="false" signature="6649:6660" ph=" { " />
-            <marker date="1507005520271" expanded="true" signature="6721:7136" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="7167:7781" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="7494:7583" ph="//..." />
           </folding>
         </state>
       </provider>
@@ -698,7 +748,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/indexTesting.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
+        <state relative-caret-position="2286">
           <caret line="132" column="0" lean-forward="false" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
           <folding>
             <marker date="1507005520271" expanded="true" signature="4954:4960" ph="{...}" />
@@ -708,42 +758,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/path.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3132">
+        <state relative-caret-position="3528">
           <caret line="212" column="13" lean-forward="false" selection-start-line="212" selection-start-column="13" selection-end-line="212" selection-end-column="13" />
           <folding>
             <marker date="1507005520271" expanded="false" signature="3868:3874" ph=" }" />
-            <marker date="1507005520271" expanded="true" signature="3933:3990" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="4038:4134" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="4175:4794" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="4832:5253" ph="{...}" />
-            <marker date="1507005520271" expanded="false" signature="5303:5314" ph=" { " />
-            <marker date="1507005520271" expanded="false" signature="5341:5347" ph=" }" />
-            <marker date="1507005520271" expanded="true" signature="5383:6022" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="6074:6617" ph="{...}" />
-            <marker date="1507005520271" expanded="false" signature="6649:6660" ph=" { " />
-            <marker date="1507005520271" expanded="true" signature="6721:7136" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="7167:7781" ph="{...}" />
-            <marker date="1507005520271" expanded="true" signature="7494:7583" ph="//..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Pindex/myNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3870">
-          <caret line="225" column="16" lean-forward="false" selection-start-line="225" selection-start-column="16" selection-end-line="225" selection-end-column="16" />
-          <folding>
-            <element signature="e#7707#7708#0" expanded="true" />
-            <element signature="e#7745#7746#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="59" column="32" lean-forward="false" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -765,35 +784,54 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1021">
+        <state relative-caret-position="342">
           <caret line="28" column="39" lean-forward="false" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="364" column="27" lean-forward="false" selection-start-line="364" selection-start-column="27" selection-end-line="364" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Pindex/myNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="887">
+          <caret line="225" column="16" lean-forward="false" selection-start-line="225" selection-start-column="16" selection-end-line="225" selection-end-column="16" />
+          <folding>
+            <element signature="e#7707#7708#0" expanded="true" />
+            <element signature="e#7745#7746#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="738">
+          <caret line="71" column="26" lean-forward="false" selection-start-line="71" selection-start-column="26" selection-end-line="71" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="49" column="36" lean-forward="true" selection-start-line="49" selection-start-column="36" selection-end-line="49" selection-end-column="36" />
+        <state relative-caret-position="559">
+          <caret line="50" column="30" lean-forward="false" selection-start-line="50" selection-start-column="30" selection-end-line="50" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/block.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="631">
-          <caret line="125" column="62" lean-forward="false" selection-start-line="125" selection-start-column="54" selection-end-line="125" selection-end-column="62" />
+        <state relative-caret-position="595">
+          <caret line="123" column="0" lean-forward="false" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="37" column="31" lean-forward="true" selection-start-line="37" selection-start-column="31" selection-end-line="37" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

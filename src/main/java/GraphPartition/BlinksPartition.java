@@ -31,6 +31,8 @@ public class BlinksPartition {
         this.NodeNum = graphsize;
         this.portalSelector = portalSelector;
         this.lowerboundSelector = lowerboundSelector;
+        System.out.println(num_parts+" "+this.NodeNum+" "+this.portalSelector+" "+this.lowerboundSelector);
+        System.out.println(this.PathBase);
     }
 
     public static void main(String args[]) {
@@ -62,6 +64,11 @@ public class BlinksPartition {
 
         bp.prts.randomSelectLandMark(3);
         long buildlandmark = System.currentTimeMillis();
+        if (lowerboundSelector.equals("landmark")) {
+            System.out.println("run landmark");
+        } else if (lowerboundSelector.equals("dijkstra")) {
+            System.out.println("run dijkstra");
+        }
         bp.prts.buildIndexes(graphsize,lowerboundSelector);
         System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis() - buildlandmark) + " ms");
 

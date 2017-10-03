@@ -121,7 +121,6 @@ public class block {
                 skylineInBlock sbib = new skylineInBlock(graphdb, this);
                 ArrayList<path> skypaths = null;
                 if (lowerboundSelector.equals("landmark")) {
-//                    System.out.println("run landmark");
                     skypaths = sbib.getSkylineInBlock_blinks(source, destination);
                 } else if (lowerboundSelector.equals("dijkstra")) {
                     skypaths = sbib.getSkylineInBlock_Dijkstra(source, destination);
