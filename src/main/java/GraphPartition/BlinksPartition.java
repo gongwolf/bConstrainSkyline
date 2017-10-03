@@ -12,8 +12,7 @@ public class BlinksPartition {
     private final String lowerboundSelector;
     private final String portalSelector;
     String PathBase = "/home/gqxwolf/mydata/projectData/testGraph10000/data/";
-    String EdgesInfoPath = PathBase + "SegInfo.txt";
-    String nodeMappingBase = PathBase + "mapping/";
+    String EdgesInfoPath ,nodeMappingBase;
     private ArrayList<Pair<String, String>> connectionInfos = new ArrayList<>();
     private HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();//node id --> pair<cid,pid>
     private HashMap<String, HashMap<String, Integer>> numberOfPartitions = new HashMap<>();
@@ -33,11 +32,13 @@ public class BlinksPartition {
         this.lowerboundSelector = lowerboundSelector;
         System.out.println(num_parts+" "+this.NodeNum+" "+this.portalSelector+" "+this.lowerboundSelector);
         System.out.println(this.PathBase);
+        this.EdgesInfoPath = PathBase + "SegInfo.txt";
+        this.nodeMappingBase = PathBase + "mapping/";
     }
 
     public static void main(String args[]) {
-        int num_parts = 100;
-        long graphsize = 10000;
+        int num_parts = 200;
+        long graphsize = 20000;
         String portalSelector = "Blinks";
         String lowerboundSelector = "landmark";
         if (args.length == 4) {
@@ -408,6 +409,7 @@ public class BlinksPartition {
         try (FileWriter fw = new FileWriter(paritionFile, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
+            System.out.println(this.NodeNum +" ======");
             int i = 1;
             for (; i <= this.NodeNum; i++) {
                 long infos[] = this.getC_id(i);
