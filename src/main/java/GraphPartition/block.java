@@ -123,7 +123,7 @@ public class block {
                 if (lowerboundSelector.equals("landmark")) {
 //                    System.out.println("run landmark");
                     skypaths = sbib.getSkylineInBlock_blinks(source, destination);
-                } else if (lowerboundSelector.equals("dijsktra")) {
+                } else if (lowerboundSelector.equals("dijkstra")) {
                     skypaths = sbib.getSkylineInBlock_Dijkstra(source, destination);
                 }
 
