@@ -22,9 +22,9 @@ public class path {
     public boolean processed_flag = false;
     double[] cost;
 
-    public path(Node startNode, Node endNode) {
+    public path(Node startNode, Node startNode_dummy) {
         this.startNode = startNode;
-        this.endNode = endNode;
+        this.endNode = startNode_dummy;
         this.NumberOfProperties = getNumberOfProperties();
         this.setPropertiesName();
         this.cost = new double[this.NumberOfProperties];
@@ -34,7 +34,7 @@ public class path {
         this.Nodes.add(startNode);
         calculateCosts();
         this.startID = String.valueOf(startNode.getId());
-        this.endID = String.valueOf(endNode.getId());
+        this.endID = String.valueOf(startNode_dummy.getId());
     }
 
     public path(path oldpath, Relationship rel) {
@@ -82,6 +82,29 @@ public class path {
 
     public path(Node startNode) {
         this(startNode, startNode);
+    }
+
+    public path(Relationship rel, path oldpath) {
+        this.startNode = rel.getStartNode();
+        this.endNode = oldpath.endNode;
+
+        this.NumberOfProperties = oldpath.NumberOfProperties;
+        this.cost = new double[this.NumberOfProperties];
+        //new nodes list
+        this.Nodes = new ArrayList<>();
+        this.Nodes.add(this.startNode);
+        this.Nodes.addAll(oldpath.Nodes);
+        //new rels list
+        this.relationships = new ArrayList<>();
+        this.relationships.add(rel);
+        this.relationships.addAll(oldpath.relationships);
+
+        System.arraycopy(oldpath.cost, 0, this.cost, 0, this.cost.length);
+        calculateCosts(rel);
+        this.propertiesName = oldpath.propertiesName;
+        this.startID = String.valueOf(startNode.getId());
+        this.endID = String.valueOf(endNode.getId());
+
     }
 
     public boolean containRelationShip(Relationship rel) {

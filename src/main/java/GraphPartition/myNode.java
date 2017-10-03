@@ -1,6 +1,5 @@
 package GraphPartition;
 
-import javafx.util.Pair;
 import neo4jTools.Line;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -30,13 +29,12 @@ public class myNode {
     int degree;
     boolean inqueue = false;
     public double priority;
-    public HashMap<String,path> shortestPaths = new HashMap<>();
+    public HashMap<String, path> shortestPaths = new HashMap<>();
 
     /**
-     *
      * @param startNode the start node of the query, that used to show the information is from this start node to current node.
-     * @param current The current node
-     * @param flag If it is a start node when we tries put it into a queue.
+     * @param current   The current node
+     * @param flag      If it is a start node when we tries put it into a queue.
      */
     public myNode(Node startNode, Node current, boolean flag) {
         this.current = current;
@@ -188,34 +186,39 @@ public class myNode {
     }
 
     public double getCostFromSource(String property_type) {
-        double result = 0.0;
+        double result;
         int p_index = this.propertiesName.indexOf(property_type);
         result = lowerBound[p_index];
         return result;
     }
 
+    /**
+     * set the lower bound of the property, the position of this lower bound is the index of propertiesName.
+     *
+     * @param property_type the name of the property
+     * @param value         the value of the lower bound
+     */
     public void setCostFromSource(String property_type, double value) {
         int p_index = this.propertiesName.indexOf(property_type);
         lowerBound[p_index] = value;
     }
 
-    public ArrayList<Pair<myNode, Double>> getNeighbor(String property_type) {
-        ArrayList<Pair<myNode, Double>> result = new ArrayList<>();
+    public ArrayList<Relationship> getNeighbor(String property_type) {
+        ArrayList<Relationship> result = new ArrayList<>();
         Iterable<Relationship> rels = this.current.getRelationships(Line.Linked, Direction.INCOMING);
         Iterator<Relationship> rel_Iter = rels.iterator();
         while (rel_Iter.hasNext()) {
             Relationship rel = rel_Iter.next();
-            Node nextNode = rel.getStartNode();
-            Double cost = Double.parseDouble(rel.getProperty(property_type).toString());
-            myNode mynextNode = new myNode(this.startNode, nextNode, false);
-            Pair<myNode, Double> pair = new Pair<>(mynextNode, cost);
-            result.add(pair);
+//            Node nextNode = rel.getEndNode();
+//            Double cost = Double.parseDouble(rel.getProperty(property_type).toString());
+//            myNode mynextNode = new myNode(this.startNode, nextNode, false);
+//            Pair<myNode, Double> pair = new Pair<>(mynextNode, cost);
+            result.add(rel);
         }
         return result;
     }
 
-    public ArrayList<Relationship> getAdjNodes(String property_type)
-    {
+    public ArrayList<Relationship> getAdjNodes(String property_type) {
 //        ArrayList<Pair<myNode, Double>> result = new ArrayList<>();
         ArrayList<Relationship> result = new ArrayList<>();
         Iterable<Relationship> rels = this.current.getRelationships(Line.Linked, Direction.OUTGOING);

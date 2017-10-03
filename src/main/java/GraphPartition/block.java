@@ -20,7 +20,7 @@ public class block {
     public ArrayList<String> landMarks;
     public HashMap<String, HashMap<String, double[]>> toLandMarkIndex; //nodeid --> <land_mark_node_id --> costs >
     public HashMap<String, HashMap<String, double[]>> fromLandMarkIndex; //nodeid --> <land_mark_node_id --> costs >
-    public HashMap<Pair<String,String>, ArrayList<path>> innerIndex;
+    public HashMap<Pair<String, String>, ArrayList<path>> innerIndex;
 
     public block(String pid) {
         this.pid = pid;
@@ -41,8 +41,10 @@ public class block {
             for (String snd : this.nodes) {
                 boolean needTobeJump = false;
                 String sid = String.valueOf(Integer.parseInt(snd) - 1);
-                Node source = graphdb.findNode(BNode.BusNode, "name", sid);
-                Node destination = graphdb.findNode(BNode.BusNode, "name", did);
+                Node source = graphdb.getNodeById(Long.parseLong(sid));
+                Node destination = graphdb.getNodeById(Long.parseLong(did));
+//                Node source = graphdb.findNode(BNode.BusNode, "name", sid);
+//                Node destination = graphdb.findNode(BNode.BusNode, "name", did);
 
                 if (fakePath == null) {
                     fakePath = new path(source);
@@ -103,7 +105,7 @@ public class block {
     }
 
 
-    public void buildInnerSkylineIndex(GraphDatabaseService graphdb) {
+    public void buildInnerSkylineIndex(GraphDatabaseService graphdb, String lowerboundSelector) {
         for (String snd : this.iportals) {
             String sid = String.valueOf(Integer.parseInt(snd) - 1);
             for (String dnd : this.oportals) {
@@ -112,14 +114,24 @@ public class block {
                 }
 
                 String did = String.valueOf(Integer.parseInt(dnd) - 1);
-                Node source = graphdb.findNode(BNode.BusNode, "name", sid);
-                Node destination = graphdb.findNode(BNode.BusNode, "name", did);
-                skylineInBlock sbib  = new skylineInBlock(graphdb,this);
-                ArrayList<path> skypaths = sbib.getSkylineInBlock(source, destination);
-                if(skypaths!=null)
-                {
-                    Pair<String,String> keyP = new Pair<>(snd,dnd);
-                    this.innerIndex.put(keyP,skypaths);
+//                Node source = graphdb.findNode(BNode.BusNode, "name", sid);
+                Node source = graphdb.getNodeById(Long.parseLong(sid));
+//                Node destination = graphdb.findNode(BNode.BusNode, "name", did);
+                Node destination = graphdb.getNodeById(Long.parseLong(did));
+                skylineInBlock sbib = new skylineInBlock(graphdb, this);
+                ArrayList<path> skypaths = null;
+                if (lowerboundSelector.equals("landmark")) {
+//                    System.out.println("run landmark");
+                    skypaths = sbib.getSkylineInBlock_blinks(source, destination);
+                } else if (lowerboundSelector.equals("dijsktra")) {
+                    skypaths = sbib.getSkylineInBlock_Dijkstra(source, destination);
+                }
+
+//                System.out.println(skypaths.size()+"-----");
+
+                if (skypaths != null) {
+                    Pair<String, String> keyP = new Pair<>(snd, dnd);
+                    this.innerIndex.put(keyP, skypaths);
                 }
 //                break;
             }
@@ -138,14 +150,6 @@ public class block {
             return paths.weight();
         }
     }
-
-
-
-
-
-
-
-
 
 
 }

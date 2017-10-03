@@ -9,32 +9,49 @@ import java.io.*;
 import java.util.*;
 
 public class BlinksPartition {
-    String PathBase = "/home/gqxwolf/mydata/projectData/testGraph20000/data/";
+    private final String lowerboundSelector;
+    private final String portalSelector;
+    String PathBase = "/home/gqxwolf/mydata/projectData/testGraph10000/data/";
     String EdgesInfoPath = PathBase + "SegInfo.txt";
     String nodeMappingBase = PathBase + "mapping/";
     private ArrayList<Pair<String, String>> connectionInfos = new ArrayList<>();
     private HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();//node id --> pair<cid,pid>
     private HashMap<String, HashMap<String, Integer>> numberOfPartitions = new HashMap<>();
 
-    public int NodeNum = 20000;
+    public long NodeNum = 10000;
 
     blocks prts = new blocks();
     int out_port = 1;
     int in_port = 2;
-    private int num_parts=200;
+    private int num_parts = 200;
 
-    public BlinksPartition(int num_parts) {
-        this.num_parts=num_parts;
+    public BlinksPartition(int num_parts, long graphsize, String portalSelector, String lowerboundSelector) {
+        this.num_parts = num_parts;
+        this.PathBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "/data/";
+        this.NodeNum = graphsize;
+        this.portalSelector = portalSelector;
+        this.lowerboundSelector = lowerboundSelector;
     }
 
     public static void main(String args[]) {
-        int num_parts = 200;
-        if(args.length==1)
-            num_parts=Integer.parseInt(args[0]);
+        int num_parts = 100;
+        long graphsize = 10000;
+        String portalSelector = "Blinks";
+        String lowerboundSelector = "landmark";
+        if (args.length == 4) {
+            num_parts = Integer.parseInt(args[0]);
+            graphsize = Long.parseLong(args[1]);
+            portalSelector = args[2];
+            lowerboundSelector = args[3];
+        }
+        BlinksPartition bp = new BlinksPartition(num_parts, graphsize, portalSelector, lowerboundSelector);
 
-        BlinksPartition bp = new BlinksPartition(num_parts);
-        ArrayList<String> portals = bp.getPortalsBlinks();
-//        ArrayList<String> portals = bp.getPortalsVertexCover();
+        ArrayList<String> portals=null;
+        if (portalSelector.equals("Blinks")) {
+            portals = bp.getPortalsBlinks();
+        } else if (portalSelector.equals("VC")) {
+            portals = bp.getPortalsVertexCover();
+        }
         System.out.println("===========================");
         System.out.println(portals.size());
         bp.cleanFadePortal(portals);
@@ -45,7 +62,7 @@ public class BlinksPartition {
 
         bp.prts.randomSelectLandMark(3);
         long buildlandmark = System.currentTimeMillis();
-        bp.prts.buildIndexes();
+        bp.prts.buildIndexes(graphsize,lowerboundSelector);
         System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis() - buildlandmark) + " ms");
 
         for (String pid : bp.prts.blocks.keySet()) {
@@ -55,13 +72,11 @@ public class BlinksPartition {
                     + "  " + b.innerIndex.size());
             int count = 0;
 
-            for(Map.Entry<Pair<String,String>,ArrayList<path>> p:b.innerIndex.entrySet())
-            {
-                count+=p.getValue().size();
+            for (Map.Entry<Pair<String, String>, ArrayList<path>> p : b.innerIndex.entrySet()) {
+                count += p.getValue().size();
             }
 
-            System.out.print("  "+count+"\n");
-
+            System.out.print("  " + count + "\n");
         }
 
 
@@ -176,7 +191,7 @@ public class BlinksPartition {
     }
 
     private ArrayList<String> getPortalsBlinks() {
-        System.out.println("read the "+this.num_parts+" partition file");
+        System.out.println("read the " + this.num_parts + " partition file");
         loadEdgesInfo();
         loadPartitionsInfo(this.num_parts);
         loadnumberinPartition();
@@ -259,7 +274,7 @@ public class BlinksPartition {
         while (!copyOfS.isEmpty()) {
             int index = 0;
             if (copyOfS.size() != 1)
-                 index=getRandomNumberInRange(0, copyOfS.size() - 1);
+                index = getRandomNumberInRange(0, copyOfS.size() - 1);
             Pair<String, String> cuttingEdge = copyOfS.get(index);
             String startNode = cuttingEdge.getKey();
             String endNode = cuttingEdge.getValue();
@@ -363,7 +378,7 @@ public class BlinksPartition {
         }
 
         System.out.println("write and read partition infos");
-        writePartionsInfo(paritionFile,num_parts);
+        writePartionsInfo(paritionFile, num_parts);
     }
 
 //    private void readPartionsInfo(String paritionFile) {
@@ -382,7 +397,7 @@ public class BlinksPartition {
 //        }
 //    }
 
-    private void writePartionsInfo(String paritionFile,int num_parts) {
+    private void writePartionsInfo(String paritionFile, int num_parts) {
         try (FileWriter fw = new FileWriter(paritionFile, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
@@ -401,7 +416,7 @@ public class BlinksPartition {
 //                } else {
 //                    pid = this.getPid_inC(cid, mapped_id);
                 } else {
-                    pid = this.getPid_inC(cid, mapped_id,num_parts);
+                    pid = this.getPid_inC(cid, mapped_id, num_parts);
                 }
 
                 Pair<String, String> p = new Pair<>(String.valueOf(cid), String.valueOf(pid));
@@ -456,9 +471,9 @@ public class BlinksPartition {
      * @param mapped_id the mapped node id
      * @return the partition id
      */
-    private int getPid_inC(int cid, long mapped_id,int num_parts) {
+    private int getPid_inC(int cid, long mapped_id, int num_parts) {
         int pid = -1;
-        String partFile = nodeMappingBase + "mapped_metis_" + cid + ".graph.part."+num_parts;
+        String partFile = nodeMappingBase + "mapped_metis_" + cid + ".graph.part." + num_parts;
 //        String partFile = PathBase + "mapped_metis_" + cid + ".graph.part.10";
         try {
             BufferedReader br = new BufferedReader(new FileReader(partFile));

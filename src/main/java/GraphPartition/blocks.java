@@ -34,8 +34,9 @@ public class blocks {
         }
     }
 
-    public void buildIndexes() {
-        connector n = new connector("/home/gqxwolf/neo4j323/testdb20000/databases/graph.db");
+    public void buildIndexes(long graphsize, String lowerboundSelector) {
+        String DB_PATH="/home/gqxwolf/neo4j323/testdb"+graphsize+"/databases/graph.db";
+        connector n = new connector(DB_PATH);
         n.startDB();
         GraphDatabaseService graphDB = n.getDBObject();
         try (Transaction tx = graphDB.beginTx()) {
@@ -44,8 +45,9 @@ public class blocks {
                 Long run_ms = System.currentTimeMillis();
                 b.buildLandmarkIndex(graphDB);
                 long rms1 = System.currentTimeMillis();
+//                System.out.println(b.nodes.size()+" "+b.iportals.size()+" "+b.oportals.size()+" "+b.landMarks.size()+" "+b.fromLandMarkIndex.size()+" "+b.toLandMarkIndex.size());
                 long run_ms1 = rms1-run_ms;
-                b.buildInnerSkylineIndex(graphDB);
+                b.buildInnerSkylineIndex(graphDB,lowerboundSelector);
                 Long run_ms2 = System.currentTimeMillis()-rms1;
                 System.out.print("Build index for partition "+b_obj.getKey()+"  "+run_ms1+" "+run_ms2+" "+(System.currentTimeMillis()-run_ms)+" ms \n");
 //                break;

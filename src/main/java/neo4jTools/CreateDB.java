@@ -20,7 +20,8 @@ public class CreateDB {
 
     public static void main(String args[]) {
         CreateDB db = new CreateDB();
-        db.createDatabasewithIndex("Id");
+//        db.createDatabasewithIndex("Id");
+        db.createDatabase();
     }
 
     public void createDatabase() {
@@ -88,7 +89,7 @@ public class CreateDB {
                 double lat = Double.parseDouble(attrs[1]);
                 double log = Double.parseDouble(attrs[2]);
                 Node n = createNode(id, lat, log);
-                indexs.add(n,property,n.getId());
+                indexs.add(n,"name",id);
             }
 
             br = new BufferedReader(new FileReader(SegsPath));
@@ -106,10 +107,8 @@ public class CreateDB {
 
             tx.success();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         nconn.shutdownDB();
     }
 
