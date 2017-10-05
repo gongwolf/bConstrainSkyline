@@ -79,11 +79,11 @@ public class myshortestPathUseNodeFinal {
             path iniPath = new path(source, source);
             this.NumberOfProperties = iniPath.NumberOfProperties;
             this.iniLowerBound = new double[this.NumberOfProperties];
-            initilizeSkylinePath(iniPath, destination);
-            numInIPath = (long) this.skylinPaths.size();
-            if (numInIPath == 0) {
-                return null;
-            }
+//            initilizeSkylinePath(iniPath, destination);
+//            numInIPath = (long) this.skylinPaths.size();
+//            if (numInIPath == 0) {
+//                return null;
+//            }
 
 //            if(1==1)
 //            {

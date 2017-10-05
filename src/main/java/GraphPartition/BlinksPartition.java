@@ -12,17 +12,19 @@ public class BlinksPartition {
     private final String lowerboundSelector;
     private final String portalSelector;
     String PathBase = "/home/gqxwolf/mydata/projectData/testGraph10000/data/";
-    String EdgesInfoPath ,nodeMappingBase;
     private ArrayList<Pair<String, String>> connectionInfos = new ArrayList<>();
     private HashMap<String, Pair<String, String>> partitionInfos = new HashMap<>();//node id --> pair<cid,pid>
     private HashMap<String, HashMap<String, Integer>> numberOfPartitions = new HashMap<>();
+    public ArrayList<String> portals = null;
 
     public long NodeNum = 10000;
 
-    blocks prts = new blocks();
+    public blocks prts = new blocks();
     int out_port = 1;
     int in_port = 2;
     private int num_parts = 200;
+    String EdgesInfoPath, nodeMappingBase;
+
 
     public BlinksPartition(int num_parts, long graphsize, String portalSelector, String lowerboundSelector) {
         this.num_parts = num_parts;
@@ -30,7 +32,7 @@ public class BlinksPartition {
         this.NodeNum = graphsize;
         this.portalSelector = portalSelector;
         this.lowerboundSelector = lowerboundSelector;
-        System.out.println(num_parts+" "+this.NodeNum+" "+this.portalSelector+" "+this.lowerboundSelector);
+        System.out.println(num_parts + " " + this.NodeNum + " " + this.portalSelector + " " + this.lowerboundSelector);
         System.out.println(this.PathBase);
         this.EdgesInfoPath = PathBase + "SegInfo.txt";
         this.nodeMappingBase = PathBase + "mapping/";
@@ -49,16 +51,15 @@ public class BlinksPartition {
         }
         BlinksPartition bp = new BlinksPartition(num_parts, graphsize, portalSelector, lowerboundSelector);
 
-        ArrayList<String> portals=null;
         if (portalSelector.equals("Blinks")) {
-            portals = bp.getPortalsBlinks();
+            bp.getPortalsBlinks();
         } else if (portalSelector.equals("VC")) {
-            portals = bp.getPortalsVertexCover();
+            bp.getPortalsVertexCover();
         }
         System.out.println("===========================");
-        System.out.println(portals.size());
-        bp.cleanFadePortal(portals);
-        bp.createBlocks(portals);
+        System.out.println(bp.portals.size());
+        bp.cleanFadePortal();
+        bp.createBlocks();
 
         System.out.println(bp.prts.blocks.size());
 
@@ -70,31 +71,59 @@ public class BlinksPartition {
         } else if (lowerboundSelector.equals("dijkstra")) {
             System.out.println("run dijkstra");
         }
-        bp.prts.buildIndexes(graphsize,lowerboundSelector);
+        bp.prts.buildIndexes(graphsize, lowerboundSelector);
         System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis() - buildlandmark) + " ms");
 
-        for (String pid : bp.prts.blocks.keySet()) {
-            block b = bp.prts.blocks.get(pid);
-            System.out.print(pid + "  " + b.nodes.size() + " " + b.iportals.size() + " " + b.oportals.size()
-                    + " " + b.landMarks.size() + " " + b.fromLandMarkIndex.size() + " " + b.toLandMarkIndex.size()
-                    + "  " + b.innerIndex.size());
-            int count = 0;
+//        for (String pid : bp.prts.blocks.keySet()) {
+//            block b = bp.prts.blocks.get(pid);
+//            System.out.print(pid + "  " + b.nodes.size() + " " + b.iportals.size() + " " + b.oportals.size()
+//                    + " " + b.landMarks.size() + " " + b.fromLandMarkIndex.size() + " " + b.toLandMarkIndex.size()
+//                    + "  " + b.innerIndex.size());
+//            int count = 0;
+//
+//            for (Map.Entry<Pair<String, String>, ArrayList<path>> p : b.innerIndex.entrySet()) {
+//                count += p.getValue().size();
+//            }
+//
+//            System.out.print("  " + count + "\n");
+//        }
 
-            for (Map.Entry<Pair<String, String>, ArrayList<path>> p : b.innerIndex.entrySet()) {
-                count += p.getValue().size();
-            }
 
-            System.out.print("  " + count + "\n");
-        }
-
-
+        bp.testing();
 //        bp.writePoralsToDisk(portals);
 //        bp.portalsMapping(portals);
 
     }
 
+    private void testing() {
+        //node id --> pair<cid,pid>
+        TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
+        infoTM.putAll(this.partitionInfos);
+        int count = 0 ;
+        for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
+            String nid = node.getKey();
+            if (!this.portals.contains(nid)) {
+                block b = this.prts.getPid(nid);
+                if(b==null)
+                {
+                    System.out.println(nid + " is not in any partition");
+                    System.exit(0);
+                }
 
-    private void createBlocks(ArrayList<String> portals) {
+
+                if (!b.hasPathToLandMark(nid)) {
+                    count++;
+//                    System.out.println(nid + " is in the partition "+b.pid+", it does not have the path to landmark and the path from the landmark");
+                }
+            }
+        }
+        System.out.println("total : "+count);
+
+    }
+
+
+    public void createBlocks() {
+        ArrayList<String> portals = this.portals;
         TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
         infoTM.putAll(this.partitionInfos);
         for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
@@ -146,7 +175,8 @@ public class BlinksPartition {
         }
     }
 
-    private void cleanFadePortal(ArrayList<String> portals) {
+    public void cleanFadePortal() {
+        ArrayList<String> portals = this.portals;
         int count = 0;
         int count1 = 0;
         for (String portal : portals) {
@@ -181,7 +211,7 @@ public class BlinksPartition {
                 count1++;
             }
         }
-//        System.out.println(count+"  "+count1);
+        System.out.println(count+"  "+count1);
     }
 
     public void writePoralsToDisk(ArrayList<String> portals) {
@@ -198,7 +228,7 @@ public class BlinksPartition {
         }
     }
 
-    private ArrayList<String> getPortalsBlinks() {
+    public ArrayList<String> getPortalsBlinks() {
         System.out.println("read the " + this.num_parts + " partition file");
         loadEdgesInfo();
         loadPartitionsInfo(this.num_parts);
@@ -256,11 +286,12 @@ public class BlinksPartition {
 //                System.out.println(copyOfS.size());
             }
         }
+        this.portals = new ArrayList<>(P);
         return new ArrayList<>(P);
     }
 
 
-    private ArrayList<String> getPortalsVertexCover() {
+    public ArrayList<String> getPortalsVertexCover() {
         loadEdgesInfo();
         loadPartitionsInfo(this.num_parts);
         loadnumberinPartition();
@@ -311,6 +342,7 @@ public class BlinksPartition {
 
 
         }
+        this.portals = new ArrayList<>(P);
         return new ArrayList<>(P);
     }
 
@@ -409,7 +441,7 @@ public class BlinksPartition {
         try (FileWriter fw = new FileWriter(paritionFile, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
-            System.out.println(this.NodeNum +" ======");
+            System.out.println(this.NodeNum + " ======");
             int i = 1;
             for (; i <= this.NodeNum; i++) {
                 long infos[] = this.getC_id(i);

@@ -26,6 +26,14 @@ public class skylineInBlock {
         this.b = block;
     }
 
+    public void clearMemeory()
+    {
+        this.ProcessedNodes.clear();
+        this.skylinPaths.clear();
+        this.propertiesName.clear();
+        this.NumberOfProperties = 0;
+    }
+
     public ArrayList<path> getSkylineInBlock_blinks(Node source, Node destination) {
 //        this.ProcessedNodes.clear();
 

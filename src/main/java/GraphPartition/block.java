@@ -13,7 +13,7 @@ import org.neo4j.graphdb.*;
 import java.util.*;
 
 public class block {
-    private final String pid;
+    public final String pid;
     public ArrayList<String> nodes;
     public ArrayList<String> iportals;
     public ArrayList<String> oportals;
@@ -21,6 +21,7 @@ public class block {
     public HashMap<String, HashMap<String, double[]>> toLandMarkIndex; //nodeid --> <land_mark_node_id --> costs >
     public HashMap<String, HashMap<String, double[]>> fromLandMarkIndex; //nodeid --> <land_mark_node_id --> costs >
     public HashMap<Pair<String, String>, ArrayList<path>> innerIndex;
+    private HashMap<Long,myNode> portalSkyline;
 
     public block(String pid) {
         this.pid = pid;
@@ -31,6 +32,7 @@ public class block {
         toLandMarkIndex = new HashMap<>();
         fromLandMarkIndex = new HashMap<>();
         innerIndex = new HashMap<>();
+        this.portalSkyline = new HashMap<>();
     }
 
     public void buildLandmarkIndex(GraphDatabaseService graphdb) {
@@ -151,6 +153,14 @@ public class block {
     }
 
 
+    public boolean hasPathToLandMark(String nid) {
+        return toLandMarkIndex.containsKey(nid)&&fromLandMarkIndex.containsKey(nid);
+    }
+
+    public void addToPortalSubSkyline(String o_portal_id, path p) {
+        myNode n = this.portalSkyline.get(o_portal_id);
+
+    }
 }
 
 
