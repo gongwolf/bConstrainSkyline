@@ -65,7 +65,10 @@ public class Test {
             Destination = graphdb.getNodeById(did_long);
             tx.success();
         }
+        long run1 = System.nanoTime();
         gps.findSkylines(Source,Destination);
+        run1 = (System.nanoTime() - run1) / 1000000;
+        System.out.println(sid + "==>" + did + " skyline path size:" + 0 + "         running time:" + run1 + " ms");
 
     }
 

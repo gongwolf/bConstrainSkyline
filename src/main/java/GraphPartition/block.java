@@ -21,7 +21,7 @@ public class block {
     public HashMap<String, HashMap<String, double[]>> toLandMarkIndex; //nodeid --> <land_mark_node_id --> costs >
     public HashMap<String, HashMap<String, double[]>> fromLandMarkIndex; //nodeid --> <land_mark_node_id --> costs >
     public HashMap<Pair<String, String>, ArrayList<path>> innerIndex;
-    private HashMap<Long,myNode> portalSkyline;
+    public HashMap<String, myNode> portalSkyline;
 
     public block(String pid) {
         this.pid = pid;
@@ -154,13 +154,33 @@ public class block {
 
 
     public boolean hasPathToLandMark(String nid) {
-        return toLandMarkIndex.containsKey(nid)&&fromLandMarkIndex.containsKey(nid);
+        return toLandMarkIndex.containsKey(nid) && fromLandMarkIndex.containsKey(nid);
     }
 
-    public void addToPortalSubSkyline(String o_portal_id, path p) {
-        myNode n = this.portalSkyline.get(o_portal_id);
+    public ArrayList<path> concatenatePath(path p) {
+        ArrayList<path> result = new ArrayList<>();
+        String p_end_node_str_id = String.valueOf(p.endNode.getId() + 1);
+        for (Map.Entry<Pair<String, String>, ArrayList<path>> innerSky_obj : innerIndex.entrySet()) {
+            String startNode = innerSky_obj.getKey().getKey();
 
+
+            if (startNode.equals(p_end_node_str_id)) {
+                for (path sp : innerSky_obj.getValue()) {
+                    path new_path = new path(p, sp);
+                    if (!new_path.isCycle())
+                        result.add(new_path);
+                }
+            }
+
+        }
+
+        return result;
     }
+
+//    public void addToPortalSubSkyline(String o_portal_id, path p) {
+//        myNode n = this.portalSkyline.get(o_portal_id);
+//
+//    }
 }
 
 

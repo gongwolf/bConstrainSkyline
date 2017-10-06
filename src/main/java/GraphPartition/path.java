@@ -107,9 +107,45 @@ public class path {
 
     }
 
+    public path(path p1, path p2) {
+        this.startNode = p1.startNode;
+        this.endNode = p2.endNode;
+        this.NumberOfProperties = p1.NumberOfProperties;
+        this.propertiesName = new ArrayList<>(p1.propertiesName);
+        this.cost = new double[NumberOfProperties];
+
+        System.arraycopy(p1.cost, 0, this.cost, 0, this.NumberOfProperties);
+        for (int i = 0; i < this.NumberOfProperties; i++) {
+            this.cost[i] = this.cost[i] + p2.cost[i];
+        }
+
+        this.Nodes = new ArrayList<>(p1.Nodes);
+        this.Nodes.remove(this.Nodes.size() - 1);// p1.endNode is equal to
+        // p2.startNode;
+        this.Nodes.addAll(p2.Nodes);
+
+        this.relationships = new ArrayList<>(p1.relationships);
+        this.relationships.addAll(p2.relationships);
+
+        this.startID = String.valueOf(startNode.getId());
+        this.endID = String.valueOf(endNode.getId());
+    }
+
     public boolean containRelationShip(Relationship rel) {
         return this.relationships.contains(rel);
 
+    }
+
+    public boolean isCycle()
+    {
+        for(int i = 0; i < this.Nodes.size()-1-1;i++)
+        {
+            if(this.Nodes.get(i).equals(this.endNode))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Relationship getlastRelationship() {

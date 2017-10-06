@@ -13,7 +13,7 @@ import java.util.*;
 
 public class blocks {
     public TreeMap<String, block> blocks; // block_id -> block
-    private HashMap<Pair<String,String>,double[]> outerLandMark;
+    public HashMap<Pair<String,String>,double[]> outerLandMark;
 
     public blocks() {
         blocks = new TreeMap<>(new StringComparator());
@@ -160,17 +160,37 @@ public class blocks {
 
     public ArrayList<block> getOutBlockOfPortal(String nid) {
         ArrayList<block> result = new ArrayList<>();
+        TreeSet<block> tr = new TreeSet<>();
         for (Map.Entry<String, block> b_Obj : this.blocks.entrySet()) {
             String pid = b_Obj.getKey();
             block b = b_Obj.getValue();
             for (String vid : b.nodes) {
                 if (nid.equals(vid)) {
                     if (b.iportals.contains(nid)) {
-                        result.add(b);
+                        tr.add(b);
                     }
                 }
             }
         }
+        result.addAll(tr);
+        return result;
+    }
+
+    public ArrayList<block> getBlocskOfPortal(String nid) {
+        ArrayList<block> result = new ArrayList<>();
+        TreeSet<block> tr = new TreeSet<>();
+        for (Map.Entry<String, block> b_Obj : this.blocks.entrySet()) {
+            String pid = b_Obj.getKey();
+            block b = b_Obj.getValue();
+            for (String vid : b.nodes) {
+                if (nid.equals(vid)) {
+                    if (b.iportals.contains(nid)||b.oportals.contains(nid)) {
+                        tr.add(b);
+                    }
+                }
+            }
+        }
+        result.addAll(tr);
         return result;
     }
 }

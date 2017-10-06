@@ -14,7 +14,7 @@ public class myNode {
     public String id;
     Node current;
     Node startNode;
-    ArrayList<path> subRouteSkyline = new ArrayList<>();
+    public ArrayList<path> subRouteSkyline = new ArrayList<>();
     ArrayList<path> processedPaths = new ArrayList<>();
     ArrayList<Relationship> expansionRels = new ArrayList<>();
     boolean processed_flag = false;
