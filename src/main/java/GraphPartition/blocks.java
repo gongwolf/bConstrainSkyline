@@ -9,11 +9,15 @@ import org.neo4j.graphalgo.PathFinder;
 import org.neo4j.graphalgo.WeightedPath;
 import org.neo4j.graphdb.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.*;
 
 public class blocks {
     public TreeMap<String, block> blocks; // block_id -> block
-    public HashMap<Pair<String,String>,double[]> outerLandMark;
+    public HashMap<Pair<String, String>, double[]> outerLandMark;
+    public HashMap<String, String> nodeToBlockId = new HashMap<>();
+    public HashMap<String, HashMap<String, HashSet<String>>> portalList = new HashMap<>();
 
     public blocks() {
         blocks = new TreeMap<>(new StringComparator());
@@ -85,15 +89,17 @@ public class blocks {
                                     }
                                 }
 
-                                Pair<String,String> landmark_pair = new Pair(landMark_b,landMark_other);
-                                this.outerLandMark.put(landmark_pair,costs);
+                                Pair<String, String> landmark_pair = new Pair(landMark_b, landMark_other);
+                                this.outerLandMark.put(landmark_pair, costs);
                             }
                         }
                     }
                 }
 
             }
-            System.out.print("Build outer landmark " +  (System.currentTimeMillis() - run_ms3) + " ms \n");
+            buildNodeInforIndex();
+            System.out.println(portalList.size() + "   " + nodeToBlockId.size());
+            System.out.print("Build outer landmark " + (System.currentTimeMillis() - run_ms3) + " ms \n");
 
 //            tx.success();
         }
@@ -147,6 +153,90 @@ public class blocks {
 
     }
 
+    /**
+     * Put the node_id -> block_id information to nodeToBlockId Structure.
+     */
+    public void buildNodeInforIndex() {
+        for (Map.Entry<String, block> b_obj : this.blocks.entrySet()) {
+            String block_id = b_obj.getKey();
+            block b = b_obj.getValue();
+            for (String node_id : b.nodes) {
+                //non-portal node
+                if (!b.iportals.contains(node_id) && !b.oportals.contains(node_id)) {
+                    this.nodeToBlockId.put(node_id, block_id);
+                } else {
+                    HashMap<String, HashSet<String>> portalList_obj = this.portalList.get(node_id);
+                    if (portalList_obj == null) {
+                        portalList_obj = new HashMap<>();
+                    }
+
+                    if (b.iportals.contains(node_id)) {
+                        HashSet<String> inList = portalList_obj.get("in");
+                        if (inList == null) {
+                            inList = new HashSet<>();
+                        }
+                        inList.add(block_id);
+                        portalList_obj.put("in", inList);
+                    }
+
+
+                    if (b.oportals.contains(node_id)) {
+                        HashSet<String> outList = portalList_obj.get("out");
+                        if (outList == null) {
+                            outList = new HashSet<>();
+                        }
+                        outList.add(block_id);
+                        portalList_obj.put("out", outList);
+                    }
+
+                    this.portalList.put(node_id, portalList_obj);
+                }
+            }
+        }
+
+//        checkingNodeList();
+        System.out.println("built the node and portal list mapping list");
+    }
+
+    private void checkingNodeList() {
+        for (int i = 1; i <= 2000; i++) {
+            String nid = String.valueOf(i);
+            String normal_node = this.nodeToBlockId.get(nid);
+            HashMap<String, HashSet<String>> adjList = this.portalList.get(nid);
+
+            if (normal_node != null) {
+                System.out.println(i + ",normal," + normal_node);
+            }
+
+            if (adjList != null) {
+                System.out.println(i + ",portal");
+                HashSet<String> inList = adjList.get("in");
+                if (inList != null) {
+                    System.out.print("  in,");
+                    for (String n : inList) {
+                        System.out.print("," + n);
+                    }
+                    System.out.print("\n");
+                }
+                HashSet<String> outList = adjList.get("out");
+                if (outList != null) {
+                    System.out.print("  out,");
+                    for (String n : outList) {
+                        System.out.print("," + n);
+                    }
+                    System.out.println();
+                }
+            }
+
+            if(normal_node==null&&adjList==null)
+            {
+                System.out.println(i+",none");
+            }
+
+        }
+
+    }
+
     private double getShortestPathWeight(Node source, Node destination, String costType) {
         PathFinder<WeightedPath> finder = GraphAlgoFactory
                 .dijkstra(PathExpanders.forTypeAndDirection(Line.Linked, Direction.OUTGOING), costType);
@@ -156,41 +246,5 @@ public class blocks {
         } else {
             return paths.weight();
         }
-    }
-
-    public ArrayList<block> getOutBlockOfPortal(String nid) {
-        ArrayList<block> result = new ArrayList<>();
-        TreeSet<block> tr = new TreeSet<>();
-        for (Map.Entry<String, block> b_Obj : this.blocks.entrySet()) {
-            String pid = b_Obj.getKey();
-            block b = b_Obj.getValue();
-            for (String vid : b.nodes) {
-                if (nid.equals(vid)) {
-                    if (b.iportals.contains(nid)) {
-                        tr.add(b);
-                    }
-                }
-            }
-        }
-        result.addAll(tr);
-        return result;
-    }
-
-    public ArrayList<block> getBlocskOfPortal(String nid) {
-        ArrayList<block> result = new ArrayList<>();
-        TreeSet<block> tr = new TreeSet<>();
-        for (Map.Entry<String, block> b_Obj : this.blocks.entrySet()) {
-            String pid = b_Obj.getKey();
-            block b = b_Obj.getValue();
-            for (String vid : b.nodes) {
-                if (nid.equals(vid)) {
-                    if (b.iportals.contains(nid)||b.oportals.contains(nid)) {
-                        tr.add(b);
-                    }
-                }
-            }
-        }
-        result.addAll(tr);
-        return result;
     }
 }

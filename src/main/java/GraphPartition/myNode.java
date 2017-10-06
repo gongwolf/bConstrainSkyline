@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 public class myNode {
     public String id;
-    Node current;
+    public Node current;
     Node startNode;
     public ArrayList<path> subRouteSkyline = new ArrayList<>();
     ArrayList<path> processedPaths = new ArrayList<>();
@@ -21,13 +21,13 @@ public class myNode {
     boolean processed_lower_bound = false;
     boolean processed[];
     boolean visited = false;
-    double EduDist = 0.0;
+    public double EduDist = 0.0;
     double[] lowerBound = null;
     String ComeFromRel = null;
     String ComeFromNode = null;
     public ArrayList<String> propertiesName = null;
     int degree;
-    boolean inqueue = false;
+    public boolean inqueue = false;
     public double priority;
     public HashMap<String, path> shortestPaths = new HashMap<>();
 

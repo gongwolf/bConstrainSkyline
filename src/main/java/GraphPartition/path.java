@@ -138,7 +138,7 @@ public class path {
 
     public boolean isCycle()
     {
-        for(int i = 0; i < this.Nodes.size()-1-1;i++)
+        for(int i = 0; i < this.Nodes.size()-2;i++)
         {
             if(this.Nodes.get(i).equals(this.endNode))
             {

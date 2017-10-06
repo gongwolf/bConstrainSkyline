@@ -3,14 +3,16 @@ package GPSkyline;
 
 import GraphPartition.block;
 
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class BlockQueue {
-    PriorityQueue<block> queue;
+    Queue<block> queue;
 
     public BlockQueue() {
 //            mycomparator mc = new mycomparator();
-        this.queue = new PriorityQueue<>();
+        this.queue = new LinkedList<>();
     }
 
     public boolean add(block p) {

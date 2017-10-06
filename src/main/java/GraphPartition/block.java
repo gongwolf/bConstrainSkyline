@@ -12,7 +12,7 @@ import org.neo4j.graphdb.*;
 
 import java.util.*;
 
-public class block {
+public class block implements Comparable<block> {
     public final String pid;
     public ArrayList<String> nodes;
     public ArrayList<String> iportals;
@@ -162,8 +162,6 @@ public class block {
         String p_end_node_str_id = String.valueOf(p.endNode.getId() + 1);
         for (Map.Entry<Pair<String, String>, ArrayList<path>> innerSky_obj : innerIndex.entrySet()) {
             String startNode = innerSky_obj.getKey().getKey();
-
-
             if (startNode.equals(p_end_node_str_id)) {
                 for (path sp : innerSky_obj.getValue()) {
                     path new_path = new path(p, sp);
@@ -171,10 +169,41 @@ public class block {
                         result.add(new_path);
                 }
             }
-
         }
 
         return result;
+    }
+
+    @Override
+    public int compareTo(block o) {
+        if (this.pid.equals(o.pid)) {
+            return 0;
+        } else if (Integer.parseInt(this.pid) < Integer.parseInt(o.pid)) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof block)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        block c = (block) o;
+
+        // Compare the data members and return accordingly
+        return c.pid.equals(((block) o).pid);
     }
 
 //    public void addToPortalSubSkyline(String o_portal_id, path p) {

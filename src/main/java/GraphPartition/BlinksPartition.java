@@ -39,8 +39,8 @@ public class BlinksPartition {
     }
 
     public static void main(String args[]) {
-        int num_parts = 200;
-        long graphsize = 20000;
+        int num_parts = 100;
+        long graphsize = 10000;
         String portalSelector = "Blinks";
         String lowerboundSelector = "landmark";
         if (args.length == 4) {
@@ -58,7 +58,7 @@ public class BlinksPartition {
         }
         System.out.println("===========================");
         System.out.println(bp.portals.size());
-        bp.cleanFadePortal();
+//        bp.cleanFadePortal();
         bp.createBlocks();
 
         System.out.println(bp.prts.blocks.size());
@@ -74,22 +74,22 @@ public class BlinksPartition {
         bp.prts.buildIndexes(graphsize, lowerboundSelector);
         System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis() - buildlandmark) + " ms");
 
-//        for (String pid : bp.prts.blocks.keySet()) {
-//            block b = bp.prts.blocks.get(pid);
-//            System.out.print(pid + "  " + b.nodes.size() + " " + b.iportals.size() + " " + b.oportals.size()
-//                    + " " + b.landMarks.size() + " " + b.fromLandMarkIndex.size() + " " + b.toLandMarkIndex.size()
-//                    + "  " + b.innerIndex.size());
-//            int count = 0;
-//
-//            for (Map.Entry<Pair<String, String>, ArrayList<path>> p : b.innerIndex.entrySet()) {
-//                count += p.getValue().size();
-//            }
-//
-//            System.out.print("  " + count + "\n");
-//        }
+        for (String pid : bp.prts.blocks.keySet()) {
+            block b = bp.prts.blocks.get(pid);
+            System.out.print(pid + "  " + b.nodes.size() + " " + b.iportals.size() + " " + b.oportals.size()
+                    + " " + b.landMarks.size() + " " + b.fromLandMarkIndex.size() + " " + b.toLandMarkIndex.size()
+                    + "  " + b.innerIndex.size());
+            int count = 0;
+
+            for (Map.Entry<Pair<String, String>, ArrayList<path>> p : b.innerIndex.entrySet()) {
+                count += p.getValue().size();
+            }
+
+            System.out.print("  " + count + "\n");
+        }
 
 
-        bp.testing();
+//        bp.testing();
 //        bp.writePoralsToDisk(portals);
 //        bp.portalsMapping(portals);
 
@@ -99,13 +99,12 @@ public class BlinksPartition {
         //node id --> pair<cid,pid>
         TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
         infoTM.putAll(this.partitionInfos);
-        int count = 0 ;
+        int count = 0;
         for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
             String nid = node.getKey();
             if (!this.portals.contains(nid)) {
                 block b = this.prts.getPid(nid);
-                if(b==null)
-                {
+                if (b == null) {
                     System.out.println(nid + " is not in any partition");
                     System.exit(0);
                 }
@@ -117,7 +116,7 @@ public class BlinksPartition {
                 }
             }
         }
-        System.out.println("total : "+count);
+        System.out.println("total : " + count);
 
     }
 
@@ -125,12 +124,31 @@ public class BlinksPartition {
     public void createBlocks() {
         ArrayList<String> portals = this.portals;
         TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
+//        System.out.println("Tree size:" + infoTM.size());
         infoTM.putAll(this.partitionInfos);
         for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
 
             int node_id = Integer.parseInt(node.getKey());
+//            if (node_id == 18) {
+//                boolean flag = portals.contains(node.getKey());
+//                System.out.println("18 is a portal ?" + flag);
+//                if (flag) {
+//                    ArrayList<String> in_nodes = getIncomingNodeToNode(node_id);
+//                    for (String inode : in_nodes) {
+//                        System.out.println("in node" + inode + " " + portals.contains(inode));
+//                    }
+//
+//                    ArrayList<String> out_nodes = getOutGoingFromNode(node_id);
+//                    for (String onode : out_nodes) {
+//                        System.out.println("in node" + onode + "  " + portals.contains(onode));
+//                    }
+//
+//
+//                }
+//            }
 
             if (portals.contains(node.getKey())) {
+
                 ArrayList<String> in_nodes = getIncomingNodeToNode(node_id);
                 for (String inode : in_nodes) {
                     if (!portals.contains(inode)) {
@@ -158,6 +176,7 @@ public class BlinksPartition {
         infoTM.clear();
     }
 
+
     private void addToBlock(int node_id, String pid, int node_type) {
         String str_nodeID = String.valueOf(node_id);
         block b = prts.blocks.get(pid);
@@ -177,8 +196,12 @@ public class BlinksPartition {
 
     public void cleanFadePortal() {
         ArrayList<String> portals = this.portals;
+        ArrayList<String> copyOfPortals = new ArrayList<>(portals);
         int count = 0;
         int count1 = 0;
+        int count2 = 0;
+        int index = 0;
+
         for (String portal : portals) {
 
             boolean allInportal = true, alloutportal = true;
@@ -189,8 +212,8 @@ public class BlinksPartition {
                     break;
                 }
             }
-            int numberOfOut = outNodes.size();
 
+            int numberOfOut = outNodes.size();
             ArrayList<String> inNodes = getIncomingNodeToNode(Integer.parseInt(portal));
             int numberOfIn = inNodes.size();
             for (String n : inNodes) {
@@ -210,8 +233,19 @@ public class BlinksPartition {
             if (!allInportal && !alloutportal) {
                 count1++;
             }
+
+            //all the out and in edge connected to the portals
+            if(allInportal&&alloutportal)
+            {
+                copyOfPortals.remove(index-count2);
+                count2++;
+            }
+
+            index++;
         }
-        System.out.println(count+"  "+count1);
+        System.out.println(count+"  "+count1+"  "+count2);
+        this.portals.clear();
+        this.portals.addAll(copyOfPortals);
     }
 
     public void writePoralsToDisk(ArrayList<String> portals) {

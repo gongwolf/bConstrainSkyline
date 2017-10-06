@@ -12,7 +12,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Test {
+public class testASRC {
     connector n;
     GraphDatabaseService graphdb;
     GPSkylineSearch gps;
@@ -24,16 +24,14 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        Test t = new Test();
-        t.createBPObject();
+        testASRC t = new testASRC();
         t.ConnectDB();
-        t.gps.setGraphObject(t.graphdb);
         for (int i = 0; i < 1; i++) {
             String sid = String.valueOf("1872");
             String did = String.valueOf("357");
 //            String did = String.valueOf(t.getRandomNumberInRange(0, 1999));
-//            t.runTest(sid, did);
-            t.runGPSearch(sid,did);
+            t.runTest(sid, did);
+//            t.runGPSearch(sid,did);
         }
         t.n.shutdownDB();
     }
@@ -47,29 +45,12 @@ public class Test {
         gps.BuildGPartitions(num_parts,graphsize,portalSelector,lowerboundSelector);
     }
 
-    private void runTest(String sid, String did) {
+    public void runTest(String sid, String did) {
         long run1 = System.nanoTime();
         ArrayList<path> r1 = runUseNodeFinal(sid,did, this.graphdb);
         run1 = (System.nanoTime() - run1) / 1000000;
         int size = r1==null?0:r1.size();
         System.out.println(sid + "==>" + did + " skyline path size:" + size + "         running time:" + run1 + " ms");
-
-    }
-
-    public void runGPSearch(String sid, String did){
-        long sid_long = Long.parseLong(sid);
-        long did_long = Long.parseLong(did);
-        Node Source;
-        Node Destination;
-        try (Transaction tx = graphdb.beginTx()) {
-            Source = graphdb.getNodeById(sid_long);
-            Destination = graphdb.getNodeById(did_long);
-            tx.success();
-        }
-        long run1 = System.nanoTime();
-        gps.findSkylines(Source,Destination);
-        run1 = (System.nanoTime() - run1) / 1000000;
-        System.out.println(sid + "==>" + did + " skyline path size:" + 0 + "         running time:" + run1 + " ms");
 
     }
 
