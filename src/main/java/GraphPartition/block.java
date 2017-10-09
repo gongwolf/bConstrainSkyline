@@ -112,34 +112,53 @@ public class block implements Comparable<block> {
 
     public void buildInnerSkylineIndex(GraphDatabaseService graphdb, String lowerboundSelector) {
         for (String snd : this.iportals) {
-            String sid = String.valueOf(Integer.parseInt(snd) - 1);
-            for (String dnd : this.oportals) {
-                if (snd.equals(dnd)) {
-                    continue;
-                }
+            if (lowerboundSelector.equals("landmark") || lowerboundSelector.equals("dijkstra")) {
+                String sid = String.valueOf(Integer.parseInt(snd) - 1);
+                for (String dnd : this.oportals) {
+                    if (snd.equals(dnd)) {
+                        continue;
+                    }
 
-                String did = String.valueOf(Integer.parseInt(dnd) - 1);
+                    String did = String.valueOf(Integer.parseInt(dnd) - 1);
 //                Node source = graphdb.findNode(BNode.BusNode, "name", sid);
-                Node source = graphdb.getNodeById(Long.parseLong(sid));
+                    Node source = graphdb.getNodeById(Long.parseLong(sid));
 //                Node destination = graphdb.findNode(BNode.BusNode, "name", did);
-                Node destination = graphdb.getNodeById(Long.parseLong(did));
-                skylineInBlock sbib = new skylineInBlock(graphdb, this);
-                ArrayList<path> skypaths = null;
-                if (lowerboundSelector.equals("landmark")) {
-                    skypaths = sbib.getSkylineInBlock_blinks(source, destination);
-                } else if (lowerboundSelector.equals("dijkstra")) {
-                    skypaths = sbib.getSkylineInBlock_Dijkstra(source, destination);
-                }
+                    Node destination = graphdb.getNodeById(Long.parseLong(did));
+                    skylineInBlock sbib = new skylineInBlock(graphdb, this);
+                    ArrayList<path> skypaths = null;
+                    if (lowerboundSelector.equals("landmark")) {
+                        skypaths = sbib.getSkylineInBlock_blinks(source, destination);
+                    } else if (lowerboundSelector.equals("dijkstra")) {
+                        skypaths = sbib.getSkylineInBlock_Dijkstra(source, destination);
+                    }
 
 
-                if (skypaths != null) {
+                    if (skypaths != null) {
 //                    if (skypaths.size() != 1) {
 //                        System.out.println(snd + "==>" + dnd + "-----");
 //                    }
-                    Pair<String, String> keyP = new Pair<>(snd, dnd);
-                    this.innerIndex.put(keyP, skypaths);
+                        Pair<String, String> keyP = new Pair<>(snd, dnd);
+                        this.innerIndex.put(keyP, skypaths);
 //                    System.out.println(skypaths.get(0));
 //                    break;
+                    }
+                }
+            } else if (lowerboundSelector.equals("oneToAll")) {
+                String sid = String.valueOf(Integer.parseInt(snd) - 1);
+                Node source = graphdb.getNodeById(Long.parseLong(sid));
+                skylineInBlock sbib = new skylineInBlock(graphdb, this);
+                HashMap<Long, myNode> pList = sbib.skylineInOneToAll(source);
+
+                for (String dnd : this.oportals) {
+                    long did = Long.parseLong(dnd) - 1;
+                    myNode dNode = pList.get(did);
+                    if (dNode != null) {
+                        ArrayList<path> sub_skyline_paths = new ArrayList<>(dNode.subRouteSkyline);
+                        if (sub_skyline_paths.size() != 0) {
+                            Pair<String, String> keyP = new Pair<>(snd, dnd);
+                            this.innerIndex.put(keyP, sub_skyline_paths);
+                        }
+                    }
                 }
             }
 //            break;
@@ -222,10 +241,7 @@ public class block implements Comparable<block> {
         path spath = new path(source);
         sNode.shortestPaths.put(property_type, spath);
         myDQ.add(sNode);
-
-
         HashMap<Long, Double> cost_so_far = new HashMap<>();
-
         cost_so_far.put(source.getId(), 0.0);
 
         while (!myDQ.isEmpty()) {
@@ -245,15 +261,15 @@ public class block implements Comparable<block> {
 
                 Double cost = Double.parseDouble(rel.getProperty(property_type).toString());
                 Double oldCost = cost_so_far.get(n.current.getId());
-                double current_cost = Double.POSITIVE_INFINITY;
-                if (cost_so_far.get(nNode.getId()) != null) {
-                    current_cost = cost_so_far.get(nNode.getId());
-                }
+//                double current_cost = Double.POSITIVE_INFINITY;
+//                if (cost_so_far.get(nNode.getId()) != null) {
+//                    current_cost = cost_so_far.get(nNode.getId());
+//                }
                 double newCost = cost + oldCost;
 
                 String nextID = String.valueOf(nNode.getId() + 1);
                 if (this.nodes.contains(nextID)) { // if the node in this block
-                    if (!cost_so_far.containsKey(nNode.getId()) || newCost < current_cost) { // this node did not access or have shorter distance
+                    if (!cost_so_far.containsKey(nNode.getId()) || newCost < cost_so_far.get(nextNode.current.getId())) { // this node did not access or have shorter distance
                         cost_so_far.put(nNode.getId(), newCost);
                         double Dij_priority = newCost;
                         nextNode.priority = Dij_priority;
@@ -366,7 +382,6 @@ public class block implements Comparable<block> {
             }
             i++;
         }
-
         return null;
     }
 

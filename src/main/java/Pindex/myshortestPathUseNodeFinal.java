@@ -209,7 +209,7 @@ public class myshortestPathUseNodeFinal {
             }
             tx.success();
         }
-//        System.out.println("----" + count1 + " " + count2 + " " + count3 + " " + count4);
+        System.out.println("----" + count1 + " " + count2 + " " + count3 + " " + count4);
 
         return this.skylinPaths;
     }

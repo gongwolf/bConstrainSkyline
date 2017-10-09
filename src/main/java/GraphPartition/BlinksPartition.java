@@ -58,7 +58,7 @@ public class BlinksPartition {
         }
         System.out.println("===========================");
         System.out.println(bp.portals.size());
-//        bp.cleanFadePortal();
+        bp.cleanFadePortal();
         bp.createBlocks();
 
         System.out.println(bp.prts.blocks.size());

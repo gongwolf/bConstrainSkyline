@@ -1,8 +1,6 @@
 package GraphPartition;
 
-import javafx.util.Pair;
 import neo4jTools.Line;
-import org.neo4j.graphalgo.impl.shortestpath.Dijkstra;
 import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
@@ -22,7 +20,6 @@ public class skylineInBlock {
 
     public skylineInBlock(GraphDatabaseService graphdb, block block) {
         this.graphdb = graphdb;
-        this.mqueue = new myNodePriorityQueue();
         this.b = block;
     }
 
@@ -31,6 +28,7 @@ public class skylineInBlock {
         this.skylinPaths.clear();
         this.propertiesName.clear();
         this.NumberOfProperties = 0;
+        this.mqueue = null;
     }
 
     public ArrayList<path> getSkylineInBlock_blinks(Node source, Node destination) {
@@ -38,9 +36,8 @@ public class skylineInBlock {
 //        this.ProcessedNodes.clear();
 
         try (Transaction tx = this.graphdb.beginTx()) {
-
+            this.mqueue = new myNodePriorityQueue();
             path iniPath = new path(source, source);
-
             this.NumberOfProperties = iniPath.NumberOfProperties;
 
             try {
@@ -401,6 +398,7 @@ public class skylineInBlock {
     public ArrayList<path> getSkylineInBlock_Dijkstra(Node source, Node destination) {
         clearMemeory();
         try (Transaction tx = this.graphdb.beginTx()) {
+            this.mqueue = new myNodePriorityQueue();
             path iniPath = new path(source, source);
             this.NumberOfProperties = iniPath.NumberOfProperties;
             this.propertiesName.addAll(iniPath.propertiesName);
@@ -453,17 +451,19 @@ public class skylineInBlock {
                                     } else {
                                         String nextid = String.valueOf(np.endNode.getId());
                                         String mapped_nexid = String.valueOf(np.endNode.getId() + 1);
-                                        myNode nextNode = this.ProcessedNodes.get(nextid);
-                                        if (nextNode == null) {
-                                            continue;
-                                        }
-                                        nextNode.addToSkylineResult(np);
-                                        //If nextNode is not in the queue, and the next node is in the same block with source node.
-                                        //Also, the next node is not a portal node, because destination node is a portal node.
-                                        //The condition to check whether it is a portal node need to be confirmed.
-                                        if (!nextNode.inqueue && this.b.nodes.contains(mapped_nexid)) {
-                                            mqueue.add(nextNode);
-                                            nextNode.inqueue = true;
+                                        if (this.b.nodes.contains(mapped_nexid)) {
+                                            myNode nextNode = this.ProcessedNodes.get(nextid);
+                                            if (nextNode == null) {
+                                                continue;
+                                            }
+                                            nextNode.addToSkylineResult(np);
+                                            //If nextNode is not in the queue, and the next node is in the same block with source node.
+                                            //Also, the next node is not a portal node, because destination node is a portal node.
+                                            //The condition to check whether it is a portal node need to be confirmed.
+                                            if (!nextNode.inqueue) {
+                                                mqueue.add(nextNode);
+                                                nextNode.inqueue = true;
+                                            }
                                         }
                                     }
                                 }
@@ -478,7 +478,125 @@ public class skylineInBlock {
             }
             tx.success();
         }
-
         return skylinPaths;
+    }
+
+
+    public HashMap<Long, myNode> skylineInOneToAll(Node source) {
+        clearMemeory();
+        HashMap<Long, myNode> pList = new HashMap<>();
+        try (Transaction tx = this.graphdb.beginTx()) {
+            this.mqueue = new myNodePriorityQueue();
+            path iniPath = new path(source, source);
+            this.NumberOfProperties = iniPath.NumberOfProperties;
+
+            this.propertiesName.addAll(iniPath.propertiesName);
+            pList = DijkstraInBlock(source);
+
+
+            for (Map.Entry<Long, myNode> my_node_info : pList.entrySet()) {
+                myNode n = my_node_info.getValue();
+                for (Map.Entry<String, path> sh_paths : n.shortestPaths.entrySet()) {
+                    n.addToSkylineResult(sh_paths.getValue());
+                }
+            }
+            myNode start = pList.get(source.getId());
+            if (start != null) {
+                mqueue.add(start);
+            }
+            tx.success();
+        }
+
+
+        try (Transaction tx = this.graphdb.beginTx()) {
+            while (!mqueue.isEmpty()) {
+                myNode vs = mqueue.pop();
+                vs.inqueue = false;
+                int index = 0;
+                for (; index < vs.subRouteSkyline.size(); ) {
+                    path p = vs.subRouteSkyline.get(index);
+                    if (!p.processed_flag) {
+                        p.processed_flag = true;
+                        ArrayList<path> paths = p.expand();
+                        for (path np : paths) {
+                            boolean isCycle = np.isCycle();
+                            if (!isCycle) {
+                                long nextid = np.endNode.getId();
+                                String mapped_nexid = String.valueOf(np.endNode.getId() + 1);
+                                if (this.b.nodes.contains(mapped_nexid)) {
+                                    myNode nextNode = pList.get(nextid);
+                                    if (nextNode == null) {
+                                        continue;
+                                    }
+                                    nextNode.addToSkylineResult(np);
+                                    //If nextNode is not in the queue, and the next node is in the same block with source node.
+                                    //Also, the next node is not a portal node, because destination node is a portal node.
+                                    //The condition to check whether it is a portal node need to be confirmed.
+                                    if (!nextNode.inqueue) {
+                                        mqueue.add(nextNode);
+                                        nextNode.inqueue = true;
+                                    }
+                                }
+                            }
+                        }
+                        index++;
+                    } else {
+                        index++;
+                    }
+                }
+            }
+            tx.success();
+            return pList;
+        }
+    }
+
+    private HashMap<Long, myNode> DijkstraInBlock(Node source) {
+        HashMap<Long, myNode> plist = new HashMap<>();
+        myNode sNode = plist.get(source.getId());
+        if (sNode == null) {
+            sNode = new myNode(source, source, true);
+        }
+        path spath = new path(source);
+
+        for (String property_type : sNode.propertiesName) {
+            myNodeDijkstraPriorityQueue myDQ = new myNodeDijkstraPriorityQueue();
+            sNode.shortestPaths.put(property_type, spath);
+            myDQ.add(sNode);
+            HashMap<Long, Double> cost_so_far = new HashMap<>();
+            cost_so_far.put(sNode.current.getId(), 0.0);
+
+            while (!myDQ.isEmpty()) {
+                myNode n = myDQ.pop();
+                plist.put(n.current.getId(), n);
+
+                ArrayList<Relationship> adjNodes = n.getAdjNodes();
+
+                for (Relationship rel : adjNodes) {
+                    Node nNode = rel.getEndNode();
+
+                    myNode nextNode = plist.get(nNode.getId());
+                    if (nextNode == null) {
+                        nextNode = new myNode(source, nNode, false);
+                    }
+
+                    Double cost = Double.parseDouble(rel.getProperty(property_type).toString());
+                    Double oldCost = cost_so_far.get(n.current.getId());
+                    double newCost = cost + oldCost;
+
+                    String nextID = String.valueOf(nNode.getId() + 1);
+                    if (b.nodes.contains(nextID)) { // if the node in this block
+                        if (!cost_so_far.containsKey(nNode.getId()) || newCost < cost_so_far.get(nNode.getId())) { // this node did not access or have shorter distance
+                            cost_so_far.put(nNode.getId(), newCost);
+                            double Dij_priority = newCost;
+                            nextNode.priority = Dij_priority;
+                            path npath = new path(n.shortestPaths.get(property_type), rel);
+                            nextNode.shortestPaths.put(property_type, npath);
+                            myDQ.add(nextNode);
+                        }
+                    }
+                }
+            }
+        }
+        return plist;
     }
 }

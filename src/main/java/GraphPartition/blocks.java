@@ -36,6 +36,7 @@ public class blocks {
             for (int i = 0; i < numberofLandmard; i++) {
                 String node_id = b.getNode(getRandomNumberInRange(0, b.nodes.size() - 1));
                 while (b.landMarks.contains(node_id) || b.iportals.contains(node_id) || b.oportals.contains(node_id)) {
+//                while (b.landMarks.contains(node_id)) {
                     node_id = b.getNode(getRandomNumberInRange(0, b.nodes.size() - 1));
                 }
                 b.landMarks.add(node_id);
@@ -70,9 +71,14 @@ public class blocks {
                 System.out.print("Build index for partition " + b_obj.getKey() + "  " + run_ms1 + " " + run_ms2 + " " + (System.currentTimeMillis() - run_ms) + " ms \n");
 //                break;
             }
+        }
+
+        try (Transaction tx = graphDB.beginTx()) {
 
             long run_ms3 = System.currentTimeMillis();
             path fakePath = null;
+            int line_counter1 = 0;
+            int line_counter2 = 0;
             for (Map.Entry<String, block> b_obj : blocks.entrySet()) {
                 for (Map.Entry<String, block> others_b_obj : blocks.entrySet()) {
                     //not the same block
@@ -94,7 +100,7 @@ public class blocks {
                                 double[] costs = new double[fakePath.NumberOfProperties];
                                 int i = 0;
                                 for (String costType : fakePath.propertiesName) {
-                                    double cost = getShortestPathWeight(source, destination, costType);
+                                    double cost = getShortestPathWeight(source, destination, costType, graphDB);
                                     costs[i] = cost;
                                     i++;
                                     //if there is no path from source to destination, set the first dimension of the cost to be -1
@@ -107,6 +113,12 @@ public class blocks {
                                 if (!flag) {
                                     Pair<String, String> landmark_pair = new Pair(landMark_b, landMark_other);
                                     this.outerLandMark.put(landmark_pair, costs);
+                                    line_counter2++;
+                                }
+
+                                line_counter1++;
+                                if (line_counter1 % 5000 == 0) {
+                                    System.out.println(line_counter1 + "----------------------");
                                 }
                             }
                         }
@@ -114,39 +126,9 @@ public class blocks {
                 }
 
             }
+            System.out.println(line_counter1 + "---" + line_counter2);
             buildNodeInforIndex();
-//            System.out.println(portalList.size() + "   " + nodeToBlockId.size());
-//            System.out.print("Build outer landmark " + (System.currentTimeMillis() - run_ms3) + " ms \n");
-//
-//            System.out.println("--------");
-//            System.out.println("61");
-//            for (String inList : this.portalList.get("61").get("in")) {
-//                System.out.println(inList);
-//            }
-//            System.out.println("@@@@");
-//            for (String inList : this.portalList.get("61").get("out")) {
-//                System.out.println(inList);
-//            }
-//            System.out.println("--------");
-//
-//            System.out.println("1566");
-//            for (String inList : this.portalList.get("1566").get("in")) {
-//                System.out.println(inList);
-//            }
-//            System.out.println("@@@@");
-//            for (String inList : this.portalList.get("1566").get("out")) {
-//                System.out.println(inList);
-//            }
-//            System.out.println("--------");
-//
-//
-//            System.out.println("--------");
-//            System.out.println("145  "+this.nodeToBlockId.get("145"));
-//            System.out.println("1566  "+this.nodeToBlockId.get("1566"));
-//            System.out.println("--------");
-
-
-//            tx.success();
+            tx.success();
         }
 //        n.shutdownDB();
 
@@ -194,6 +176,7 @@ public class blocks {
                     this.nodeToBlockId.put(node_id, block_id);
                 } else {
                     HashMap<String, HashSet<String>> portalList_obj = this.portalList.get(node_id);
+
                     if (portalList_obj == null) {
                         portalList_obj = new HashMap<>();
                     }
@@ -264,14 +247,17 @@ public class blocks {
 
     }
 
-    private double getShortestPathWeight(Node source, Node destination, String costType) {
-        PathFinder<WeightedPath> finder = GraphAlgoFactory
-                .dijkstra(PathExpanders.forTypeAndDirection(Line.Linked, Direction.OUTGOING), costType);
-        WeightedPath paths = finder.findSinglePath(source, destination);
-        if (paths == null) {
-            return -1;
-        } else {
-            return paths.weight();
+    private double getShortestPathWeight(Node source, Node destination, String costType, GraphDatabaseService gpdb) {
+        try (Transaction tx = gpdb.beginTx()) {
+            PathFinder<WeightedPath> finder = GraphAlgoFactory
+                    .dijkstra(PathExpanders.forTypeAndDirection(Line.Linked, Direction.OUTGOING), costType);
+            WeightedPath paths = finder.findSinglePath(source, destination);
+            tx.success();
+            if (paths == null) {
+                return -1;
+            } else {
+                return paths.weight();
+            }
         }
     }
 }

@@ -7,11 +7,11 @@ public class myNodeDijkstraPriorityQueue {
     PriorityQueue<myNode> queue;
     String propertiy_type;
 
-//    public myNodeDijkstraPriorityQueue(String propertiy_type) {
+    //    public myNodeDijkstraPriorityQueue(String propertiy_type) {
     public myNodeDijkstraPriorityQueue() {
         myDcomparator mc = new myDcomparator();
 //        myDcomparator mc = new myDcomparator(propertiy_type);
-        this.queue = new PriorityQueue<>(1000000, mc);
+        this.queue = new PriorityQueue<>(mc);
         this.propertiy_type = propertiy_type;
     }
 

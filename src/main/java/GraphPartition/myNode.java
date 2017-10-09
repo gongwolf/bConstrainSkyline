@@ -12,6 +12,7 @@ import java.util.Iterator;
 
 public class myNode {
     public String id;
+    public long Lid;
     public Node current;
     Node startNode;
     public ArrayList<path> subRouteSkyline = new ArrayList<>();
@@ -40,6 +41,7 @@ public class myNode {
         this.current = current;
         this.startNode = startNode;
         this.id = String.valueOf(this.current.getId());
+        this.Lid = this.current.getId();
         this.setEduDist();
         path p = new path(startNode, startNode);
         propertiesName = new ArrayList<String>(p.getPropertiesName());
@@ -67,6 +69,7 @@ public class myNode {
         this.current = current;
         this.startNode = startNode;
         this.id = String.valueOf(this.current.getId());
+        this.Lid = this.current.getId();
         this.setEduDist();
         path p = new path(startNode, startNode);
         propertiesName = new ArrayList<>(p.getPropertiesName());
@@ -91,6 +94,7 @@ public class myNode {
         this.current = current;
         this.startNode = startNode;
         this.id = String.valueOf(this.current.getId());
+        this.Lid = this.current.getId();
         this.setEduDist();
         this.lowerBound = new double[xlength];
     }
@@ -219,16 +223,11 @@ public class myNode {
     }
 
     public ArrayList<Relationship> getAdjNodes() {
-//        ArrayList<Pair<myNode, Double>> result = new ArrayList<>();
         ArrayList<Relationship> result = new ArrayList<>();
         Iterable<Relationship> rels = this.current.getRelationships(Line.Linked, Direction.OUTGOING);
         Iterator<Relationship> rel_Iter = rels.iterator();
         while (rel_Iter.hasNext()) {
             Relationship rel = rel_Iter.next();
-//            Node nextNode = rel.getEndNode();
-//            Double cost = Double.parseDouble(rel.getProperty(property_type).toString());
-//            myNode mynextNode = new myNode(this.startNode, nextNode, false);
-//            Pair<myNode, Double> pair = new Pair<>(mynextNode, cost);
             result.add(rel);
         }
         return result;

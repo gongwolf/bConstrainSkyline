@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 
 public class path {
     public Node startNode;
-    public String startID,endID;
+    public String startID, endID;
     public Node endNode;
     public int NumberOfProperties;
     public ArrayList<String> propertiesName = new ArrayList<>();
@@ -132,17 +132,19 @@ public class path {
         this.endID = String.valueOf(endNode.getId());
     }
 
+    public path(double[] cost_upper_bound) {
+        this.cost = new double[cost_upper_bound.length];
+        System.arraycopy(cost_upper_bound, 0, this.cost, 0, cost_upper_bound.length);
+    }
+
     public boolean containRelationShip(Relationship rel) {
         return this.relationships.contains(rel);
 
     }
 
-    public boolean isCycle()
-    {
-        for(int i = 0; i < this.Nodes.size()-2;i++)
-        {
-            if(this.Nodes.get(i).equals(this.endNode))
-            {
+    public boolean isCycle() {
+        for (int i = 0; i < this.Nodes.size() - 2; i++) {
+            if (this.Nodes.get(i).equals(this.endNode)) {
                 return true;
             }
         }
@@ -253,11 +255,10 @@ public class path {
         }
 
         sb.append("     [");
-        for(double d:this.cost)
-        {
+        for (double d : this.cost) {
             sb.append(d).append(",");
         }
-        sb.replace(sb.lastIndexOf(","),sb.length(),"");
+        sb.replace(sb.lastIndexOf(","), sb.length(), "");
         sb.append("]");
         return sb.toString();
     }
@@ -285,4 +286,17 @@ public class path {
         return sb.toString();
     }
 
+    public ArrayList<path> expand(block adjb) {
+        ArrayList<path> result = new ArrayList<>();
+        Iterable<Relationship> rels = this.endNode.getRelationships(Line.Linked, Direction.OUTGOING);
+        Iterator<Relationship> rel_Iter = rels.iterator();
+        while (rel_Iter.hasNext()) {
+            Relationship rel = rel_Iter.next();
+            path nPath = new path(this, rel);
+            if (adjb.nodes.contains(String.valueOf(nPath.endNode.getId() - 1))) {
+                result.add(nPath);
+            }
+        }
+        return result;
+    }
 }

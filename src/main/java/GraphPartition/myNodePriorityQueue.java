@@ -37,11 +37,9 @@ public class myNodePriorityQueue {
 
 class mycomparator implements Comparator<myNode> {
     public int compare(myNode x, myNode y) {
-        long xid = Long.parseLong(x.id);
-        long yid = Long.parseLong(y.id);
-        if (xid == yid) {
+        if (x.EduDist == y.EduDist) {
             return 0;
-        } else if (xid > yid) {
+        } else if (x.EduDist > y.EduDist) {
             return 1;
         } else {
             return -1;
