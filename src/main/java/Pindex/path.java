@@ -194,6 +194,14 @@ public class path {
             }
             sb.append("(" + this.Nodes.get(i).getId() + ")");
         }
+
+        sb.append("     [");
+        for(double d:this.cost)
+        {
+            sb.append(d).append(",");
+        }
+        sb.replace(sb.lastIndexOf(","),sb.length(),"");
+        sb.append("]");
         return sb.toString();
     }
 

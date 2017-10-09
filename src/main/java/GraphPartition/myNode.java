@@ -69,7 +69,7 @@ public class myNode {
         this.id = String.valueOf(this.current.getId());
         this.setEduDist();
         path p = new path(startNode, startNode);
-        propertiesName = new ArrayList<String>(p.getPropertiesName());
+        propertiesName = new ArrayList<>(p.getPropertiesName());
         this.lowerBound = new double[p.NumberOfProperties];
         this.processed = new boolean[p.NumberOfProperties];
 
@@ -203,7 +203,7 @@ public class myNode {
         lowerBound[p_index] = value;
     }
 
-    public ArrayList<Relationship> getNeighbor(String property_type) {
+    public ArrayList<Relationship> getNeighbor() {
         ArrayList<Relationship> result = new ArrayList<>();
         Iterable<Relationship> rels = this.current.getRelationships(Line.Linked, Direction.INCOMING);
         Iterator<Relationship> rel_Iter = rels.iterator();
@@ -218,7 +218,7 @@ public class myNode {
         return result;
     }
 
-    public ArrayList<Relationship> getAdjNodes(String property_type) {
+    public ArrayList<Relationship> getAdjNodes() {
 //        ArrayList<Pair<myNode, Double>> result = new ArrayList<>();
         ArrayList<Relationship> result = new ArrayList<>();
         Iterable<Relationship> rels = this.current.getRelationships(Line.Linked, Direction.OUTGOING);

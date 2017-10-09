@@ -71,7 +71,7 @@ public class BlinksPartition {
         } else if (lowerboundSelector.equals("dijkstra")) {
             System.out.println("run dijkstra");
         }
-        bp.prts.buildIndexes(graphsize, lowerboundSelector);
+//        bp.prts.buildIndexes(graphsize, lowerboundSelector);
         System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis() - buildlandmark) + " ms");
 
         for (String pid : bp.prts.blocks.keySet()) {
@@ -126,46 +126,61 @@ public class BlinksPartition {
         TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
 //        System.out.println("Tree size:" + infoTM.size());
         infoTM.putAll(this.partitionInfos);
+        System.out.println(infoTM.size());
         for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
 
             int node_id = Integer.parseInt(node.getKey());
-//            if (node_id == 18) {
+//            if (node_id == 61 || node_id == 1566) {
 //                boolean flag = portals.contains(node.getKey());
-//                System.out.println("18 is a portal ?" + flag);
 //                if (flag) {
 //                    ArrayList<String> in_nodes = getIncomingNodeToNode(node_id);
 //                    for (String inode : in_nodes) {
-//                        System.out.println("in node" + inode + " " + portals.contains(inode));
+//                        if (!portals.contains(inode)) {
+//                            String pid = this.partitionInfos.get(inode).getValue();
+//                            System.out.println("PPPP" + inode + "  " + pid);
+//                        }else {
+//                            System.out.println("OOOO" + inode + "  " + infoTM.get(inode));
+//                        }
 //                    }
 //
+//                    System.out.println("*****");
 //                    ArrayList<String> out_nodes = getOutGoingFromNode(node_id);
 //                    for (String onode : out_nodes) {
-//                        System.out.println("in node" + onode + "  " + portals.contains(onode));
+//                        if (!portals.contains(onode)) {
+//                            //get the pid of the onode
+//                            String pid = this.partitionInfos.get(onode).getValue();
+//                            //node is a in-coming portal of the partition where the onode is located.
+//                            System.out.println("PPPP" + onode + "  " + pid);
+//                        } else {
+//                            System.out.println("OOOO" + onode + "  " + infoTM.get(onode));
+//                        }
 //                    }
-//
-//
+//                } else {
+//                    String pid = node.getValue().getValue();
+//                    System.out.println("NNNNN" + node_id + "  " + pid);
 //                }
+//                System.out.println("--------");
 //            }
 
             if (portals.contains(node.getKey())) {
 
                 ArrayList<String> in_nodes = getIncomingNodeToNode(node_id);
                 for (String inode : in_nodes) {
-                    if (!portals.contains(inode)) {
-                        String pid = this.partitionInfos.get(inode).getValue();
-                        //node is a out-going portal of the partition where the inode is located.
-                        addToBlock(node_id, pid, out_port);
-                    }
+//                    if (!portals.contains(inode)) {
+                    String pid = this.partitionInfos.get(inode).getValue();
+                    //node is a out-going portal of the partition where the inode is located.
+                    addToBlock(node_id, pid, out_port);
+//                    }
                 }
 
                 ArrayList<String> out_nodes = getOutGoingFromNode(node_id);
                 for (String onode : out_nodes) {
-                    if (!portals.contains(onode)) {
-                        //get the pid of the onode
-                        String pid = this.partitionInfos.get(onode).getValue();
-                        //node is a in-coming portal of the partition where the onode is located.
-                        addToBlock(node_id, pid, in_port);
-                    }
+//                    if (!portals.contains(onode)) {
+                    //get the pid of the onode
+                    String pid = this.partitionInfos.get(onode).getValue();
+                    //node is a in-coming portal of the partition where the onode is located.
+                    addToBlock(node_id, pid, in_port);
+//                    }
                 }
             } else {
                 String pid = node.getValue().getValue();
@@ -235,15 +250,14 @@ public class BlinksPartition {
             }
 
             //all the out and in edge connected to the portals
-            if(allInportal&&alloutportal)
-            {
-                copyOfPortals.remove(index-count2);
+            if (allInportal && alloutportal) {
+                copyOfPortals.remove(index - count2);
                 count2++;
             }
 
             index++;
         }
-        System.out.println(count+"  "+count1+"  "+count2);
+        System.out.println(count + "  " + count1 + "  " + count2);
         this.portals.clear();
         this.portals.addAll(copyOfPortals);
     }
@@ -564,7 +578,6 @@ public class BlinksPartition {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         return pid;
     }

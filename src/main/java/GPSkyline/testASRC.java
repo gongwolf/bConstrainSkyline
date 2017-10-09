@@ -27,8 +27,10 @@ public class testASRC {
         testASRC t = new testASRC();
         t.ConnectDB();
         for (int i = 0; i < 1; i++) {
-            String sid = String.valueOf("1872");
-            String did = String.valueOf("357");
+//            String sid = String.valueOf("1872");
+//            String did = String.valueOf("357");
+            String sid = String.valueOf("1062");
+            String did = String.valueOf("1433");
 //            String did = String.valueOf(t.getRandomNumberInRange(0, 1999));
             t.runTest(sid, did);
 //            t.runGPSearch(sid,did);
@@ -42,15 +44,20 @@ public class testASRC {
         long graphsize = 2000;
         String portalSelector = "Blinks";
         String lowerboundSelector = "landmark";
-        gps.BuildGPartitions(num_parts,graphsize,portalSelector,lowerboundSelector);
+        gps.BuildGPartitions(num_parts, graphsize, portalSelector, lowerboundSelector);
     }
 
     public void runTest(String sid, String did) {
         long run1 = System.nanoTime();
-        ArrayList<path> r1 = runUseNodeFinal(sid,did, this.graphdb);
+        ArrayList<path> r1 = runUseNodeFinal(sid, did, this.graphdb);
         run1 = (System.nanoTime() - run1) / 1000000;
-        int size = r1==null?0:r1.size();
-        System.out.println(sid + "==>" + did + " skyline path size:" + size + "         running time:" + run1 + " ms");
+        int size = r1 == null ? 0 : r1.size();
+        System.out.println("ASRC:" + sid + "==>" + did + " skyline path size:" + size + "         running time:" + run1 + " ms");
+        if (r1 != null) {
+            for (path p : r1) {
+                System.out.println(p);
+            }
+        }
 
     }
 
@@ -82,4 +89,7 @@ public class testASRC {
     }
 
 
+    public void setgraphDBObject(GraphDatabaseService graphdb) {
+        this.graphdb = graphdb;
+    }
 }

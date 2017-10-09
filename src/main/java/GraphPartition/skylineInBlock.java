@@ -26,8 +26,7 @@ public class skylineInBlock {
         this.b = block;
     }
 
-    public void clearMemeory()
-    {
+    public void clearMemeory() {
         this.ProcessedNodes.clear();
         this.skylinPaths.clear();
         this.propertiesName.clear();
@@ -35,6 +34,7 @@ public class skylineInBlock {
     }
 
     public ArrayList<path> getSkylineInBlock_blinks(Node source, Node destination) {
+        clearMemeory();
 //        this.ProcessedNodes.clear();
 
         try (Transaction tx = this.graphdb.beginTx()) {
@@ -57,8 +57,9 @@ public class skylineInBlock {
                 path sht_path_in_type = DijkstraInType(source, destination, ptype);
                 if (sht_path_in_type != null) {
                     addToSkylineResult(sht_path_in_type);
+//                    System.out.println((sht_path_in_type));
                 } else {
-//                    System.out.println("22222222222");
+//                    System.out.println(source+" ==> "+destination+" 22222222222");
                     return null;
                 }
             }
@@ -98,19 +99,21 @@ public class skylineInBlock {
                             ArrayList<path> paths = p.expand();
                             for (path np : paths) {
                                 if (b.nodes.contains(String.valueOf(np.endNode.getId() + 1))) {
-                                    boolean isCycle = p.containRelationShip(np.getlastRelationship());
+                                    boolean isCycle = np.isCycle();
                                     if (!isCycle) {
-                                        if (np.endNode.equals(destination)) {
+                                        if (np.endNode.getId() == destination.getId()) {
                                             addToSkylineResult(np);
                                         } else {
                                             String nextid = String.valueOf(np.endNode.getId());
                                             myNode nextNode = this.ProcessedNodes.get(nextid);
                                             if (nextNode == null) {
-                                                nextNode = new myNode(source, np.endNode, false);
+                                                continue;
                                             }
                                             nextNode.addToSkylineResult(np);
-                                            if (!nextNode.inqueue)
+                                            if (!nextNode.inqueue) {
                                                 mqueue.add(nextNode);
+                                                nextNode.inqueue = true;
+                                            }
                                         }
                                     }
                                 }
@@ -129,10 +132,10 @@ public class skylineInBlock {
     }
 
 
-    private double[] landmark_heuristic(Node destination, Node nextNode) {
+    private double[] landmark_heuristic(Node snode, Node dnode) {
 
-        String dnd = String.valueOf(destination.getId() + 1);
-        String cnd = String.valueOf(nextNode.getId() + 1);
+        String cnd = String.valueOf(snode.getId() + 1);
+        String dnd = String.valueOf(dnode.getId() + 1);
 
         double result[] = new double[this.NumberOfProperties];
 
@@ -140,6 +143,7 @@ public class skylineInBlock {
         HashMap<String, double[]> fromLowerBound = b.fromLandMarkIndex.get(dnd);
 
         int landmark_index = 0;
+        boolean changedResult = false;
         for (String ptype : this.propertiesName) {
             double maxValue = Double.NEGATIVE_INFINITY;
             if (toLowerBound != null && fromLowerBound != null) {
@@ -147,9 +151,12 @@ public class skylineInBlock {
                     double[] t_l_cost = toLowerBound.get(lnd);
                     double[] f_l_cost = fromLowerBound.get(lnd);
                     if (t_l_cost != null && f_l_cost != null) {
-                        double D_value = t_l_cost[landmark_index] - f_l_cost[landmark_index];
-                        if (maxValue < Math.abs(D_value)) {
+                        double D_value = Math.abs(t_l_cost[landmark_index] - f_l_cost[landmark_index]);
+                        if (maxValue < D_value) {
                             maxValue = D_value;
+                            if (!changedResult) {
+                                changedResult = true;
+                            }
                         }
                     }
                 }
@@ -158,7 +165,11 @@ public class skylineInBlock {
             landmark_index++;
         }
 
-        return result;
+        if (changedResult) {
+            return result;
+        } else {
+            return new double[this.NumberOfProperties];
+        }
     }
 
     private void addToSkylineResult(path np) {
@@ -222,11 +233,17 @@ public class skylineInBlock {
         if (myEndNode == null) {
             return false;
         }
-        for (; i < this.NumberOfProperties; i++) {
-            if (myEndNode.lowerBound[i] == Double.POSITIVE_INFINITY) {
-                return false;
-            }
-            estimatedCosts[i] = p.getCosts()[i] + myEndNode.lowerBound[i];
+//        for (; i < this.NumberOfProperties; i++) {
+//            if (myEndNode.lowerBound[i] == Double.POSITIVE_INFINITY) {
+//                return false;
+//            }
+//            estimatedCosts[i] = p.getCosts()[i] + myEndNode.lowerBound[i];
+//        }
+
+        for (String ptype : this.propertiesName) {
+            double s_cost = myEndNode.shortestPaths.get(ptype).getCosts()[i];
+            estimatedCosts[i] = p.getCosts()[i] + s_cost;
+            i++;
         }
 
         flag = isdominatedbySkylineResults(estimatedCosts);
@@ -251,8 +268,10 @@ public class skylineInBlock {
 
     public void myDijkstra(Node source, Node destination, String property_type) {
         myNodeDijkstraPriorityQueue dijkstraqueue = new myNodeDijkstraPriorityQueue();
-
-        myNode sNode = new myNode(source, destination, true);
+        myNode sNode = this.ProcessedNodes.get(String.valueOf(destination.getId()));
+        if (sNode == null) {
+            sNode = new myNode(source, destination, true);
+        }
         HashMap<String, Double> cost_so_far = new HashMap<>();
         cost_so_far.put(sNode.id, 0.0);
         path spath = new path(destination);
@@ -268,29 +287,35 @@ public class skylineInBlock {
 
             //get the in-comming edges to n.current node.
             //At begin, it is the destination Node
-            ArrayList<Relationship> expensions = n.getNeighbor(property_type);
+            ArrayList<Relationship> expensions = n.getNeighbor();
 
             for (Relationship rel : expensions) {
 
                 Node nNode = rel.getStartNode(); //get the incoming node
-                String next_id = String.valueOf(nNode.getId() + 1);
+                String next_id = String.valueOf(nNode.getId());
 
-                myNode nextNode = ProcessedNodes.get(String.valueOf(nNode.getId()));
+                myNode nextNode = ProcessedNodes.get(next_id);
+
                 if (nextNode == null) {
                     nextNode = new myNode(source, nNode, false);
                 }
 
-                if (this.b.nodes.contains(next_id)) {
+                String nextID = String.valueOf(nNode.getId() + 1);
+                if (b.nodes.contains(nextID)) { // if the node in this block
                     Double cost = Double.parseDouble(rel.getProperty(property_type).toString());
-                    Double oldCost = cost_so_far.get(nextNode.id);
+                    Double oldCost = cost_so_far.get(n.id);
 
-                    if (oldCost == null) {
-                        oldCost = 0.0;
-                    }
+//                    if (oldCost == null) {
+//                        oldCost = Double.POSITIVE_INFINITY;
+//                    }
 
                     double newCost = cost + oldCost;
+                    double current_cost = Double.POSITIVE_INFINITY;
+                    if (cost_so_far.get(nextNode.id) != null) {
+                        current_cost = cost_so_far.get(nextNode.id);
+                    }
 
-                    if (!cost_so_far.containsKey(nextNode.id) || newCost < cost_so_far.get(nextNode.id)) {
+                    if (!cost_so_far.containsKey(nextNode.id) || newCost < current_cost) {
                         cost_so_far.put(nextNode.id, newCost);
                         double Dij_priority = newCost;
                         nextNode.priority = Dij_priority;
@@ -330,25 +355,28 @@ public class skylineInBlock {
 //            System.out.println(n.id);
 
             //get the neighborhood's nodes and its cost
-            ArrayList<Relationship> adjNodes = n.getAdjNodes(property_type);
+            ArrayList<Relationship> adjNodes = n.getAdjNodes();
 
             for (Relationship rel : adjNodes) {
                 Node nNode = rel.getEndNode();
-                String next_id = String.valueOf(nNode.getId() + 1);
-                myNode nextNode = ProcessedNodes.get(String.valueOf(nNode.getId()));
+                String next_id = String.valueOf(nNode.getId());
+                myNode nextNode = ProcessedNodes.get(next_id);
                 if (nextNode == null) {
                     nextNode = new myNode(source, nNode, false);
                 }
 
                 Double cost = Double.parseDouble(rel.getProperty(property_type).toString());
-                Double oldCost = cost_so_far.get(nextNode.id);
-                if (oldCost == null) {
-                    oldCost = 0.0;
-                }
+                Double oldCost = cost_so_far.get(n.id);
                 double newCost = cost + oldCost;
 
-                if (b.nodes.contains(next_id)) { // if the node in this block
-                    if (!cost_so_far.containsKey(nextNode.id) || newCost < cost_so_far.get(nextNode.id)) { // this node did not access or have shorter distance
+                double current_cost = Double.POSITIVE_INFINITY;
+                if (cost_so_far.get(nextNode.id) != null) {
+                    current_cost = cost_so_far.get(nextNode.id);
+                }
+
+                String nextID = String.valueOf(nNode.getId() + 1);
+                if (b.nodes.contains(nextID)) { // if the node in this block
+                    if (!cost_so_far.containsKey(nextNode.id) || newCost < current_cost) { // this node did not access or have shorter distance
                         cost_so_far.put(nextNode.id, newCost);
                         double Dij_priority = newCost;
                         nextNode.priority = Dij_priority;
@@ -371,13 +399,17 @@ public class skylineInBlock {
 
 
     public ArrayList<path> getSkylineInBlock_Dijkstra(Node source, Node destination) {
+        clearMemeory();
         try (Transaction tx = this.graphdb.beginTx()) {
             path iniPath = new path(source, source);
             this.NumberOfProperties = iniPath.NumberOfProperties;
+            this.propertiesName.addAll(iniPath.propertiesName);
             //initialize the lower bound
             for (String p_type : iniPath.getPropertiesName()) {
                 myDijkstra(source, destination, p_type);
             }
+
+//            System.out.println()
 
             myNode start = this.ProcessedNodes.get(String.valueOf(source.getId()));
             //can not reach by back-wards dijkstra from destination to source
@@ -414,7 +446,7 @@ public class skylineInBlock {
                         } else {
                             ArrayList<path> paths = p.expand();
                             for (path np : paths) {
-                                boolean isCycle = p.containRelationShip(np.getlastRelationship());
+                                boolean isCycle = np.isCycle();
                                 if (!isCycle) {
                                     if (np.endNode.getId() == destination.getId()) {
                                         addToSkylineResult(np);
@@ -429,8 +461,10 @@ public class skylineInBlock {
                                         //If nextNode is not in the queue, and the next node is in the same block with source node.
                                         //Also, the next node is not a portal node, because destination node is a portal node.
                                         //The condition to check whether it is a portal node need to be confirmed.
-                                        if (!nextNode.inqueue && this.b.nodes.contains(mapped_nexid))
+                                        if (!nextNode.inqueue && this.b.nodes.contains(mapped_nexid)) {
                                             mqueue.add(nextNode);
+                                            nextNode.inqueue = true;
+                                        }
                                     }
                                 }
                             }

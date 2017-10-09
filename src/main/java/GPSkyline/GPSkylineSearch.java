@@ -41,7 +41,6 @@ public class GPSkylineSearch {
         bp.cleanFadePortal();
         System.out.println(bp.portals.size());
         bp.createBlocks();
-
         System.out.println(bp.prts.blocks.size());
 
 
@@ -52,11 +51,28 @@ public class GPSkylineSearch {
         } else if (lowerboundSelector.equals("dijkstra")) {
             System.out.println("run dijkstra");
         }
-        bp.prts.buildIndexes(graphsize, lowerboundSelector);
+        bp.prts.buildIndexes(graphsize, lowerboundSelector,this.graphdb);
         System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis() - buildlandmark) + " ms");
+
+//        for (String pid : bp.prts.blocks.keySet()) {
+//            block b = bp.prts.blocks.get(pid);
+//            System.out.print(pid + "  " + b.nodes.size() + " " + b.iportals.size() + " " + b.oportals.size()
+//                    + " " + b.landMarks.size() + " " + b.fromLandMarkIndex.size() + " " + b.toLandMarkIndex.size()
+//                    + "  " + b.innerIndex.size());
+//            int count = 0;
+//
+//            for (Map.Entry<Pair<String, String>, ArrayList<path>> p : b.innerIndex.entrySet()) {
+//                count += p.getValue().size();
+//            }
+//
+//            System.out.print("  " + count + "\n");
+//        }
     }
 
     public ArrayList<path> findSkylines(Node source, Node destination) {
+        this.processedNodeList.clear();
+        this.count1=this.count2=this.count3=0;
+        this.skylines.clear();
         String str_sid = String.valueOf(source.getId() + 1);
         String str_did = String.valueOf(destination.getId() + 1);
         myNodePriorityQueue mqueue = new myNodePriorityQueue();
@@ -68,30 +84,44 @@ public class GPSkylineSearch {
             //portal node
             if (this.bp.prts.portalList.containsKey(str_did)) {
                 HashSet<String> outList = this.bp.prts.portalList.get(str_did).get("out");
-                System.out.println("target node " + destination + " is a portal node");
+//                System.out.println("target node " + destination + " is a portal node");
                 if (outList != null) {
                     for (String o_blockID : outList) {
                         targetBlock.add(this.bp.prts.blocks.get(o_blockID));
                     }
                 } else {
-                    System.out.println("there is no in-comming edges to it.");
+//                    System.out.println("there is no in-comming edges to it.");
                     System.exit(0);
                 }
                 target_is_portal = true;
+
+                HashSet<String> inList = this.bp.prts.portalList.get(str_did).get("in");
+//                for(String pid : inList)
+//                {
+//                    System.out.println(pid);
+//                }
             } else {//normal node
                 String blockID = this.bp.prts.nodeToBlockId.get(str_did);
-                System.out.println(blockID);
+//                System.out.println(blockID);
                 targetBlock.add(this.bp.prts.blocks.get(blockID));
             }
+
+
+//            for(block tb : targetBlock)
+//            {
+//                System.out.println("target is the out portal of block "+tb.pid);
+//            }
 
 
             myNode start = processedNodeList.get(source.getId());
             if (start == null) {
                 start = new myNode(source, source, true);
+                this.processedNodeList.put(source.getId(),start);
             }
             mqueue.add(start);
 
 
+//            int i = 1;
             while (!mqueue.isEmpty()) {
                 myNode vs = mqueue.pop();
                 vs.inqueue = false;
@@ -114,39 +144,49 @@ public class GPSkylineSearch {
                     vsBlock.add(this.bp.prts.blocks.get(blockID));
                 }
 
-                System.out.println(vs.id+" "+vs_is_portal);
+
+//                if(i%10==0)
+//                {
+//                    break;
+//                }
+//
+//                i++;
+//                System.out.println(vs.id+" "+vs_is_portal);
 
                 int index = 0;
                 // System.out.println(vs.id+" "+vs.subRouteSkyline.size());
                 for (; index < vs.subRouteSkyline.size(); ) {
                     path p = vs.subRouteSkyline.get(index);
+//                    System.out.println("    "+p);
                     if (!p.processed_flag) {
+                        p.processed_flag=true;
                         //two ways to find the destination of the block -portal node or non-portal node
                         boolean is_expand = checkingExpansion(p, destination, vsBlock, targetBlock);
-                        System.out.println("  is_expand "+is_expand);
+//                        System.out.println("  is_expand "+is_expand);
                         if (!is_expand) {
                             vs.subRouteSkyline.remove(index);
                         } else {
                             if (vs_is_portal) {
-                                System.out.println("   "+vsBlock.size());
+//                                System.out.println("   "+vsBlock.size());
                                 for (block adjb : vsBlock) {
-                                    System.out.println("        "+adjb.pid);
+//                                    System.out.println("        "+adjb.pid);
                                     ArrayList<path> paths = adjb.concatenatePath(p);
                                     if (!target_is_portal && adjb.pid.equals(targetBlock.get(0).pid)) {
-                                        System.out.println("    reach target block");
+//                                        System.out.println("    reach target block");
                                         for (path inT_path : p.expand()) {
                                             if (!inT_path.isCycle())
                                                 paths.add(inT_path);
                                         }
                                     }
-                                    System.out.println("        paths size "+paths.size());
+//                                    System.out.println("        paths size "+paths.size());
                                     for (path np : paths) {
-                                        System.out.println("   "+np);
+//                                        System.out.println("   "+np);
                                         if (!np.isCycle()) {
                                             if (np.endNode.getId() == destination.getId()) {
+//                                                System.out.println(np);
                                                 addToSkylineResult(np);
                                             } else {
-                                                String nextid = String.valueOf(np.endNode.getId());
+                                                long nextid = np.endNode.getId();
                                                 myNode nextNode = this.processedNodeList.get(nextid);
                                                 if (nextNode == null) {
                                                     nextNode = new myNode(source, np.endNode);
@@ -166,10 +206,11 @@ public class GPSkylineSearch {
                                 ArrayList<path> paths = p.expand();
                                 for (path np : paths) {
                                     if (!np.isCycle()) {
+//                                        System.out.println("    "+np);
                                         if (np.endNode.getId() == destination.getId()) {
                                             addToSkylineResult(np);
                                         } else {
-                                            String nextid = String.valueOf(np.endNode.getId());
+                                            long nextid = np.endNode.getId();
                                             myNode nextNode = this.processedNodeList.get(nextid);
                                             if (nextNode == null) {
                                                 nextNode = new myNode(source, np.endNode);
@@ -193,6 +234,7 @@ public class GPSkylineSearch {
                 }
             }
         }
+//        System.out.println("----" + count1 + " " + count2 + " " + count3 );
 
         return this.skylines;
 
@@ -201,11 +243,13 @@ public class GPSkylineSearch {
 
     //Todo: finished it in for loop
 
+    int count1,count2,count3;
     private boolean checkingExpansion(path p, Node destination, ArrayList<block> vsblock, ArrayList<block> targetBlock) {
         String cnd = String.valueOf(p.endNode.getId() + 1);
         String dnd = String.valueOf(destination.getId() + 1);
         double[] estimatedCost = new double[p.NumberOfProperties];
         //get the landmark distance from p.endNodes to the landmark in the block cb
+        boolean changedReulst = false;
         for (block cb : vsblock) {
             for (block targetb : targetBlock) {
                 HashMap<String, double[]> toLowerBound = cb.toLandMarkIndex.get(cnd);
@@ -220,9 +264,14 @@ public class GPSkylineSearch {
                                 double[] betweenLand = this.bp.prts.outerLandMark.get(key);
                                 double[] t_l_cost = toLowerBound.get(cb_lmk);
                                 double[] f_l_cost = fromLowerBound.get(targetB_lmk);
-                                if (t_l_cost != null && f_l_cost != null) {
-                                    double D_value = t_l_cost[landmark_index] - f_l_cost[landmark_index] - betweenLand[landmark_index];
-                                    if (estimatedCost[landmark_index] < Math.abs(D_value)) {
+                                if (t_l_cost != null && f_l_cost != null && betweenLand!=null) {
+                                    double a1=Math.abs(t_l_cost[landmark_index]+ betweenLand[landmark_index]);
+                                    double a2=Math.abs(t_l_cost[landmark_index]- betweenLand[landmark_index]);
+                                    double b1 = Math.abs(a1-f_l_cost[landmark_index]);
+                                    double b2 = Math.abs(a2-f_l_cost[landmark_index]);
+                                    double D_value=b1>b2?b2:b1;
+//                                    double D_value = Math.abs(Math.abs(t_l_cost[landmark_index]+ betweenLand[landmark_index]) - f_l_cost[landmark_index] );
+                                    if (estimatedCost[landmark_index] < D_value) {
                                         estimatedCost[landmark_index] = D_value;
                                     }
                                 }
@@ -239,6 +288,13 @@ public class GPSkylineSearch {
             estimatedCost[i] = p.getCosts()[i] + estimatedCost[i];
         }
         flag = isdominatedbySkylineResults(estimatedCost);
+        if(flag)
+        {
+            count1++;
+        }else
+        {
+            count2++;
+        }
         return flag;
     }
 

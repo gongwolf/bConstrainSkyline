@@ -25,6 +25,8 @@ public class blocks {
     }
 
     /**
+     * Randomly select numberofLandmard landmarks in each block
+     *
      * @param numberofLandmard the number of landmarks in each blocks
      */
     public void randomSelectLandMark(int numberofLandmard) {
@@ -32,9 +34,9 @@ public class blocks {
             block b = b_obj.getValue();
 
             for (int i = 0; i < numberofLandmard; i++) {
-                String node_id = b.nodes.get(getRandomNumberInRange(0, b.nodes.size() - 1));
-                while (b.landMarks.contains(node_id)) {
-                    node_id = b.nodes.get(getRandomNumberInRange(0, b.nodes.size() - 1));
+                String node_id = b.getNode(getRandomNumberInRange(0, b.nodes.size() - 1));
+                while (b.landMarks.contains(node_id) || b.iportals.contains(node_id) || b.oportals.contains(node_id)) {
+                    node_id = b.getNode(getRandomNumberInRange(0, b.nodes.size() - 1));
                 }
                 b.landMarks.add(node_id);
             }
@@ -42,21 +44,28 @@ public class blocks {
         }
     }
 
-    public void buildIndexes(long graphsize, String lowerboundSelector) {
-        String DB_PATH = "/home/gqxwolf/neo4j323/testdb" + graphsize + "/databases/graph.db";
-        connector n = new connector(DB_PATH);
-        System.out.println("Connect to the database : " + DB_PATH);
-        n.startDB();
-        GraphDatabaseService graphDB = n.getDBObject();
+    /**
+     * @param graphsize          the size of the graph to build the index
+     * @param lowerboundSelector the method that use to as the lower bound selection to build skyline index in each block
+     * @param graphDB            the graph database object
+     */
+    public void buildIndexes(long graphsize, String lowerboundSelector, GraphDatabaseService graphDB) {
+//        String DB_PATH = "/home/gqxwolf/neo4j323/testdb" + graphsize + "/databases/graph.db";
+//        connector n = new connector(DB_PATH);
+//        System.out.println("Connect to the database : " + DB_PATH);
+//        n.startDB();
+//        GraphDatabaseService graphDB = n.getDBObject();
         try (Transaction tx = graphDB.beginTx()) {
             for (Map.Entry<String, block> b_obj : blocks.entrySet()) {
                 block b = b_obj.getValue();
                 Long run_ms = System.currentTimeMillis();
-                b.buildLandmarkIndex(graphDB);
+//                b.buildLandmarkIndex(graphDB);
+                b.buildLandmarkIndex_inBlock(graphDB);
                 long rms1 = System.currentTimeMillis();
 //                System.out.println(b.nodes.size()+" "+b.iportals.size()+" "+b.oportals.size()+" "+b.landMarks.size()+" "+b.fromLandMarkIndex.size()+" "+b.toLandMarkIndex.size());
                 long run_ms1 = rms1 - run_ms;
                 b.buildInnerSkylineIndex(graphDB, lowerboundSelector);
+//                b.buildLandmarkIndex_inBlock(graphDB);
                 Long run_ms2 = System.currentTimeMillis() - rms1;
                 System.out.print("Build index for partition " + b_obj.getKey() + "  " + run_ms1 + " " + run_ms2 + " " + (System.currentTimeMillis() - run_ms) + " ms \n");
 //                break;
@@ -70,6 +79,9 @@ public class blocks {
                     if (!b_obj.getKey().equals(others_b_obj.getKey())) {
                         for (String landMark_b : b_obj.getValue().landMarks) {
                             for (String landMark_other : others_b_obj.getValue().landMarks) {
+//                                if (landMark_b.equals(landMark_other)) {
+//                                    System.out.println(b_obj.getKey() + "  " + others_b_obj.getKey());
+//                                }
 
                                 Node source = graphDB.getNodeById(Long.parseLong(landMark_b) - 1);
                                 Node destination = graphDB.getNodeById(Long.parseLong(landMark_other) - 1);
@@ -78,19 +90,24 @@ public class blocks {
                                     fakePath = new path(source);
                                 }
 
+                                boolean flag = false;
                                 double[] costs = new double[fakePath.NumberOfProperties];
                                 int i = 0;
                                 for (String costType : fakePath.propertiesName) {
                                     double cost = getShortestPathWeight(source, destination, costType);
                                     costs[i] = cost;
+                                    i++;
                                     //if there is no path from source to destination, set the first dimension of the cost to be -1
                                     if (cost == -1) {
+                                        flag = true;
                                         break;
                                     }
                                 }
 
-                                Pair<String, String> landmark_pair = new Pair(landMark_b, landMark_other);
-                                this.outerLandMark.put(landmark_pair, costs);
+                                if (!flag) {
+                                    Pair<String, String> landmark_pair = new Pair(landMark_b, landMark_other);
+                                    this.outerLandMark.put(landmark_pair, costs);
+                                }
                             }
                         }
                     }
@@ -98,12 +115,40 @@ public class blocks {
 
             }
             buildNodeInforIndex();
-            System.out.println(portalList.size() + "   " + nodeToBlockId.size());
-            System.out.print("Build outer landmark " + (System.currentTimeMillis() - run_ms3) + " ms \n");
+//            System.out.println(portalList.size() + "   " + nodeToBlockId.size());
+//            System.out.print("Build outer landmark " + (System.currentTimeMillis() - run_ms3) + " ms \n");
+//
+//            System.out.println("--------");
+//            System.out.println("61");
+//            for (String inList : this.portalList.get("61").get("in")) {
+//                System.out.println(inList);
+//            }
+//            System.out.println("@@@@");
+//            for (String inList : this.portalList.get("61").get("out")) {
+//                System.out.println(inList);
+//            }
+//            System.out.println("--------");
+//
+//            System.out.println("1566");
+//            for (String inList : this.portalList.get("1566").get("in")) {
+//                System.out.println(inList);
+//            }
+//            System.out.println("@@@@");
+//            for (String inList : this.portalList.get("1566").get("out")) {
+//                System.out.println(inList);
+//            }
+//            System.out.println("--------");
+//
+//
+//            System.out.println("--------");
+//            System.out.println("145  "+this.nodeToBlockId.get("145"));
+//            System.out.println("1566  "+this.nodeToBlockId.get("1566"));
+//            System.out.println("--------");
+
 
 //            tx.success();
         }
-        n.shutdownDB();
+//        n.shutdownDB();
 
     }
 
@@ -134,23 +179,6 @@ public class blocks {
             }
         }
         return null;
-    }
-
-    public boolean isPortals(String nid) {
-        for (Map.Entry<String, block> b_Obj : this.blocks.entrySet()) {
-            String pid = b_Obj.getKey();
-            block b = b_Obj.getValue();
-
-            for (String vid : b.nodes) {
-                if (nid.equals(vid)) {
-                    if (b.oportals.contains(nid) || b.iportals.contains(nid)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-
     }
 
     /**
@@ -228,9 +256,8 @@ public class blocks {
                 }
             }
 
-            if(normal_node==null&&adjList==null)
-            {
-                System.out.println(i+",none");
+            if (normal_node == null && adjList == null) {
+                System.out.println(i + ",none");
             }
 
         }

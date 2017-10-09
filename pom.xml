@@ -56,7 +56,7 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <!--mainClass>nmsu.qixugong.Test.GenerateMetisFile</mainClass-->
-                                    <mainClass>GraphPartition.BlinksPartition</mainClass>
+                                    <mainClass>GPSkyline.Test</mainClass>
                                 </transformer>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>

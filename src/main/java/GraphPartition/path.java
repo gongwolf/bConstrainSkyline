@@ -43,7 +43,7 @@ public class path {
         this.NumberOfProperties = oldpath.NumberOfProperties;
         this.cost = new double[this.NumberOfProperties];
         this.Nodes = new ArrayList<>(oldpath.Nodes);
-        this.propertiesName = oldpath.propertiesName;
+        this.propertiesName.addAll(oldpath.propertiesName);
         this.relationships = new ArrayList<>(oldpath.relationships);
         this.relationships.add(rel);
         // System.out.println(startNode+"##"+endNode+"###"+
@@ -85,6 +85,7 @@ public class path {
     }
 
     public path(Relationship rel, path oldpath) {
+//        System.out.println("-------------");
         this.startNode = rel.getStartNode();
         this.endNode = oldpath.endNode;
 
@@ -98,10 +99,10 @@ public class path {
         this.relationships = new ArrayList<>();
         this.relationships.add(rel);
         this.relationships.addAll(oldpath.relationships);
+        this.propertiesName.addAll(oldpath.propertiesName);
 
         System.arraycopy(oldpath.cost, 0, this.cost, 0, this.cost.length);
         calculateCosts(rel);
-        this.propertiesName = oldpath.propertiesName;
         this.startID = String.valueOf(startNode.getId());
         this.endID = String.valueOf(endNode.getId());
 
@@ -186,7 +187,7 @@ public class path {
     }
 
     private void calculateCosts() {
-        if (this.startNode == this.endNode) {
+        if (this.startNode.getId() == this.endNode.getId()) {
             for (int i = 0; i < this.cost.length; i++) {
                 this.cost[i] = 0;
             }
@@ -204,7 +205,8 @@ public class path {
     }
 
     private void calculateCosts(Relationship rel) {
-        if (this.startNode == this.endNode) {
+        if (this.startNode.getId() == this.endNode.getId()) {
+//            System.out.println("!!!!!");
             for (int i = 0; i < this.cost.length; i++) {
                 this.cost[i] = 0;
             }
@@ -213,7 +215,7 @@ public class path {
             // System.out.println("--------------------"+this.relationships.size());
             for (String pname : this.propertiesName) {
                 this.cost[i] += Double.parseDouble(rel.getProperty(pname).toString());
-                // System.out.println(pname+"***"+r.getProperty(pname));
+//                System.out.println(pname+"***"+rel.getProperty(pname));
                 i++;
             }
         }
@@ -249,6 +251,14 @@ public class path {
             }
             sb.append("(" + this.Nodes.get(i).getId() + ")");
         }
+
+        sb.append("     [");
+        for(double d:this.cost)
+        {
+            sb.append(d).append(",");
+        }
+        sb.replace(sb.lastIndexOf(","),sb.length(),"");
+        sb.append("]");
         return sb.toString();
     }
 

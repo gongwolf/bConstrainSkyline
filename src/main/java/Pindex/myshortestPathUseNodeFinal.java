@@ -79,16 +79,12 @@ public class myshortestPathUseNodeFinal {
             path iniPath = new path(source, source);
             this.NumberOfProperties = iniPath.NumberOfProperties;
             this.iniLowerBound = new double[this.NumberOfProperties];
-//            initilizeSkylinePath(iniPath, destination);
-//            numInIPath = (long) this.skylinPaths.size();
-//            if (numInIPath == 0) {
-//                return null;
-//            }
-
-//            if(1==1)
-//            {
-//                return skylinPaths;
-//            }
+//            System.out.println(skylinPaths.size());
+            initilizeSkylinePath(iniPath, destination);
+            numInIPath = (long) this.skylinPaths.size();
+            if (numInIPath == 0) {
+                return null;
+            }
 
             // for (path p : skylinPaths) {
             // System.out.println(printCosts(p.getCosts()));
@@ -185,6 +181,7 @@ public class myshortestPathUseNodeFinal {
                                         String nextid = String.valueOf(np.endNode.getId());
                                         myNode nextNode = this.processedNodeList.get(nextid);
                                         if (nextNode == null) {
+                                            count4++;
                                             continue;
                                         }
 //                                        long nrt = System.nanoTime();
@@ -192,8 +189,10 @@ public class myshortestPathUseNodeFinal {
 //                                        this.insertedPath += info[0];
 //                                        this.removedPath += info[1];
 //                                        usedInNode = usedInNode + (System.nanoTime() - nrt);
-                                        if (!nextNode.inqueue)
+                                        if (!nextNode.inqueue) {
+//                                            nextNode.inqueue = true;
                                             mqueue.add(nextNode);
+                                        }
                                         // System.out.println("expand :" + np);
                                         // System.out.println("push into queue
                                         // :"+ nextNode.id);
@@ -210,116 +209,15 @@ public class myshortestPathUseNodeFinal {
             }
             tx.success();
         }
-//        System.out.println("run2:"+(System.nanoTime()-run2)/1000000);
+//        System.out.println("----" + count1 + " " + count2 + " " + count3 + " " + count4);
 
-//        Long Pages_3 = getFromManagementBean("Page cache", "Faults", graphdb);
-//        Long Pins_3 = getFromManagementBean("Page cache", "Pins", graphdb);
-//        Long time_3 = System.currentTimeMillis();
-//
-//        pagecachedInFindNodes = Pages_1;
-//        pagecachedInInital = Pages_2 - Pages_1;
-//        pagecachedInFindSkyPath = Pages_3 - Pages_2;
-//
-//        pinsInFindNodes = Pins_1;
-//        pinsInInital = Pins_2 - Pins_1;
-//        PinsInFindSkyPath = Pins_3 - Pins_2;
-//
-//        long timeInInitial = time_2 - time_1;
-//        long timeInFindSkyPath = time_3 - time_2;
-//
-//        numIters = (long) i;
-//        numAccessedNodes = (long) p_list.size();
-//
-//        numFinalPath = (long) this.skylinPaths.size();
-//        DecimalFormat formatter = new DecimalFormat("#0.00");
-//        StringBuffer sb = new StringBuffer();
-//        // long totalRt = (timeInInitial + timeInFindSkyPath) * 1000000;
-//        used_In_skyline_operation = used_In_skyline_operation + usedInNode + usedInMain;
-//
-//        sb.append(sourceId + ",").append(destinationId + ",");
-//        sb.append(pagecachedInFindNodes).append(",");
-//        sb.append(pagecachedInInital).append(",");
-//        sb.append(pagecachedInFindSkyPath).append(",");
-//        sb.append(pinsInFindNodes).append(",");
-//        sb.append(pinsInInital).append(",");
-//        sb.append(PinsInFindSkyPath).append(",");
-//        sb.append(timeInInitial).append(",");
-//        sb.append(timeInFindSkyPath).append(",");
-//        sb.append(numIters).append(",");
-//        sb.append(numAccessedNodes).append(",");
-//        sb.append(numInIPath).append(",");
-//        sb.append(numFinalPath).append(",");
-//
-//        sb.append(formatter.format(usedInDijkstra / 1000000)).append(",");
-//        sb.append(formatter.format(usedInExpansion / 1000000)).append(",");
-//        sb.append(formatter.format((double) used_In_skyline_operation / 100000)).append(",");
-//
-//        // long totalRt = timeInInitial+timeInFindSkyPath*1000000;
-//        // System.out.println(totalRt);
-//        // System.out.println(
-//        // "usedInNode:" + usedInNode / 1000000 + " " + formatter.format(100 *
-//        // (double) usedInNode / totalRt));
-//        // System.out.println(
-//        // "usedInMain:" + usedInMain / 1000000 + " " + formatter.format(100 *
-//        // (double) usedInMain / totalRt));
-//        // System.out.println("usedInCheckExpand:" + usedInCheckExpand / 1000000
-//        // + " " + formatter.format(100 * (double) usedInCheckExpand /
-//        // totalRt));
-//        // System.out.println(" usedInDijkstra:" + usedInDijkstra / 1000000 + "
-//        // "+ formatter.format(100 * (double) usedInDijkstra / totalRt));
-//        // System.out.println("usedInExpansion:" + usedInExpansion / 1000000 + "
-//        // "+ formatter.format(100 * (double) usedInExpansion / totalRt));
-//
-//        // System.out.println("used_In_skyline_operation:"
-//        // +used_In_skyline_operation / 1000000 + " "+ formatter.format(100 *
-//        // (double) used_In_skyline_operation /totalRt));
-//        // System.out.println(100*(double)(usedInNode + usedInMain +
-//        // usedInCheckExpand + usedInExpansion) * 1.00 / totalRt);
-//        double avg_slr_inNode = 0.00;
-//        for (myNode n : this.processedNodeList.values()) {
-//            avg_slr_inNode += n.subRouteSkyline.size();
-//        }
-//
-//        double avg_lenght_in_final = 0.00;
-//        for (path n : this.skylinPaths) {
-//            avg_lenght_in_final += n.getLenght();
-//            if (n.getLenght() > maxLengthOfPath) {
-//                maxLengthOfPath = n.getLenght();
-//            }
-//        }
-//
-//        // long totalDegree = 0;
-//        // try (Transaction tx = this.graphdb.beginTx()) {
-//        // for (path n : this.skylinPaths) {
-//        // totalDegree += n.totalDegree();
-//
-//        // }
-//        // tx.success();
-//        // }
-//        //
-//
-//        sb.append(avg_slr_inNode / numAccessedNodes).append(",");
-//        sb.append(this.totalDegree).append(",");
-//        sb.append(avg_lenght_in_final / this.skylinPaths.size()).append(",");
-//        sb.append(maxLengthOfPath).append(",");
-//        sb.append(maxQueueSize).append(",");
-//        sb.append(numAccessedNodes).append(",");
-//        sb.append(pruningNum).append(",");
-//        sb.append(extendedPathNum);
-        // sb.append(insertedPath).append(",");
-        // sb.append(removedPath);
-        // System.out.println(sb);
-        // for (path p : skylinPaths) {
-        // if (p.getCosts()[0] == 69049.41455738951) {
-        // System.out.println(printCosts(p.getCosts()));
-        // System.out.println(p);
-        // // System.out.println("---------------");
-        // }
-        // }
-
-//        System.out.println("----"+numIters+" "+numAccessedNodes);
         return this.skylinPaths;
     }
+
+    int count1 = 0;
+    int count2 = 0;
+    int count3 = 0;
+    int count4 = 0;
 
     private boolean needToBeExpanded(path p, Node destination) {
         boolean flag = false;
@@ -330,9 +228,9 @@ public class myshortestPathUseNodeFinal {
         myNode myEndNode = this.processedNodeList.get(endNode_id);
         // System.out.println(" "+printCosts(myEndNode.lowerBound));
         // System.out.println(" "+printCosts(p.getCosts()));
-        myEndNode = processedNodeList.get(endNode_id);
         for (; i < this.NumberOfProperties; i++) {
             if (myEndNode.lowerBound[i] == Double.POSITIVE_INFINITY) {
+                count1++;
                 return false;
             }
             estimatedCosts[i] = p.getCosts()[i] + myEndNode.lowerBound[i];
@@ -352,6 +250,11 @@ public class myshortestPathUseNodeFinal {
         // True, all the path in result set doesn't dominate the lower bound.
         // False, at least path in the result set dominate the lower bound, it means the min value from vi to vt already is dominated by one of the path in result set.
         flag = isdominatedbySkylineResults(estimatedCosts);
+        if (!flag) {
+            count2++;
+        } else {
+            count3++;
+        }
 //        this.used_In_skyline_operation += System.nanoTime() - usedInskyline;
         return flag;
     }
