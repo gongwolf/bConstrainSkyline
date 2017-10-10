@@ -10,16 +10,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GPSkyline/GPSkylineSearch.java" afterPath="$PROJECT_DIR$/src/main/java/GPSkyline/GPSkylineSearch.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GPSkyline/Test.java" afterPath="$PROJECT_DIR$/src/main/java/GPSkyline/Test.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GPSkyline/testASRC.java" afterPath="$PROJECT_DIR$/src/main/java/GPSkyline/testASRC.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/block.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/block.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/myNode.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/myNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/myNodeDijkstraPriorityQueue.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/myNodeDijkstraPriorityQueue.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/myNodePriorityQueue.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/myNodePriorityQueue.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/path.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/path.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java" afterPath="$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Pindex/myshortestPathUseNodeFinal.java" afterPath="$PROJECT_DIR$/src/main/java/Pindex/myshortestPathUseNodeFinal.java" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -35,9 +26,11 @@
       <file leaf-file-name="skylineInBlock.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1956">
-              <caret line="516" column="59" lean-forward="true" selection-start-line="516" selection-start-column="59" selection-end-line="516" selection-end-column="59" />
-              <folding />
+            <state relative-caret-position="8586">
+              <caret line="602" column="0" lean-forward="false" selection-start-line="602" selection-start-column="0" selection-end-line="602" selection-end-column="0" />
+              <folding>
+                <marker date="1507610096221" expanded="true" signature="24519:24526" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -45,9 +38,16 @@
       <file leaf-file-name="myNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/myNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="226" column="50" lean-forward="false" selection-start-line="226" selection-start-column="43" selection-end-line="226" selection-end-column="50" />
-              <folding />
+            <state relative-caret-position="3942">
+              <caret line="229" column="47" lean-forward="false" selection-start-line="229" selection-start-column="47" selection-end-line="229" selection-end-column="47" />
+              <folding>
+                <marker date="1507610096221" expanded="true" signature="8064:8066" ph="//..." />
+                <marker date="1507610096221" expanded="true" signature="8064:8134" ph="{...}" />
+                <marker date="1507610096221" expanded="false" signature="8178:8189" ph=" { " />
+                <marker date="1507610096221" expanded="false" signature="8212:8218" ph=" }" />
+                <marker date="1507610096221" expanded="false" signature="8261:8272" ph=" { " />
+                <marker date="1507610096221" expanded="false" signature="8294:8300" ph=" }" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -55,8 +55,8 @@
       <file leaf-file-name="GPSkylineSearch.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/GPSkyline/GPSkylineSearch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-65">
-              <caret line="38" column="49" lean-forward="true" selection-start-line="38" selection-start-column="49" selection-end-line="38" selection-end-column="49" />
+            <state relative-caret-position="190">
+              <caret line="156" column="39" lean-forward="false" selection-start-line="156" selection-start-column="39" selection-end-line="156" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -65,7 +65,7 @@
       <file leaf-file-name="BlinksPartition.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
+            <state relative-caret-position="-684">
               <caret line="28" column="11" lean-forward="false" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
               <folding />
             </state>
@@ -75,8 +75,8 @@
       <file leaf-file-name="path.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/path.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="208" column="17" lean-forward="false" selection-start-line="208" selection-start-column="17" selection-end-line="208" selection-end-column="17" />
+            <state relative-caret-position="641">
+              <caret line="295" column="74" lean-forward="false" selection-start-line="295" selection-start-column="74" selection-end-line="295" selection-end-column="74" />
               <folding />
             </state>
           </provider>
@@ -85,9 +85,11 @@
       <file leaf-file-name="blocks.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="63" column="41" lean-forward="false" selection-start-line="63" selection-start-column="41" selection-end-line="63" selection-end-column="41" />
-              <folding />
+            <state relative-caret-position="954">
+              <caret line="64" column="41" lean-forward="false" selection-start-line="64" selection-start-column="41" selection-end-line="64" selection-end-column="41" />
+              <folding>
+                <marker date="1507610096221" expanded="true" signature="10740:10756" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,12 +97,12 @@
       <file leaf-file-name="block.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/block.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="336" column="43" lean-forward="true" selection-start-line="336" selection-start-column="43" selection-end-line="336" selection-end-column="43" />
+            <state relative-caret-position="6174">
+              <caret line="352" column="43" lean-forward="false" selection-start-line="352" selection-start-column="43" selection-end-line="352" selection-end-column="43" />
               <folding>
                 <element signature="e#1294#1295#0" expanded="true" />
                 <element signature="e#1337#1338#0" expanded="true" />
-                <marker date="1507588248151" expanded="true" signature="15785:15792" ph="{...}" />
+                <marker date="1507610096221" expanded="true" signature="15765:15792" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -109,8 +111,8 @@
       <file leaf-file-name="Test.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GPSkyline/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="60" column="24" lean-forward="false" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
+            <state relative-caret-position="241">
+              <caret line="33" column="45" lean-forward="false" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -119,8 +121,8 @@
       <file leaf-file-name="testASRC.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/GPSkyline/testASRC.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="25" column="17" lean-forward="true" selection-start-line="25" selection-start-column="17" selection-end-line="25" selection-end-column="17" />
+            <state relative-caret-position="144">
+              <caret line="14" column="17" lean-forward="false" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -141,6 +143,10 @@
       <find>system</find>
       <find>system.out</find>
       <find>tx.success();</find>
+      <find>!!!!!!</find>
+      <find>!!!!!!!!!!!!!</find>
+      <find>reach</find>
+      <find>1708</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -168,10 +174,10 @@
         <option value="$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java" />
         <option value="$PROJECT_DIR$/src/main/java/Pindex/myshortestPathUseNodeFinal.java" />
         <option value="$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java" />
-        <option value="$PROJECT_DIR$/src/main/java/GraphPartition/path.java" />
         <option value="$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java" />
         <option value="$PROJECT_DIR$/src/main/java/GraphPartition/block.java" />
         <option value="$PROJECT_DIR$/src/main/java/GPSkyline/testASRC.java" />
+        <option value="$PROJECT_DIR$/src/main/java/GraphPartition/path.java" />
         <option value="$PROJECT_DIR$/src/main/java/GPSkyline/Test.java" />
         <option value="$PROJECT_DIR$/src/main/java/GPSkyline/GPSkylineSearch.java" />
       </list>
@@ -530,23 +536,23 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1863" height="1092" extended-state="6" />
+    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32879582" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32795697" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4104712" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="59" y="24" width="1861" height="1056" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.40967742" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="1985" y="24" width="1855" height="1056" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18787879" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15096419" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15257049" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -603,7 +609,7 @@
           <folding>
             <element signature="e#1294#1295#0" expanded="true" />
             <element signature="e#1337#1338#0" expanded="true" />
-            <marker date="1507588248151" expanded="true" signature="15785:15792" ph="{...}" />
+            <marker date="1507610096221" expanded="true" signature="15765:15792" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -612,7 +618,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2790">
           <caret line="164" column="40" lean-forward="true" selection-start-line="164" selection-start-column="20" selection-end-line="164" selection-end-column="40" />
-          <folding />
+          <folding>
+            <marker date="1507610096221" expanded="true" signature="10740:10756" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -675,7 +683,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="16" column="11" lean-forward="false" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
-          <folding />
+          <folding>
+            <marker date="1507610096221" expanded="true" signature="8064:8066" ph="//..." />
+            <marker date="1507610096221" expanded="true" signature="8064:8134" ph="{...}" />
+            <marker date="1507610096221" expanded="false" signature="8178:8189" ph=" { " />
+            <marker date="1507610096221" expanded="false" signature="8212:8218" ph=" }" />
+            <marker date="1507610096221" expanded="false" signature="8261:8272" ph=" { " />
+            <marker date="1507610096221" expanded="false" signature="8294:8300" ph=" }" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -683,7 +698,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3312">
           <caret line="191" column="0" lean-forward="true" selection-start-line="191" selection-start-column="0" selection-end-line="200" selection-end-column="5" />
-          <folding />
+          <folding>
+            <marker date="1507610096221" expanded="true" signature="24519:24526" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -716,7 +733,7 @@
           <folding>
             <element signature="e#1294#1295#0" expanded="true" />
             <element signature="e#1337#1338#0" expanded="true" />
-            <marker date="1507588248151" expanded="true" signature="15785:15792" ph="{...}" />
+            <marker date="1507610096221" expanded="true" signature="15765:15792" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -725,7 +742,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="15" column="10" lean-forward="false" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
-          <folding />
+          <folding>
+            <marker date="1507610096221" expanded="true" signature="10740:10756" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -757,7 +776,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5724">
           <caret line="318" column="27" lean-forward="false" selection-start-line="318" selection-start-column="14" selection-end-line="318" selection-end-column="27" />
-          <folding />
+          <folding>
+            <marker date="1507610096221" expanded="true" signature="24519:24526" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -780,7 +801,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1134">
           <caret line="72" column="1" lean-forward="true" selection-start-line="72" selection-start-column="1" selection-end-line="72" selection-end-column="1" />
-          <folding />
+          <folding>
+            <marker date="1507610096221" expanded="true" signature="10740:10756" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -791,7 +814,7 @@
           <folding>
             <element signature="e#1294#1295#0" expanded="true" />
             <element signature="e#1337#1338#0" expanded="true" />
-            <marker date="1507588248151" expanded="true" signature="15785:15792" ph="{...}" />
+            <marker date="1507610096221" expanded="true" signature="15765:15792" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -808,7 +831,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="25" column="13" lean-forward="false" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -816,7 +838,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1128">
           <caret line="121" column="25" lean-forward="true" selection-start-line="121" selection-start-column="25" selection-end-line="121" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -824,7 +845,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1620">
           <caret line="100" column="0" lean-forward="false" selection-start-line="100" selection-start-column="0" selection-end-line="108" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -847,7 +867,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -890,7 +909,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="40" column="16" lean-forward="false" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -898,7 +916,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -906,7 +923,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
           <caret line="49" column="23" lean-forward="true" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -914,7 +930,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="486">
           <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="48" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -922,7 +937,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="29" column="5" lean-forward="true" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -947,76 +961,87 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/blocks.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="63" column="41" lean-forward="false" selection-start-line="63" selection-start-column="41" selection-end-line="63" selection-end-column="41" />
-          <folding />
+        <state relative-caret-position="954">
+          <caret line="64" column="41" lean-forward="false" selection-start-line="64" selection-start-column="41" selection-end-line="64" selection-end-column="41" />
+          <folding>
+            <marker date="1507610096221" expanded="true" signature="10740:10756" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/myNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="226" column="50" lean-forward="false" selection-start-line="226" selection-start-column="43" selection-end-line="226" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/path.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="208" column="17" lean-forward="false" selection-start-line="208" selection-start-column="17" selection-end-line="208" selection-end-column="17" />
-          <folding />
+        <state relative-caret-position="3942">
+          <caret line="229" column="47" lean-forward="false" selection-start-line="229" selection-start-column="47" selection-end-line="229" selection-end-column="47" />
+          <folding>
+            <marker date="1507610096221" expanded="true" signature="8064:8066" ph="//..." />
+            <marker date="1507610096221" expanded="true" signature="8064:8134" ph="{...}" />
+            <marker date="1507610096221" expanded="false" signature="8178:8189" ph=" { " />
+            <marker date="1507610096221" expanded="false" signature="8212:8218" ph=" }" />
+            <marker date="1507610096221" expanded="false" signature="8261:8272" ph=" { " />
+            <marker date="1507610096221" expanded="false" signature="8294:8300" ph=" }" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/block.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="336" column="43" lean-forward="true" selection-start-line="336" selection-start-column="43" selection-end-line="336" selection-end-column="43" />
+        <state relative-caret-position="6174">
+          <caret line="352" column="43" lean-forward="false" selection-start-line="352" selection-start-column="43" selection-end-line="352" selection-end-column="43" />
           <folding>
             <element signature="e#1294#1295#0" expanded="true" />
             <element signature="e#1337#1338#0" expanded="true" />
-            <marker date="1507588248151" expanded="true" signature="15785:15792" ph="{...}" />
+            <marker date="1507610096221" expanded="true" signature="15765:15792" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/skylineInBlock.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1956">
-          <caret line="516" column="59" lean-forward="true" selection-start-line="516" selection-start-column="59" selection-end-line="516" selection-end-column="59" />
+        <state relative-caret-position="8586">
+          <caret line="602" column="0" lean-forward="false" selection-start-line="602" selection-start-column="0" selection-end-line="602" selection-end-column="0" />
+          <folding>
+            <marker date="1507610096221" expanded="true" signature="24519:24526" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/path.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="641">
+          <caret line="295" column="74" lean-forward="false" selection-start-line="295" selection-start-column="74" selection-end-line="295" selection-end-column="74" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GPSkyline/testASRC.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="25" column="17" lean-forward="true" selection-start-line="25" selection-start-column="17" selection-end-line="25" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/GPSkyline/Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="60" column="24" lean-forward="false" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
+        <state relative-caret-position="144">
+          <caret line="14" column="17" lean-forward="false" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GraphPartition/BlinksPartition.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
+        <state relative-caret-position="-684">
           <caret line="28" column="11" lean-forward="false" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GPSkyline/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="33" column="45" lean-forward="false" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="45" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GPSkyline/GPSkylineSearch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-65">
-          <caret line="38" column="49" lean-forward="true" selection-start-line="38" selection-start-column="49" selection-end-line="38" selection-end-column="49" />
+        <state relative-caret-position="190">
+          <caret line="156" column="39" lean-forward="false" selection-start-line="156" selection-start-column="39" selection-end-line="156" selection-end-column="39" />
           <folding />
         </state>
       </provider>

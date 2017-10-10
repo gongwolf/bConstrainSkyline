@@ -293,7 +293,7 @@ public class path {
         while (rel_Iter.hasNext()) {
             Relationship rel = rel_Iter.next();
             path nPath = new path(this, rel);
-            if (adjb.nodes.contains(String.valueOf(nPath.endNode.getId() - 1))) {
+            if (adjb.nodes.contains(String.valueOf(nPath.endNode.getId() + 1))) {
                 result.add(nPath);
             }
         }

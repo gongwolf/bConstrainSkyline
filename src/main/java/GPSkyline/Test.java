@@ -30,8 +30,8 @@ public class Test {
         rt.setgraphDBObject(t.graphdb);
 
         for (int i = 0; i < 1; i++) {
-            String sid = String.valueOf("305");
-            String did = String.valueOf("1639");
+            String sid = String.valueOf("889");
+            String did = String.valueOf("1707");
 //            String sid = String.valueOf("1872");
 //            String did = String.valueOf("357");
 //            String sid = String.valueOf(t.getRandomNumberInRange(0, 1999));
