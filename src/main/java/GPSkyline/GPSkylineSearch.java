@@ -42,7 +42,7 @@ public class GPSkylineSearch {
         }
         System.out.println("===========================");
         System.out.println(bp.portals.size());
-//        bp.cleanFadePortal();
+        bp.cleanFadePortal();
         System.out.println(bp.portals.size());
         bp.createBlocks();
         System.out.println(bp.prts.blocks.size());
@@ -227,6 +227,12 @@ public class GPSkylineSearch {
                 } else {//normal node
                     String blockID = this.bp.prts.nodeToBlockId.get(str_vs_id);
                     vsBlock.add(this.bp.prts.blocks.get(blockID));
+                }
+
+                if(vsBlock.size()==0)
+                {
+                    System.out.println(str_vs_id+"  !! "+vs_is_portal);
+                    System.exit(0);
                 }
 
 

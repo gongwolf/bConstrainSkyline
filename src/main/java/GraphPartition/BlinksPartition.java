@@ -142,7 +142,7 @@ public class BlinksPartition {
                 ArrayList<String> out_nodes = getOutGoingFromNode(node_id);
                 for (String onode : out_nodes) {
 //                    if (!portals.contains(onode)) {
-                        //get the pid of the onode
+                         //get the pid of the onode
                         String pid = this.partitionInfos.get(onode).getValue();
                         //node is a in-coming portal of the partition where the onode is located.
                         addToBlock(node_id, pid, in_port);
@@ -171,6 +171,42 @@ public class BlinksPartition {
 //        while (!NotneedProcess) {
         for (String pNode : portals) {
             int pNode_id = Integer.parseInt(pNode);
+
+
+            if(pNode_id==812)
+            {
+                System.out.println(portals.contains("812"));
+                ArrayList<String> in_nodes = getIncomingNodeToNode(812);
+                for (String inode : in_nodes) {
+                    if (portals.contains(inode)) {
+                        ArrayList<String> elist = prts.getThePortalPartitionID(pNode);
+                        ArrayList<String> slist = prts.getThePortalPartitionID(inode);
+                        int count = 0;
+                        for (String eNode : elist) {
+                            if (slist.contains(eNode)) {
+                                addToBlock(pNode_id, eNode, out_port);
+                            }
+                        }
+                    }
+                }
+
+                ArrayList<String> out_nodes = getOutGoingFromNode(pNode_id);
+                for (String onode : out_nodes) {
+                    if (portals.contains(onode)) {
+                        ArrayList<String> elist = prts.getThePortalPartitionID(onode);
+                        ArrayList<String> slist = prts.getThePortalPartitionID(pNode);
+                        int count = 0;
+                        for (String eNode : elist) {
+                            if (slist.contains(eNode)) {
+                                addToBlock(pNode_id, eNode, in_port);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
             ArrayList<String> in_nodes = getIncomingNodeToNode(pNode_id);
             for (String inode : in_nodes) {
                 if (portals.contains(inode)) {
