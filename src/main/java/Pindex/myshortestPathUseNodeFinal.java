@@ -80,11 +80,11 @@ public class myshortestPathUseNodeFinal {
             this.NumberOfProperties = iniPath.NumberOfProperties;
             this.iniLowerBound = new double[this.NumberOfProperties];
 //            System.out.println(skylinPaths.size());
-            initilizeSkylinePath(iniPath, destination);
-            numInIPath = (long) this.skylinPaths.size();
-            if (numInIPath == 0) {
-                return null;
-            }
+//            initilizeSkylinePath(iniPath, destination);
+//            numInIPath = (long) this.skylinPaths.size();
+//            if (numInIPath == 0) {
+//                return null;
+//            }
 
             // for (path p : skylinPaths) {
             // System.out.println(printCosts(p.getCosts()));
@@ -166,7 +166,7 @@ public class myshortestPathUseNodeFinal {
 
                             for (path np : paths) {
                                 // long checkCycle = System.nanoTime();
-                                boolean isCycle = p.containRelationShip(np.getlastRelationship());
+                                boolean isCycle = np.isCycle();
                                 // this.UsedInCheckCycle += System.nanoTime() -
                                 // checkCycle;
                                 if (!isCycle) {

@@ -228,4 +228,12 @@ public class path {
         return sb.toString();
     }
 
+    public boolean isCycle() {
+        for (int i = 0; i < this.Nodes.size() - 2; i++) {
+            if (this.Nodes.get(i).equals(this.endNode)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

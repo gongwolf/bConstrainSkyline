@@ -3,14 +3,11 @@ package GraphPartition;
 import javafx.util.Pair;
 import neo4jTools.Line;
 import neo4jTools.StringComparator;
-import neo4jTools.connector;
 import org.neo4j.graphalgo.GraphAlgoFactory;
 import org.neo4j.graphalgo.PathFinder;
 import org.neo4j.graphalgo.WeightedPath;
 import org.neo4j.graphdb.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.*;
 
 public class blocks {
@@ -74,7 +71,6 @@ public class blocks {
         }
 
         try (Transaction tx = graphDB.beginTx()) {
-
             long run_ms3 = System.currentTimeMillis();
             path fakePath = null;
             int line_counter1 = 0;
@@ -127,11 +123,8 @@ public class blocks {
 
             }
             System.out.println(line_counter1 + "---" + line_counter2);
-            buildNodeInforIndex();
-            tx.success();
         }
-//        n.shutdownDB();
-
+        buildNodeInforIndex();
     }
 
     private int getRandomNumberInRange(int min, int max) {
@@ -259,5 +252,24 @@ public class blocks {
                 return paths.weight();
             }
         }
+    }
+
+    public ArrayList<String> getThePortalPartitionID(String pNode) {
+        ArrayList<String> result = new ArrayList<>();
+        boolean flag;
+
+        for (Map.Entry<String, block> b_Obj : this.blocks.entrySet()) {
+            String pid = b_Obj.getKey();
+            block b = b_Obj.getValue();
+
+            for (String vid : b.nodes) {
+                if (pNode.equals(vid) && (b.oportals.contains(pNode) || b.iportals.contains(pNode))) {
+                    //pNode is a portal node of this block
+                    result.add(pid);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }

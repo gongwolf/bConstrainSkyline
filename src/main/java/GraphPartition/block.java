@@ -286,7 +286,6 @@ public class block implements Comparable<block> {
     public void buildLandmarkIndex_inBlock(GraphDatabaseService graphdb) {
         path fakePath = null;
         for (String snd : this.nodes) {
-            boolean needTobeJump = false;
             String sid = String.valueOf(Integer.parseInt(snd) - 1);
             Node source = graphdb.getNodeById(Long.parseLong(sid));
 //            Node destination = graphdb.getNodeById(Long.parseLong(did));

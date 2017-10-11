@@ -17,12 +17,13 @@ public class testASRC {
         run1 = (System.nanoTime() - run1) / 1000000;
         int size = r1 == null ? 0 : r1.size();
         System.out.println("ASRC:" + sid + "==>" + did + " skyline path size:" + size + "         running time:" + run1 + " ms");
-        if (r1 != null) {
-            for (path p : r1) {
-                System.out.println(p);
-            }
-        }
+//        if (r1 != null) {
+//            for (path p : r1) {
+//                System.out.println(p);
+//            }
+//        }
 
+//        System.out.println("-----------------------------------------");
         return r1;
 
     }
