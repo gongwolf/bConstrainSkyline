@@ -22,6 +22,7 @@ public class BlinksPartition {
     public blocks prts = new blocks();
     int out_port = 1;
     int in_port = 2;
+    int normal_node = 0;
     private int num_parts = 200;
     String EdgesInfoPath, nodeMappingBase;
 
@@ -51,14 +52,14 @@ public class BlinksPartition {
         }
         BlinksPartition bp = new BlinksPartition(num_parts, graphsize, portalSelector, lowerboundSelector);
 
-        if (portalSelector.equals("Blinks")) {
-            bp.getPortalsBlinks();
-        } else if (portalSelector.equals("VC")) {
-            bp.getPortalsVertexCover();
-        }
-        System.out.println("===========================");
-        System.out.println(bp.portals.size());
-        bp.cleanFadePortal();
+//        if (portalSelector.equals("Blinks")) {
+//            bp.getPortalsBlinks();
+//        } else if (portalSelector.equals("VC")) {
+//            bp.getPortalsVertexCover();
+//        }
+//        System.out.println("===========================");
+//        System.out.println(bp.portals.size());
+//        bp.cleanFadePortal();
         bp.createBlocks();
 
         System.out.println(bp.prts.blocks.size());
@@ -121,123 +122,127 @@ public class BlinksPartition {
     }
 
 
-    public void createBlocks() {
-        ArrayList<String> portals = this.portals;
+    public void getOriginBlockSize() {
         TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
-//        System.out.println("Tree size:" + infoTM.size());
         infoTM.putAll(this.partitionInfos);
         System.out.println(infoTM.size());
         for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
             int node_id = Integer.parseInt(node.getKey());
-            if (portals.contains(node.getKey())) {
+            String pid = node.getValue().getValue();
+            int pid_int = Integer.parseInt(pid);
+            addToBlock(node_id, pid, normal_node);
+            if (!prts.Blosks_size.containsKey(pid_int)) {
+                prts.Blosks_size.put(pid_int, 1);
+            } else {
+                prts.Blosks_size.put(pid_int, prts.Blosks_size.get(pid_int) + 1);
+            }
+        }
+        infoTM.clear();
+    }
 
-                ArrayList<String> in_nodes = getIncomingNodeToNode(node_id);
-                for (String inode : in_nodes) {
-//                    if (!portals.contains(inode)) {
-                        String pid = this.partitionInfos.get(inode).getValue();
-                        //node is a out-going portal of the partition where the inode is located.
-                        addToBlock(node_id, pid, out_port);
-//                    }
-                }
-                ArrayList<String> out_nodes = getOutGoingFromNode(node_id);
-                for (String onode : out_nodes) {
-//                    if (!portals.contains(onode)) {
-                         //get the pid of the onode
-                        String pid = this.partitionInfos.get(onode).getValue();
-                        //node is a in-coming portal of the partition where the onode is located.
-                        addToBlock(node_id, pid, in_port);
-//                    }
+
+    public void createBlocks_blinks() {
+        loadEdgesInfo();
+        loadPartitionsInfo(this.num_parts);
+        getOriginBlockSize();
+        changeSeparator();
+        assignToBlock();
+    }
+
+    private void assignToBlock() {
+        TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
+        infoTM.putAll(this.partitionInfos);
+        System.out.println(infoTM.size());
+        for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
+            int node_id = Integer.parseInt(node.getKey());
+            String pid = node.getValue().getValue();
+            int pid_int = Integer.parseInt(pid);
+            if (!prts.portals.contains(node_id)) {
+                continue;
+            }
+
+            boolean flag = false;
+            ArrayList<String> in_nodes = getIncomingNodeToNode(node_id);
+            if (in_nodes.size() != 0) {
+                for (String i_node : in_nodes) {
+                    if (!prts.portals.contains(Integer.parseInt(i_node))) {
+                        String i_pid = this.partitionInfos.get(i_node).getValue();
+                        addToBlock(node_id, i_pid, out_port);
+                    }
                 }
             } else {
-                String pid = node.getValue().getValue();
-                addToBlock(node_id, pid, 0);
-            }
-
-        }
-
-//        System.out.println("===========");
-//
-//        for (String pid : prts.getThePortalPartitionID("1708")) {
-//            System.out.println(pid);
-//        }
-//        System.out.println("---------");
-//        for (String pid : prts.getThePortalPartitionID("232")) {
-//            System.out.println(pid);
-//        }
-//        System.out.println("===========");
-
-
-//        boolean NotneedProcess = false;
-//        while (!NotneedProcess) {
-        for (String pNode : portals) {
-            int pNode_id = Integer.parseInt(pNode);
-
-
-            if(pNode_id==812)
-            {
-                System.out.println(portals.contains("812"));
-                ArrayList<String> in_nodes = getIncomingNodeToNode(812);
-                for (String inode : in_nodes) {
-                    if (portals.contains(inode)) {
-                        ArrayList<String> elist = prts.getThePortalPartitionID(pNode);
-                        ArrayList<String> slist = prts.getThePortalPartitionID(inode);
-                        int count = 0;
-                        for (String eNode : elist) {
-                            if (slist.contains(eNode)) {
-                                addToBlock(pNode_id, eNode, out_port);
-                            }
-                        }
-                    }
-                }
-
-                ArrayList<String> out_nodes = getOutGoingFromNode(pNode_id);
-                for (String onode : out_nodes) {
-                    if (portals.contains(onode)) {
-                        ArrayList<String> elist = prts.getThePortalPartitionID(onode);
-                        ArrayList<String> slist = prts.getThePortalPartitionID(pNode);
-                        int count = 0;
-                        for (String eNode : elist) {
-                            if (slist.contains(eNode)) {
-                                addToBlock(pNode_id, eNode, in_port);
-                            }
-                        }
-                    }
-                }
+                flag = true;
             }
 
 
-
-            ArrayList<String> in_nodes = getIncomingNodeToNode(pNode_id);
-            for (String inode : in_nodes) {
-                if (portals.contains(inode)) {
-                    ArrayList<String> elist = prts.getThePortalPartitionID(pNode);
-                    ArrayList<String> slist = prts.getThePortalPartitionID(inode);
-                    int count = 0;
-                    for (String eNode : elist) {
-                        if (slist.contains(eNode)) {
-                            addToBlock(pNode_id, eNode, out_port);
-                        }
+            ArrayList<String> out_nodes = getOutGoingFromNode(node_id);
+            if (out_nodes.size() != 0) {
+                for (String o_node : out_nodes) {
+                    if (!prts.portals.contains(Integer.parseInt(o_node))) {
+                        String o_pid = this.partitionInfos.get(o_node).getValue();
+                        addToBlock(node_id, o_pid, in_port);
                     }
                 }
-            }
-
-            ArrayList<String> out_nodes = getOutGoingFromNode(pNode_id);
-            for (String onode : out_nodes) {
-                if (portals.contains(onode)) {
-                    ArrayList<String> elist = prts.getThePortalPartitionID(onode);
-                    ArrayList<String> slist = prts.getThePortalPartitionID(pNode);
-                    int count = 0;
-                    for (String eNode : elist) {
-                        if (slist.contains(eNode)) {
-                            addToBlock(pNode_id, eNode, in_port);
-                        }
-                    }
+            } else {
+                if (flag) {
+                    prts.portals.remove(node_id);
                 }
             }
         }
-//        }
-
         infoTM.clear();
+
+    }
+
+
+    int getEdgesOnSeparator(int node) {
+        int count = 0;
+        String str_node = String.valueOf(node);
+        int node_pid = Integer.parseInt(this.partitionInfos.get(str_node).getValue());
+
+        ArrayList<String> inNodes = getIncomingNodeToNode(node);
+        for (String iNode : inNodes) {
+            int iNode_pid = Integer.parseInt(this.partitionInfos.get(iNode).getValue());
+            if (!prts.portals.contains(Integer.parseInt(iNode)) && iNode_pid != node_pid) {
+                count++;
+            }
+        }
+
+
+        ArrayList<String> outNodes = getOutGoingFromNode(node);
+        for (String oNode : outNodes) {
+            int oNode_pid = Integer.parseInt(this.partitionInfos.get(oNode).getValue());
+            if (!prts.portals.contains(Integer.parseInt(oNode)) && oNode_pid != node_pid) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private void changeSeparator() {
+        for (Pair<String, String> edge : this.connectionInfos) {
+            String str_sid = edge.getKey();
+            String str_did = edge.getValue();
+            int sid = Integer.parseInt(edge.getKey());
+            int did = Integer.parseInt(edge.getValue());
+
+            int s_pid = Integer.parseInt(this.partitionInfos.get(str_sid).getValue());
+            int d_pid = Integer.parseInt(this.partitionInfos.get(str_did).getValue());
+            System.out.println(s_pid + "==>" + d_pid + " " + prts.portals.contains(sid));
+
+            if (s_pid != d_pid && !prts.portals.contains(sid) && !prts.portals.contains(did)) {
+                if (getEdgesOnSeparator(sid) * prts.Blosks_size.get(s_pid) > getEdgesOnSeparator(did) * prts.Blosks_size.get(d_pid)) {
+                    prts.portals.add(sid);
+                    prts.Blosks_size.put(d_pid, prts.Blosks_size.get(d_pid) + 1);
+                } else {
+                    prts.portals.add(did);
+                    prts.Blosks_size.put(s_pid, prts.Blosks_size.get(s_pid) + 1);
+                }
+
+            }
+
+
+        }
     }
 
 
@@ -506,6 +511,7 @@ public class BlinksPartition {
     }
 
     public void loadPartitionsInfo(int num_parts) {
+        this.partitionInfos.clear();
         String paritionFile = PathBase + "partitions_info.txt";
         System.out.println(paritionFile);
         File pFile = new File(paritionFile);
@@ -920,6 +926,123 @@ public class BlinksPartition {
 
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
+    }
+
+    public void createBlocks() {
+        ArrayList<String> portals = this.portals;
+        TreeMap<String, Pair<String, String>> infoTM = new TreeMap<>(new StringComparator());
+//        System.out.println("Tree size:" + infoTM.size());
+        infoTM.putAll(this.partitionInfos);
+        System.out.println(infoTM.size());
+        for (Map.Entry<String, Pair<String, String>> node : infoTM.entrySet()) {
+            int node_id = Integer.parseInt(node.getKey());
+            if (portals.contains(node.getKey())) {
+
+                ArrayList<String> in_nodes = getIncomingNodeToNode(node_id);
+                for (String inode : in_nodes) {
+//                    if (!portals.contains(inode)) {
+                    String pid = this.partitionInfos.get(inode).getValue();
+                    //node is a out-going portal of the partition where the inode is located.
+                    addToBlock(node_id, pid, out_port);
+//                    }
+                }
+                ArrayList<String> out_nodes = getOutGoingFromNode(node_id);
+                for (String onode : out_nodes) {
+//                    if (!portals.contains(onode)) {
+                    //get the pid of the onode
+                    String pid = this.partitionInfos.get(onode).getValue();
+                    //node is a in-coming portal of the partition where the onode is located.
+                    addToBlock(node_id, pid, in_port);
+//                    }
+                }
+            } else {
+                String pid = node.getValue().getValue();
+                addToBlock(node_id, pid, 0);
+            }
+
+        }
+
+//        System.out.println("===========");
+//
+//        for (String pid : prts.getThePortalPartitionID("1708")) {
+//            System.out.println(pid);
+//        }
+//        System.out.println("---------");
+//        for (String pid : prts.getThePortalPartitionID("232")) {
+//            System.out.println(pid);
+//        }
+//        System.out.println("===========");
+
+
+//        boolean NotneedProcess = false;
+//        while (!NotneedProcess) {
+        for (String pNode : portals) {
+            int pNode_id = Integer.parseInt(pNode);
+
+
+            if (pNode_id == 812) {
+                System.out.println(portals.contains("812"));
+                ArrayList<String> in_nodes = getIncomingNodeToNode(812);
+                for (String inode : in_nodes) {
+                    if (portals.contains(inode)) {
+                        ArrayList<String> elist = prts.getThePortalPartitionID(pNode);
+                        ArrayList<String> slist = prts.getThePortalPartitionID(inode);
+                        int count = 0;
+                        for (String eNode : elist) {
+                            if (slist.contains(eNode)) {
+                                addToBlock(pNode_id, eNode, out_port);
+                            }
+                        }
+                    }
+                }
+
+                ArrayList<String> out_nodes = getOutGoingFromNode(pNode_id);
+                for (String onode : out_nodes) {
+                    if (portals.contains(onode)) {
+                        ArrayList<String> elist = prts.getThePortalPartitionID(onode);
+                        ArrayList<String> slist = prts.getThePortalPartitionID(pNode);
+                        int count = 0;
+                        for (String eNode : elist) {
+                            if (slist.contains(eNode)) {
+                                addToBlock(pNode_id, eNode, in_port);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            ArrayList<String> in_nodes = getIncomingNodeToNode(pNode_id);
+            for (String inode : in_nodes) {
+                if (portals.contains(inode)) {
+                    ArrayList<String> elist = prts.getThePortalPartitionID(pNode);
+                    ArrayList<String> slist = prts.getThePortalPartitionID(inode);
+                    int count = 0;
+                    for (String eNode : elist) {
+                        if (slist.contains(eNode)) {
+                            addToBlock(pNode_id, eNode, out_port);
+                        }
+                    }
+                }
+            }
+
+            ArrayList<String> out_nodes = getOutGoingFromNode(pNode_id);
+            for (String onode : out_nodes) {
+                if (portals.contains(onode)) {
+                    ArrayList<String> elist = prts.getThePortalPartitionID(onode);
+                    ArrayList<String> slist = prts.getThePortalPartitionID(pNode);
+                    int count = 0;
+                    for (String eNode : elist) {
+                        if (slist.contains(eNode)) {
+                            addToBlock(pNode_id, eNode, in_port);
+                        }
+                    }
+                }
+            }
+        }
+//        }
+
+        infoTM.clear();
     }
 
 }

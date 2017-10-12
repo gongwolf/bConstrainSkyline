@@ -42,10 +42,14 @@ public class GPSkylineSearch {
         }
         System.out.println("===========================");
         System.out.println(bp.portals.size());
-        bp.cleanFadePortal();
+//        bp.cleanFadePortal();
         System.out.println(bp.portals.size());
         bp.createBlocks();
+//        bp.createBlocks_blinks();
+
+
         System.out.println(bp.prts.blocks.size());
+        System.out.println(bp.prts.portals.size());
 
 
         bp.prts.randomSelectLandMark(3);
@@ -57,6 +61,9 @@ public class GPSkylineSearch {
         }
         bp.prts.buildIndexes(graphsize, lowerboundSelector, this.graphdb);
         System.out.println("The time usage to build the landmark index " + (System.currentTimeMillis() - buildlandmark) + " ms");
+        System.out.println("===="+bp.prts.portalList.size());
+        System.out.println("===="+bp.prts.nodeToBlockId.size());
+
 
         for (String pid : bp.prts.blocks.keySet()) {
             block b = bp.prts.blocks.get(pid);
@@ -94,7 +101,7 @@ public class GPSkylineSearch {
                         targetBlock.add(this.bp.prts.blocks.get(o_blockID));
                     }
                 } else {
-//                    System.out.println("there is no in-comming edges to it.");
+                    System.out.println("there is no in-comming edges to it.");
                     System.exit(0);
                 }
                 target_is_portal = true;
@@ -232,7 +239,6 @@ public class GPSkylineSearch {
                 if(vsBlock.size()==0)
                 {
                     System.out.println(str_vs_id+"  !! "+vs_is_portal);
-                    System.exit(0);
                 }
 
 

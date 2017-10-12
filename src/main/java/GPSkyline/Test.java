@@ -30,7 +30,7 @@ public class Test {
         testASRC rt = new testASRC();
         rt.setgraphDBObject(t.graphdb);
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 30; i++) {
 //            String sid = String.valueOf("1326");
 //            String did = String.valueOf("1392");
 ////            String sid = String.valueOf("1872");

@@ -15,6 +15,8 @@ public class blocks {
     public HashMap<Pair<String, String>, double[]> outerLandMark;
     public HashMap<String, String> nodeToBlockId = new HashMap<>();
     public HashMap<String, HashMap<String, HashSet<String>>> portalList = new HashMap<>();
+    public HashMap<Integer,Integer> Blosks_size = new HashMap<>();
+    public HashSet<Integer> portals=new HashSet<>();
 
     public blocks() {
         blocks = new TreeMap<>(new StringComparator());
@@ -164,6 +166,7 @@ public class blocks {
             String block_id = b_obj.getKey();
             block b = b_obj.getValue();
             for (String node_id : b.nodes) {
+//                System.out.println(node_id);
                 //non-portal node
                 if (!b.iportals.contains(node_id) && !b.oportals.contains(node_id)) {
                     this.nodeToBlockId.put(node_id, block_id);
