@@ -16,31 +16,54 @@ public class Test {
     GraphDatabaseService graphdb;
     GPSkylineSearch gps;
 
-    public void ConnectDB() {
-        this.n = new connector("/home/gqxwolf/neo4j323/testdb2000/databases/graph.db");
+    public void ConnectDB(long graphsize, String degree) {
+        String db_path = "/home/gqxwolf/neo4j323/testdb" + graphsize + "_" + degree + "/databases/graph.db";
+//        this.n = new connector("/home/gqxwolf/neo4j323/testdb2000_2_5/databases/graph.db");
+        this.n = new connector(db_path);
         this.n.startDB();
         this.graphdb = this.n.getDBObject();
     }
 
     public static void main(String[] args) {
+
+        int num_parts = 20;
+        long graphsize = 2000;
+        String degree = "2_5";
+        String portalSelector = "Blinks";
+        String lowerboundSelector = "oneToAll";
+
+        if (args.length == 5) {
+            num_parts = Integer.parseInt(args[0]);
+            graphsize = Long.parseLong(args[1]);
+            degree = args[2];
+            portalSelector = args[3];
+            lowerboundSelector = args[4];
+        }
+
+
+        String basePath = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
         Test t = new Test();
-        t.ConnectDB();
-        t.createBPObject();
+        t.ConnectDB(graphsize, degree);
+        t.createBPObject(num_parts, graphsize, portalSelector, lowerboundSelector, basePath);
         t.gps.setGraphObject(t.graphdb);
         testASRC rt = new testASRC();
         rt.setgraphDBObject(t.graphdb);
 
-        for (int i = 0; i < 30; i++) {
-//            String sid = String.valueOf("1326");
+        int num = 20;
+        int i = 0;
+        while (i != 20) {
+//            String sid = String.valueOf("697");
 //            String did = String.valueOf("1392");
 ////            String sid = String.valueOf("1872");
 ////            String did = String.valueOf("357");
-            String sid = String.valueOf(t.getRandomNumberInRange(0, 1999));
-            String did = String.valueOf(t.getRandomNumberInRange(0, 1999));
-            System.out.println("=======================================================");
-            ArrayList<Pindex.path> s1 = rt.runTest(sid, did);
+            String sid = String.valueOf(t.getRandomNumberInRange(0, (int) graphsize - 1));
+            String did = String.valueOf(t.getRandomNumberInRange(0, (int) graphsize - 1));
+//            ArrayList<Pindex.path> s1 = rt.runTest(sid, did);
             ArrayList<path> s2 = t.runGPSearch(sid, did);
-            System.out.println("result set is same? "+t.compareResult(s1, s2));
+            if (s2 != null && s2.size() != 0) {
+                i++;
+            }
+//            System.out.println("result set is same? " + t.compareResult(s1, s2));
 
 //            int ns1 = s1 == null ? 0 : s1.size();
 //            int ns2 = s2 == null ? 0 : s2.size();
@@ -52,13 +75,9 @@ public class Test {
         t.n.shutdownDB();
     }
 
-    private void createBPObject() {
+    private void createBPObject(int num_parts, long graphsize, String portalSelector, String lowerboundSelector, String basePath) {
         this.gps = new GPSkylineSearch(this.graphdb);
-        int num_parts = 20;
-        long graphsize = 2000;
-        String portalSelector = "Blinks";
-        String lowerboundSelector = "oneToAll";
-        gps.BuildGPartitions(num_parts, graphsize, portalSelector, lowerboundSelector);
+        gps.BuildGPartitions(basePath, num_parts, graphsize, portalSelector, lowerboundSelector);
     }
 
 
@@ -76,8 +95,12 @@ public class Test {
         ArrayList<path> r1 = gps.findSkylines(Source, Destination);
         run1 = (System.nanoTime() - run1) / 1000000;
         int size = (r1 == null) ? 0 : r1.size();
-        System.out.println("GPSkyline:" + sid + "==>" + did + " skyline path size:" + size + "         running time:" + run1 + " ms");
-        System.out.println(gps.concatenetPath / 1000000);
+        if (size != 0) {
+            System.out.print("GPSkyline:" + sid + "==>" + did + " skyline path size:" + size + "         running time:" + run1 + " ms " + gps.count1 + " " + gps.count2 + " ");
+            System.out.println(gps.concatenetPath / 1000000 + "  " + gps.expandInBlock / 1000000 + " " + gps.skylineTime / 1000000
+                    + " " + gps.usedInExpand / 1000000 + " " + gps.findAdjBlock / 1000000 + " " + gps.getNodeTime / 1000000 + " " + gps.checkCycle / 1000000
+                    + " " + gps.AddToqueueTime / 100000);
+        }
 //        if (r1 != null) {
 //            for (path p : r1) {
 ////                if (p.startNode != null) {

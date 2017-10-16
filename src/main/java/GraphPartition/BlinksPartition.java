@@ -27,9 +27,10 @@ public class BlinksPartition {
     String EdgesInfoPath, nodeMappingBase;
 
 
-    public BlinksPartition(int num_parts, long graphsize, String portalSelector, String lowerboundSelector) {
+    public BlinksPartition(String basePath, int num_parts, long graphsize, String portalSelector, String lowerboundSelector) {
         this.num_parts = num_parts;
         this.PathBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "/data/";
+        this.PathBase = basePath;
         this.NodeNum = graphsize;
         this.portalSelector = portalSelector;
         this.lowerboundSelector = lowerboundSelector;
@@ -50,7 +51,8 @@ public class BlinksPartition {
             portalSelector = args[2];
             lowerboundSelector = args[3];
         }
-        BlinksPartition bp = new BlinksPartition(num_parts, graphsize, portalSelector, lowerboundSelector);
+        String basePath = "/home/gqxwolf/mydata/projectData/testGraph10000/data/";
+        BlinksPartition bp = new BlinksPartition(basePath, num_parts, graphsize, portalSelector, lowerboundSelector);
 
 //        if (portalSelector.equals("Blinks")) {
 //            bp.getPortalsBlinks();

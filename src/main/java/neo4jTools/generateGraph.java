@@ -7,13 +7,13 @@ import java.io.*;
 import java.util.*;
 
 public class generateGraph {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph40000/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph4000_5/data/";
     String EdgesPath = DBBase + "SegInfo.txt";
     String NodePath = DBBase + "NodeInfo.txt";
 
     public static void main(String args[]) {
-        int numberNodes = 40000;
-        int numberofEdges = (int)Math.round(numberNodes*(2.1));
+        int numberNodes = 4000;
+        int numberofEdges = (int)Math.round(numberNodes*(5));
         int numberofDimen = 3;
         generateGraph g = new generateGraph();
         g.generateG(numberNodes, numberofEdges, numberofDimen);

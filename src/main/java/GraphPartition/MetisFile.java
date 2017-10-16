@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class MetisFile {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph20000/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph4000_5/data/";
     String NodePath = DBBase + "NodeInfo.txt";
     String EdgePath = DBBase + "SegInfo.txt";
     String metisGraphFile = DBBase + "metisFormatFile.csv";
@@ -28,9 +28,9 @@ public class MetisFile {
 
     public static void main(String args[]) {
         MetisFile mf = new MetisFile();
-        mf.generateMetisFile(-1);
-        mf.checkingConnection("1");
-        System.out.println("======================");
+//        mf.generateMetisFile(-1);
+//        mf.checkingConnection("1");
+//        System.out.println("======================");
         String mappingfile = "mapped_metis_1.graph";
         mf.countEdges(mappingfile);
     }

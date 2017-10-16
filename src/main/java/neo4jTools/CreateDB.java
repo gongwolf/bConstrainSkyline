@@ -12,8 +12,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class CreateDB {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph40000/data/";
-    String DB_PATH = "/home/gqxwolf/neo4j323/testdb40000/databases/graph.db";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph4000_1/data/";
+    String DB_PATH = "/home/gqxwolf/neo4j323/testdb4000_1/databases/graph.db";
     String NodesPath = DBBase + "NodeInfo.txt";
     String SegsPath = DBBase + "SegInfo.txt";
     private GraphDatabaseService graphdb = null;
