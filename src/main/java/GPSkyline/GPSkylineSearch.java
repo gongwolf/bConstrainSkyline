@@ -5,6 +5,7 @@ import javafx.util.Pair;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
+import sun.nio.cs.ext.MacHebrew;
 
 import java.util.*;
 
@@ -51,7 +52,7 @@ public class GPSkylineSearch {
         }
         System.out.println("===========================");
         System.out.println(bp.portals.size());
-        bp.cleanFadePortal();
+//        bp.cleanFadePortal();
         System.out.println(bp.portals.size());
         bp.createBlocks();
 //        bp.createBlocks_blinks();
@@ -223,9 +224,9 @@ public class GPSkylineSearch {
                                                 if (!nextNode.inqueue) {
 //                                                    processedNodeList.put(nextNode.current.getId(), nextNode);
                                                     long s_add_queue = System.nanoTime();
-                                                    nextNode.inqueue=true;
+                                                    nextNode.inqueue = true;
                                                     mqueue.add(nextNode);
-                                                    this.AddToqueueTime += System.nanoTime()-s_add_queue;
+                                                    this.AddToqueueTime += System.nanoTime() - s_add_queue;
                                                 }
                                             }
                                         }
@@ -258,9 +259,9 @@ public class GPSkylineSearch {
                                             this.skylineTime += System.nanoTime() - nodeSkyline;
                                             if (!nextNode.inqueue) {
                                                 long s_add_queue = System.nanoTime();
-                                                nextNode.inqueue=true;
+                                                nextNode.inqueue = true;
                                                 mqueue.add(nextNode);
-                                                this.AddToqueueTime += System.nanoTime()-s_add_queue;
+                                                this.AddToqueueTime += System.nanoTime() - s_add_queue;
 //                                                nextNode.inqueue = true;
                                             }
                                         }
@@ -307,7 +308,7 @@ public class GPSkylineSearch {
         this.usedInExpand = 0;
         this.getNodeTime = 0;
         this.checkCycle = 0;
-        this.AddToqueueTime=0;
+        this.AddToqueueTime = 0;
     }
 
     private double[] upperbound(Node source, Node destination, ArrayList<block> vsblock, ArrayList<block> targetBlock) {
@@ -377,11 +378,12 @@ public class GPSkylineSearch {
                                 for (String ptype : p.propertiesName) {
                                     double a1 = Math.abs(t_l_cost[landmark_index] + betweenLand[landmark_index]);
                                     double a2 = Math.abs(t_l_cost[landmark_index] - betweenLand[landmark_index]);
-                                    double b1 = f_l_cost[landmark_index] - a1;
-                                    double b2 = a2 - f_l_cost[landmark_index];
+                                    double b1 = f_l_cost[landmark_index] - a1 > 0 ? Math.abs(f_l_cost[landmark_index] - a1) : 0;
+                                    double b2 = f_l_cost[landmark_index] - a2 < 0 ? Math.abs(f_l_cost[landmark_index] - a2) : 0;
                                     double D_value = b1 > b2 ? b2 : b1;
+//                                    double D_value = f_l_cost[landmark_index] - a1 > 0 ? Math.abs(f_l_cost[landmark_index] - a1) : 0;
 
-                                    if (estimatedCost[landmark_index] < D_value && D_value > 0) {
+                                    if (estimatedCost[landmark_index] < D_value) {
                                         estimatedCost[landmark_index] = D_value;
                                     }
                                     landmark_index++;

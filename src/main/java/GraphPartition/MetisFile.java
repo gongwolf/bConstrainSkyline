@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class MetisFile {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph4000_5/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph40000/data/";
     String NodePath = DBBase + "NodeInfo.txt";
     String EdgePath = DBBase + "SegInfo.txt";
     String metisGraphFile = DBBase + "metisFormatFile.csv";
@@ -21,7 +21,7 @@ public class MetisFile {
     HashMap<String, Boolean> remainNodes = new HashMap<>();
     ArrayList<HashMap<String, ArrayList<String[]>>> connectionSets = new ArrayList<>();
 
-    public MetisFile(){
+    public MetisFile() {
 
     }
 
@@ -29,7 +29,7 @@ public class MetisFile {
     public static void main(String args[]) {
         MetisFile mf = new MetisFile();
 //        mf.generateMetisFile(-1);
-//        mf.checkingConnection("1");
+        mf.checkingConnection("1");
 //        System.out.println("======================");
         String mappingfile = "mapped_metis_1.graph";
         mf.countEdges(mappingfile);
@@ -38,6 +38,7 @@ public class MetisFile {
     /**
      * transfer the graph information of the graph from nodepath and edgepath, to the metis formed file.
      * original node id becomes the id+1 in metis csv file
+     *
      * @param costid the i-th id to include into the metis file
      */
     public void generateMetisFile(int costid) {
@@ -348,7 +349,7 @@ public class MetisFile {
         int EdgesNum = 0;
         int nodeNum = 0;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(this.DBBase+"/mapping/"+mappedGraphFileName));
+            BufferedReader br = new BufferedReader(new FileReader(this.DBBase + "/mapping/" + mappedGraphFileName));
             String line = null;
             while ((line = br.readLine()) != null) {
                 EdgesNum = EdgesNum + (line.split(" ").length);
