@@ -45,8 +45,8 @@ public class Test {
         String basePath = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
         Test t = new Test();
         t.ConnectDB(graphsize, degree);
-//        t.createBPObject(num_parts, graphsize, portalSelector, lowerboundSelector, basePath);
-//        t.gps.setGraphObject(t.graphdb);
+        t.createBPObject(num_parts, graphsize, portalSelector, lowerboundSelector, basePath);
+        t.gps.setGraphObject(t.graphdb);
         testASRC rt = new testASRC();
         rt.setgraphDBObject(t.graphdb);
 
@@ -59,9 +59,9 @@ public class Test {
 //            String did = String.valueOf("561");
             String sid = String.valueOf(t.getRandomNumberInRange(0, (int) graphsize - 1));
             String did = String.valueOf(t.getRandomNumberInRange(0, (int) graphsize - 1));
-            ArrayList<Pindex.path> s1 = rt.runTest(sid, did);
-//            ArrayList<path> s2 = t.runGPSearch(sid, did);
-            if (s1 != null && s1.size() != 0) {
+//            ArrayList<Pindex.path> s1 = rt.runTest(sid, did);
+            ArrayList<path> s2 = t.runGPSearch(sid, did);
+            if (s2 != null && s2.size() != 0) {
                 i++;
             }
 //            System.out.println("result set is same? " + t.compareResult(s1, s2));
@@ -100,7 +100,7 @@ public class Test {
             System.out.print("GPSkyline:" + sid + "==>" + did + " skyline path size:" + size + "         running time:" + run1 + " ms " + gps.count1 + " " + gps.count2 + " ");
             System.out.println(gps.concatenetPath / 1000000 + "  " + gps.expandInBlock / 1000000 + " " + gps.skylineTime / 1000000
                     + " " + gps.usedInExpand / 1000000 + " " + gps.findAdjBlock / 1000000 + " " + gps.getNodeTime / 1000000 + " " + gps.checkCycle / 1000000
-                    + " " + gps.AddToqueueTime / 100000);
+                    + " " + gps.AddToqueueTime / 1000000);
         }
 //        if (r1 != null) {
 //            for (path p : r1) {
