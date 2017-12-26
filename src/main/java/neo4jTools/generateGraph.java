@@ -1,33 +1,51 @@
 package neo4jTools;
 
 import javafx.util.Pair;
-import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class generateGraph {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph4000_5/data/";
+    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph10_2/data/";
     String EdgesPath = DBBase + "SegInfo.txt";
     String NodePath = DBBase + "NodeInfo.txt";
 
-    public static void main(String args[]) {
-        int numberNodes = 4000;
-        int numberofEdges = (int)Math.round(numberNodes*(5));
-        int numberofDimen = 3;
-        generateGraph g = new generateGraph();
-        g.generateG(numberNodes, numberofEdges, numberofDimen);
+    int numberNodes, numberofEdges, numberofDimens;
+
+
+    public generateGraph(int graphsize, int degree, int dimensions) {
+        this.numberNodes = graphsize;
+        this.numberofEdges = (int) Math.round(numberNodes * (degree));
+        this.numberofDimens = dimensions;
+
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
+        EdgesPath = DBBase + "SegInfo.txt";
+        NodePath = DBBase + "NodeInfo.txt";
 
     }
 
-    private void generateG(int numberNodes, int numberofEdges, int numberofDimens) {
-        File dataF = new File(DBBase);
-        try {
-            FileUtils.deleteDirectory(dataF);
-            dataF.mkdirs();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+    public static void main(String args[]) {
+        int numberNodes = 10;
+        int numberofDegree = 2;
+        int numberofDimen = 3;
+        generateGraph g = new generateGraph(numberNodes, numberofDegree, numberofDimen);
+        g.generateG();
+
+    }
+
+    public void generateG() {
+        //File dataF = new File(DBBase);
+        //try {
+        //    FileUtils.deleteDirectory(dataF);
+        //    dataF.mkdirs();
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //}
+
         HashMap<Pair<String, String>, String[]> Edges = new HashMap<>();
         HashMap<String, String[]> Nodes = new HashMap<>();
 
@@ -82,10 +100,7 @@ public class generateGraph {
         writeNodeToDisk(Nodes);
         writeEdgeToDisk(Edges);
 
-        System.out.println(Nodes.size());
-        System.out.println(Edges.size());
-
-
+        System.out.println("Graph is created, there are "+Nodes.size()+" nodes and "+Edges.size()+" edges");
     }
 
     private void writeEdgeToDisk(HashMap<Pair<String, String>, String[]> edges) {

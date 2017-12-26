@@ -1,2 +1,6 @@
 target
 classes
+pythonScript/lib
+pythonScript/include
+pythonScript/bin
+pythonScript/local

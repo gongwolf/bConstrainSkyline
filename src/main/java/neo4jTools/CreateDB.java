@@ -12,19 +12,30 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class CreateDB {
-    String DBBase = "/home/gqxwolf/mydata/projectData/testGraph4000_1/data/";
-    String DB_PATH = "/home/gqxwolf/neo4j323/testdb4000_1/databases/graph.db";
+    String DBBase = "/home/gqxwolf/mydata/projectData/un_testGraph2000_5/data/";
+    String DB_PATH = "/home/gqxwolf/neo4j323/test_un_db2000_5/databases/graph.db";
     String NodesPath = DBBase + "NodeInfo.txt";
     String SegsPath = DBBase + "SegInfo.txt";
     private GraphDatabaseService graphdb = null;
 
+    public CreateDB(int graphsize, int degree)
+    {
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph"+graphsize+"_"+degree+"/data/";
+        this.DB_PATH = "/home/gqxwolf/neo4j323/testdb"+graphsize+"_"+degree+"/databases/graph.db";
+        NodesPath = DBBase + "NodeInfo.txt";
+        SegsPath = DBBase + "SegInfo.txt";    }
+
     public static void main(String args[]) {
-        CreateDB db = new CreateDB();
+        CreateDB db = new CreateDB(10,5);
 //        db.createDatabasewithIndex("Id");
         db.createDatabase();
     }
 
     public void createDatabase() {
+        //System.out.println(DB_PATH);
+        //System.out.println(DBBase);
+        //System.out.println("=============");
+
         connector nconn = new connector(DB_PATH);
         //delete the data base at first
         nconn.deleteDB();
@@ -48,7 +59,7 @@ public class CreateDB {
             br = new BufferedReader(new FileReader(SegsPath));
             line = null;
             while ((line = br.readLine()) != null) {
-//                System.out.println(line);
+                //System.out.println(line);
                 String attrs[] = line.split(" ");
                 String src = attrs[0];
                 String des = attrs[1];
@@ -65,6 +76,7 @@ public class CreateDB {
         }
 
         nconn.shutdownDB();
+        System.out.println("Database is created, the location of the db file is "+this.DB_PATH);
     }
 
 
@@ -82,7 +94,7 @@ public class CreateDB {
             BufferedReader br = new BufferedReader(new FileReader(NodesPath));
             String line = null;
             while ((line = br.readLine()) != null) {
-                //System.out.println(line);
+                System.out.println(line);
                 String[] attrs = line.split(" ");
 
                 String id = attrs[0];
@@ -95,7 +107,7 @@ public class CreateDB {
             br = new BufferedReader(new FileReader(SegsPath));
             line = null;
             while ((line = br.readLine()) != null) {
-//                System.out.println(line);
+                System.out.println(line);
                 String attrs[] = line.split(" ");
                 String src = attrs[0];
                 String des = attrs[1];

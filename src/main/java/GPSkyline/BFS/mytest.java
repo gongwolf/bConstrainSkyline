@@ -21,7 +21,7 @@ import java.util.Random;
 public class mytest {
     public static void main(String args[]) {
 
-        int graph_size = 4000;
+        int graph_size = 10;
         String degree = "5";
 
         if (args.length == 2) {
@@ -30,18 +30,27 @@ public class mytest {
         }
 
 
-        System.out.println("/home/gqxwolf/neo4j323/testdb"+graph_size+"_"+degree+"/databases/graph.db");
+        System.out.println("/home/gqxwolf/neo4j323/testdb" + graph_size + "_" + degree + "/databases/graph.db");
         mytest t = new mytest();
-        int num = 20;
+        int num = 1;
         int i = 0;
         while (i != num) {
-            String sid = String.valueOf(t.getRandomNumberInRange(0, (int) graph_size - 1));
-            String did = String.valueOf(t.getRandomNumberInRange(0, (int) graph_size - 1));
-            String r = t.runUseNodeFinal(sid, did,graph_size,degree);
-            if (r!=null && !r.split(":")[3].split(",")[3].equals("0")) {
-                System.out.println(r);
+//            String sid = String.valueOf(t.getRandomNumberInRange(0, (int) graph_size - 1));
+//            String did = String.valueOf(t.getRandomNumberInRange(0, (int) graph_size - 1));
+            String sid = String.valueOf(5);
+            String did = String.valueOf(8);
+            ArrayList<path> r = t.runUseNodeFinal(sid, did, graph_size, degree);
+            if (r != null) {
+                for (path r_path : r) {
+                    System.out.println(r_path);
+                }
                 i++;
             }
+
+//            if (r != null && !r.split(":")[3].split(",")[3].equals("0")) {
+//                System.out.println(r);
+//                i++;
+//            }
         }
     }
 
@@ -73,8 +82,8 @@ public class mytest {
         n.shutdownDB();
     }
 
-    public String runUseNodeFinal(String sid, String did,int graph_size,String degree) {
-        connector n = new connector("/home/gqxwolf/neo4j323/testdb"+graph_size+"_"+degree+"/databases/graph.db");
+    public ArrayList<path> runUseNodeFinal(String sid, String did, int graph_size, String degree) {
+        connector n = new connector("/home/gqxwolf/neo4j323/testdb" + graph_size + "_" + degree + "/databases/graph.db");
         n.startDB();
         GraphDatabaseService graphdb = n.getDBObject();
         Node Source;
@@ -85,7 +94,7 @@ public class mytest {
             tx.success();
         }
         myshortestPathUseNodeFinal mspNode = new myshortestPathUseNodeFinal(graphdb);
-        String r = mspNode.getSkylinePath(Source, Destination);
+        ArrayList<path> r = mspNode.getSkylinePath(Source, Destination);
 //        System.out.println(r);
         n.shutdownDB();
         return r;

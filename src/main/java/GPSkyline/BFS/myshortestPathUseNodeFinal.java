@@ -42,7 +42,7 @@ public class myshortestPathUseNodeFinal {
     }
 
     // public void getSkylinePath(Node source, Node destination) {
-    public String getSkylinePath(Node source, Node destination) {
+    public ArrayList<path> getSkylinePath(Node source, Node destination) {
         String sourceId = String.valueOf(source.getId());
         String destinationId = String.valueOf(destination.getId());
         Long pagecachedInFindNodes = 0L;
@@ -55,9 +55,12 @@ public class myshortestPathUseNodeFinal {
         Long numFinalPath = 0L;
         Long numIters = 0L;
         Long numAccessedNodes = 0L;
-        Long Pages_2 = 0L;
-        Long Pins_2 = 0L;
-        Long time_2 = 0L;
+        long Pages_2 = 0L;
+        long Pins_2 = 0L;
+        long time_2 = 0L;
+        long Pages_3 = 0L;
+        long Pins_3 = 0L;
+        long time_3 = 0L;
 
         long usedInNode = 0;
         long usedInMain = 0;
@@ -68,9 +71,9 @@ public class myshortestPathUseNodeFinal {
         long pruningNum = 0;
         long extendedPathNum = 0;
 
-        Long time_1 = System.nanoTime();
-        Long Pages_1 = getFromManagementBean("Page cache", "Faults", graphdb);
-        Long Pins_1 = getFromManagementBean("Page cache", "Pins", graphdb);
+        long time_1 = System.nanoTime();
+        long Pages_1 = getFromManagementBean("Page cache", "Faults", graphdb);
+        long Pins_1 = getFromManagementBean("Page cache", "Pins", graphdb);
 
         try (Transaction tx = this.graphdb.beginTx()) {
             path iniPath = new path(source, source);
@@ -82,25 +85,31 @@ public class myshortestPathUseNodeFinal {
                 return null;
             }
 
-            // for (path p : skylinPaths) {
-            // System.out.println(printCosts(p.getCosts()));
-            // // System.out.println(p);
-            // System.out.println("---------------------------------");
-            // }
-            // System.out.println("initilzed the sky line path");
+//            for (path p : skylinPaths) {
+//                System.out.println(printCosts(p.getCosts()));
+//                // System.out.println(p);
+//                System.out.println("---------------------------------");
+//            }
+//            System.out.println("initilzed the sky line path");
             for (String p_type : iniPath.getPropertiesName()) {
                 myDijkstra(source, destination, p_type);
             }
+
+//            System.out.println(printCosts(processedNodeList.get(String.valueOf(destinationId)).lowerBound));
+//            System.out.println(printCosts(processedNodeList.get("76").lowerBound));
+//            System.out.println(processedNodeList.get(String.valueOf(destinationId)).id);
 
             myNode start = processedNodeList.get(String.valueOf(source.getId()));
             if (start != null) {
                 mqueue.add(start);
             }
+
             tx.success();
-            Pages_2 = getFromManagementBean("Page cache", "Faults", graphdb);
-            Pins_2 = getFromManagementBean("Page cache", "Pins", graphdb);
-            time_2 = System.nanoTime();
         }
+        Pages_2 = getFromManagementBean("Page cache", "Faults", graphdb);
+        Pins_2 = getFromManagementBean("Page cache", "Pins", graphdb);
+        time_2 = System.nanoTime();
+
 
         int i = 0;
         try (Transaction tx = this.graphdb.beginTx()) {
@@ -115,10 +124,10 @@ public class myshortestPathUseNodeFinal {
                 // System.out.println("-------------------------------------");
                 // System.out.println("pop: "+vs.id);
 
-                if (!p_list.contains(vs.id)) {
-                    this.totalDegree += vs.degree;
-                    p_list.add(vs.id);
-                }
+//                if (!p_list.contains(vs.id)) {
+//                    this.totalDegree += vs.degree;
+//                    p_list.add(vs.id);
+//                }
 
                 i++;
                 // if(i==20)
@@ -127,7 +136,7 @@ public class myshortestPathUseNodeFinal {
                 // }
                 int index = 0;
                 // System.out.println(vs.id+" "+vs.subRouteSkyline.size());
-                for (; index < vs.subRouteSkyline.size();) {
+                for (; index < vs.subRouteSkyline.size(); ) {
                     path p = vs.subRouteSkyline.get(index);
                     // System.out.println("is processed " + p.processed_flag + "
                     // : " + p);
@@ -195,12 +204,14 @@ public class myshortestPathUseNodeFinal {
                 }
 
             }
+
+
             tx.success();
         }
+        Pages_3 = getFromManagementBean("Page cache", "Faults", graphdb);
+        Pins_3 = getFromManagementBean("Page cache", "Pins", graphdb);
+        time_3 = System.nanoTime();
 
-        long Pages_3 = getFromManagementBean("Page cache", "Faults", graphdb);
-        long Pins_3 = getFromManagementBean("Page cache", "Pins", graphdb);
-        long time_3 = System.nanoTime();
 
         pagecachedInFindNodes = Pages_1;
         pagecachedInInital = Pages_2 - Pages_1;
@@ -229,16 +240,19 @@ public class myshortestPathUseNodeFinal {
         sb.append(pinsInFindNodes).append(",");
         sb.append(pinsInInital).append(",");
         sb.append(PinsInFindSkyPath).append(":");
-        sb.append(formatter.format((double)timeInInitial / 1000000)).append(",");
-        sb.append(formatter.format((double)timeInFindSkyPath / 1000000)).append(":");
+        sb.append(formatter.format((double) timeInInitial / 1000000)).append(",");
+        sb.append(formatter.format((double) timeInFindSkyPath / 1000000)).append(":");
         sb.append(numIters).append(",");
         sb.append(numAccessedNodes).append(",");
         sb.append(numInIPath).append(",");
-        sb.append(numFinalPath).append(":");
+        sb.append(numFinalPath).append("|");
+        sb.append(pruningNum).append(",");
+        sb.append(extendedPathNum).append("|");
 
-        sb.append(formatter.format(usedInDijkstra / 1000000)).append(",");
+//        sb.append(formatter.format(usedInDijkstra / 1000000)).append(",");
+        sb.append(formatter.format(usedInCheckExpand / 1000000)).append(",");
         sb.append(formatter.format(usedInExpansion / 1000000)).append(",");
-        sb.append(formatter.format((double) used_In_skyline_operation / 100000)).append(":");
+        sb.append(formatter.format((double) used_In_skyline_operation / 1000000)).append(":");
 
         // long totalRt = timeInInitial+timeInFindSkyPath*1000000;
         // System.out.println(totalRt);
@@ -302,7 +316,15 @@ public class myshortestPathUseNodeFinal {
         // // System.out.println("---------------");
         // }
         // }
-        return sb.toString();
+
+//        for (path p :
+//                this.skylinPaths) {
+//            System.out.println(p);
+////            System.out.println(printCosts(p.cost));
+//        }
+//        return sb.toString();
+        System.out.println(sb);
+        return this.skylinPaths;
     }
 
     private boolean needToBeExpanded(path p, Node destination) {
@@ -316,11 +338,13 @@ public class myshortestPathUseNodeFinal {
         // System.out.println(" "+printCosts(p.getCosts()));
         myEndNode = processedNodeList.get(endNode_id);
         for (; i < this.NumberOfProperties; i++) {
-            if (myEndNode.lowerBound[i] == Double.POSITIVE_INFINITY) {
-                return false;
-            }
+//            if (myEndNode.lowerBound[i] == Double.POSITIVE_INFINITY) {
+//                return false;
+//            }
             estimatedCosts[i] = p.getCosts()[i] + myEndNode.lowerBound[i];
         }
+
+//        System.out.println(printCosts(estimatedCosts));
 
         long usedInskyline = System.nanoTime();
         // if the return value is true, it means all the path in result set
@@ -414,7 +438,7 @@ public class myshortestPathUseNodeFinal {
             boolean alreadyinsert = false;
             // System.out.println("============================");
             // System.out.println(this.skylinPaths.size());
-            for (; i < skylinPaths.size();) {
+            for (; i < skylinPaths.size(); ) {
                 // System.out.println(printCosts(skylinPaths.get(i).getCosts())
                 // + " " + printCosts(np.getCosts()) + " "
                 // + checkDominated(skylinPaths.get(i).getCosts(),
@@ -469,20 +493,11 @@ public class myshortestPathUseNodeFinal {
             myNode n = dijkstraqueue.pop();
             ArrayList<Pair<myNode, Double>> expensions = n.getNeighbor(property_type);
 
-            // System.out.println(n.id+" "+n.getCostFromSource(property_type));
-            // System.out.println("============");
+
+            //if n is already processed
             if (NodeList.containsKey(n.id)) {
                 continue;
             }
-
-            // if(n.id.equals(String.valueOf(source.getId())))
-            // {
-            //
-            // NodeList.put(n.id,n);
-            // printPath(NodeList, sid, did);
-            // return n.getCostFromSource(property_type);
-            // }
-
             NodeList.put(n.id, n);
 
             myNode tmpNode = this.processedNodeList.get(n.id);
@@ -496,17 +511,12 @@ public class myshortestPathUseNodeFinal {
 
             for (Pair<myNode, Double> p : expensions) {
                 myNode nextNode = p.getKey();
-                // System.out.println(" nextNode:"+nextNode.id);
 
                 Double cost = p.getValue();
                 Double newCost = n.getCostFromSource(property_type) + cost;
                 if (!NodeList.containsKey(nextNode.id) || (nextNode.getCostFromSource(property_type) > newCost)) {
                     nextNode.setCostFromSource(property_type, newCost);
-                    // System.out.println(" "+n.id+" update : "+newCost+ " Form
-                    // "+nextNode.id +" to "+did);
                     nextNode.setComeFromNode(n.id);
-                    // System.out.println(" update the"+n.id+ " come from
-                    // "+nextNode.id);
                     dijkstraqueue.add(nextNode);
                 }
             }
