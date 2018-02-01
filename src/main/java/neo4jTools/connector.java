@@ -1,9 +1,6 @@
 package neo4jTools;
 
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.io.fs.FileUtils;
@@ -120,5 +117,16 @@ public class connector {
 
     public GraphDatabaseService getDBObject() {
         return this.graphDB;
+    }
+
+
+    public long getNumberofNodes() {
+        long result = 0;
+        try (Transaction tx = this.graphDB.beginTx()) {
+            ResourceIterable<Node> r = this.graphDB.getAllNodes();
+            tx.success();
+            result = r.stream().count();
+        }
+        return result;
     }
 }

@@ -1,6 +1,7 @@
 target
 classes
-pythonScript/lib
-pythonScript/include
-pythonScript/bin
-pythonScript/local
+pythonScript
+data
+output
+.idea
+target
