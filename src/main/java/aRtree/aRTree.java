@@ -151,6 +151,8 @@ public class aRTree {
              * old root and sn
              */
             if (split_root == Constants.SPLIT) {
+
+                //Todo: new root is created,so the aggregate value of this new node show be update
                 //initialize new root
                 nroot_ptr = new aRTDirNode(this);
                 nroot_ptr.son_is_data = root_is_data;
