@@ -4,7 +4,8 @@ import java.io.IOException;
 
 public interface Node {
     public abstract int get_num_of_data();  // returns number of data entries
-//    // behind that node
+
+    //    // behind that node
     public abstract Data get(int i);      // returns the i-th object in the
     // tree lying behind that node
 
@@ -19,7 +20,7 @@ public interface Node {
 //    public abstract void print();                // prints rectangles
 
 
-    public abstract void overlapping(float p[], int nodes_t[]);
+    //public abstract void overlapping(float p[], int nodes_t[]);
 
     public abstract void nodes(int nodes_a[]);
 

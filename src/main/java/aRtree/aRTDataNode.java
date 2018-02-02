@@ -186,6 +186,7 @@ public class aRTDataNode extends aRTNode implements Node {
                 }
 
                 // insert last 30% candidates into reinsertion list
+                // Todo: Those node needs to be removed from this datanode, so the aggregate value of this node.
                 for (; i < num_entries; i++) {
                     nd = new Data(dimension);
                     nd = data[sm[i].index];
@@ -207,7 +208,7 @@ public class aRTDataNode extends aRTNode implements Node {
             } else {
                 // reinsert was applied before
                 // --> split the node
-                sn[0] = new aRTDataNode(my_tree);
+                sn[0] = new aRTDataNode(my_tree); //the new node
 //                System.out.println("sn"+sn[0].getClass().getName());
                 sn[0].level = level;
                 split((aRTDataNode) sn[0]);
@@ -239,6 +240,7 @@ public class aRTDataNode extends aRTNode implements Node {
      * the new split node.
      * invokes RTNode.split() to calculate the split distribution
      */
+    //Todo: update the aggregate value here, the new node and the old new both needs to update
     public void split(aRTDataNode splitnode) // splits the current node so that m mbr's moves to splitnode
     // werden
     {
@@ -285,6 +287,50 @@ public class aRTDataNode extends aRTNode implements Node {
         // Anzahl der Eintraege berichtigen
         num_entries = dist;
         splitnode.num_entries = n - dist;  // muss wegen Rundung so bleiben !!
+    }
+
+    public boolean is_data_node() // this is a data node
+    {
+        return true;
+    }
+
+    public Data get(int i) {
+        Data d;
+
+        if (i >= get_num()) // if there is no i-th object -. null
+        {
+            return null;
+        }
+
+        d = new Data(dimension);
+        d = data[i];
+
+        return d;
+    }
+
+    public float[] get_mbr() // float
+    // calculates the mbr of all data in this node
+    {
+        int i, j, n;
+        float mbr[], tm[];
+
+        mbr = data[0].get_mbr();
+//        System.out.println(mbr[0]+" "+mbr[1]+" "+mbr[2]+" "+mbr[3]+" ");
+        n = get_num();
+        for (j = 1; j < n; j++) {
+            tm = data[j].get_mbr();
+//            System.out.println(tm[0]+" "+tm[1]+" "+tm[2]+" "+tm[3]+" ");
+
+            for (i = 0; i < 2 * dimension; i += 2) {
+//                System.out.println(i+" "+mbr[i]+" "+tm[i]);
+//                System.out.println(i+" "+mbr[i+1]+" "+tm[i+1]);
+                mbr[i] = Constants.min(mbr[i], tm[i]);
+                mbr[i + 1] = Constants.max(mbr[i + 1], tm[i + 1]);
+            }
+        }
+//        System.out.println(mbr[0]+" "+mbr[1]+" "+mbr[2]+" "+mbr[3]+" ");
+
+        return mbr;
     }
 
 }

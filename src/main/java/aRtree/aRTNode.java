@@ -30,9 +30,6 @@ public class aRTNode {
 
     public int split(float mbr[][], int distribution[][])
     {
-        //#ifdef SHOWMBR
-        //    split_000++;
-        //#endif
 
         boolean lu = false;       // indicates whether the split will be done
         // with respect to the lower bounds of the mbrs
