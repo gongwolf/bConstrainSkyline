@@ -206,6 +206,7 @@ public final class aRTDirNode extends aRTNode implements Node {
         mbr = d.get_mbr();
         follow = choose_subtree(mbr);
 
+
         // get corresponding son
         succ = entries[follow].get_son();
 
@@ -230,6 +231,7 @@ public final class aRTDirNode extends aRTNode implements Node {
             }
 
             // create a new entry to hold the new_succ[0] node
+            //Todo: update aggregate value
             de = new DirEntry(dimension, son_is_data, my_tree);
             nmbr = ((Node) new_succ[0]).get_mbr();
 
@@ -238,6 +240,7 @@ public final class aRTDirNode extends aRTNode implements Node {
             de.son_ptr = new_succ[0];
             de.son_is_data = son_is_data;
             de.num_of_data = ((Node) new_succ[0]).get_num_of_data();
+            Constants.print(de.attr_lower);
 
             // insert de to this
             enter(de);

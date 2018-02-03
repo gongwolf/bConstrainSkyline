@@ -250,7 +250,7 @@ public class aRTDataNode extends aRTNode implements Node {
     }
 
     private void updateBounds(Data d) {
-        System.out.println(num_entries);
+        System.out.println("number of entries"+num_entries);
         for (int i = 0; i < attr_lower.length; i++) {
             if (d.attrs[i] < attr_lower[i]) {
                 attr_lower[i] = d.attrs[i];

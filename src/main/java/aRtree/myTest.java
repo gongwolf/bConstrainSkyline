@@ -27,6 +27,18 @@ public class myTest {
         d.setData(new float[]{4f, 1f});
         dataf.add(d);
 
+        d = new Data(2);
+        d.setPlaceId(4);
+        d.setAttrs(new float[]{8f, 9f, 8f});
+        d.setData(new float[]{5f, 4f});
+        dataf.add(d);
+
+        d = new Data(2);
+        d.setPlaceId(5);
+        d.setAttrs(new float[]{9f, 5f, 1f});
+        d.setData(new float[]{3f, 9f});
+        dataf.add(d);
+
 
     }
 
