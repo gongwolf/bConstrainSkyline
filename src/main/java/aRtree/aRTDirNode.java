@@ -24,6 +24,8 @@ public final class aRTDirNode extends aRTNode implements Node {
                 + Constants.SIZEOF_INT;  //num_entries
         capacity = (rt.file.get_blocklength() - header_size) / d.get_size();
 
+        System.out.println("new entries node : capacity " + capacity);
+
         entries = new DirEntry[capacity];
 
         // initialize block for this node
@@ -211,7 +213,7 @@ public final class aRTDirNode extends aRTNode implements Node {
         ret = ((Node) succ).insert(d, new_succ);
         if (ret != Constants.NONE) // if anything (SPLIT or REINSERT) happend -. update bounces of entry "follow"
         // because these actions change the entries in succ
-            //Todo: update the follow's aggregate value and the parent node aggragate value
+        //Todo: update the follow's aggregate value and the parent node aggragate value
         {
             mbr = ((Node) succ).get_mbr();
             System.arraycopy(mbr, 0, entries[follow].bounces, 0, 2 * dimension);
@@ -484,6 +486,60 @@ public final class aRTDirNode extends aRTNode implements Node {
 
     public boolean is_data_node() {
         return false;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("lower:[");
+        for (float f : this.attr_lower) {
+            sb.append(f).append(",");
+        }
+
+        sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("]");
+        sb.append(", upper:[");
+        for (float f : this.attr_upper) {
+            sb.append(f).append(",");
+        }
+        sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("]");
+        return sb.toString();
+    }
+
+    public float[] getAttr_upper() {
+        float[] uppers = new float[Constants.attrs_length];
+        for (int i = 0; i < uppers.length; i++) {
+            uppers[i] = Float.MIN_VALUE;
+        }
+        for (int i = 0; i < this.get_num(); i++) {
+            DirEntry e = entries[i];
+
+            for (int j = 0; j < uppers.length; j++) {
+                if (e.attr_upper[j] > uppers[j]) {
+                    uppers[j] = e.attr_upper[j];
+                }
+            }
+
+        }
+        return uppers;
+    }
+
+    public float[] getAttr_lower() {
+        float[] lowers = new float[Constants.attrs_length];
+
+        for (int i = 0; i < lowers.length; i++) {
+            lowers[i] = Float.MAX_VALUE;
+        }
+
+        for (int i = 0; i < this.get_num(); i++) {
+            DirEntry e = entries[i];
+
+            for (int j = 0; j < lowers.length; j++) {
+                if (e.attr_lower[j] < lowers[j]) {
+                    lowers[j] = e.attr_lower[j];
+                }
+            }
+
+        }
+        return lowers;
     }
 
 }

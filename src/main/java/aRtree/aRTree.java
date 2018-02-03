@@ -56,6 +56,7 @@ public class aRTree {
         num_of_data = num_of_inodes = num_of_dnodes = 0;
 
         root_ptr = new aRTDataNode(this);
+        System.out.println(root_ptr);
         root = root_ptr.block;
     }
 
@@ -120,7 +121,7 @@ public class aRTree {
         DirEntry de;                                    // temp Object used to consruct new root dir entries when SPLIT takes place
         int split_root = Constants.NONE;  // return of root_ptr.insert(d)
         Data d_cand, dc;                            // temp duplicates of d
-        float nmbr[];
+        float nmbr[],lower[],upper[];
 
         load_root();
 
@@ -150,11 +151,16 @@ public class aRTree {
              * insert has lead to split --> create new root having as sons
              * old root and sn
              */
+
+//            System.out.println(split_root);
             if (split_root == Constants.SPLIT) {
 
                 //Todo: new root is created,so the aggregate value of this new node show be update
                 //initialize new root
                 nroot_ptr = new aRTDirNode(this);
+
+                System.out.println(nroot_ptr);
+
                 nroot_ptr.son_is_data = root_is_data;
                 nroot_ptr.level = (short) (root_ptr.level + 1);
                 nroot = nroot_ptr.block;
@@ -163,25 +169,53 @@ public class aRTree {
                 // a new direntry is introduced having as son the old root
                 de = new DirEntry(dimension, root_is_data, this);
                 nmbr = ((Node) root_ptr).get_mbr();
+                Constants.print(nmbr);
                 // store the mbr of the root to the direntry
                 System.arraycopy(nmbr, 0, de.bounces, 0, 2 * dimension);
+
+                lower = ((Node) root_ptr).getAttr_lower();
+                upper = ((Node) root_ptr).getAttr_upper();
+                System.arraycopy(lower, 0, de.attr_lower,0, Constants.attrs_length);
+                System.arraycopy(upper, 0, de.attr_upper,0, Constants.attrs_length);
+
+
                 de.son = root_ptr.block;
                 de.son_ptr = root_ptr;
                 de.son_is_data = root_is_data;
                 de.num_of_data = ((Node) root_ptr).get_num_of_data();
                 // add de to the new root
                 nroot_ptr.enter(de);
+                Constants.print(((Node) root_ptr).getAttr_lower());
+                Constants.print(((Node) root_ptr).getAttr_upper());
+                System.out.println("-------" + ((Node) root_ptr).get_num_of_data());
+
 
                 // a new direntry is introduced having as son the brother(split) of the old root
                 de = new DirEntry(dimension, root_is_data, this);
 //                System.out.println(sn[0].getClass().getName());
+
                 nmbr = ((Node) sn[0]).get_mbr();
+                Constants.print(nmbr);
                 System.arraycopy(nmbr, 0, de.bounces, 0, 2 * dimension);
+
+                lower = ((Node) sn[0]).getAttr_lower();
+                upper = ((Node) sn[0]).getAttr_upper();
+                System.arraycopy(lower, 0, de.attr_lower,0, Constants.attrs_length);
+                System.arraycopy(upper, 0, de.attr_upper,0, Constants.attrs_length);
+
                 de.son = sn[0].block;
                 de.son_ptr = sn[0];
                 de.son_is_data = root_is_data;
                 de.num_of_data = ((Node) sn[0]).get_num_of_data();
                 nroot_ptr.enter(de);
+                nroot_ptr.enter(de);
+                Constants.print(((Node) sn[0]).getAttr_lower());
+                Constants.print(((Node) sn[0]).getAttr_upper());
+                System.out.println("-------" + ((Node) sn[0]).get_num_of_data());
+
+                Constants.print(nroot_ptr.getAttr_lower());
+                Constants.print(nroot_ptr.getAttr_upper());
+
 
                 // replace the root of the tree with the new node
                 root = nroot;
@@ -202,7 +236,9 @@ public class aRTree {
         }
 
         // increase number of data in the tree after insertion
+//        System.out.println(root_ptr);
         num_of_data++;
+        System.out.println(num_of_data + " " + num_of_dnodes + " " + num_of_inodes);
     }
 
     /**

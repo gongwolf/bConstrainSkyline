@@ -6,7 +6,7 @@ package aRtree;
 
 /**
  * DirEntry implements the entries of a directory node (RTDirNode)
- *
+ * <p>
  * the info of the DirEntry in a RTDirNode block is organised as follows:
  * +-------------+-----+------------------------+-----+-------------+
  * | bounces[0]  | ... | bounces[2*dimension-1] | son | num_of_data |
@@ -20,14 +20,17 @@ import java.io.IOException;
 
 public class DirEntry {
 
+    public aRTNode son_ptr;                     // pointer to son if in main mem.
     aRTree my_tree;                      // pointer to my R-tree
     int son;                            // block # of son
-    public aRTNode son_ptr;                     // pointer to son if in main mem.
     boolean son_is_data;                // TRUE, if son is a data page
     int dimension;                      // dimension of the box
     float bounces[];                    // the mbr of the box
     int son_level;                      // level of the node pointed to
     int num_of_data;                    // amount of data entries behind the son of this entry
+
+    float attr_lower[];
+    float attr_upper[];
 
     DirEntry(int _dimension, boolean son_is_data, aRTree rt) {
         dimension = _dimension;
@@ -36,6 +39,8 @@ public class DirEntry {
         bounces = new float[2 * dimension];
         son_ptr = null;
         num_of_data = 0;
+        attr_lower=new float[Constants.attrs_length];
+        attr_upper=new float[Constants.attrs_length];
     }
 
     /**

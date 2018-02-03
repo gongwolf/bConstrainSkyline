@@ -4,28 +4,44 @@ package aRtree;
  Improve User Interface of the program
  */
 
-import aRtree.Sortable;
-
 public class Constants {
 
+    //    static final int BLOCKLENGTH = 1024;
+//    static final int CACHESIZE = 128;
+    public static final int BLOCKLENGTH = 100;
+    public static final int CACHESIZE = 3;
+    public static final int attrs_length = 3;
+    public final static int RTDataNode__dimension = 2;
+    public final static float MAXREAL = (float) 9.99e20;
+    public final static int MAX_DIMENSION = 256;
+    // for comparing mbrs
+    public final static int OVERLAP = 0;
+    public final static int INSIDE = 1;
+    public final static int S_NONE = 2;
+    // for the insert algorithm
+    public final static int SPLIT = 0;
+    public final static int REINSERT = 1;
+    public final static int NONE = 2;
+    // sorting criteria
+    public final static int SORT_LOWER_MBR = 0; //for mbrs
+    public final static int SORT_UPPER_MBR = 1; //for mbrs
+    public final static int SORT_CENTER_MBR = 2; //for mbrs
+    public final static int SORT_MINDIST = 3; //for branchlists
+    public final static int BLK_SIZE = 4096;
+    public final static int MAXLONGINT = 32768;
+    public final static int NUM_TRIES = 10;
     /* These values are now set by the users - see UserInterface module.*/
     // for experimental rects
     static final int MAXCOORD = 100;
     static final int MAXWIDTH = 60;
     static final int NUMRECTS = 200;
     static final int DIMENSION = 2;
-    //    static final int BLOCKLENGTH = 1024;
-//    static final int CACHESIZE = 128;
-    public static final int BLOCKLENGTH = 2048;
-    public static final int CACHESIZE = 50;
-
     // for queries
     static final int RANGEQUERY = 0;
     static final int POINTQUERY = 1;
     static final int CIRCLEQUERY = 2;
     static final int RINGQUERY = 3;
     static final int CONSTQUERY = 4;
-
     // for buffering
     static final int SIZEOF_BOOLEAN = 1;
     static final int SIZEOF_SHORT = 2;
@@ -33,11 +49,8 @@ public class Constants {
     static final int SIZEOF_BYTE = 1;
     static final int SIZEOF_FLOAT = 4;
     static final int SIZEOF_INT = 4;
-
-    public final static int RTDataNode__dimension = 2;
-
-    public final static float MAXREAL = (float) 9.99e20;
-    public final static int MAX_DIMENSION = 256;
+    // for header blocks
+    public final static int BFHEAD_LENGTH = SIZEOF_INT * 2;
 
     // for comparisons
     public final static float min(float a, float b) {
@@ -55,29 +68,6 @@ public class Constants {
     public final static int max(int a, int b) {
         return (a > b) ? a : b;
     }
-
-    // for comparing mbrs
-    public final static int OVERLAP = 0;
-    public final static int INSIDE = 1;
-    public final static int S_NONE = 2;
-
-    // for the insert algorithm
-    public final static int SPLIT = 0;
-    public final static int REINSERT = 1;
-    public final static int NONE = 2;
-
-    // for header blocks
-    public final static int BFHEAD_LENGTH = SIZEOF_INT * 2;
-
-    // sorting criteria
-    public final static int SORT_LOWER_MBR = 0; //for mbrs
-    public final static int SORT_UPPER_MBR = 1; //for mbrs
-    public final static int SORT_CENTER_MBR = 2; //for mbrs
-    public final static int SORT_MINDIST = 3; //for branchlists
-
-    public final static int BLK_SIZE = 4096;
-    public final static int MAXLONGINT = 32768;
-    public final static int NUM_TRIES = 10;
 
     // for errors
     public static void error(String msg, boolean fatal) {
@@ -223,14 +213,14 @@ public class Constants {
      * This is a generic version of C.A.R Hoare's Quick Sort algorithm. This
      * will handle arrays that are already sorted, and arrays with duplicate
      * keys.
-     *
+     * <p>
      * If you think of a one dimensional array as going from the lowest index on
      * the left to the highest index on the right then the parameters to this
      * function are lowest index or left and highest index or right. The first
      * time you call this function it will be with the parameters 0, a.length -
      * 1.
      *
-     * @param a a Sortable array
+     * @param a   a Sortable array
      * @param lo0 left boundary of array partition
      * @param hi0 right boundary of array partition
      */
@@ -295,12 +285,13 @@ public class Constants {
 
     }
 
-
-
-
-
-
-
+    public static void print(float[] costs) {
+        System.out.print("[");
+        for (double c : costs) {
+            System.out.print(c + " ");
+        }
+        System.out.println("]");
+    }
 
 
 }

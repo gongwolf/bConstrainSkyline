@@ -5,6 +5,8 @@ public class aRTNode {
     // to disk after a change (dirty bit)
     public int block;                     // corresponding disc block of the node. The block number that stores this node.
     public short level;                   // level of the node in the tree     // level of the node in the tree
+    public float attr_upper[];             //the upper bound of the attributes in this node
+    public float attr_lower[];             //the lower bound of the attributes in this node
     protected int capacity;               // max. # of entries
     protected int dimension;              // dimension
     protected int num_entries;            // # of used entries
@@ -20,6 +22,22 @@ public class aRTNode {
         dimension = rt.dimension;
         num_entries = 0;
         block = -1;
+
+        attr_lower = new float[Constants.attrs_length];
+        attr_upper = new float[Constants.attrs_length];
+
+        init_attrs_bounds();
+
+    }
+
+    public void init_attrs_bounds() {
+        for (int i = 0; i < attr_lower.length; i++) {
+            attr_lower[i] = Float.MAX_VALUE;
+        }
+
+        for (int i = 0; i < attr_upper.length; i++) {
+            attr_upper[i] = Float.MIN_VALUE;
+        }
     }
 
     public int get_num()                  // returns # of used entries
@@ -28,8 +46,7 @@ public class aRTNode {
     }
 
 
-    public int split(float mbr[][], int distribution[][])
-    {
+    public int split(float mbr[][], int distribution[][]) {
 
         boolean lu = false;       // indicates whether the split will be done
         // with respect to the lower bounds of the mbrs
@@ -44,23 +61,22 @@ public class aRTNode {
         n = get_num();
 
         // nodes have to be filled at least 40%
-        m1 = (int) ((float)n * 0.40);
+        m1 = (int) ((float) n * 0.40);
         dist = m1;
 
         // sort by lower value of their rectangles
         // index arrays initialisation
         sml = new SortMbr[n];    //stores the mbrs according to their lower values in a specific dimension(axis)
         smu = new SortMbr[n];    //stores the mbrs according to their upper values in a specific dimension(axis)
-        rxmbr = new float[2*dimension];
-        rymbr = new float[2*dimension];
+        rxmbr = new float[2 * dimension];
+        rymbr = new float[2 * dimension];
 
         // choose split axis according to minimization of margin
         minmarg = Constants.MAXREAL;
         for (i = 0; i < dimension; i++)
         // for each axis,对每一个维度
         {
-            for (j = 0; j < n; j++)
-            {
+            for (j = 0; j < n; j++) {
                 // initialize SortMbr arrays, sml, smu
                 sml[j] = new SortMbr();
                 smu[j] = new SortMbr();
@@ -85,25 +101,21 @@ public class aRTNode {
             System.out.println("");
             */
 
-            marg = (float)0.0;
+            marg = (float) 0.0;
             // for all possible distributions R1,R2 of sml
-            for (k = 0; k < n - 2*m1 + 1; k++)
-            {
+            for (k = 0; k < n - 2 * m1 + 1; k++) {
                 // now calculate margin of R1
                 // initialize mbr of R1
-                for (s = 0; s < 2*dimension; s += 2)
-                {
-                    rxmbr[s] =    Constants.MAXREAL;
-                    rxmbr[s+1] = -Constants.MAXREAL;
+                for (s = 0; s < 2 * dimension; s += 2) {
+                    rxmbr[s] = Constants.MAXREAL;
+                    rxmbr[s + 1] = -Constants.MAXREAL;
                 }
                 // R1 = first m1+k mbrs
-                for (l = 0; l < m1+k; l++)
-                {
+                for (l = 0; l < m1 + k; l++) {
                     // calculate mbr of R1
-                    for (s = 0; s < 2*dimension; s += 2)
-                    {
-                        rxmbr[s] =   Constants.min(rxmbr[s],   sml[l].mbr[s]);
-                        rxmbr[s+1] = Constants.max(rxmbr[s+1], sml[l].mbr[s+1]);
+                    for (s = 0; s < 2 * dimension; s += 2) {
+                        rxmbr[s] = Constants.min(rxmbr[s], sml[l].mbr[s]);
+                        rxmbr[s + 1] = Constants.max(rxmbr[s + 1], sml[l].mbr[s + 1]);
                     }
                 }
                 // add to marg the margin of the mbr of R1
@@ -111,20 +123,17 @@ public class aRTNode {
 
                 // now calculate margin of R2
                 // initialize mbr of R2
-                for (s = 0; s < 2*dimension; s += 2)
-                {
-                    rxmbr[s] =    Constants.MAXREAL;
-                    rxmbr[s+1] = -Constants.MAXREAL;
+                for (s = 0; s < 2 * dimension; s += 2) {
+                    rxmbr[s] = Constants.MAXREAL;
+                    rxmbr[s + 1] = -Constants.MAXREAL;
                 }
 
                 // R2 = last n-m1-k mbrs
-                for ( ; l < n; l++)
-                {
+                for (; l < n; l++) {
                     // calculate mbr of R1
-                    for (s = 0; s < 2*dimension; s += 2)
-                    {
-                        rxmbr[s] =   Constants.min(rxmbr[s],   sml[l].mbr[s]);
-                        rxmbr[s+1] = Constants.max(rxmbr[s+1], sml[l].mbr[s+1]);
+                    for (s = 0; s < 2 * dimension; s += 2) {
+                        rxmbr[s] = Constants.min(rxmbr[s], sml[l].mbr[s]);
+                        rxmbr[s + 1] = Constants.max(rxmbr[s + 1], sml[l].mbr[s + 1]);
                     }
                 }
                 // add to marg the margin of the mbr of R2
@@ -132,23 +141,19 @@ public class aRTNode {
             }
 
             // for all possible distributions of smu
-            for (k = 0; k < n - 2*m1 + 1; k++)
-            {
+            for (k = 0; k < n - 2 * m1 + 1; k++) {
                 // now calculate margin of R1
                 // initialize mbr of R1
-                for (s = 0; s < 2*dimension; s += 2)
-                {
-                    rxmbr[s] =    Constants.MAXREAL;
-                    rxmbr[s+1] = -Constants.MAXREAL;
+                for (s = 0; s < 2 * dimension; s += 2) {
+                    rxmbr[s] = Constants.MAXREAL;
+                    rxmbr[s + 1] = -Constants.MAXREAL;
                 }
                 // R1 = first m1+k mbrs
-                for (l = 0; l < m1+k; l++)
-                {
+                for (l = 0; l < m1 + k; l++) {
                     // calculate mbr of R1
-                    for (s = 0; s < 2*dimension; s += 2)
-                    {
-                        rxmbr[s] =   Constants.min(rxmbr[s],   smu[l].mbr[s]);
-                        rxmbr[s+1] = Constants.max(rxmbr[s+1], smu[l].mbr[s+1]);
+                    for (s = 0; s < 2 * dimension; s += 2) {
+                        rxmbr[s] = Constants.min(rxmbr[s], smu[l].mbr[s]);
+                        rxmbr[s + 1] = Constants.max(rxmbr[s + 1], smu[l].mbr[s + 1]);
                     }
                 }
                 // add to marg the margin of the mbr of R1
@@ -156,19 +161,16 @@ public class aRTNode {
 
                 // now calculate margin of R2
                 // initialize mbr of R2
-                for (s = 0; s < 2*dimension; s += 2)
-                {
-                    rxmbr[s] =    Constants.MAXREAL;
-                    rxmbr[s+1] = -Constants.MAXREAL;
+                for (s = 0; s < 2 * dimension; s += 2) {
+                    rxmbr[s] = Constants.MAXREAL;
+                    rxmbr[s + 1] = -Constants.MAXREAL;
                 }
                 // R2 = last n-m1-k mbrs
-                for ( ; l < n; l++)
-                {
+                for (; l < n; l++) {
                     // calculate mbr of R1
-                    for (s = 0; s < 2*dimension; s += 2)
-                    {
-                        rxmbr[s] =   Constants.min(rxmbr[s],   smu[l].mbr[s]);
-                        rxmbr[s+1] = Constants.max(rxmbr[s+1], smu[l].mbr[s+1]);
+                    for (s = 0; s < 2 * dimension; s += 2) {
+                        rxmbr[s] = Constants.min(rxmbr[s], smu[l].mbr[s]);
+                        rxmbr[s + 1] = Constants.max(rxmbr[s + 1], smu[l].mbr[s + 1]);
                     }
                 }
                 // add to marg the margin of the mbr of R1
@@ -179,8 +181,7 @@ public class aRTNode {
             // now marg contains the sum of all margins of all distributions according
             // to the current dimension (axis)
             // is actual margin better than optimum?
-            if (marg < minmarg)
-            {
+            if (marg < minmarg) {
                 // set split_axis to the best so far
                 split_axis = i;
                 // set minimum margin to the best so far
@@ -197,8 +198,7 @@ public class aRTNode {
 
         // Now we choose the best distribution for split axis
         // according to minimum overlap and minimum dead space
-        for (j = 0; j < n; j++)
-        {
+        for (j = 0; j < n; j++) {
             sml[j].index = smu[j].index = j;
             sml[j].dimension = smu[j].dimension = split_axis;
             sml[j].mbr = smu[j].mbr = mbr[j];
@@ -211,25 +211,21 @@ public class aRTNode {
         minover = Constants.MAXREAL;
         mindead = Constants.MAXREAL;
         // for all possible distributions R1,R2 of sml and snu
-        for (k = 0; k < n - 2*m1 + 1; k++)
-        {
+        for (k = 0; k < n - 2 * m1 + 1; k++) {
             // lower end sort
             // now calculate margin of R1
             // initialize mbr of R1
-            dead = (float)0.0;
-            for (s = 0; s < 2*dimension; s += 2)
-            {
-                rxmbr[s] =    Constants.MAXREAL;
-                rxmbr[s+1] = -Constants.MAXREAL;
+            dead = (float) 0.0;
+            for (s = 0; s < 2 * dimension; s += 2) {
+                rxmbr[s] = Constants.MAXREAL;
+                rxmbr[s + 1] = -Constants.MAXREAL;
             }
             // R1 = first m1+k mbrs
-            for (l = 0; l < m1+k; l++)
-            {
+            for (l = 0; l < m1 + k; l++) {
                 // calculate mbr of R1
-                for (s = 0; s < 2*dimension; s += 2)
-                {
-                    rxmbr[s] =   Constants.min(rxmbr[s],   sml[l].mbr[s]);
-                    rxmbr[s+1] = Constants.max(rxmbr[s+1], sml[l].mbr[s+1]);
+                for (s = 0; s < 2 * dimension; s += 2) {
+                    rxmbr[s] = Constants.min(rxmbr[s], sml[l].mbr[s]);
+                    rxmbr[s + 1] = Constants.max(rxmbr[s + 1], sml[l].mbr[s + 1]);
                 }
                 dead -= Constants.area(dimension, sml[l].mbr);
             }
@@ -237,19 +233,16 @@ public class aRTNode {
 
             // now calculate margin of R2
             // initialize mbr of R2
-            for (s = 0; s < 2*dimension; s += 2)
-            {
-                rymbr[s] =    Constants.MAXREAL;
-                rymbr[s+1] = -Constants.MAXREAL;
+            for (s = 0; s < 2 * dimension; s += 2) {
+                rymbr[s] = Constants.MAXREAL;
+                rymbr[s + 1] = -Constants.MAXREAL;
             }
             // R2 = last n-m1-k mbrs
-            for ( ; l < n; l++)
-            {
+            for (; l < n; l++) {
                 // calculate mbr of R1
-                for (s = 0; s < 2*dimension; s += 2)
-                {
-                    rymbr[s] =   Constants.min(rymbr[s],   sml[l].mbr[s]);
-                    rymbr[s+1] = Constants.max(rymbr[s+1], sml[l].mbr[s+1]);
+                for (s = 0; s < 2 * dimension; s += 2) {
+                    rymbr[s] = Constants.min(rymbr[s], sml[l].mbr[s]);
+                    rymbr[s + 1] = Constants.max(rymbr[s + 1], sml[l].mbr[s + 1]);
                 }
                 dead -= Constants.area(dimension, sml[l].mbr);
             }
@@ -261,32 +254,28 @@ public class aRTNode {
 
             // is the overlap smaller than the best so far?
             // if overlaps are the same, is the dead space smaller?
-            if ((over < minover) || (over == minover) && dead < mindead)
-            {
+            if ((over < minover) || (over == minover) && dead < mindead) {
                 // update best overlap and dead space
                 minover = over;
                 mindead = dead;
-                dist = m1+k;  // update best distribution info
+                dist = m1 + k;  // update best distribution info
                 lu = true;  // best distribution is with respect to the lower mbr bounds
             }
 
             // upper sort
             // now calculate margin of R1
             // initialize mbr of R1
-            dead = (float)0.0;
-            for (s = 0; s < 2*dimension; s += 2)
-            {
-                rxmbr[s] =    Constants.MAXREAL;
-                rxmbr[s+1] = -Constants.MAXREAL;
+            dead = (float) 0.0;
+            for (s = 0; s < 2 * dimension; s += 2) {
+                rxmbr[s] = Constants.MAXREAL;
+                rxmbr[s + 1] = -Constants.MAXREAL;
             }
             // R1 = first m1+k mbrs
-            for (l = 0; l < m1+k; l++)
-            {
+            for (l = 0; l < m1 + k; l++) {
                 // calculate mbr of R1
-                for (s = 0; s < 2*dimension; s += 2)
-                {
-                    rxmbr[s] =   Constants.min(rxmbr[s],   smu[l].mbr[s]);
-                    rxmbr[s+1] = Constants.max(rxmbr[s+1], smu[l].mbr[s+1]);
+                for (s = 0; s < 2 * dimension; s += 2) {
+                    rxmbr[s] = Constants.min(rxmbr[s], smu[l].mbr[s]);
+                    rxmbr[s + 1] = Constants.max(rxmbr[s + 1], smu[l].mbr[s + 1]);
                 }
                 dead -= Constants.area(dimension, smu[l].mbr);
             }
@@ -294,19 +283,16 @@ public class aRTNode {
 
             // now calculate margin of R2
             // initialize mbr of R2
-            for (s = 0; s < 2*dimension; s += 2)
-            {
-                rymbr[s] =    Constants.MAXREAL;
-                rymbr[s+1] = -Constants.MAXREAL;
+            for (s = 0; s < 2 * dimension; s += 2) {
+                rymbr[s] = Constants.MAXREAL;
+                rymbr[s + 1] = -Constants.MAXREAL;
             }
             // R2 = last n-m1-k mbrs
-            for ( ; l < n; l++)
-            {
+            for (; l < n; l++) {
                 // calculate mbr of R1
-                for (s = 0; s < 2*dimension; s += 2)
-                {
-                    rymbr[s] =   Constants.min(rymbr[s],   smu[l].mbr[s]);
-                    rymbr[s+1] = Constants.max(rymbr[s+1], smu[l].mbr[s+1]);
+                for (s = 0; s < 2 * dimension; s += 2) {
+                    rymbr[s] = Constants.min(rymbr[s], smu[l].mbr[s]);
+                    rymbr[s + 1] = Constants.max(rymbr[s + 1], smu[l].mbr[s + 1]);
                 }
                 dead -= Constants.area(dimension, smu[l].mbr);
             }
@@ -317,12 +303,11 @@ public class aRTNode {
 
             // is the overlap smaller than the best so far?
             // if overlaps are the same, is the dead space smaller?
-            if ((over < minover) || (over == minover) && dead < mindead)
-            {
+            if ((over < minover) || (over == minover) && dead < mindead) {
                 // update best overlap and dead space
                 minover = over;
                 mindead = dead;
-                dist = m1+k; // update best distribution info
+                dist = m1 + k; // update best distribution info
                 lu = false;  // best distribution is with respect to the upper mbr bounds
             }
         }
@@ -331,8 +316,7 @@ public class aRTNode {
         // sml or smu hold the best sorting to be stored to distribution
         // and dist holds the best splitting index in this sorting
         distribution[0] = new int[n];
-        for (i = 0; i < n; i++)
-        {
+        for (i = 0; i < n; i++) {
             if (lu)
                 distribution[0][i] = sml[i].index;
             else
@@ -343,5 +327,7 @@ public class aRTNode {
         // return the index in the distribution array that specifies the split
         return dist;
     }
+
+
 
 }

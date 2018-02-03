@@ -6,9 +6,6 @@ package aRtree;
 ////////////////////////////////////////////////////////////////////////////
 //
 
-import RstarTree.Constants;
-import RstarTree.Streamable;
-
 import java.io.*;
 
 /**
@@ -32,8 +29,9 @@ public class Data implements Comparable, Streamable {
     public int id = 0;
     //    public String PlaceId = "";
     public int PlaceId;
-    public double[] location = new double[2];
-    public double distance_q;
+    //    public double[] location = new double[2];
+    public float[] attrs = new float[Constants.attrs_length];
+    public float distance_q;
 
 //--------------------------------------------------------------------------
 
@@ -169,7 +167,10 @@ public class Data implements Comparable, Streamable {
      * each data object
      */
     public int get_size() {
-        return this.dimension * 2 * sizeof_float + 4 * sizeof_float + sizeof_dimension + sizeof_int;
+        return this.dimension * 2 * sizeof_float //data[]
+                + Constants.attrs_length * sizeof_float //attrs[]
+                + sizeof_dimension //dimension
+                + sizeof_int; //place_id
     }
 
     /**
@@ -178,9 +179,7 @@ public class Data implements Comparable, Streamable {
     public void read_from_buffer(byte[] buffer) throws IOException {
         ByteArrayInputStream byte_in = new ByteArrayInputStream(buffer);
         DataInputStream in = new DataInputStream(byte_in);
-
         read_from_buffer(in);
-
         in.close();
         byte_in.close();
     }
@@ -217,8 +216,10 @@ public class Data implements Comparable, Streamable {
 //        in.read(b, 0, 27);
 //        this.setPlaceId(new String(b));
         this.setPlaceId(in.readInt());
-        this.location[0] = in.readDouble();
-        this.location[1] = in.readDouble();
+
+        for (int i = 0; i < Constants.attrs_length; i++) {
+            this.attrs[i] = in.readFloat();
+        }
     }
 
 //--------------------------------------------------------------------------
@@ -230,12 +231,12 @@ public class Data implements Comparable, Streamable {
             out.writeFloat(this.data[i]);
         }
         out.writeFloat(this.distanz);
-//        out.write(this.PlaceId.getBytes());
         out.writeInt(this.getPlaceId());
-//        System.out.println("heheheh +::" + this.PlaceId.length);
-        out.writeDouble(this.location[0]);
-        out.writeDouble(this.location[1]);
-//        System.out.println("heheheh +::" +this.PlaceId.getBytes().length);
+
+        for (int i = 0; i < Constants.attrs_length; i++) {
+            out.writeFloat(this.attrs[i]);
+        }
+
     }
 
     /**
@@ -260,7 +261,8 @@ public class Data implements Comparable, Streamable {
     public String toString() {
 //        String answer = this.getClass().getName();
 //        answer = answer + "(distanz=" + this.distanz + "," + this.dimension + ":[";
-        String answer = getPlaceId()+" [" + location[0] + "," + location[1] + "],[";
+//        String answer = getPlaceId() + " [" + location[0] + "," + location[1] + "],[";
+        String answer = getPlaceId() + " [";
 //        if (this.dimension > 0) {
 //            answer = answer + this.data[0];
 //        }
@@ -300,17 +302,20 @@ public class Data implements Comparable, Streamable {
             return false;
         }
         Data other = (Data) obj;
-        if ((this.location[0] != other.location[0]) || (this.location[01] != other.location[1])) {
-            return false;
-        } else if (this.getPlaceId() != other.getPlaceId()) {
-            return false;
-        } else if (this.dimension == other.dimension
+        if (this.dimension == other.dimension
                 && this.distanz == other.distanz) {
             for (int i = 0; i < this.data.length; ++i) {
                 if (this.data[i] != other.data[i]) {
                     return false;
                 }
             }
+
+            for (int i = 0; i < this.attrs.length; ++i) {
+                if (this.attrs[i] != other.attrs[i]) {
+                    return false;
+                }
+            }
+
             return true;
         }
 
@@ -328,7 +333,13 @@ public class Data implements Comparable, Streamable {
         for (int i = 0; i < this.dimension * 2; ++i) {
             this.data[i] = other.data[i];
         }
+
+        for (int i = 0; i < this.attrs.length; ++i) {
+            this.attrs[i] = other.attrs[i];
+        }
         this.id = other.id;
+        this.setPlaceId(other.getPlaceId());
+
         return this;
     }
 
@@ -347,10 +358,10 @@ public class Data implements Comparable, Streamable {
         }
         d.id = this.id;
 
-        d.location[0] = this.location[0];
-        d.location[1] = this.location[1];
 
-
+        for (int i = 0; i < this.attrs.length; ++i) {
+            d.attrs[i] = this.attrs[i];
+        }
         return (Object) d;
     }
 
@@ -360,10 +371,6 @@ public class Data implements Comparable, Streamable {
 
     public void setPlaceId(int PlaceId) {
         this.PlaceId = PlaceId;
-    }
-
-    public void setLocation(double[] location) {
-        System.arraycopy(location, 0, this.location, 0, location.length);
     }
 
     public double[] getData() {
@@ -378,5 +385,15 @@ public class Data implements Comparable, Streamable {
         for (int i = 0; i < this.dimension * 2; i += 2) {
             this.data[i] = this.data[i + 1] = data[i / 2];
         }
+    }
+
+    public void setAttrs(float[] attrs) {
+        for (int i = 0; i < this.attrs.length; ++i) {
+            this.attrs[i] = attrs[i];
+        }
+    }
+
+    public float[] getAttrs() {
+        return this.attrs;
     }
 }

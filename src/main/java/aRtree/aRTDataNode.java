@@ -5,6 +5,7 @@ import java.io.*;
 public class aRTDataNode extends aRTNode implements Node {
     public Data data[];
 
+
     public aRTDataNode(aRTree rt) // create a brand new RTDataNode
     {
         super(rt);
@@ -21,6 +22,7 @@ public class aRTDataNode extends aRTNode implements Node {
                 + Constants.SIZEOF_INT; //num_entries
 
         capacity = (rt.file.get_blocklength() - header_size) / d.get_size();//how many data can be stored in one data node
+        System.out.println("new data node : capacity " + capacity);
 
         data = new Data[capacity];
 
@@ -132,9 +134,11 @@ public class aRTDataNode extends aRTNode implements Node {
         }
 
         // insert data into the node
-//        System.out.println("there are " + this.get_num() + " entries before insert !!!!");
+        System.out.println("there are " + this.get_num() + " entries before insert !!!!");
         data[get_num()] = d;
         num_entries++;
+        System.out.println("there are " + this.get_num() + " entries after insert !!!!");
+
 
         // Plattenblock zum Schreiben markieren
         // Mark the block for writing
@@ -174,23 +178,41 @@ public class aRTDataNode extends aRTNode implements Node {
                 // sort by distance of each center to the overall center
                 Constants.quickSort(sm, 0, sm.length - 1, Constants.SORT_CENTER_MBR);
 
-                last_cand = (int) ((float) num_entries * 0.3);
+                last_cand = (int) ((float) num_entries * 0.4);
+                System.out.println(last_cand);
 
 //                System.out.format("0.30 * %d = last_cand to reinsertion list: %d \n", num_entries, last_cand);
 //                System.out.format("%d entries is keep in this node\n", num_entries - last_cand);
                 // copy the nearest 70% candidates to new array.
                 // If the last_cand is equal to 0, it will keep all the data[] to the new array new_data[].
                 // Then there will no re-insert appended.
+
+//              Because this.data needs to be updated, we need to initialize the bounds array at first.
+                init_attrs_bounds();
+
                 for (i = 0; i < num_entries - last_cand; i++) {
                     new_data[i] = data[sm[i].index];
+
+                    //update aggregate value
+                    for (int j = 0; j < attr_lower.length; j++) {
+                        if (new_data[i].attrs[j] < attr_lower[j]) {
+                            attr_lower[j] = new_data[i].attrs[j];
+                        }
+                    }
+                    for (int j = 0; j < attr_upper.length; j++) {
+                        if (new_data[i].attrs[j] > attr_upper[j]) {
+                            attr_upper[j] = new_data[i].attrs[j];
+                        }
+                    }
                 }
 
                 // insert last 30% candidates into reinsertion list
-                // Todo: Those node needs to be removed from this datanode, so the aggregate value of this node.
                 for (; i < num_entries; i++) {
                     nd = new Data(dimension);
                     nd = data[sm[i].index];
                     my_tree.re_data_cands.insert(nd);
+
+                    System.out.println("reinsert +++++ : " + nd);
                 }
 
                 data = new_data;
@@ -203,23 +225,58 @@ public class aRTDataNode extends aRTNode implements Node {
                 // must write page
                 dirty = true;
 //                System.out.println(last_cand);
-
                 return Constants.REINSERT;
             } else {
+                System.out.println("split the data node " + this.block);
                 // reinsert was applied before
                 // --> split the node
+                System.out.println("    Create one new data node to store the split datas");
                 sn[0] = new aRTDataNode(my_tree); //the new node
-//                System.out.println("sn"+sn[0].getClass().getName());
                 sn[0].level = level;
                 split((aRTDataNode) sn[0]);
+                System.out.println(sn[0]);
 //                for (int q = 0; q < ((RTDataNode) sn[0]).num_entries; q++) {
 //                    Data d1 = ((RTDataNode) sn[0]).data[q];
 //                    System.out.println(d1.getPlaceId());
 //                }
+                System.out.println("Split +++++ ");
+                System.out.println(this);
                 return Constants.SPLIT;
             }
         } else {
+            updateBounds(d);
             return Constants.NONE;
+        }
+    }
+
+    private void updateBounds(Data d) {
+        System.out.println(num_entries);
+        for (int i = 0; i < attr_lower.length; i++) {
+            if (d.attrs[i] < attr_lower[i]) {
+                attr_lower[i] = d.attrs[i];
+            }
+        }
+
+        for (int i = 0; i < attr_upper.length; i++) {
+            if (d.attrs[i] > attr_upper[i]) {
+                attr_upper[i] = d.attrs[i];
+            }
+        }
+    }
+
+    private void updateBounds() {
+        for (int i = 0; i < get_num(); i++) {
+            //update aggregate value
+            for (int j = 0; j < attr_lower.length; j++) {
+                if (this.data[i].attrs[j] < attr_lower[j]) {
+                    attr_lower[j] = this.data[i].attrs[j];
+                }
+            }
+            for (int j = 0; j < attr_upper.length; j++) {
+                if (this.data[i].attrs[j] > attr_upper[j]) {
+                    attr_upper[j] = this.data[i].attrs[j];
+                }
+            }
         }
     }
 
@@ -287,6 +344,14 @@ public class aRTDataNode extends aRTNode implements Node {
         // Anzahl der Eintraege berichtigen
         num_entries = dist;
         splitnode.num_entries = n - dist;  // muss wegen Rundung so bleiben !!
+
+        //update the aggregate value of the split node
+        splitnode.updateBounds();
+
+
+        //because this.data already be updated, we need to initial the bounds array at first.
+        this.init_attrs_bounds();
+        this.updateBounds();
     }
 
     public boolean is_data_node() // this is a data node
@@ -333,4 +398,28 @@ public class aRTDataNode extends aRTNode implements Node {
         return mbr;
     }
 
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("lower:[");
+        for (float f : this.attr_lower) {
+            sb.append(f).append(",");
+        }
+
+        sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("]");
+        sb.append(", upper:[");
+        for (float f : this.attr_upper) {
+            sb.append(f).append(",");
+        }
+        sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("]");
+        return sb.toString();
+    }
+
+    public float[] getAttr_upper() {
+        return this.attr_upper;
+    }
+
+    public float[] getAttr_lower() {
+        return this.attr_lower;
+    }
 }

@@ -32,4 +32,7 @@ public interface Node {
     // pointer to the new node
 
     public abstract void delete();
+
+    public abstract float[] getAttr_lower();
+    public abstract float[] getAttr_upper();
 }
