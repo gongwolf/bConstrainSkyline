@@ -270,8 +270,12 @@ public class Data implements Comparable, Streamable {
         for (int i = 0; i < this.dimension * 2; i += 2) {
             answer = answer + " " + String.valueOf(this.data[i]);
         }
-        answer = answer + "]";
-        return answer;
+        answer = answer + "] [";
+        for (int i = 0; i < this.attrs.length; i ++) {
+            answer = answer + " " + String.valueOf(this.attrs[i]);
+        }
+
+        return answer+"]";
     }
 
     /**

@@ -40,11 +40,48 @@ public class myTest {
         dataf.add(d);
 
 
+        d = new Data(2);
+        d.setPlaceId(5);
+        d.setAttrs(new float[]{10f, 2f, 3f});
+        d.setData(new float[]{7f, 12f});
+        dataf.add(d);
+
+        d = new Data(2);
+        d.setPlaceId(5);
+        d.setAttrs(new float[]{10f, 2f, 3f});
+        d.setData(new float[]{7f, 12f});
+        dataf.add(d);
+
+        d = new Data(2);
+        d.setPlaceId(5);
+        d.setAttrs(new float[]{1, 10f, 5f});
+        d.setData(new float[]{17f, 20f});
+        dataf.add(d);
+
+        d = new Data(2);
+        d.setPlaceId(5);
+        d.setAttrs(new float[]{11f, 22f, 32f});
+        d.setData(new float[]{8f, 5f});
+        dataf.add(d);
+
+        d = new Data(2);
+        d.setPlaceId(5);
+        d.setAttrs(new float[]{18f, 10f, 19f});
+        d.setData(new float[]{18f, 19f});
+        dataf.add(d);
+
+
     }
 
     public static void main(String args[]) {
         myTest t = new myTest();
-        t.test1();
+//        t.test1();
+        t.readTreetest();
+    }
+
+    private void readTreetest() {
+        aRTree ar = new aRTree("data/ar.art",3);
+        ar.print();
     }
 
     public void test1() {
@@ -56,12 +93,12 @@ public class myTest {
             System.out.println("delete the old file");
         }
 
-        aRTree ar = new aRTree("data/ar.art", 150, 3, 2);
+        aRTree ar = new aRTree("data/ar.art", Constants.BLOCKLENGTH, 3, 2);
         for (Data d : dataf) {
             ar.insert(d);
             System.out.println("==========================");
         }
 
-
+        ar.delete();
     }
 }

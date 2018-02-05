@@ -35,4 +35,5 @@ public interface Node {
 
     public abstract float[] getAttr_lower();
     public abstract float[] getAttr_upper();
+    public abstract void print(String prefix, int times);
 }

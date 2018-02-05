@@ -1,6 +1,7 @@
 package aRtree;
 
 import java.io.*;
+import java.util.Collections;
 
 public class aRTDataNode extends aRTNode implements Node {
     public Data data[];
@@ -22,7 +23,6 @@ public class aRTDataNode extends aRTNode implements Node {
                 + Constants.SIZEOF_INT; //num_entries
 
         capacity = (rt.file.get_blocklength() - header_size) / d.get_size();//how many data can be stored in one data node
-        System.out.println("new data node : capacity " + capacity);
 
         data = new Data[capacity];
 
@@ -37,6 +37,8 @@ public class aRTDataNode extends aRTNode implements Node {
         rt.num_of_dnodes++;
         // Must be written to disk --> Set dirty bit
         dirty = true;
+        System.out.println("new data node " + block + ": capacity " + capacity + " " + d.get_size() + "  " + (rt.file.get_blocklength() - header_size));
+
     }
 
     // this constructor reads an existing RTDataNode from the disk
@@ -123,6 +125,7 @@ public class aRTDataNode extends aRTNode implements Node {
 
     public int insert(Data d, aRTNode sn[]) // liefert false, wenn die Seite gesplittet werden muss
     {
+        System.out.println("insert into the data block " + block);
         int i, last_cand;
         float mbr[], center[];
         SortMbr sm[]; //used for REINSERT
@@ -250,7 +253,7 @@ public class aRTDataNode extends aRTNode implements Node {
     }
 
     private void updateBounds(Data d) {
-        System.out.println("number of entries"+num_entries);
+        System.out.println("number of entries" + num_entries);
         for (int i = 0; i < attr_lower.length; i++) {
             if (d.attrs[i] < attr_lower[i]) {
                 attr_lower[i] = d.attrs[i];
@@ -401,25 +404,64 @@ public class aRTDataNode extends aRTNode implements Node {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("lower:[");
-        for (float f : this.attr_lower) {
+        sb.append("data node " + this.block + " lower:[");
+        for (float f : this.getAttr_lower()) {
             sb.append(f).append(",");
         }
 
         sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("]");
         sb.append(", upper:[");
-        for (float f : this.attr_upper) {
+        for (float f : this.getAttr_upper()) {
             sb.append(f).append(",");
         }
-        sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("]");
+        sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("]").append(" ").append(this.get_num());
         return sb.toString();
     }
 
     public float[] getAttr_upper() {
-        return this.attr_upper;
-    }
+        float[] uppers = new float[Constants.attrs_length];
+
+        for (int i = 0; i < uppers.length; i++) {
+            uppers[i] = Float.MIN_VALUE;
+        }
+
+        for (int i = 0; i < this.get_num(); i++) {
+            Data d = this.data[i];
+
+            for (int j = 0; j < uppers.length; j++) {
+                if (d.attrs[j] > uppers[j]) {
+                    uppers[j] = d.attrs[j];
+                }
+            }
+
+        }
+        return uppers;    }
 
     public float[] getAttr_lower() {
-        return this.attr_lower;
+        float[] lowers = new float[Constants.attrs_length];
+
+        for (int i = 0; i < lowers.length; i++) {
+            lowers[i] = Float.MAX_VALUE;
+        }
+
+        for (int i = 0; i < this.get_num(); i++) {
+            Data d = this.data[i];
+
+            for (int j = 0; j < lowers.length; j++) {
+                if (d.attrs[j] < lowers[j]) {
+                    lowers[j] = d.attrs[j];
+                }
+            }
+
+        }
+        return lowers;
+    }
+
+    public void print(String prefix, int times) {
+        System.out.println((String.join("", Collections.nCopies(times, prefix)))+this);
+        for(int i = 0 ; i< get_num();i++)
+        {
+            System.out.println((String.join("", Collections.nCopies(times+1, prefix)))+this.data[i]);
+        }
     }
 }

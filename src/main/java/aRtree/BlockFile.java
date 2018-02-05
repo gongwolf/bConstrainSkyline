@@ -181,4 +181,17 @@ public class BlockFile {
             act_block = 1;
         }
     }
+
+    public void set_header(byte[] header) throws IOException {
+        // write Rtree header to header
+        fp.seek(BFHEAD_LENGTH);
+        put_bytes(header, blocklength - BFHEAD_LENGTH);
+
+        if (number < 1) {
+            fp.seek(0);
+            act_block = 0;
+        } else {
+            act_block = 1;
+        }
+    }
 }

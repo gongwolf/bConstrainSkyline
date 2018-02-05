@@ -1,6 +1,7 @@
 package aRtree;
 
 import java.io.*;
+import java.util.Collections;
 
 public final class aRTDirNode extends aRTNode implements Node {
 
@@ -24,7 +25,6 @@ public final class aRTDirNode extends aRTNode implements Node {
                 + Constants.SIZEOF_INT;  //num_entries
         capacity = (rt.file.get_blocklength() - header_size) / d.get_size();
 
-        System.out.println("new entries node : capacity " + capacity);
 
         entries = new DirEntry[capacity];
 
@@ -41,6 +41,8 @@ public final class aRTDirNode extends aRTNode implements Node {
 
         // If removed from memory, this node has to be written back to disk
         dirty = true;
+        System.out.println("new entries node " + block + ": capacity " + capacity + " " + d.get_size() + "  " + (rt.file.get_blocklength() - header_size));
+
     }
 
     public aRTDirNode(aRTree rt, int _block) {
@@ -195,12 +197,15 @@ public final class aRTDirNode extends aRTNode implements Node {
     }
 
     public int insert(Data d, aRTNode sn[]) {
+        System.out.println("insert into the entry block " + block);
+
         int follow;
         aRTNode succ = null;
         aRTNode new_succ[] = new aRTNode[1];
         DirEntry de;
         int ret;
         float mbr[], nmbr[];
+        float lower[], upper[];
 
         // choose subtree to follow
         mbr = d.get_mbr();
@@ -214,10 +219,15 @@ public final class aRTDirNode extends aRTNode implements Node {
         ret = ((Node) succ).insert(d, new_succ);
         if (ret != Constants.NONE) // if anything (SPLIT or REINSERT) happend -. update bounces of entry "follow"
         // because these actions change the entries in succ
-        //Todo: update the follow's aggregate value and the parent node aggragate value
         {
             mbr = ((Node) succ).get_mbr();
             System.arraycopy(mbr, 0, entries[follow].bounces, 0, 2 * dimension);
+
+
+            lower = ((Node) succ).getAttr_lower();
+            upper = ((Node) succ).getAttr_upper();
+            System.arraycopy(lower, 0, entries[follow].attr_lower, 0, Constants.attrs_length);
+            System.arraycopy(upper, 0, entries[follow].attr_upper, 0, Constants.attrs_length);
         }
 
         // recalculate # of succeeders in the tree
@@ -227,6 +237,7 @@ public final class aRTDirNode extends aRTNode implements Node {
         {
             // some error checking
             if (get_num() == capacity) {
+                System.out.println(this.block);
                 Constants.error("RTDirNode.insert: maximum capacity violation", true);
             }
 
@@ -234,16 +245,23 @@ public final class aRTDirNode extends aRTNode implements Node {
             //Todo: update aggregate value
             de = new DirEntry(dimension, son_is_data, my_tree);
             nmbr = ((Node) new_succ[0]).get_mbr();
-
             System.arraycopy(nmbr, 0, de.bounces, 0, 2 * dimension);
             de.son = new_succ[0].block;
             de.son_ptr = new_succ[0];
             de.son_is_data = son_is_data;
             de.num_of_data = ((Node) new_succ[0]).get_num_of_data();
-            Constants.print(de.attr_lower);
+
+            lower = ((Node) new_succ[0]).getAttr_lower();
+            upper = ((Node) new_succ[0]).getAttr_upper();
+            System.arraycopy(lower, 0, de.attr_lower, 0, Constants.attrs_length);
+            System.arraycopy(upper, 0, de.attr_upper, 0, Constants.attrs_length);
+
+
+//            Constants.print(de.attr_lower);
 
             // insert de to this
             enter(de);
+            System.out.println("  inserted " + de.son_ptr.getClass().getName() + " " + de.son + " into " + this.block + " - " + this.get_num() + " " + capacity);
 
             if (get_num() == (capacity - 1)) // directory node overflows -. Split
             // this happens already if the node is nearly filled (capacity - 1)
@@ -255,6 +273,7 @@ public final class aRTDirNode extends aRTNode implements Node {
                 sn[0].level = level;
                 // split this --> this and sn[0]
                 split((aRTDirNode) sn[0]);
+                System.out.println("    split the entry node ++++" + ((aRTDirNode) this).block + " the new entry node is " + ((aRTDirNode) sn[0]).block);
 
                 ret = Constants.SPLIT;
             } else {
@@ -493,17 +512,24 @@ public final class aRTDirNode extends aRTNode implements Node {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("lower:[");
-        for (float f : this.attr_lower) {
+        sb.append("entry node " + this.block + " lower:[");
+        for (float f : this.getAttr_lower()) {
             sb.append(f).append(",");
         }
 
         sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("]");
         sb.append(", upper:[");
-        for (float f : this.attr_upper) {
+        for (float f : this.getAttr_upper()) {
             sb.append(f).append(",");
         }
-        sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("]");
+        sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("] ");
+        sb.append("[");
+        for(float f:get_mbr())
+        {
+            sb.append(f).append(",");
+        }
+        sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("] ");
+        sb.append(get_num());
         return sb.toString();
     }
 
@@ -544,5 +570,23 @@ public final class aRTDirNode extends aRTNode implements Node {
         }
         return lowers;
     }
+
+    public void print(String prefix,int times) {
+        System.out.println((String.join("", Collections.nCopies(times, prefix)))+this);
+        int i, n;
+        aRTNode succ;
+
+        n = get_num();
+        //System.out.println("I'm here aaaaaa");
+
+        for (i = 0; i < n; i++) // teste alle Rechtecke auf Ueberschneidung
+        {
+                succ = entries[i].get_son();
+                ((Node) succ).print(prefix,times+1);
+
+        }
+
+    }
+
 
 }

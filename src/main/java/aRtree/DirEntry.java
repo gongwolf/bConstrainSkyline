@@ -39,8 +39,8 @@ public class DirEntry {
         bounces = new float[2 * dimension];
         son_ptr = null;
         num_of_data = 0;
-        attr_lower=new float[Constants.attrs_length];
-        attr_upper=new float[Constants.attrs_length];
+        attr_lower = new float[Constants.attrs_length];
+        attr_upper = new float[Constants.attrs_length];
     }
 
     /**
@@ -112,6 +112,14 @@ public class DirEntry {
         }
         son = in.readInt();
         num_of_data = in.readInt();
+
+        for (int i = 0; i < Constants.attrs_length; i++) {
+            this.attr_lower[i] = in.readFloat();
+        }
+
+        for (int i = 0; i < Constants.attrs_length; i++) {
+            this.attr_upper[i] = in.readFloat();
+        }
     }
 
     /**
@@ -124,12 +132,22 @@ public class DirEntry {
         }
         out.writeInt(son);
         out.writeInt(num_of_data);
+
+        for (int i = 0; i < Constants.attrs_length; i++) {
+            out.writeFloat(this.attr_lower[i]);
+        }
+
+        for (int i = 0; i < Constants.attrs_length; i++) {
+            out.writeFloat(this.attr_upper[i]);
+        }
     }
 
     int get_size() {
-        return 2 * dimension * Constants.SIZEOF_FLOAT
-                + Constants.SIZEOF_INT
-                + Constants.SIZEOF_INT;
+        return 2 * dimension * Constants.SIZEOF_FLOAT // mbr
+                + Constants.SIZEOF_INT // block id
+                + Constants.SIZEOF_INT // num of data
+                + 2 * Constants.attrs_length * Constants.SIZEOF_FLOAT ;//upper and lower
+
     }
 
     /**

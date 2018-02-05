@@ -1,9 +1,7 @@
 package aRtree;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class aRTree {
 
@@ -159,7 +157,8 @@ public class aRTree {
                 //initialize new root
                 nroot_ptr = new aRTDirNode(this);
 
-                System.out.println(nroot_ptr);
+
+                System.out.println("new root "+nroot_ptr);
 
                 nroot_ptr.son_is_data = root_is_data;
                 nroot_ptr.level = (short) (root_ptr.level + 1);
@@ -187,6 +186,7 @@ public class aRTree {
                 nroot_ptr.enter(de);
                 Constants.print(((Node) root_ptr).getAttr_lower());
                 Constants.print(((Node) root_ptr).getAttr_upper());
+                System.out.println(nroot_ptr);
                 System.out.println("-------" + ((Node) root_ptr).get_num_of_data());
 
 
@@ -208,13 +208,15 @@ public class aRTree {
                 de.son_is_data = root_is_data;
                 de.num_of_data = ((Node) sn[0]).get_num_of_data();
                 nroot_ptr.enter(de);
-                nroot_ptr.enter(de);
                 Constants.print(((Node) sn[0]).getAttr_lower());
                 Constants.print(((Node) sn[0]).getAttr_upper());
+                System.out.println(nroot_ptr);
                 System.out.println("-------" + ((Node) sn[0]).get_num_of_data());
 
+                System.out.println("==============");
                 Constants.print(nroot_ptr.getAttr_lower());
                 Constants.print(nroot_ptr.getAttr_upper());
+                System.out.println(nroot_ptr);
 
 
                 // replace the root of the tree with the new node
@@ -251,6 +253,13 @@ public class aRTree {
         ((Node) root_ptr).nodes(nodes_a);
     }
 
+
+    void print()
+    {
+        load_root();
+        ((Node) root_ptr).print("   ",0);
+    }
+
     void load_root() {
         if (root_ptr == null) {
             if (root_is_data) {
@@ -265,6 +274,52 @@ public class aRTree {
     int get_num() // returns # of stored data
     {
         return num_of_data;
+    }
+
+    public void delete() {
+        try {
+            write_header(header);
+            file.set_header(header);
+        } catch (IOException e) {
+            Constants.error("RTree.delete: error in writing header", true);
+        }
+
+        if (root_ptr != null) {
+            ((Node) root_ptr).delete();
+        }
+        try {
+            file.flush();
+        } catch (IOException e) {
+            Constants.error("RTree.delete: error in flushing file", true);
+        }
+
+        System.out.println("Rtree saved: num_of_data=" + num_of_data
+                + " num_of_inodes=" + num_of_inodes
+                + " num_of_dnodes=" + num_of_dnodes);
+    }
+
+    void write_header(byte buffer[]) throws IOException {
+        ByteArrayOutputStream byte_out = new ByteArrayOutputStream(buffer.length);
+        DataOutputStream out = new DataOutputStream(byte_out);
+
+        out.writeInt(dimension);
+        out.writeInt(num_of_data);
+        out.writeInt(num_of_dnodes);
+        out.writeInt(num_of_inodes);
+        out.writeBoolean(root_is_data);
+        out.writeInt(root);
+        out.writeInt(dimension);
+
+        //user_header = &buffer[i];
+        byte[] bytes = byte_out.toByteArray();
+//        System.out.println(bytes.length+"!!!!!!!");
+        //copy bytes[] to buffer[]
+        for (int i = 0; i < bytes.length; ++i) {
+            buffer[i] = bytes[i];
+        }
+
+        out.close();
+        byte_out.close();
     }
 
 }

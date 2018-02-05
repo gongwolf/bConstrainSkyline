@@ -64,6 +64,42 @@ public class CachedBlockFile extends BlockFile {
         }
     }
 
+    public boolean read_block(byte[] block, int index) throws IOException {
+        int c_ind;
+
+        //because the first block stored the information of this R tree,
+        //The actual data stored from index 1 to ...
+        index++;
+        if (index <= get_num_of_blocks() && index > 0) {
+            if ((c_ind = in_cache(index)) >= 0) // the block is in cache
+            {
+                int blclth = get_blocklength();
+                for (int i = 0; i < blclth; i++) {
+                    block[i] = cache[c_ind][i];
+                }
+            } else // the block is not in cache
+            {
+                // find next free cache block or free one used
+                c_ind = next();
+//                System.out.println("c_ind:" + c_ind+" ##  index:"+index);
+                if (c_ind >= 0) {
+                    super.read_block(cache[c_ind], index - 1);
+                    cache_cont[c_ind] = index;
+                    fuf_cont[c_ind] = USED;
+                    int blclth = get_blocklength();
+                    for (int i = 0; i < blclth; i++) {
+                        block[i] = cache[c_ind][i];
+                    }
+                } else {
+                    super.read_block(block, index - 1);
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private int in_cache(int index) {
         int i;
 
@@ -129,6 +165,16 @@ public class CachedBlockFile extends BlockFile {
                 return ret_val;
             } else {
                 return tmp;
+            }
+        }
+    }
+
+    public void flush() throws IOException {
+        int i;
+
+        for (i = 0; i < cachesize; i++) {
+            if (fuf_cont[i] != FREE) {
+                super.write_block(cache[i], cache_cont[i] - 1);
             }
         }
     }
