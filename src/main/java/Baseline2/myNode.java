@@ -1,10 +1,9 @@
-package BaseLine;
+package Baseline2;
 
-import RstarTree.Data;
+import aRtree.Data;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
-
 import java.util.ArrayList;
 
 public class myNode {
@@ -33,18 +32,11 @@ public class myNode {
         try (Transaction tx = graphdb.beginTx()) {
             locations[0] = (double) this.node.getProperty("lat");
             locations[1] = (double) this.node.getProperty("log");
-            this.distance_q = Math.sqrt(Math.pow(locations[0] - qNode.location[0], 2) + Math.pow(locations[1] - qNode.location[1], 2));
+            float[] q_l = qNode.getData();
+            this.distance_q = Math.sqrt(Math.pow(locations[0] - q_l[0], 2) + Math.pow(locations[1] - q_l[1], 2));
             tx.success();
         }
         this.locations = locations;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public boolean addToSkyline(path np) {

@@ -512,6 +512,13 @@ public final class aRTDirNode extends aRTNode implements Node {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
+
+        if (get_num() == 0) {
+            sb.append("Empty entry node " + this.block);
+            return sb.toString();
+        }
+
+
         sb.append("entry node " + this.block + " lower:[");
         for (float f : this.getAttr_lower()) {
             sb.append(f).append(",");
@@ -524,8 +531,7 @@ public final class aRTDirNode extends aRTNode implements Node {
         }
         sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("] ");
         sb.append("[");
-        for(float f:get_mbr())
-        {
+        for (float f : get_mbr()) {
             sb.append(f).append(",");
         }
         sb = new StringBuffer(sb.substring(0, sb.lastIndexOf(","))).append("] ");
@@ -571,8 +577,8 @@ public final class aRTDirNode extends aRTNode implements Node {
         return lowers;
     }
 
-    public void print(String prefix,int times) {
-        System.out.println((String.join("", Collections.nCopies(times, prefix)))+this);
+    public void print(String prefix, int times) {
+        System.out.println((String.join("", Collections.nCopies(times, prefix))) + this);
         int i, n;
         aRTNode succ;
 
@@ -581,8 +587,8 @@ public final class aRTDirNode extends aRTNode implements Node {
 
         for (i = 0; i < n; i++) // teste alle Rechtecke auf Ueberschneidung
         {
-                succ = entries[i].get_son();
-                ((Node) succ).print(prefix,times+1);
+            succ = entries[i].get_son();
+            ((Node) succ).print(prefix, times + 1);
 
         }
 

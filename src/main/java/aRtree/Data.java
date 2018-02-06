@@ -377,8 +377,8 @@ public class Data implements Comparable, Streamable {
         this.PlaceId = PlaceId;
     }
 
-    public double[] getData() {
-        double[] values = new double[this.dimension];
+    public float[] getData() {
+        float[] values = new float[this.dimension];
         for (int i = 0; i < values.length; i++) {
             values[i] = this.data[i * 2];
         }

@@ -1,6 +1,9 @@
 package aRtree;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class myTest {
@@ -76,11 +79,15 @@ public class myTest {
     public static void main(String args[]) {
         myTest t = new myTest();
 //        t.test1();
+//        t.readTreetest();
+
+        t.test3();
         t.readTreetest();
+
     }
 
     private void readTreetest() {
-        aRTree ar = new aRTree("data/ar.art",3);
+        aRTree ar = new aRTree("data/ar.art", Constants.CACHESIZE);
         ar.print();
     }
 
@@ -93,10 +100,46 @@ public class myTest {
             System.out.println("delete the old file");
         }
 
-        aRTree ar = new aRTree("data/ar.art", Constants.BLOCKLENGTH, 3, 2);
+        aRTree ar = new aRTree("data/ar.art", Constants.BLOCKLENGTH, Constants.CACHESIZE, 2);
         for (Data d : dataf) {
             ar.insert(d);
             System.out.println("==========================");
+        }
+
+        ar.delete();
+    }
+
+    public void test3() {
+
+        String fname = "data/ar.art";
+        File f = new File(fname);
+        if (f.exists()) {
+            f.delete();
+            System.out.println("delete the old file");
+        }
+
+        aRTree ar = new aRTree("data/ar.art", Constants.BLOCKLENGTH, 3, 2);
+
+
+        try {
+            File file = new File("data/staticNode.txt");
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+
+                String infos[] = line.split(",");
+                Data d = new Data(2);
+                d.setPlaceId(Integer.parseInt(infos[0]));
+                d.setData(new float[]{Float.valueOf(infos[1]), Float.valueOf(infos[2])});
+                d.setAttrs(new float[]{Float.valueOf(infos[3]), Float.valueOf(infos[4]), Float.valueOf(infos[5])});
+                ar.insert(d);
+                System.out.println("=========================");
+            }
+            fileReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         ar.delete();

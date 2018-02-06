@@ -171,7 +171,7 @@ public class BaseMethod {
 //                            constants.print(np.costs);
 
 
-                            //lemma 3
+                            //lemma 2
                             if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q)) {
                                 if (next_n.addToSkyline(np)) {
                                     mqueue.add(next_n);
@@ -223,52 +223,52 @@ public class BaseMethod {
 //            System.out.println(r);
         }
 
-        System.out.println(finalDatas.size());
+        System.out.println(finalDatas.size()+" "+this.skyPaths.size());
 
-        double max_values[] = new double[constants.path_dimension + 3];
+//        double max_values[] = new double[constants.path_dimension + 3];
+//
+//        for (int i = 0; i < max_values.length; i++) {
+//            max_values[i] = Double.MIN_VALUE;
+//        }
+//
+//        double min_values[] = new double[constants.path_dimension + 3];
+//        for (int i = 0; i < max_values.length; i++) {
+//            min_values[i] = Double.MAX_VALUE;
+//        }
 
-        for (int i = 0; i < max_values.length; i++) {
-            max_values[i] = Double.MIN_VALUE;
-        }
-
-        double min_values[] = new double[constants.path_dimension + 3];
-        for (int i = 0; i < max_values.length; i++) {
-            min_values[i] = Double.MAX_VALUE;
-        }
-
-        for (Result r : sortedList) {
-            for (int i = 0; i < max_values.length; i++) {
-                if (r.costs[i] > max_values[i]) {
-                    max_values[i] = r.costs[i];
-                }
-
-                if (r.costs[i] < min_values[i]) {
-                    min_values[i] = r.costs[i];
-                }
-
-            }
-        }
-
-        constants.print(max_values);
-        constants.print(min_values);
-
-
-        for (Result r : sortedList) {
-            double score = 0.0;
-            for (int i = 0; i < r.costs.length; i++) {
-                score += (r.costs[i] - min_values[i]) / (max_values[i] - min_values[i]);
-
-            }
-
-
-//            for (int i = constants.path_dimension; i < max_values.length; i++) {
-//                score += (max_values[i]-r.costs[i]) / (max_values[i] - min_values[i]);
+//        for (Result r : sortedList) {
+//            for (int i = 0; i < max_values.length; i++) {
+//                if (r.costs[i] > max_values[i]) {
+//                    max_values[i] = r.costs[i];
+//                }
+//
+//                if (r.costs[i] < min_values[i]) {
+//                    min_values[i] = r.costs[i];
+//                }
 //
 //            }
+//        }
+//
+//        constants.print(max_values);
+//        constants.print(min_values);
 
 
-            System.out.println(score+" "+r);
-        }
+//        for (Result r : sortedList) {
+//            double score = 0.0;
+//            for (int i = 0; i < r.costs.length; i++) {
+//                score += (r.costs[i] - min_values[i]) / (max_values[i] - min_values[i]);
+//
+//            }
+//
+//
+////            for (int i = constants.path_dimension; i < max_values.length; i++) {
+////                score += (max_values[i]-r.costs[i]) / (max_values[i] - min_values[i]);
+////
+////            }
+//
+//
+//            System.out.println(score+" "+r);
+//        }
 
 //        System.out.println(r2);
 
@@ -323,6 +323,7 @@ public class BaseMethod {
 //                System.out.println((final_costs[0] < d.distance_q) + " " + final_costs[0] + " " + np.costs[0] + " " + end_distance + ";" + d.distance_q + " " + d.getPlaceId() + " " + d.location[0] + ";" + d.location[1]);
 //            }
             long rrrr = System.nanoTime();
+            //lemma3
             if (final_costs[0] < d.distance_q) {
                 boolean t = addToSkyline(r);
                 if (!flag && t) {
