@@ -89,7 +89,7 @@ public class BaseMethod2 {
                         p.expaned = true;
 
 
-                        addToSkylineResult(p, queryD);
+//                        addToSkylineResult(p, queryD);
 
 
                         ArrayList<path> new_paths = p.expand();
