@@ -16,8 +16,8 @@ public class Constants {
 //    static final int CACHESIZE = 128;
 //    public static final int BLOCKLENGTH = 2048;
 //    public static final int CACHESIZE = 50;
-    public static final int BLOCKLENGTH = 1024;
-    public static final int CACHESIZE = 50;
+    public static final int BLOCKLENGTH = 256;
+    public static final int CACHESIZE = 30;
 
     // for queries
     static final int RANGEQUERY = 0;

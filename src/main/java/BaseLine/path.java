@@ -16,7 +16,6 @@ public class path {
 
     public ArrayList<Node> nodes = new ArrayList<>();
     public ArrayList<Relationship> rels = new ArrayList<>();
-
     public ArrayList<String> propertiesName = new ArrayList<>();
 
 
@@ -45,7 +44,7 @@ public class path {
         this.rels.add(rel);
         this.propertiesName = old_path.propertiesName;
 
-        System.arraycopy(old_path.costs,0,this.costs,0,this.costs.length);
+        System.arraycopy(old_path.costs, 0, this.costs, 0, this.costs.length);
 
         calculateCosts(rel);
     }
@@ -102,6 +101,12 @@ public class path {
             }
             sb.append("(" + this.nodes.get(i).getId() + ")");
         }
+
+        sb.append(",[");
+        for (double d : this.costs) {
+            sb.append(" "+d);
+        }
+        sb.append("]");
         return sb.toString();
     }
 

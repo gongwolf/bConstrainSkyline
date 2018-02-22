@@ -135,7 +135,7 @@ class ObjComparator implements Comparator {
 
             sum += Math.pow(points[i] - r, 2);
         }
-        return Math.sqrt(sum);
+        return sum;
     }
 
     private double getDistance_Point(float[] mbr, Data qD) {
@@ -143,6 +143,6 @@ class ObjComparator implements Comparator {
         for (int i = 0; i < 2 * qD.dimension; i += 2) {
             dist += Math.pow(qD.data[i] - mbr[i], 2);
         }
-        return Math.sqrt(dist);
+        return dist;
     }
 }

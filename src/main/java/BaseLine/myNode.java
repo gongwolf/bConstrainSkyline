@@ -14,6 +14,7 @@ public class myNode {
     public ArrayList<path> skyPaths;
     public double distance_q;
     double[] locations = new double[2];
+    public ArrayList<Data> d_list;
 
     public myNode(Data startNode, Node current, GraphDatabaseService graphdb) {
         this.node = current;

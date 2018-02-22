@@ -10,4 +10,12 @@ public class constants {
         }
         System.out.println("]");
     }
+
+    public static void print(double[] costs) {
+        System.out.print("[");
+        for (double c : costs) {
+            System.out.print(c+" ");
+        }
+        System.out.println("]");
+    }
 }

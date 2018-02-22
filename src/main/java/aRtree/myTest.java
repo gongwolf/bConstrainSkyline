@@ -82,7 +82,7 @@ public class myTest {
 //        t.readTreetest();
 
         t.test3();
-        t.readTreetest();
+//        t.readTreetest();
 
     }
 

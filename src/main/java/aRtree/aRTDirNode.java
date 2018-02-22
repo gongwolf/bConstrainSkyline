@@ -209,7 +209,7 @@ public final class aRTDirNode extends aRTNode implements Node {
 
         // choose subtree to follow
         mbr = d.get_mbr();
-        follow = choose_subtree(mbr);
+        follow = choose_subtree(mbr, d.attrs);
 
 
         // get corresponding son
@@ -242,7 +242,6 @@ public final class aRTDirNode extends aRTNode implements Node {
             }
 
             // create a new entry to hold the new_succ[0] node
-            //Todo: update aggregate value
             de = new DirEntry(dimension, son_is_data, my_tree);
             nmbr = ((Node) new_succ[0]).get_mbr();
             System.arraycopy(nmbr, 0, de.bounces, 0, 2 * dimension);
@@ -269,12 +268,11 @@ public final class aRTDirNode extends aRTNode implements Node {
             {
                 // initialize brother(split) node
                 sn[0] = new aRTDirNode(my_tree);
-                ((aRTDirNode) sn[0]).son_is_data = ((aRTDirNode) this).son_is_data;
+                ((aRTDirNode) sn[0]).son_is_data = this.son_is_data;
                 sn[0].level = level;
                 // split this --> this and sn[0]
                 split((aRTDirNode) sn[0]);
-                System.out.println("    split the entry node ++++" + ((aRTDirNode) this).block + " the new entry node is " + ((aRTDirNode) sn[0]).block);
-
+                System.out.println("    split the entry node ++++" + this.block + " the new entry node is " + ((aRTDirNode) sn[0]).block);
                 ret = Constants.SPLIT;
             } else {
                 ret = Constants.NONE;
@@ -301,7 +299,7 @@ public final class aRTDirNode extends aRTNode implements Node {
      * subtree, we enlarge the directory entry (if has to be enlarged) and
      * return its index
      */
-    public int choose_subtree(float mbr[]) {
+    public int choose_subtree(float[] mbr, float[] attrs) {
         int i, j, n, follow, minindex = 0, inside[], inside_count, over[];
         float bmbr[] = new float[2 * dimension];
         float old_o, o, omin, a, amin, f, fmin;
@@ -343,18 +341,16 @@ public final class aRTDirNode extends aRTNode implements Node {
         } else // Case 3: There are no dir_mbrs that contain mbr
         // choose the one for which insertion causes the minimun overlap if son_is_data
         // else choose the one for which insertion causes the minimun area enlargement
-        // Case 3: Rechteck faellt in keinen Eintrag -.
-        // fuer Knoten, die auf interne Knoten zeigen:
-        // nimm den Eintrag, der am geringsten vergroessert wird;
-        // bei gleicher Vergroesserung:
-        // nimm den Eintrag, der die geringste Flaeche hat
-        //
-        // fuer Knoten, die auf Datenknoten zeigen:
-        // nimm den, der die geringste Ueberlappung verursacht
-        // bei gleicher Ueberlappung:
-        // nimm den Eintrag, der am geringsten vergroessert wird;
-        // bei gleicher Vergroesserung:
-        // nimm den Eintrag, der die geringste Flaeche hat
+        // for nodes pointing to internal nodes:
+        // take the entry that is the least magnified;
+        // at the same magnification:
+        // take the entry that has the smallest area
+        // for nodes pointing to data nodes:
+        // take the one that causes the slightest overlap
+        // with the same overlap:
+        // take the entry that is the least magnified;
+        // at the same magnification:
+        // take the entry that has the smallest area
         {
             if (son_is_data) {
                 omin = Constants.MAXREAL;
@@ -419,6 +415,21 @@ public final class aRTDirNode extends aRTNode implements Node {
             // enlarge the boundaries of the directoty entry we will follow
             Constants.enlarge(dimension, bmbr, mbr, entries[minindex].bounces);
             System.arraycopy(bmbr, 0, entries[minindex].bounces, 0, 2 * dimension);
+
+
+            for (int li = 0; li < Constants.attrs_length; li++) {
+                if (entries[minindex].attr_lower[li] > attrs[li]) {
+                    entries[minindex].attr_lower[li] = attrs[li];
+                }
+
+                if (entries[minindex].attr_upper[li] < attrs[li]) {
+                    entries[minindex].attr_upper[li] = attrs[li];
+                }
+
+
+            }
+
+//            System.arraycopy(lowers, 0, entries[minindex].attr_lower, 0, lowers.length);
 
             follow = minindex;
 
@@ -566,6 +577,7 @@ public final class aRTDirNode extends aRTNode implements Node {
 
         for (int i = 0; i < this.get_num(); i++) {
             DirEntry e = entries[i];
+//            Constants.print(e.attr_lower);
 
             for (int j = 0; j < lowers.length; j++) {
                 if (e.attr_lower[j] < lowers[j]) {

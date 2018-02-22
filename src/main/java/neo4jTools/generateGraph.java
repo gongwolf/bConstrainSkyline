@@ -29,7 +29,7 @@ public class generateGraph {
 
 
     public static void main(String args[]) {
-        int numberNodes = 10;
+        int numberNodes = 1000;
         int numberofDegree = 2;
         int numberofDimen = 3;
         generateGraph g = new generateGraph(numberNodes, numberofDegree, numberofDimen);

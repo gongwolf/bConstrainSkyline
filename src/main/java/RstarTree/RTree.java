@@ -22,7 +22,7 @@ public final class RTree {
     boolean root_is_data;         // true, if root is a data page
     int dimension;                // dimension of the data's
 
-    int num_of_data;              // # of stored data
+    public int num_of_data;              // # of stored data
     int num_of_dnodes;            // # of stored data pages
     int num_of_inodes;            // # of stored directory pages
 

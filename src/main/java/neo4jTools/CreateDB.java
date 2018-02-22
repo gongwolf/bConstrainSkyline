@@ -26,7 +26,7 @@ public class CreateDB {
         SegsPath = DBBase + "SegInfo.txt";    }
 
     public static void main(String args[]) {
-        CreateDB db = new CreateDB(10,5);
+        CreateDB db = new CreateDB(1000,2);
 //        db.createDatabasewithIndex("Id");
         db.createDatabase();
     }

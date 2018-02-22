@@ -9,7 +9,7 @@ import org.neo4j.graphdb.Transaction;
 
 import java.util.*;
 
-public class BaseMethod {
+public class BaseMethod3 {
     public ArrayList<path> qqqq = new ArrayList<>();
     Random r;
     String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
@@ -29,15 +29,17 @@ public class BaseMethod {
     private long add_counter;
     private long pro_add_result_counter;
     private long sky_add_result_counter;
+    private int num_of_data;
+    private HashMap<Integer, Integer> node_stas;
 
-    public BaseMethod(int graph_size, String degree) {
+    public BaseMethod3(int graph_size, String degree) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
     }
 
     public static void main(String args[]) {
-        int graph_size = 100;
+        int graph_size = 1000;
         String degree = "5";
         int query_num = 1;
 
@@ -48,6 +50,7 @@ public class BaseMethod {
         }
 
         for (int i = 0; i < query_num; i++) {
+            BaseMethod3 bm3 = new BaseMethod3(graph_size, degree);
             BaseMethod bm = new BaseMethod(graph_size, degree);
 //            Data queryD = bm.generateQueryData();
 ////
@@ -61,7 +64,11 @@ public class BaseMethod {
 //            constants.print(queryD.getData());
 
 
-            bm.baseline(queryD);
+//            bm.baseline(queryD);
+
+            System.out.println("\n===============================\n");
+
+            bm3.baseline(queryD);
         }
     }
 
@@ -70,6 +77,17 @@ public class BaseMethod {
         long s_sum = System.currentTimeMillis();
         ArrayList<path> Results = new ArrayList<>();
         Skyline sky = new Skyline(treePath);
+        System.out.println("num of data:" + sky.get_num_of_nodes());
+        this.num_of_data = sky.get_num_of_nodes();
+
+
+        this.node_stas = new HashMap<>();
+        for (int i = 0; i < this.num_of_data; i++) {
+            this.node_stas.put(i, 0);
+//            System.out.println(i);
+        }
+
+
         long r1 = System.currentTimeMillis();
         sky.BBS(queryD);
         System.out.println("Find candidate static node by BBS " + (System.currentTimeMillis() - r1) + "ms " + sky.skylineStaticNodes.size());
@@ -153,9 +171,6 @@ public class BaseMethod {
 //                        System.out.println("++: " + p);
 //                        constants.print(p.costs);
 
-                        long rr = System.nanoTime();
-                        addToSkylineResult(p, queryD);
-                        addResult_rt += (System.nanoTime() - rr);
 
                         long ee = System.nanoTime();
                         ArrayList<path> new_paths = p.expand();
@@ -190,13 +205,19 @@ public class BaseMethod {
 //                break;
             }
 
-            HashSet<Integer> r_id = new HashSet<>();
-            for (Result r : this.skyPaths) {
-                r_id.add(r.end.getPlaceId());
+
+            long tt_sl = 0;
+
+
+            for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
+                tt_sl += entry.getValue().skyPaths.size();
+                for (path p : entry.getValue().skyPaths) {
+                    long rr = System.nanoTime();
+                    addToSkylineResult(p, queryD);
+                    addResult_rt += (System.nanoTime() - rr);
+                }
             }
 
-            System.out.println("==================================================");
-            System.out.println("There are " + r_id.size() + " different hotels returned in final results");
             long exploration_rt = System.currentTimeMillis() - rt;
 
             sb.append(bbs_rt + "," + nn_rt + "," + exploration_rt + ",");
@@ -237,62 +258,120 @@ public class BaseMethod {
         System.out.println(finalDatas.size() + " " + this.skyPaths.size());
         System.out.println(addResult_rt + "/" + add_counter + "=" + (double) addResult_rt / add_counter / 1000000);
 
-
-        long tt_sl = 0;
+        int ll_sl = 0;
         for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
-            tt_sl += entry.getValue().skyPaths.size();
-            for (path p : entry.getValue().skyPaths) {
-                addToSkyline_p(p);
+            myNode my_n = entry.getValue();
+            ll_sl += my_n.skyPaths.size();
+        }
+        System.out.println(ll_sl);
+        System.out.println("======");
+
+
+//        myNode node_2 = this.tmpStoreNodes.get(4L);
+//        for (path p : node_2.skyPaths) {
+//            System.out.println(p);
+//        }
+//        System.out.println("=========================================");
+//        for (Result r : this.skyPaths) {
+//            if (r.p != null && r.p.endNode.getId() == 4) {
+//                System.out.println("::+===== " + r);
+//            }
+//        }
+//        System.out.println("=========================================");
+//        myNode node_6 = this.tmpStoreNodes.get(9L);
+//        for (path p : node_6.skyPaths) {
+//            System.out.println(p);
+//        }
+//        System.out.println("=========================================");
+//        for (Result r : this.skyPaths) {
+//            if (r.p != null && r.p.endNode.getId() == 9) {
+//                System.out.println("::+===== " + r);
+//            }
+//        }
+
+//        for (Result r : this.skyPaths) {
+//            int id = r.end.getPlaceId();
+//            if (id != 9999999) {
+//                int c = this.node_stas.get(r.end.getPlaceId()) + 1;
+//                this.node_stas.put(r.end.getPlaceId(), c);
+//            }
+//        }
+//
+//        for (Map.Entry<Integer, Integer> e : this.node_stas.entrySet()) {
+//            if (e.getValue() != 0)
+//                System.out.println(e.getKey() + " " + e.getValue());
+//        }
+
+        double max_values[] = new double[constants.path_dimension + 3];
+
+        for (int i = 0; i < max_values.length; i++) {
+            max_values[i] = Double.MIN_VALUE;
+        }
+
+        double min_values[] = new double[constants.path_dimension + 3];
+        for (int i = 0; i < max_values.length; i++) {
+            min_values[i] = Double.MAX_VALUE;
+        }
+
+        for (Result r : sortedList) {
+            for (int i = 0; i < max_values.length; i++) {
+                if (r.costs[i] > max_values[i]) {
+                    max_values[i] = r.costs[i];
+                }
+
+                if (r.costs[i] < min_values[i]) {
+                    min_values[i] = r.costs[i];
+                }
 
             }
         }
 
-        System.out.println(qqqq.size() + "   " + tt_sl);
+        constants.print(max_values);
+        constants.print(min_values);
 
-//        double max_values[] = new double[constants.path_dimension + 3];
-//
-//        for (int i = 0; i < max_values.length; i++) {
-//            max_values[i] = Double.MIN_VALUE;
+
+        for (Result r : sortedList) {
+            double score = 0.0;
+
+            for (int i = 0; i < r.costs.length; i++) {
+                if (i < 1) {
+                    score += Math.pow(2, -r.costs[i] / 0.5);
+                } else if(i>=4){
+                    score += (max_values[i] - r.costs[i]) / (max_values[i] - min_values[i]);
+                }
+            }
+            r.score = score;
+//            System.out.println(score + " " + r);
+        }
+
+//        Collections.sort(this.skyPaths);
+//        for (Result r : this.skyPaths) {
+//            System.out.println(r.score + "  " + r + " ");
 //        }
-//
-//        double min_values[] = new double[constants.path_dimension + 3];
-//        for (int i = 0; i < max_values.length; i++) {
-//            min_values[i] = Double.MAX_VALUE;
-//        }
 
-//        for (Result r : sortedList) {
-//            for (int i = 0; i < max_values.length; i++) {
-//                if (r.costs[i] > max_values[i]) {
-//                    max_values[i] = r.costs[i];
-//                }
-//
-//                if (r.costs[i] < min_values[i]) {
-//                    min_values[i] = r.costs[i];
-//                }
-//
-//            }
-//        }
-//
-//        constants.print(max_values);
-//        constants.print(min_values);
-
-
-//        for (Result r : sortedList) {
-//            double score = 0.0;
-//            for (int i = 0; i < r.costs.length; i++) {
-//                score += (r.costs[i] - min_values[i]) / (max_values[i] - min_values[i]);
-//
-//            }
-//
-//
-////            for (int i = constants.path_dimension; i < max_values.length; i++) {
-////                score += (max_values[i]-r.costs[i]) / (max_values[i] - min_values[i]);
-////
+//        ArrayList<Integer> has_results = new ArrayList<>();
+//        int ranks = 20;
+////        for (Result r : this.skyPaths) {
+////            if (r.end.getPlaceId() == 9999999) {
+////                if (ranks > 20) {
+////                    System.out.println(r.score + "  " + r + " " + ranks);
+////                    ranks = 20;
+////                }
+////                break;
 ////            }
+////            ranks++;
+////        }
 //
-//
-//            System.out.println(score+" "+r);
+//        int j = 0;
+//        for (int i = 0; i <= ranks; i++) {
+//            Result rrr = this.skyPaths.get(i);
+////            if (has_results.indexOf(rrr.end.getPlaceId()) == -1) {
+//            System.out.println(rrr.score + "  " + rrr);
+//            has_results.add(rrr.end.getPlaceId());
+////                j++;
+////        }
 //        }
+
 
 //        System.out.println(r2);
 
@@ -323,8 +402,6 @@ public class BaseMethod {
         for (Data d : this.sNodes) {
             this.pro_add_result_counter++;
             long rrr = System.nanoTime();
-            //this.read_data += (rrr - dsad);
-
 
             if (d.getPlaceId() == 9999999) {
                 continue;
@@ -345,10 +422,16 @@ public class BaseMethod {
             d1 += System.nanoTime() - rrr;
 
             long rrrr = System.nanoTime();
+
             //lemma3
+
+
             if (final_costs[0] < d.distance_q) {
                 this.sky_add_result_counter++;
                 boolean t = addToSkyline(r);
+//                if (np.endNode.getId() == 9 && np.startNode.getId() == 4 && t) {
+//                    System.out.println("!!!!!   " + r);
+//                }
                 if (!flag && t) {
                     flag = true;
                 }
@@ -412,7 +495,9 @@ public class BaseMethod {
             boolean can_insert_np = true;
             for (; i < skyPaths.size(); ) {
                 if (checkDominated(skyPaths.get(i).costs, r.costs)) {
-//                    if (r.end.getPlaceId() == checkedDataId && skyPaths.get(i).p != null) {
+//                    if (r.p != null && r.p.endNode.getId() == 9 && r.p.startNode.getId() == 1) {
+//                    if (r.p == null && skyPaths.get(i).p==null) {
+//                        System.out.println(r);
 //                        System.out.println("    dominated by " + skyPaths.get(i));
 //                    }
                     can_insert_np = false;
@@ -465,6 +550,7 @@ public class BaseMethod {
                     break;
                 } else {
                     if (checkDominated_p(np.costs, qqqq.get(i).costs)) {
+
                         this.qqqq.remove(i);
                     } else {
                         i++;

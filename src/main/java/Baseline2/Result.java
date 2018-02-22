@@ -1,17 +1,23 @@
-package BaseLine;
+package Baseline2;
 
-import RstarTree.Data;
+import aRtree.Data;
 
 public class Result implements Comparable<Result> {
     public Data start, end;
     public path p;
     public double[] costs = new double[constants.path_dimension + 3];
-    public double score=0.0;
 
 
     public Result(Data queryD, Data destination, double[] c, path np) {
         this.start = queryD;
         this.end = destination;
+        System.arraycopy(c, 0, this.costs, 0, c.length);
+        p = np;
+    }
+
+    public Result(Data queryD, Object o, double[] c, path np) {
+        this.start = queryD;
+        this.end = null;
         System.arraycopy(c, 0, this.costs, 0, c.length);
         p = np;
     }
@@ -39,44 +45,27 @@ public class Result implements Comparable<Result> {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(this.start.getPlaceId()).append(",").append(this.start.location[0]).append(",").append(this.start.location[1]).append(",");
-        sb.append(this.end.getPlaceId()).append(",").append(this.end.location[0]).append(",").append(this.end.location[1]).append(",");
+        sb.append(this.start.getPlaceId()).append(",").append(this.start.getData()[0]).append(",").append(this.start.getData()[1]).append(",");
+        sb.append(this.end.getPlaceId()).append(",").append(this.end.getData()[0]).append(",").append(this.end.getData()[1]).append(",");
         sb.append(this.p);
-        if(this.p==null)
-        {
-            sb.append(",[]");
-        }
         sb.append(",[");
         for (double c : this.costs) {
-            sb.append(c).append(" ");
+            sb.append(c).append(",");
         }
-        sb.substring(0,sb.lastIndexOf(" "));
+        sb.substring(0,sb.lastIndexOf(","));
         sb.append("]");
         return sb.toString();
     }
 
 
-//    @Override
-//    public int compareTo(Result o) {
-//        if (o.costs[0] == this.costs[0]) {
-//            return 0;
-//        } else if (o.costs[0] > this.costs[0]) {
-//            return -1;
-//        } else {
-//            return 1;
-//        }
-//    }
-
     @Override
     public int compareTo(Result o) {
-        if (o.score == this.score) {
+        if (o.costs[0] == this.costs[0]) {
             return 0;
-        } else if (o.score > this.score) {
-            return 1;
-        } else {
+        } else if (o.costs[0] > this.costs[0]) {
             return -1;
+        } else {
+            return 1;
         }
     }
 }
-
-

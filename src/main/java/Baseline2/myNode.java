@@ -36,7 +36,6 @@ public class myNode {
             this.distance_q = Math.sqrt(Math.pow(locations[0] - q_l[0], 2) + Math.pow(locations[1] - q_l[1], 2));
             tx.success();
         }
-        this.locations = locations;
     }
 
     public boolean addToSkyline(path np) {

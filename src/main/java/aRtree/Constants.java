@@ -8,8 +8,8 @@ public class Constants {
 
 //        static final int BLOCKLENGTH = 1024;
 //    static final int CACHESIZE = 128;
-    public static final int BLOCKLENGTH = 1024;
-    public static final int CACHESIZE = 50;
+    public static final int BLOCKLENGTH = 256;
+    public static final int CACHESIZE = 30;
     public static final int attrs_length = 3;
     public final static int RTDataNode__dimension = 2;
     public final static float MAXREAL = (float) 9.99e20;
@@ -191,6 +191,10 @@ public class Constants {
         //   check_mbr(dimension,*mbr);
         //#endif
     }
+
+
+
+
 
     /**
      * returns true if the two mbrs intersect

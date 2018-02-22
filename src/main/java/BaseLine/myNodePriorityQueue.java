@@ -55,6 +55,11 @@ class myQueue {
         this.queue = new PriorityQueue(mc);
     }
 
+    public myQueue() {
+        defaultComparator mc = new defaultComparator();
+        this.queue = new PriorityQueue(mc);
+    }
+
     public boolean add(Object d) {
         return this.queue.add(d);
     }
@@ -146,3 +151,70 @@ class ObjComparator implements Comparator {
         return Math.sqrt(dist);
     }
 }
+
+
+class defaultComparator implements Comparator {
+
+    @Override
+    public int compare(Object x, Object y) {
+        double disX = 0, disY = 0;
+        if (x.getClass() == Data.class) {
+            Data dx = (Data) x;
+            float[] x_mbr = dx.get_mbr();
+            disX = getDistance_Point(x_mbr);
+        } else if (x instanceof Node) {
+            float[] x_mbr = ((Node) x).get_mbr();
+            disX = getDistance_Node(x_mbr);
+        }
+
+
+        if (y.getClass() == Data.class) {
+            Data dy = (Data) y;
+            float[] y_mbr = dy.get_mbr();
+            disY = getDistance_Point(y_mbr);
+        } else if (y instanceof Node) {
+            float[] y_mbr = ((Node) y).get_mbr();
+            disY = getDistance_Node(y_mbr);
+        }
+
+        if (disX == disY) {
+            return 0;
+        } else if (disX > disY) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    private double getDistance_Node(float[] mbr) {
+        float sum = (float) 0.0;
+        float r;
+        int i;
+
+        float points[] = new float[mbr.length/2];
+
+        for (i = 0; i < points.length ; i++) {
+            if (points[i] < mbr[2 * i]) {
+                r = mbr[2 * i];
+            } else {
+                if (points[i] > mbr[2 * i + 1]) {
+                    r = mbr[2 * i + 1];
+                } else {
+                    r = points[i];
+                }
+            }
+
+            sum += Math.pow(points[i] - r, 2);
+        }
+        return Math.sqrt(sum);
+    }
+
+    private double getDistance_Point(float[] mbr) {
+        double dist = 0;
+        for (int i = 0; i < mbr.length ; i += 2) {
+            dist += Math.pow(mbr[i], 2);
+        }
+        return Math.sqrt(dist);
+    }
+}
+

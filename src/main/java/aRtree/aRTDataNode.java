@@ -435,7 +435,8 @@ public class aRTDataNode extends aRTNode implements Node {
             }
 
         }
-        return uppers;    }
+        return uppers;
+    }
 
     public float[] getAttr_lower() {
         float[] lowers = new float[Constants.attrs_length];
@@ -444,8 +445,12 @@ public class aRTDataNode extends aRTNode implements Node {
             lowers[i] = Float.MAX_VALUE;
         }
 
+
         for (int i = 0; i < this.get_num(); i++) {
             Data d = this.data[i];
+
+//            System.out.print("      data:");
+//            Constants.print(d.attrs);
 
             for (int j = 0; j < lowers.length; j++) {
                 if (d.attrs[j] < lowers[j]) {
@@ -453,15 +458,17 @@ public class aRTDataNode extends aRTNode implements Node {
                 }
             }
 
+
         }
+//        System.out.print("      data_lower:");
+//        Constants.print(lowers);
         return lowers;
     }
 
     public void print(String prefix, int times) {
-        System.out.println((String.join("", Collections.nCopies(times, prefix)))+this);
-        for(int i = 0 ; i< get_num();i++)
-        {
-            System.out.println((String.join("", Collections.nCopies(times+1, prefix)))+this.data[i]);
+        System.out.println((String.join("", Collections.nCopies(times, prefix))) + this);
+        for (int i = 0; i < get_num(); i++) {
+            System.out.println((String.join("", Collections.nCopies(times + 1, prefix))) + this.data[i]);
         }
     }
 }
