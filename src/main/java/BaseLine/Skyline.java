@@ -47,7 +47,7 @@ public class Skyline {
                 int n = dirN.get_num();
                 for (int i = 0; i < n; i++) {
                     Object succ_o = dirN.entries[i].get_son();
-                    if (!isDominatedByResult((Node) succ_o, queryPoint)) {
+                    if (!isDominatedByQueryPoint((Node) succ_o, queryPoint)) {
                         queue.add(succ_o);
                     }
                 }
@@ -116,7 +116,7 @@ public class Skyline {
         return false;
     }
 
-    private boolean isDominatedByResult(Node node, Data queryD) {
+    private boolean isDominatedByQueryPoint(Node node, Data queryD) {
         if (skylineStaticNodes.isEmpty()) {
             return false;
         } else {
@@ -125,7 +125,7 @@ public class Skyline {
             float[] n_mbr = node.get_mbr();
             boolean flag = true;
             for (int j = 0; j < n_mbr.length; j += 2) {
-                flag = flag & (n_mbr[j] > q_points[j / 2]);
+                flag = flag & (n_mbr[j] >= q_points[j / 2]);
                 //if one dimension of the node is less than the point d
                 //It means the point d can not fall into the left-bottom partition.
                 //So the node can not be dominated by this d.
@@ -143,7 +143,7 @@ public class Skyline {
 
 
     private boolean isDominatedByResult(Node node) {
-        if (skylineStaticNodes.isEmpty()) {
+        if (sky_hotels.isEmpty()) {
             return false;
         } else {
             float[] n_mbr = node.get_mbr();
