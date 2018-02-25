@@ -104,7 +104,7 @@ public class path {
 
         sb.append(",[");
         for (double d : this.costs) {
-            sb.append(" "+d);
+            sb.append(" " + d);
         }
         sb.append("]");
         return sb.toString();
@@ -113,10 +113,17 @@ public class path {
     @Override
     public boolean equals(Object obj) {
 
+        if (obj == null && this == null) {
+            return true;
+        } else if((obj==null && this!=null) || (obj!=null&&this==null)){
+            return false;
+        }
+
         if (obj == this)
             return true;
         if (!(obj instanceof path))
             return false;
+
 
         path o_path = (path) obj;
         if (!o_path.nodes.equals(this.nodes) || !o_path.rels.equals(this.rels)) {

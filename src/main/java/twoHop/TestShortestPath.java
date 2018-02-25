@@ -195,7 +195,7 @@ public class TestShortestPath {
 
     private void CreateGraph() {
         generateGraph gg = new generateGraph(this.graphsize, this.degree, 3);
-        gg.generateG();
+        gg.generateG(true);
         CreateDB db = new CreateDB(this.graphsize, this.degree);
         db.createDatabase();
 

@@ -1,11 +1,9 @@
 package neo4jTools;
 
 import javafx.util.Pair;
+import org.apache.commons.io.FileUtils;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 public class generateGraph {
@@ -29,22 +27,24 @@ public class generateGraph {
 
 
     public static void main(String args[]) {
-        int numberNodes = 1000;
-        int numberofDegree = 2;
+        int numberNodes = 20;
+        int numberofDegree = 5;
         int numberofDimen = 3;
         generateGraph g = new generateGraph(numberNodes, numberofDegree, numberofDimen);
-        g.generateG();
+        g.generateG(true);
 
     }
 
-    public void generateG() {
-        //File dataF = new File(DBBase);
-        //try {
-        //    FileUtils.deleteDirectory(dataF);
-        //    dataF.mkdirs();
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
+    public void generateG(boolean deleteBefore) {
+        if (deleteBefore) {
+            File dataF = new File(DBBase);
+            try {
+                FileUtils.deleteDirectory(dataF);
+                dataF.mkdirs();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         HashMap<Pair<String, String>, String[]> Edges = new HashMap<>();
         HashMap<String, String[]> Nodes = new HashMap<>();
@@ -97,10 +97,12 @@ public class generateGraph {
                 Edges.put(new Pair(startNode, endNode), costs);
             }
         }
+
         writeNodeToDisk(Nodes);
         writeEdgeToDisk(Edges);
+        System.out.println("Graph is created, there are " + Nodes.size() + " nodes and " + Edges.size() + " edges");
 
-        System.out.println("Graph is created, there are "+Nodes.size()+" nodes and "+Edges.size()+" edges");
+
     }
 
     private void writeEdgeToDisk(HashMap<Pair<String, String>, String[]> edges) {

@@ -75,7 +75,7 @@ public class SyntheticData {
 
                 if (fw != null)
                     fw.close();
-                System.out.println("Done!! See MCP_Results.csv for MCP of each cow for each day.");
+//                System.out.println("Done!! See MCP_Results.csv for MCP of each cow for each day.");
 
             } catch (IOException ex) {
 
