@@ -30,6 +30,12 @@ public class BaseMethod {
     private long pro_add_result_counter;
     private long sky_add_result_counter;
 
+
+    private ArrayList<Data> sky_hotel;
+//    HashMap<Integer, Double> dominated_checking = new HashMap<>();
+
+
+
     public BaseMethod(int graph_size, String degree) {
         r = new Random();
         this.graph_size = graph_size;
@@ -37,7 +43,7 @@ public class BaseMethod {
     }
 
     public static void main(String args[]) {
-        int graph_size = 100;
+        int graph_size = 10;
         String degree = "5";
         int query_num = 1;
 
@@ -72,19 +78,12 @@ public class BaseMethod {
         Skyline sky = new Skyline(treePath);
         long r1 = System.currentTimeMillis();
         sky.BBS(queryD);
+
         System.out.println("Find candidate static node by BBS " + (System.currentTimeMillis() - r1) + "ms " + sky.skylineStaticNodes.size());
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
 
-//        for (Data d : sNodes) {
-//            System.out.println(d);
-//        }
-//
-//        System.out.println("==========");
 
-
-//        System.out.println(sNodes.size());
-//        System.out.println("there are " + sNodes.size() + " nodes are not dominated by query point");
         for (Data d : sNodes) {
             double[] c = new double[constants.path_dimension + 3];
             c[0] = d.distance_q;
@@ -97,10 +96,6 @@ public class BaseMethod {
             addToSkyline(r);
         }
 
-//        System.out.println(this.skyPaths.size());
-//        for (Result r : skyPaths) {
-//            System.out.println(r);
-//        }
         System.out.println("==========");
 
 
@@ -365,8 +360,8 @@ public class BaseMethod {
     public Data generateQueryData() {
         Data d = new Data(3);
         d.setPlaceId(9999999);
-        float latitude = randomFloatInRange(0f, 180f);
-        float longitude = randomFloatInRange(0f, 180f);
+        float latitude = randomFloatInRange(0f, 360f);
+        float longitude = randomFloatInRange(0f, 360f);
         d.setLocation(new double[]{latitude, longitude});
 
 

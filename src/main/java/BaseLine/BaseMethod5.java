@@ -41,7 +41,7 @@ public class BaseMethod5 {
     }
 
     public static void main(String args[]) {
-        int graph_size = 4000;
+        int graph_size = 20;
         String degree = "5";
         int query_num = 1;
 
@@ -61,15 +61,15 @@ public class BaseMethod5 {
 
             Data queryD = new Data(3);
             queryD.setPlaceId(9999999);
-            queryD.setLocation(new double[]{20.380422592163086, 9.294476509094238});
+            queryD.setLocation(new double[]{219.9745788574219,151.3258361816406});
             queryD.setData(new float[]{4.3136826f, 0.45063168f, 3.711781f});
             bm.baseline(queryD);
 
             System.out.println("\n===============================\n");
-//
-//            bm3.baseline(queryD);
-//
-//            System.out.println("\n===============================\n");
+////
+            bm3.baseline(queryD);
+////
+            System.out.println("\n===============================\n");
 
             bm5.baseline(queryD);
         }
@@ -85,9 +85,9 @@ public class BaseMethod5 {
         sky.findSkyline();
 
         this.sky_hotel = new ArrayList<>(sky.sky_hotels);
-//        for (Data sddd : this.sky_hotel) {
-//            System.out.println(sddd);
-//        }
+        for (Data sddd : this.sky_hotel) {
+            System.out.println(sddd.getPlaceId());
+        }
         System.out.println("there are " + this.sky_hotel.size() + " skyline hotels");
         System.out.println("-------------------------");
 
@@ -365,6 +365,10 @@ public class BaseMethod5 {
         System.out.println(finalDatas.size() + " " + this.skyPaths.size());
         System.out.println(addResult_rt + "/" + add_counter + "=" + (double) addResult_rt / add_counter / 1000000);
         System.out.println(sky_add_result_counter + "/" + add_counter + "=" + (double) sky_add_result_counter / add_counter);
+
+        for (Result r:this.skyPaths) {
+            System.out.println(r);
+        }
 
     }
 

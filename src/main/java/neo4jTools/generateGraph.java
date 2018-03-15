@@ -52,22 +52,22 @@ public class generateGraph {
 
         //生成经度和纬度
         for (int i = 0; i < numberNodes; i++) {
-            String cost1 = String.valueOf(getRandomNumberInRange(1, 180));
-            String cost2 = String.valueOf(getRandomNumberInRange(1, 180));
+            String cost1 = String.valueOf(getRandomNumberInRange(1, 360));
+            String cost2 = String.valueOf(getRandomNumberInRange(1, 360));
             Nodes.put(String.valueOf(i), new String[]{cost1, cost2});
         }
 
         //Create the Edges information.
         for (int i = 0; i < numberofEdges; i++) {
-            String startNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
-            String endNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
+            String startNode = String.valueOf(getRandomNumberInRange_int(0, numberNodes - 1));
+            String endNode = String.valueOf(getRandomNumberInRange_int(0, numberNodes - 1));
             while (startNode.equals(endNode)) {
-                endNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
+                endNode = String.valueOf(getRandomNumberInRange_int(0, numberNodes - 1));
             }
 
             String[] costs = new String[numberofDimens];
             for (int j = 0; j < numberofDimens; j++) {
-                costs[j] = String.valueOf(getRandomNumberInRange(1, 500));
+                costs[j] = String.valueOf(getRandomNumberInRange(0,5));
             }
 
             Edges.put(new Pair(startNode, endNode), costs);
@@ -84,14 +84,14 @@ public class generateGraph {
             //Create edge for it
             if (!containedNodes.contains(node)) {
                 String startNode = String.valueOf(node);
-                String endNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
+                String endNode = String.valueOf(getRandomNumberInRange_int(0, numberNodes - 1));
                 while (startNode.equals(endNode)) {
-                    endNode = String.valueOf(getRandomNumberInRange(0, numberNodes - 1));
+                    endNode = String.valueOf(getRandomNumberInRange_int(0, numberNodes - 1));
                 }
 
                 String[] costs = new String[numberofDimens];
                 for (int j = 0; j < numberofDimens; j++) {
-                    costs[j] = String.valueOf(getRandomNumberInRange(1, 500));
+                    costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
                 }
 
                 Edges.put(new Pair(startNode, endNode), costs);
@@ -147,7 +147,18 @@ public class generateGraph {
         }
     }
 
-    private int getRandomNumberInRange(int min, int max) {
+    private double getRandomNumberInRange(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextDouble() * (max - min) + min;
+    }
+
+
+    private int getRandomNumberInRange_int(int min, int max) {
 
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");

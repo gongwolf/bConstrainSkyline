@@ -53,7 +53,7 @@ public class BaseMethod2 {
 
 
     public static void main(String args[]) {
-        int graph_size = 100;
+        int graph_size = 1000;
         String degree = "5";
         int query_num = 1;
 
@@ -198,7 +198,6 @@ public class BaseMethod2 {
             tt_sl += entry.getValue().skyPaths.size();
             for (path p : entry.getValue().skyPaths) {
                 addToSkyline_p(p);
-
             }
         }
 

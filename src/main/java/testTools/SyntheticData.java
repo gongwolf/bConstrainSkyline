@@ -16,7 +16,7 @@ public class SyntheticData {
 
     public static void main(String args[]) {
         SyntheticData sd = new SyntheticData();
-        sd.createStaticNodes(1000, 3);
+        sd.createStaticNodes(5, 3);
         sd.testStaticRTree();
     }
 
@@ -44,8 +44,8 @@ public class SyntheticData {
             for (int i = 0; i < NumberOfNodes; i++) {
                 Data d = new Data(dimension);
                 d.setPlaceId(i);
-                float latitude = randomFloatInRange(0f, 180f);
-                float longitude = randomFloatInRange(0f, 180f);
+                float latitude = randomFloatInRange(0f, 360f);
+                float longitude = randomFloatInRange(0f, 360f);
                 d.setLocation(new double[]{latitude, longitude});
 
 
