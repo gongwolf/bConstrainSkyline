@@ -41,8 +41,8 @@ public class BaseMethod5 {
     }
 
     public static void main(String args[]) {
-        int graph_size = 20;
-        String degree = "5";
+        int graph_size = 50;
+        String degree = "4";
         int query_num = 1;
 
         if (args.length == 3) {
@@ -61,7 +61,7 @@ public class BaseMethod5 {
 
             Data queryD = new Data(3);
             queryD.setPlaceId(9999999);
-            queryD.setLocation(new double[]{219.9745788574219,151.3258361816406});
+            queryD.setLocation(new double[]{219.9745788574219, 151.3258361816406});
             queryD.setData(new float[]{4.3136826f, 0.45063168f, 3.711781f});
             bm.baseline(queryD);
 
@@ -366,8 +366,17 @@ public class BaseMethod5 {
         System.out.println(addResult_rt + "/" + add_counter + "=" + (double) addResult_rt / add_counter / 1000000);
         System.out.println(sky_add_result_counter + "/" + add_counter + "=" + (double) sky_add_result_counter / add_counter);
 
-        for (Result r:this.skyPaths) {
-            System.out.println(r);
+        for (Result r : this.skyPaths) {
+            if (r.p != null && r.end.getPlaceId() == 14) {
+                System.out.println(r);
+            }
+
+//            if (r.p != null) {
+//                System.out.println(r.end.getPlaceId() + " " + r.p.startNode.getId() + " " + r.p.endNode.getId());
+//            } else {
+//                System.out.println(r.end.getPlaceId() + " " + null);
+//
+//            }
         }
 
     }

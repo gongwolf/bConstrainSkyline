@@ -16,7 +16,7 @@ public class SyntheticData {
 
     public static void main(String args[]) {
         SyntheticData sd = new SyntheticData();
-        sd.createStaticNodes(5, 3);
+        sd.createStaticNodes(30, 3);
         sd.testStaticRTree();
     }
 

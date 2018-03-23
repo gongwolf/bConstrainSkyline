@@ -26,7 +26,7 @@ public class CreateDB {
     }
 
     public static void main(String args[]) {
-        CreateDB db = new CreateDB(20, 5);
+        CreateDB db = new CreateDB(50, 4);
 //        db.createDatabasewithIndex("Id");
         db.createDatabase();
     }

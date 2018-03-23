@@ -8,9 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1927bf6b-a886-486f-9482-a756607011b0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod.java" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Baseline2/BaseMethod2.java" afterPath="$PROJECT_DIR$/src/main/java/Baseline2/BaseMethod2.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java" afterPath="$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java" />
@@ -32,11 +30,9 @@
       <file leaf-file-name="BaseMethod5.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="79" column="45" lean-forward="true" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
-              <folding>
-                <element signature="e#1050#1056#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="414">
+              <caret line="369" column="55" lean-forward="false" selection-start-line="369" selection-start-column="55" selection-end-line="369" selection-end-column="55" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -44,7 +40,7 @@
       <file leaf-file-name="BaseMethod.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
+            <state relative-caret-position="18">
               <caret line="359" column="16" lean-forward="false" selection-start-line="359" selection-start-column="16" selection-end-line="359" selection-end-column="16" />
               <folding />
             </state>
@@ -54,8 +50,8 @@
       <file leaf-file-name="SyntheticData.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="24" column="0" lean-forward="true" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+            <state relative-caret-position="198">
+              <caret line="23" column="44" lean-forward="true" selection-start-line="23" selection-start-column="44" selection-end-line="23" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -64,8 +60,8 @@
       <file leaf-file-name="generateGraph.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+            <state relative-caret-position="252">
+              <caret line="39" column="42" lean-forward="true" selection-start-line="39" selection-start-column="42" selection-end-line="39" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -74,8 +70,8 @@
       <file leaf-file-name="CreateDB.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+            <state relative-caret-position="360">
+              <caret line="29" column="43" lean-forward="true" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -183,9 +179,9 @@
         <option value="$PROJECT_DIR$/src/main/java/Baseline2/BaseMethod2.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod.java" />
         <option value="$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java" />
+        <option value="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" />
-        <option value="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" />
       </list>
     </option>
   </component>
@@ -208,10 +204,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="462" />
-    <option name="y" value="388" />
-    <option name="width" value="974" />
-    <option name="height" value="555" />
+    <option name="x" value="988" />
+    <option name="y" value="-4" />
+    <option name="width" value="933" />
+    <option name="height" value="1085" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -760,8 +756,8 @@
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Application.BaseMethod5" />
-        <item index="1" class="java.lang.String" itemvalue="Application.CreateDB" />
-        <item index="2" class="java.lang.String" itemvalue="Application.SyntheticData" />
+        <item index="1" class="java.lang.String" itemvalue="Application.SyntheticData" />
+        <item index="2" class="java.lang.String" itemvalue="Application.CreateDB" />
         <item index="3" class="java.lang.String" itemvalue="Application.generateGraph" />
         <item index="4" class="java.lang.String" itemvalue="Application.BaseMethod2" />
       </list>
@@ -804,7 +800,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="462" y="388" width="1863" height="1092" extended-state="6" />
+    <frame x="58" y="-4" width="1863" height="1085" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295688" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -812,10 +808,10 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19320388" sideWeight="0.5063361" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.51937175" sideWeight="0.50854" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294766" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.51937175" sideWeight="0.4936639" order="2" side_tool="false" content_ui="tabs" x="59" y="24" width="1861" height="1056" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.51937175" sideWeight="0.49146006" order="2" side_tool="false" content_ui="tabs" x="59" y="24" width="1861" height="1056" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -838,7 +834,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19320388" sideWeight="0.5063361" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.51937175" sideWeight="0.50854" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294766" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -854,7 +850,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.51937175" sideWeight="0.4936639" order="2" side_tool="false" content_ui="tabs" x="59" y="24" width="1861" height="1056" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.51937175" sideWeight="0.49146006" order="2" side_tool="false" content_ui="tabs" x="59" y="24" width="1861" height="1056" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23856749" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32670158" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1228,7 +1224,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
+        <state relative-caret-position="18">
           <caret line="359" column="16" lean-forward="false" selection-start-line="359" selection-start-column="16" selection-end-line="359" selection-end-column="16" />
           <folding />
         </state>
@@ -1236,35 +1232,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="24" column="0" lean-forward="true" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+        <state relative-caret-position="252">
+          <caret line="39" column="42" lean-forward="true" selection-start-line="39" selection-start-column="42" selection-end-line="39" selection-end-column="42" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+        <state relative-caret-position="360">
+          <caret line="29" column="43" lean-forward="true" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="23" column="44" lean-forward="true" selection-start-line="23" selection-start-column="44" selection-end-line="23" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="79" column="45" lean-forward="true" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
-          <folding>
-            <element signature="e#1050#1056#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="414">
+          <caret line="369" column="55" lean-forward="false" selection-start-line="369" selection-start-column="55" selection-end-line="369" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>
