@@ -215,6 +215,8 @@ public class BaseMethod5 {
                 myNode my_n = entry.getValue();
                 ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
 //                System.out.println(d_list.size() + " ");
+                //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
+                //It means the hotel could be a candidate hotel of the bus stop n.
                 for (Data d : this.sNodes) {
                     for (Data s_d : this.sky_hotel) {
                         double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
@@ -242,6 +244,9 @@ public class BaseMethod5 {
                     }
                 }
             }
+
+
+            System.out.println(hotels_scope.get(1).size());
 
 
             System.out.println("-----------------");
@@ -366,11 +371,11 @@ public class BaseMethod5 {
         System.out.println(addResult_rt + "/" + add_counter + "=" + (double) addResult_rt / add_counter / 1000000);
         System.out.println(sky_add_result_counter + "/" + add_counter + "=" + (double) sky_add_result_counter / add_counter);
 
-        for (Result r : this.skyPaths) {
-            if (r.p != null && r.p.startNode.getId() == 35) {
-//            if (r.p != null && r.end.getPlaceId() == 23) {
-                System.out.println(r.end.getPlaceId()+" "+r.p.endNode.getId());
-            }
+//        for (Result r : this.skyPaths) {
+////            if (r.p != null && r.p.startNode.getId() == 35) {
+////            if (r.p != null && r.end.getPlaceId() == 14) {
+////                System.out.println(r);
+////            }
 //
 //            if (r.p != null) {
 //                System.out.println(r.end.getPlaceId() + " " + r.p.startNode.getId() + " " + r.p.endNode.getId());
@@ -378,7 +383,7 @@ public class BaseMethod5 {
 //                System.out.println(r.end.getPlaceId() + " " + null);
 //
 //            }
-        }
+//        }
 
     }
 
@@ -414,6 +419,11 @@ public class BaseMethod5 {
             //Todo: find somewhere to update the information from hotel to the query point
             //Todo: Add one pruning condition that the distance also need to less than the distance form query point to the hotels which dominate d w.r.t q
             //double d3 = Math.sqrt(Math.pow(d.location[0] - queryD.location[0], 2) + Math.pow(d.location[1] - queryD.location[1], 2));
+
+            if (d.getPlaceId() == 2) {
+                System.out.println(np+" "+(final_costs[0] < d.distance_q) +" "+ (final_costs[0] < this.dominated_checking.get(d.getPlaceId())));
+            }
+
             if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId())) {
 
 
