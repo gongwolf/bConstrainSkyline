@@ -65,10 +65,18 @@ public class generateGraph {
                 endNode = String.valueOf(getRandomNumberInRange_int(0, numberNodes - 1));
             }
 
+            double x1 = Double.valueOf(Nodes.get(startNode)[0]);
+            double y1 = Double.valueOf(Nodes.get(startNode)[1]);
+            double x2 = Double.valueOf(Nodes.get(endNode)[0]);
+            double y2 = Double.valueOf(Nodes.get(endNode)[1]);
+
+            double dist = Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+
             String[] costs = new String[numberofDimens];
             for (int j = 0; j < numberofDimens; j++) {
-                costs[j] = String.valueOf(getRandomNumberInRange(0,5));
+                costs[j] = String.valueOf(getGaussian(dist, dist*0.2));
             }
+
 
             Edges.put(new Pair(startNode, endNode), costs);
         }
@@ -89,9 +97,16 @@ public class generateGraph {
                     endNode = String.valueOf(getRandomNumberInRange_int(0, numberNodes - 1));
                 }
 
+                double x1 = Double.valueOf(Nodes.get(startNode)[0]);
+                double y1 = Double.valueOf(Nodes.get(startNode)[1]);
+                double x2 = Double.valueOf(Nodes.get(endNode)[0]);
+                double y2 = Double.valueOf(Nodes.get(endNode)[1]);
+
+                double dist = Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+
                 String[] costs = new String[numberofDimens];
                 for (int j = 0; j < numberofDimens; j++) {
-                    costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+                    costs[j] = String.valueOf(getGaussian(dist*2, dist*0.3));
                 }
 
                 Edges.put(new Pair(startNode, endNode), costs);
@@ -166,6 +181,17 @@ public class generateGraph {
 
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
+    }
+
+    private double getGaussian(double mean, double sd) {
+        Random r = new Random();
+        double value = r.nextGaussian() * sd + mean;
+
+        while (value <= 0) {
+            value = r.nextGaussian() * sd + mean;
+        }
+
+        return value;
     }
 
 

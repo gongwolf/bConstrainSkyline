@@ -102,11 +102,11 @@ public class path {
             sb.append("(" + this.nodes.get(i).getId() + ")");
         }
 
-        sb.append(",[");
-        for (double d : this.costs) {
-            sb.append(" " + d);
-        }
-        sb.append("]");
+//        sb.append(",[");
+//        for (double d : this.costs) {
+//            sb.append(" " + d);
+//        }
+//        sb.append("]");
         return sb.toString();
     }
 

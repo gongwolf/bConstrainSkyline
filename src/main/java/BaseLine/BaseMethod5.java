@@ -367,10 +367,11 @@ public class BaseMethod5 {
         System.out.println(sky_add_result_counter + "/" + add_counter + "=" + (double) sky_add_result_counter / add_counter);
 
         for (Result r : this.skyPaths) {
-            if (r.p != null && r.end.getPlaceId() == 14) {
-                System.out.println(r);
+            if (r.p != null && r.p.startNode.getId() == 35) {
+//            if (r.p != null && r.end.getPlaceId() == 23) {
+                System.out.println(r.end.getPlaceId()+" "+r.p.endNode.getId());
             }
-
+//
 //            if (r.p != null) {
 //                System.out.println(r.end.getPlaceId() + " " + r.p.startNode.getId() + " " + r.p.endNode.getId());
 //            } else {
