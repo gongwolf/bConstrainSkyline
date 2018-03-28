@@ -27,7 +27,7 @@ public class generateGraph {
 
 
     public static void main(String args[]) {
-        int numberNodes = 50;
+        int numberNodes = 1000;
         int numberofDegree = 4;
         int numberofDimen = 3;
         generateGraph g = new generateGraph(numberNodes, numberofDegree, numberofDimen);

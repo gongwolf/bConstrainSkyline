@@ -39,21 +39,21 @@ public class Result implements Comparable<Result> {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-//        sb.append(this.start.getPlaceId()).append(",").append(this.start.location[0]).append(",").append(this.start.location[1]).append(",");
-//        sb.append(this.end.getPlaceId()).append(",").append(this.end.location[0]).append(",").append(this.end.location[1]).append(",");
-        sb.append("path.append(\""+this.p+"\")");
-//        if(this.p==null)
-//        {
-//            sb.append(",[]");
-//        }else {
-//            sb.append(p);
-//        }
-//        sb.append(",[");
-//        for (double c : this.costs) {
-//            sb.append(c).append(" ");
-//        }
-//        sb.substring(0,sb.lastIndexOf(" "));
-//        sb.append("]");
+        sb.append(this.start.getPlaceId()).append(",").append(this.start.location[0]).append(",").append(this.start.location[1]).append(",");
+        sb.append(this.end.getPlaceId()).append(",").append(this.end.location[0]).append(",").append(this.end.location[1]).append(",");
+//        sb.append("path.append(\""+this.p+"\")");
+        if(this.p==null)
+        {
+            sb.append(",[]");
+        }else {
+            sb.append(p);
+        }
+        sb.append(",[");
+        for (double c : this.costs) {
+            sb.append(c).append(" ");
+        }
+        sb.substring(0,sb.lastIndexOf(" "));
+        sb.append("]");
         return sb.toString();
     }
 

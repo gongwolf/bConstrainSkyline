@@ -30,11 +30,41 @@ public class BaseMethod3 {
     private long pro_add_result_counter; // how many path + hotel combination of the results are generated
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
+    private int checkedDataId = 29;
+
 
     public BaseMethod3(int graph_size, String degree) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
+    }
+
+
+    public static void main(String args[]) {
+        int graph_size = 50;
+        String degree = "4";
+        int query_num = 1;
+
+        if (args.length == 3) {
+            graph_size = Integer.parseInt(args[0]);
+            degree = args[1];
+            query_num = Integer.parseInt(args[2]);
+        }
+
+        for (int i = 0; i < query_num; i++) {
+            BaseMethod3 bm3 = new BaseMethod3(graph_size, degree);
+//            Data queryD = bm.generateQueryData();
+////
+//            System.out.println(queryD);
+
+            Data queryD = new Data(3);
+//            queryD.setPlaceId(9999999);
+            queryD.setPlaceId(14);
+            queryD.setLocation(new double[]{123.22092, 139.60222});
+            queryD.setData(new float[]{2.8372698f, 0.22167504f, 3.7420158f});
+            bm3.baseline(queryD);
+
+        }
     }
 
     public void baseline(Data queryD) {
@@ -136,11 +166,22 @@ public class BaseMethod3 {
                 myNode v = mqueue.pop();
                 counter++;
 
+//                if (v.id == this.checkedDataId) {
+//                    System.out.println("-" + v.id + " " + v.distance_q + " " + v.locations[0] + ":" + v.locations[1]);
+//                }
+
                 for (int i = 0; i < v.skyPaths.size(); i++) {
                     //Todo: I can not decide whether one path needs to be extended
                     path p = v.skyPaths.get(i);
+
+
                     if (!p.expaned) {
+//                        if (p.startNode.getId() == checkedDataId) {
+//                            System.out.println(v.id + "       " + p);
+//                        }
                         p.expaned = true;
+                        boolean extend_f = false;
+
 
                         long ee = System.nanoTime();
                         ArrayList<path> new_paths = p.expand();
@@ -157,55 +198,33 @@ public class BaseMethod3 {
 
                             //lemma 2
                             if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q)) {
+                                if (!extend_f)
+                                    extend_f = true;
+
                                 if (next_n.addToSkyline(np)) {
                                     mqueue.add(next_n);
                                 }
                             }
                         }
 
+                        boolean add_f = addToSkylineResult(p, sNodes);
 
+
+//                        if (p.startNode.getId() == checkedDataId) {
+//                            System.out.println(extend_f + "  " + add_f);
+//                        }
                     }
                 }
             }
-
 
 
             index_s = System.nanoTime();
 
+            System.out.println("==========================================");
             System.out.println(this.tmpStoreNodes.size());
 
 
             int sk_counter = 0; //the number of total candidate hotels of each bus station
-            for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
-                myNode my_n = entry.getValue();
-                ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
-                //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
-                //It means the hotel could be a candidate hotel of the bus stop n.
-                for (Data d : this.sNodes) {
-                    for (Data s_d : this.sky_hotel) {
-                        double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
-                        double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
-                            d_list.add(d);
-                            break;
-                        }
-                    }
-                }
-
-                my_n.d_list = new ArrayList<>(d_list);
-                sk_counter += d_list.size();
-
-                for (path p : my_n.skyPaths) {
-                    if (!p.rels.isEmpty()) {
-                        long ats = System.nanoTime();
-                        addToSkylineResult(p, d_list);
-                        addResult_rt += System.nanoTime() - ats;
-                    }
-                }
-
-            }
-
-
 
 
             System.out.println("-----------------");
@@ -306,6 +325,13 @@ public class BaseMethod3 {
             double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
 
             final_costs[0] += end_distance;
+
+
+//            if (np.startNode.getId() == checkedDataId) {
+//                if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId()))
+//                    System.out.println("----" + d.getPlaceId());
+//            }
+
             //lemma3&4
             if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId())) {
 
@@ -373,6 +399,12 @@ public class BaseMethod3 {
             for (; i < skyPaths.size(); ) {
                 if (checkDominated(skyPaths.get(i).costs, r.costs)) {
                     can_insert_np = false;
+//                    if (r.p != null && r.p.startNode.getId() == checkedDataId) {
+//                        System.out.println(r);
+//                        System.out.println("Dominated by ");
+//                        System.out.println(skyPaths.get(i));
+//                        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");
+//                    }
                     break;
                 } else {
                     if (checkDominated(r.costs, skyPaths.get(i).costs)) {

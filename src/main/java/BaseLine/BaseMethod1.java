@@ -25,7 +25,6 @@ public class BaseMethod1 {
     private ArrayList<Data> sNodes = new ArrayList<>();
     private ArrayList<Result> skyPaths = new ArrayList<>();
     private HashSet<Data> finalDatas = new HashSet<Data>();
-    private int checkedDataId = 4;
     private long add_counter;
     private long pro_add_result_counter;
     private long sky_add_result_counter;
@@ -53,7 +52,7 @@ public class BaseMethod1 {
         }
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod1 bm = new BaseMethod1(graph_size, degree);
+            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree);
 //            Data queryD = bm.generateQueryData();
 ////
 //            System.out.println(queryD);
@@ -66,7 +65,7 @@ public class BaseMethod1 {
 //            constants.print(queryD.getData());
 
 
-            bm.baseline(queryD);
+            bm1.baseline(queryD);
         }
     }
 
@@ -134,12 +133,13 @@ public class BaseMethod1 {
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
-//                System.out.println("-" + v.id + " " + v.distance_q + " " + v.locations[0] + ":" + v.locations[1]);
+
                 counter++;
                 //if (++counter % 1000 == 0) {
                 //}
                 for (int i = 0; i < v.skyPaths.size(); i++) {
                     path p = v.skyPaths.get(i);
+
                     //constants.print(p.costs);
                     if (!p.expaned) {
 //                        System.out.println(counter + "  ......  ");
@@ -230,7 +230,7 @@ public class BaseMethod1 {
 //            }
         }
 
-        System.out.println("   " + tt_sl);
+        System.out.println(this.tmpStoreNodes.size()+"   " + tt_sl);
     }
 
     private boolean addToSkylineResult(path np, Data queryD) {

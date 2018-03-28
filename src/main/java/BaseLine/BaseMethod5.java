@@ -41,7 +41,7 @@ public class BaseMethod5 {
     }
 
     public static void main(String args[]) {
-        int graph_size = 50;
+        int graph_size = 1000;
         String degree = "4";
         int query_num = 1;
 
@@ -62,13 +62,16 @@ public class BaseMethod5 {
 
             Data queryD = new Data(3);
 //            queryD.setPlaceId(9999999);
-            queryD.setPlaceId(14);
-            queryD.setLocation(new double[]{123.22092, 139.60222});
-            queryD.setData(new float[]{2.8372698f, 0.22167504f, 3.7420158f});
+            queryD.setPlaceId(27);
+            queryD.setLocation(new double[]{193.93123,131.5776});
+            queryD.setData(new float[]{3.466656f,2.1194327f,4.7721605f});
             bm1.baseline(queryD);
 
-            System.out.println("\n===============================\n");
-//////
+//            System.out.println("\n===============================\n");
+//            bm.baseline(queryD);
+//
+//            System.out.println("\n===============================\n");
+////////
 //            bm3.baseline(queryD);
 ////
             System.out.println("\n===============================\n");
@@ -376,7 +379,7 @@ public class BaseMethod5 {
 
         for (Result r : this.skyPaths) {
 ////            if (r.p != null && r.p.startNode.getId() == 35) {
-            if (r.p != null && r.end.getPlaceId() == 24) {
+            if (r.p != null && r.p.startNode.getId() == 29) {
                 System.out.println(r);
             }
 //
