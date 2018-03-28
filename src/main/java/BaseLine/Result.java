@@ -45,6 +45,8 @@ public class Result implements Comparable<Result> {
 //        if(this.p==null)
 //        {
 //            sb.append(",[]");
+//        }else {
+//            sb.append(p);
 //        }
 //        sb.append(",[");
 //        for (double c : this.costs) {

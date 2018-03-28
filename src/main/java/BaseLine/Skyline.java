@@ -7,6 +7,7 @@ import java.util.Random;
 
 public class Skyline {
     public ArrayList<Data> skylineStaticNodes = new ArrayList<>();
+    public ArrayList<Data> allNodes = new ArrayList<>();
     public ArrayList<Data> sky_hotels = new ArrayList<>();
     String treePath = "data/test.rtr";
     RTree rt;
@@ -68,6 +69,33 @@ public class Skyline {
         this.skylineStaticNodes.add(queryPoint);
     }
 
+    public void allDatas(Data queryPoint) {
+        myQueue queue = new myQueue(queryPoint);
+        queue.add(rt.root_ptr);
+
+        while (!queue.isEmpty()) {
+            Object o = queue.pop();
+            if (o.getClass() == RTDirNode.class) {
+                RTDirNode dirN = (RTDirNode) o;
+                int n = dirN.get_num();
+                for (int i = 0; i < n; i++) {
+                    Object succ_o = dirN.entries[i].get_son();
+                    queue.add(succ_o);
+                }
+            } else if (o.getClass() == RTDataNode.class) {
+                RTDataNode dataN = (RTDataNode) o;
+                int n = dataN.get_num();
+                for (int i = 0; i < n; i++) {
+                    dataN.data[i].distance_q = Math.pow(dataN.data[i].location[0] - queryPoint.location[0], 2) + Math.pow(dataN.data[i].location[1] - queryPoint.location[1], 2);
+                    dataN.data[i].distance_q = Math.sqrt(dataN.data[i].distance_q);
+                    this.allNodes.add(dataN.data[i]);
+                }
+            }
+        }
+
+        queryPoint.distance_q = 0;
+    }
+
     public Data generateQueryData() {
         Data d = new Data(3);
         d.setPlaceId(9999999);
@@ -117,26 +145,23 @@ public class Skyline {
     }
 
     private boolean isDominatedByQueryPoint(Node node, Data queryD) {
-        if (skylineStaticNodes.isEmpty()) {
-            return false;
-        } else {
-            double[] q_points = queryD.getData();
+
+        double[] q_points = queryD.getData();
 //            System.out.println(queryD);
-            float[] n_mbr = node.get_mbr();
-            boolean flag = true;
-            for (int j = 0; j < n_mbr.length; j += 2) {
-                flag = flag & (n_mbr[j] >= q_points[j / 2]);
-                //if one dimension of the node is less than the point d
-                //It means the point d can not fall into the left-bottom partition.
-                //So the node can not be dominated by this d.
-                if (!flag) {
-                    break;
-                }
+        float[] n_mbr = node.get_mbr();
+        boolean flag = true;
+        for (int j = 0; j < n_mbr.length; j += 2) {
+            flag = flag & (n_mbr[j] >= q_points[j / 2]);
+            //if one dimension of the node is less than the point d
+            //It means the point d can not fall into the left-bottom partition.
+            //So the node can not be dominated by this d.
+            if (!flag) {
+                break;
             }
-            //if one of the data d dominate the node
-            if (flag) {
-                return true;
-            }
+        }
+        //if one of the data d dominate the node
+        if (flag) {
+            return true;
         }
         return false;
     }
