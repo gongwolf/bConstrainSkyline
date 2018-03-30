@@ -71,13 +71,14 @@ public class BaseMethod1 {
 
     public void baseline(Data queryD) {
         StringBuffer sb = new StringBuffer();
+        sb.append(queryD.getPlaceId()+" ");
         long s_sum = System.currentTimeMillis();
         ArrayList<path> Results = new ArrayList<>();
         Skyline sky = new Skyline(treePath);
         long r1 = System.currentTimeMillis();
         sky.allDatas(queryD);
 
-        System.out.println("Find candidate static node by BBS " + (System.currentTimeMillis() - r1) + "ms " + sky.skylineStaticNodes.size());
+//        System.out.println("Find candidate static node by BBS " + (System.currentTimeMillis() - r1) + "ms " + sky.skylineStaticNodes.size());
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.allNodes;
 
@@ -94,10 +95,10 @@ public class BaseMethod1 {
             addToSkyline(r);
         }
 
-        System.out.println("==========");
+//        System.out.println("==========");
+//
 
-
-        String graphPath = "/home/gqxwolf/neo4j323/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         //System.out.println(graphPath);
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -117,8 +118,8 @@ public class BaseMethod1 {
             r1 = System.currentTimeMillis();
             Node startNode = nearestNetworkNode(queryD);
             long nn_rt = System.currentTimeMillis() - r1;
-            System.out.println("Find nearest road network " + nn_rt + " ms");
-            System.out.println(startNode.getProperty("lat") + " " + startNode.getProperty("log"));
+//            System.out.println("Find nearest road network " + nn_rt + " ms");
+//            System.out.println(startNode.getProperty("lat") + " " + startNode.getProperty("log"));
 
 
             long rt = System.currentTimeMillis();
@@ -178,8 +179,8 @@ public class BaseMethod1 {
                 r_id.add(r.end.getPlaceId());
             }
 
-            System.out.println("==================================================");
-            System.out.println("There are " + r_id.size() + " different hotels returned in final results");
+//            System.out.println("==================================================");
+//            System.out.println("There are " + r_id.size() + " different hotels returned in final results");
             long exploration_rt = System.currentTimeMillis() - rt;
 
             sb.append(bbs_rt + "," + nn_rt + "," + exploration_rt + ",");
@@ -201,36 +202,32 @@ public class BaseMethod1 {
         sb.append(addResult_rt / 1000000 + "(" + (this.add_oper / 1000000) + "+" + (this.check_add_oper / 1000000)
                 + "+" + (this.map_operation / 1000000) + "+" + (this.checkEmpty / 1000000) + "+" + (this.read_data / 1000000) + "),");
         sb.append(expasion_rt / 1000000 + " ");
-        sb.append("\nadd_to_Skyline_result " + this.add_counter + "  " + this.pro_add_result_counter + "  " + this.sky_add_result_counter + " ");
-        sb.append((double) this.sky_add_result_counter / this.pro_add_result_counter);
-        System.out.println(sb.toString());
-//        System.out.println(finalDatas.size());
+//        sb.append("\nadd_to_Skyline_result " + this.add_counter + "  " + this.pro_add_result_counter + "  " + this.sky_add_result_counter + " ");
+//        sb.append((double) this.sky_add_result_counter / this.pro_add_result_counter);
 
-        Result r2 = null;
         List<Result> sortedList = new ArrayList(this.skyPaths);
         Collections.sort(sortedList);
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
-//            if (r.p != null && r2 == null) {
-//                r2 = r;
-//            }
-//            System.out.println(r);
         }
 
-        System.out.println(finalDatas.size() + " " + this.skyPaths.size());
-        System.out.println(addResult_rt + "/" + add_counter + "=" + (double) addResult_rt / add_counter / 1000000);
 
+        sb.append(finalDatas.size() + " " + this.skyPaths.size());
+        System.out.println(sb.toString());
 
-        long tt_sl = 0;
-        for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
-            tt_sl += entry.getValue().skyPaths.size();
-//            for (path p : entry.getValue().skyPaths) {
-//                addToSkyline_p(p);
+//        System.out.println(addResult_rt + "/" + add_counter + "=" + (double) addResult_rt / add_counter / 1000000);
 //
-//            }
-        }
-
-        System.out.println(this.tmpStoreNodes.size()+"   " + tt_sl);
+//
+//        long tt_sl = 0;
+//        for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
+//            tt_sl += entry.getValue().skyPaths.size();
+////            for (path p : entry.getValue().skyPaths) {
+////                addToSkyline_p(p);
+////
+////            }
+//        }
+//
+//        System.out.println(this.tmpStoreNodes.size()+"   " + tt_sl);
     }
 
     private boolean addToSkylineResult(path np, Data queryD) {

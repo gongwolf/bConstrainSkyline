@@ -20,13 +20,13 @@ public class CreateDB {
 
     public CreateDB(int graphsize, int degree) {
         this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
-        this.DB_PATH = "/home/gqxwolf/neo4j323/testdb" + graphsize + "_" + degree + "/databases/graph.db";
+        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
         NodesPath = DBBase + "NodeInfo.txt";
         SegsPath = DBBase + "SegInfo.txt";
     }
 
     public static void main(String args[]) {
-        CreateDB db = new CreateDB(1000, 4);
+        CreateDB db = new CreateDB(4000, 5);
 //        db.createDatabasewithIndex("Id");
         db.createDatabase();
     }

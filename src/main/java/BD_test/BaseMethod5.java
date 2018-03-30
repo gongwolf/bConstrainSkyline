@@ -1,5 +1,6 @@
-package BaseLine;
+package BD_test;
 
+import BaseLine.*;
 import RstarTree.Data;
 import neo4jTools.connector;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -14,8 +15,12 @@ import java.util.*;
 public class BaseMethod5 {
     public ArrayList<path> qqqq = new ArrayList<>();
     Random r;
+//    String treePath = "/home/qgong/code/constrainSkyline/data/test.rtr";
+//    String dataPath = "/home/qgong/code/constrainSkyline/data/staticNode.txt";
+
     String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
     String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
+
     int graph_size;
     String degree;
     long add_oper = 0;
@@ -44,22 +49,22 @@ public class BaseMethod5 {
     }
 
     public static void main(String args[]) {
-        int graph_size = 1000;
-        String degree = "5";
-        int query_num = 100;
-        int hotels_num = 300;
+        System.out.println("begin...........");
 
-        if (args.length == 4) {
+        int graph_size = 8000;
+        String degree = "4";
+        int query_num = 100;
+
+        if (args.length == 3) {
             graph_size = Integer.parseInt(args[0]);
             degree = args[1];
             query_num = Integer.parseInt(args[2]);
-            hotels_num = Integer.parseInt(args[3]);
         }
 
         for (int i = 0; i < query_num; i++) {
             BaseMethod5 bm5 = new BaseMethod5(graph_size, degree);
             BaseMethod1 bm1 = new BaseMethod1(graph_size, degree);
-            int random_place_id = bm5.getRandomNumberInRange_int(0,hotels_num-1);
+            int random_place_id = bm5.getRandomNumberInRange_int(0,299);
             Data queryD = bm5.getDataById(random_place_id);
 ////
 //            System.out.println(queryD);
@@ -69,20 +74,18 @@ public class BaseMethod5 {
 //            queryD.setPlaceId(27);
 //            queryD.setLocation(new double[]{193.93123,131.5776});
 //            queryD.setData(new float[]{3.466656f,2.1194327f,4.7721605f});
-            bm1.baseline(queryD);
-
-        }
-
-        System.out.println("=====================================================");
-
-
-        for (int i = 0; i < query_num; i++) {
-            BaseMethod5 bm5 = new BaseMethod5(graph_size, degree);
-            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree);
-            int random_place_id = bm5.getRandomNumberInRange_int(0,299);
-            Data queryD = bm5.getDataById(random_place_id);
             bm5.baseline(queryD);
 
+//            System.out.println("\n===============================\n");
+//            bm.baseline(queryD);
+//
+//            System.out.println("\n===============================\n");
+//////////
+//            bm3.baseline(queryD);
+////
+//            System.out.println("\n===============================\n");
+//
+//            bm5.baseline(queryD);
         }
     }
 
@@ -154,6 +157,7 @@ public class BaseMethod5 {
 
 
         String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+//        String graphPath = "/home/qgong/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
         n.startDB();

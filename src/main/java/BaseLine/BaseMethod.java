@@ -7,12 +7,15 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.*;
 
 public class BaseMethod {
     public ArrayList<path> qqqq = new ArrayList<>();
     Random r;
     String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
+    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
     int graph_size;
     String degree;
     long add_oper = 0;
@@ -99,7 +102,7 @@ public class BaseMethod {
         System.out.println("==========");
 
 
-        String graphPath = "/home/gqxwolf/neo4j323/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         //System.out.println(graphPath);
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -483,5 +486,6 @@ public class BaseMethod {
         }
         return true;
     }
+
 
 }
