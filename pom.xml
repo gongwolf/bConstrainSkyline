@@ -41,11 +41,11 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>SyntheticData</finalName>
+                    <finalName>baselineMethod</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>testTools.SyntheticData</mainClass>
+                            <mainClass>BaseLine.BaseMethod5</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

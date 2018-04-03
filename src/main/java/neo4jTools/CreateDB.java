@@ -26,7 +26,21 @@ public class CreateDB {
     }
 
     public static void main(String args[]) {
-        CreateDB db = new CreateDB(4000, 5);
+
+        int graphsize = 4000;
+        int degree =5;
+        int dimension=3;
+
+        if (args.length == 3) {
+            graphsize = Integer.parseInt(args[0]);
+            degree = Integer.parseInt(args[1]);
+            dimension = Integer.parseInt(args[2]);
+        }
+
+        generateGraph g = new generateGraph(graphsize, degree, dimension);
+        g.generateG(true);
+
+        CreateDB db = new CreateDB(graphsize, degree);
 //        db.createDatabasewithIndex("Id");
         db.createDatabase();
     }

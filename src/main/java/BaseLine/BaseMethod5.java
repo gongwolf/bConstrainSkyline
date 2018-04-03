@@ -222,7 +222,6 @@ public class BaseMethod5 {
 
             long tt_sl = 0;
 
-            index_s = System.nanoTime();
 
 //            System.out.println(this.tmpStoreNodes.size());
 
@@ -230,6 +229,8 @@ public class BaseMethod5 {
             int sk_counter = 0; //the number of total candidate hotels of each bus station
             hotels_scope = new HashMap<>();
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
+                long t_index_s = System.nanoTime();
+
                 myNode my_n = entry.getValue();
                 ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
                 //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
@@ -247,6 +248,8 @@ public class BaseMethod5 {
 
                 my_n.d_list = new ArrayList<>(d_list);
                 sk_counter += d_list.size();
+
+                index_s+=(System.nanoTime()-t_index_s);
 
                 for (path p : my_n.skyPaths) {
                     if (!p.rels.isEmpty()) {
@@ -277,7 +280,7 @@ public class BaseMethod5 {
 //            System.out.println("-----------------");
 //
 //            System.out.println("sk_counter " + sk_counter + " / " + this.tmpStoreNodes.size() + " = " + sk_counter / this.tmpStoreNodes.size()); //average candidate hotels of each hotel
-            index_s = System.nanoTime() - index_s;
+//            index_s = System.nanoTime() - index_s;
 
 //            for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
 //                myNode my_n = entry.getValue();
