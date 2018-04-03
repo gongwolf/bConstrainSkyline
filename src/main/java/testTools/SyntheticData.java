@@ -15,20 +15,28 @@ public class SyntheticData {
     Random r = new Random(System.nanoTime());
 
     public static void main(String args[]) {
+        int numberOfNodes = 3000;
+        int dimension =3;
+
+        if (args.length == 2) {
+            numberOfNodes = Integer.parseInt(args[0]);
+            dimension = Integer.parseInt(args[1]);
+        }
+
         SyntheticData sd = new SyntheticData();
-        sd.createStaticNodes(3000, 3);
+        sd.createStaticNodes(numberOfNodes, dimension);
         sd.testStaticRTree();
     }
 
     private void createStaticNodes(int NumberOfNodes, int dimension) {
-        File fp = new File("data/test.rtr");
+        File fp = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr");
 
         if (fp.exists()) {
             fp.delete();
         }
 
 
-        File file = new File("data/staticNode.txt");
+        File file = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt");
         if (file.exists()) {
             file.delete();
         }
@@ -39,7 +47,7 @@ public class SyntheticData {
             fw = new FileWriter(file.getAbsoluteFile(), true);
             bw = new BufferedWriter(fw);
 
-            RTree rt = new RTree("data/test.rtr", Constants.BLOCKLENGTH, Constants.CACHESIZE, dimension);
+            RTree rt = new RTree("/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr", Constants.BLOCKLENGTH, Constants.CACHESIZE, dimension);
 
             for (int i = 0; i < NumberOfNodes; i++) {
                 Data d = new Data(dimension);
@@ -87,7 +95,7 @@ public class SyntheticData {
 
 
     public void testStaticRTree() {
-        RTree rt = new RTree("data/test.rtr", Constants.CACHESIZE);
+        RTree rt = new RTree("/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr", Constants.CACHESIZE);
 
         System.out.println((((Node) rt.root_ptr).get_num_of_data()));
 //        System.out.println((((RTDataNode) rt.root_ptr).data[0].getPlaceId()));
