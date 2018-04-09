@@ -1,13 +1,9 @@
 package testTools;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
+import com.google.maps.PlacesApi;
 import com.google.maps.errors.ApiException;
-import com.google.maps.model.AddressType;
-import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.LatLng;
+import com.google.maps.model.*;
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
@@ -18,7 +14,15 @@ import java.util.*;
 
 public class GoogleMaps {
 
-    HashSet<Pair<Double, Double>> busStations = new HashSet<>();
+    HashMap<Pair<Double, Double>, String> busStations = new HashMap<>();
+    HashSet<Pair<Double, Double>> busLocation = new HashSet<>();
+    GeoApiContext context;
+
+    public GoogleMaps() {
+        this.context = new GeoApiContext.Builder()
+                .apiKey("AIzaSyA8M13Xzf7XZH9hV3_E2L1FsA9ZcCqfYS0")
+                .build();
+    }
 
     public static void main(String args[]) {
 
@@ -29,11 +33,22 @@ public class GoogleMaps {
         double lat2 = 40.90364300;
         double long2 = -73.85031800;
 
-        g.distanceInMeters(lat1, long1, lat2, long2);
+//        g.distanceInMeters(lat1, long1, lat2, long2);
         g.readBusInfo();
         System.out.println(g.busStations.size());
-        g.findDistanceToBusStop(34.24741300, -118.41914200);
-        g.findDetailsOfBusStation(34.249828,-118.422432);
+//        g.findDistanceToBusStop(37.75731290, -122.42150700);
+
+
+        int i = 0;
+        for (Map.Entry<Pair<Double, Double>, String> e : g.busStations.entrySet()) {
+            System.out.println("------------");
+            System.out.println(e.getValue());
+            g.findDetailsOfBusStation(e.getKey().getKey(), e.getKey().getValue());
+            if(i++ == 2)
+            {
+                break;
+            }
+        }
     }
 
     private double distanceInMeters(double lat1, double long1, double lat2, double long2) {
@@ -71,7 +86,8 @@ public class GoogleMaps {
                     double latitude = Double.valueOf(LatAndLong.substring(0, LatAndLong.indexOf(",")));
                     double longitude = Double.valueOf(LatAndLong.substring(LatAndLong.indexOf(",") + 1, LatAndLong.length()));
 //                    System.out.println(LatAndLong+" "+latitude+" "+longitude);
-                    this.busStations.add(new Pair<>(latitude, longitude));
+                    this.busStations.put(new Pair<>(latitude, longitude), readLine.trim());
+                    this.busLocation.add(new Pair<>(latitude, longitude));
                 }
             }
         } catch (IOException e) {
@@ -81,7 +97,7 @@ public class GoogleMaps {
     }
 
     public void findDistanceToBusStop(double latitude, double longitude) {
-        Iterator<Pair<Double, Double>> iter = this.busStations.iterator();
+        Iterator<Pair<Double, Double>> iter = this.busLocation.iterator();
         HashMap<Integer, HashSet<Pair<Double, Double>>> BusStations_List = new HashMap<>();
         while (iter.hasNext()) {
             Pair<Double, Double> p = iter.next();
@@ -98,7 +114,6 @@ public class GoogleMaps {
                 newSet.add(p);
                 BusStations_List.put(d_modular, newSet);
             }
-
         }
 
         TreeMap<Integer, HashSet<Pair<Double, Double>>> map = new TreeMap<>();
@@ -108,25 +123,53 @@ public class GoogleMaps {
 //            System.out.println(e.getKey() + "     " + e.getValue().size());
 //        }
 
-        System.out.println(BusStations_List.get(0));
-        System.out.println(latitude+" "+longitude);
+        System.out.println(map.size());
+
+        System.out.println(BusStations_List.get(10));
+        System.out.println(latitude + " " + longitude);
 
     }
 
     public void findDetailsOfBusStation(double latitude, double longitude) {
-        System.out.println("========================");
-        GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey("AIzaSyA8M13Xzf7XZH9hV3_E2L1FsA9ZcCqfYS0")
-                .build();
+//        System.out.println("========================");
+        LatLng queryLL = new LatLng(latitude, longitude);
+
 
         try {
-            System.out.println(latitude+" "+longitude);
-            GeocodingResult[] results = GeocodingApi.reverseGeocode(context,new LatLng(latitude,longitude)).resultType(AddressType.BUS_STATION,AddressType.).await();
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            System.out.println(gson.toJson(results[0].formattedAddress));
-            System.out.println(gson.toJson(results[0].geometry.location));
-            System.out.println(results.length);
+//            System.out.println(latitude + " " + longitude);
+//            GeocodingResult[] results = GeocodingApi.reverseGeocode(context, queryLL).resultType(AddressType.BUS_STATION,AddressType.TRANSIT_STATION).await();
+//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//            System.out.println(results.length);
+//            for (int i = 0; i < results.length; i++) {
+//                System.out.println(gson.toJson(results[0].formattedAddress));
+//                System.out.println(gson.toJson(results[0].geometry.location));
+//                System.out.println(gson.toJson(results[0].types));
+//                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//            }
+//            System.out.println("=========================");
+            PlacesSearchResponse place_response =
+                    PlacesApi.nearbySearchQuery(context, queryLL).rankby(RankBy.DISTANCE).type(PlaceType.BUS_STATION).await();
+            PlacesSearchResult[] places_results = place_response.results;
+//            System.out.println(places_results.length);
 
+            for (int i = 0; i < 1; i++) {
+                String placeId = places_results[i].placeId;
+                PlaceDetails Details = PlacesApi.placeDetails(context, placeId).await();
+                System.out.println("    "+Details.formattedAddress);
+                System.out.println("    "+Details.name);
+                System.out.println("    "+Details.geometry.location);
+                for (AddressComponent c : Details.addressComponents) {
+                    System.out.print("    "+c.longName + " ");
+                    for (AddressComponentType cty : c.types) {
+                        System.out.print(cty + ";");
+                    }
+                    System.out.println();
+
+                }
+//                Arrays.stream(Details.addressComponents).forEach(c -> System.out.println(c.longName+" "+c.types));
+                Arrays.stream(Details.types).forEach(c -> System.out.print("    "+c + ","));
+                System.out.println();
+            }
 
         } catch (ApiException e) {
             e.printStackTrace();
