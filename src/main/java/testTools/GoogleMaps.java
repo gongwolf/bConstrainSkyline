@@ -25,6 +25,12 @@ public class GoogleMaps {
     }
 
     public static void main(String args[]) {
+        int range = 800;
+
+        if(args.length==1)
+        {
+            range = Integer.valueOf(args[0]);
+        }
 
         GoogleMaps g = new GoogleMaps();
 
@@ -36,6 +42,8 @@ public class GoogleMaps {
 //        g.distanceInMeters(lat1, long1, lat2, long2);
         g.readBusInfo();
         System.out.println(g.busStations.size());
+//        g.statisticInRange(range);
+//        g.averageDistance();
 //        g.findDistanceToBusStop(37.75731290, -122.42150700);
 
 
@@ -44,11 +52,133 @@ public class GoogleMaps {
             System.out.println("------------");
             System.out.println(e.getValue());
             g.findDetailsOfBusStation(e.getKey().getKey(), e.getKey().getValue());
-            if(i++ == 2)
-            {
+            if (i++ == 2) {
                 break;
             }
         }
+    }
+
+    private void averageDistance() {
+
+        String[] cities = new String[]{"Los Angeles", "New York", "San Francisco"};
+        String[] types = new String[]{"restaurant", "lodging", "food"};
+
+        HashSet<Pair<Double, Double>> poi_list = new HashSet<>();
+
+        for (String city : cities) {
+            for (String type : types) {
+                String path = "/home/gqxwolf/shared_git/bConstrainSkyline/data/IOP_data/outfilename_" + type + "_" + city;
+                System.out.println(path);
+                try {
+                    File f = new File(path);
+                    BufferedReader b = new BufferedReader(new FileReader(f));
+                    String line = "";
+                    while (((line = b.readLine()) != null)) {
+                        if (line.startsWith("   locations:")) {
+                            double latitude = Double.valueOf(line.substring(line.indexOf(":") + 1).trim().split(",")[0]);
+                            double longitude = Double.valueOf(line.substring(line.indexOf(":") + 1).trim().split(",")[1]);
+                            poi_list.add(new Pair<>(latitude, longitude));
+
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+        int counter = poi_list.size();
+        System.out.println(counter);
+        double result = 0;
+        int i = 0;
+        for (Pair<Double, Double> p : poi_list) {
+            double distance = NearestBusStop(p.getKey(), p.getValue());
+            result += distance;
+            i++;
+            if (i % 500 == 0) {
+                System.out.println(i + "................");
+            }
+        }
+        System.out.println(result + "/" + counter + "=" + result / counter);
+    }
+
+    private double NearestBusStop(double latitude, double longitude) {
+        double result = Double.POSITIVE_INFINITY;
+        for (Pair<Double, Double> p : this.busLocation) {
+            double d = distanceInMeters(latitude, longitude, p.getKey(), p.getValue());
+            if (d < result) {
+                result = d;
+            }
+        }
+
+        return result;
+    }
+
+    private void statisticInRange(int range) {
+        HashMap<Integer, Integer> result = new HashMap<>();
+        String[] cities = new String[]{"Los Angeles", "New York", "San Francisco"};
+        String[] types = new String[]{"restaurant", "lodging", "food"};
+
+        HashSet<Pair<Double, Double>> poi_list = new HashSet<>();
+
+        for (String city : cities) {
+            for (String type : types) {
+                String path = "/home/gqxwolf/shared_git/bConstrainSkyline/data/IOP_data/outfilename_" + type + "_" + city;
+                System.out.println(path);
+                try {
+                    File f = new File(path);
+                    BufferedReader b = new BufferedReader(new FileReader(f));
+                    String line = "";
+                    while (((line = b.readLine()) != null)) {
+                        if (line.startsWith("   locations:")) {
+                            double latitude = Double.valueOf(line.substring(line.indexOf(":") + 1).trim().split(",")[0]);
+                            double longitude = Double.valueOf(line.substring(line.indexOf(":") + 1).trim().split(",")[1]);
+                            poi_list.add(new Pair<>(latitude, longitude));
+
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+        System.out.println(poi_list.size());
+        int i = 0;
+        for (Pair<Double, Double> p : poi_list) {
+            int numberInRange = getNumberInRange(p.getKey(), p.getValue(), range);
+
+            if (result.containsKey(numberInRange)) {
+                result.put(numberInRange, result.get(numberInRange) + 1);
+            } else {
+                result.put(numberInRange, 1);
+            }
+
+            i++;
+            if (i % 500 == 0) {
+                System.out.println(i + "................");
+            }
+        }
+
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        map.putAll(result);
+        for (Map.Entry<Integer, Integer> e : map.entrySet()) {
+            System.out.println(e.getKey() + " " + e.getValue());
+        }
+    }
+
+    private int getNumberInRange(double latitude, double longitude, int range) {
+        int result = 0;
+        for (Pair<Double, Double> p : this.busLocation) {
+            if (distanceInMeters(latitude, longitude, p.getKey(), p.getValue()) <= range) {
+                result++;
+            }
+        }
+
+        return result;
+
     }
 
     private double distanceInMeters(double lat1, double long1, double lat2, double long2) {
@@ -71,9 +201,8 @@ public class GoogleMaps {
         return d;
     }
 
-
     public void readBusInfo() {
-        String bus_data = "data/Bus_data/output.txt";
+        String bus_data = "/home/gqxwolf/shared_git/bConstrainSkyline/data/Bus_data/output.txt";
         try {
             File f = new File(bus_data);
             BufferedReader b = new BufferedReader(new FileReader(f));
@@ -155,11 +284,11 @@ public class GoogleMaps {
             for (int i = 0; i < 1; i++) {
                 String placeId = places_results[i].placeId;
                 PlaceDetails Details = PlacesApi.placeDetails(context, placeId).await();
-                System.out.println("    "+Details.formattedAddress);
-                System.out.println("    "+Details.name);
-                System.out.println("    "+Details.geometry.location);
+                System.out.println("    " + Details.formattedAddress);
+                System.out.println("    " + Details.name);
+                System.out.println("    " + Details.geometry.location);
                 for (AddressComponent c : Details.addressComponents) {
-                    System.out.print("    "+c.longName + " ");
+                    System.out.print("    " + c.longName + " ");
                     for (AddressComponentType cty : c.types) {
                         System.out.print(cty + ";");
                     }
@@ -167,7 +296,7 @@ public class GoogleMaps {
 
                 }
 //                Arrays.stream(Details.addressComponents).forEach(c -> System.out.println(c.longName+" "+c.types));
-                Arrays.stream(Details.types).forEach(c -> System.out.print("    "+c + ","));
+                Arrays.stream(Details.types).forEach(c -> System.out.print("    " + c + ","));
                 System.out.println();
             }
 
