@@ -16,9 +16,9 @@ public class myNode {
     public double[] locations = new double[2];
     public ArrayList<Data> d_list;
 
-    public myNode(Data startNode, Node current, GraphDatabaseService graphdb) {
+    public myNode(Data queryNode, Node current, GraphDatabaseService graphdb) {
         this.node = current;
-        this.qNode = startNode;
+        this.qNode = queryNode;
         this.id = current.getId();
         skyPaths = new ArrayList<>();
         setLocations(graphdb);
@@ -37,7 +37,6 @@ public class myNode {
             this.distance_q = Math.sqrt(Math.pow(locations[0] - qNode.location[0], 2) + Math.pow(locations[1] - qNode.location[1], 2));
             tx.success();
         }
-        this.locations = locations;
     }
 
     public long getId() {

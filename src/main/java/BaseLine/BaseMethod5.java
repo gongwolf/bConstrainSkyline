@@ -30,7 +30,7 @@ public class BaseMethod5 {
     private ArrayList<Data> sNodes = new ArrayList<>();
     private ArrayList<Result> skyPaths = new ArrayList<>();
     private ArrayList<Data> sky_hotel;
-    private HashSet<Data> finalDatas = new HashSet<Data>();
+    private HashSet<Data> finalDatas = new HashSet<>();
     private int checkedDataId = 9;
     private long add_counter; // how many times call the addtoResult function
     private long pro_add_result_counter; // how many path + hotel combination of the results are generated
@@ -44,9 +44,9 @@ public class BaseMethod5 {
     }
 
     public static void main(String args[]) {
-        int graph_size = 1000;
-        String degree = "5";
-        int query_num = 100;
+        int graph_size = 2000;
+        String degree = "4";
+        int query_num = 10;
         int hotels_num = 300;
 
         if (args.length == 4) {
@@ -56,20 +56,20 @@ public class BaseMethod5 {
             hotels_num = Integer.parseInt(args[3]);
         }
 
+
+        Data[] queryList = new Data[query_num];
+//        int[] numbers = new int[]{241};
         for (int i = 0; i < query_num; i++) {
             BaseMethod5 bm5 = new BaseMethod5(graph_size, degree);
-            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree);
-            int random_place_id = bm5.getRandomNumberInRange_int(0,hotels_num-1);
+            int random_place_id = bm5.getRandomNumberInRange_int(0, hotels_num - 1);
             Data queryD = bm5.getDataById(random_place_id);
-////
-//            System.out.println(queryD);
+            queryList[i] = queryD;
+        }
 
-//            Data queryD = new Data(3);
-////            queryD.setPlaceId(9999999);
-//            queryD.setPlaceId(27);
-//            queryD.setLocation(new double[]{193.93123,131.5776});
-//            queryD.setData(new float[]{3.466656f,2.1194327f,4.7721605f});
-            bm1.baseline(queryD);
+
+        for (int i = 0; i < query_num; i++) {
+            BaseMethod1 bMethod = new BaseMethod1(graph_size, degree);
+            bMethod.baseline(queryList[i]);
 
         }
 
@@ -77,11 +77,8 @@ public class BaseMethod5 {
 
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod5 bm5 = new BaseMethod5(graph_size, degree);
-            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree);
-            int random_place_id = bm5.getRandomNumberInRange_int(0,299);
-            Data queryD = bm5.getDataById(random_place_id);
-            bm5.baseline(queryD);
+            BaseMethod5 Lemmas_method = new BaseMethod5(graph_size, degree);
+            Lemmas_method.baseline(queryList[i]);
 
         }
     }
@@ -89,7 +86,7 @@ public class BaseMethod5 {
     public void baseline(Data queryD) {
         this.queryD = queryD;
         StringBuffer sb = new StringBuffer();
-        sb.append(queryD.getPlaceId()+" ");
+        sb.append(queryD.getPlaceId() + " ");
 
         Skyline sky = new Skyline(treePath);
 
@@ -106,17 +103,12 @@ public class BaseMethod5 {
 
         long s_sum = System.currentTimeMillis();
         long index_s = 0;
-        ArrayList<path> Results = new ArrayList<>();
-        HashMap<Integer, HashSet<Long>> hotels_scope;
 
         long r1 = System.currentTimeMillis();
         //Find the hotels that aren't dominated by the query point
         sky.BBS(queryD);
-//        System.out.println("Find candidate static node by BBS " + (System.currentTimeMillis() - r1) + "ms ");
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
-//        System.out.println("there are " + this.sNodes.size() + " hotels which are not dominated by the query point");
-//        System.out.println(sNodes.get(0));
 
         for (Data d : sNodes) {
             double[] c = new double[constants.path_dimension + 3];
@@ -128,6 +120,7 @@ public class BaseMethod5 {
             Result r = new Result(queryD, d, c, null);
             addToSkyline(r);
         }
+//        System.out.println(this.skyPaths.size());
 
 
         //find the minimum distance from query point to the skyline hotel that dominate non-skyline hotel cand_d
@@ -169,9 +162,6 @@ public class BaseMethod5 {
             r1 = System.currentTimeMillis();
             Node startNode = nearestNetworkNode(queryD);
             long nn_rt = System.currentTimeMillis() - r1;
-//            System.out.println("Find nearest road network " + nn_rt + " ms");
-//            System.out.println(startNode.getProperty("lat") + " " + startNode.getProperty("log"));
-
 
             long rt = System.currentTimeMillis();
 
@@ -188,7 +178,6 @@ public class BaseMethod5 {
                 counter++;
 
                 for (int i = 0; i < v.skyPaths.size(); i++) {
-                    //Todo: I can not decide whether one path needs to be extended
                     path p = v.skyPaths.get(i);
                     if (!p.expaned) {
                         p.expaned = true;
@@ -205,7 +194,6 @@ public class BaseMethod5 {
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
 
-
                             //lemma 2
                             if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q)) {
                                 if (next_n.addToSkyline(np)) {
@@ -219,15 +207,13 @@ public class BaseMethod5 {
                 }
             }
 
+            long exploration_rt = System.currentTimeMillis() - rt;
 
             long tt_sl = 0;
 
 
-//            System.out.println(this.tmpStoreNodes.size());
-
-
             int sk_counter = 0; //the number of total candidate hotels of each bus station
-            hotels_scope = new HashMap<>();
+//            hotels_scope = new HashMap<>();
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 long t_index_s = System.nanoTime();
 
@@ -249,88 +235,23 @@ public class BaseMethod5 {
                 my_n.d_list = new ArrayList<>(d_list);
                 sk_counter += d_list.size();
 
-                index_s+=(System.nanoTime()-t_index_s);
+                index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
                     if (!p.rels.isEmpty()) {
                         long ats = System.nanoTime();
-                        addToSkylineResult(p, d_list);
+
+                        boolean f = addToSkylineResult(p, my_n.d_list);
+
                         addResult_rt += System.nanoTime() - ats;
                     }
                 }
 
 
-//                for (Data cd : d_list) {
-//                    int c_id = cd.getPlaceId();
-//                    if (hotels_scope.containsKey(c_id)) {
-//                        HashSet<Long> t = hotels_scope.get(c_id);
-//                        t.add(my_n.id);
-//                    } else {
-//                        HashSet<Long> t = new HashSet<>();
-//                        t.add(my_n.id);
-//                        hotels_scope.put(c_id, t);
-//                    }
-//                }
             }
+//            System.out.println(sk_counter);
 
 
-//            System.out.println(hotels_scope.get(1).size());
-
-
-//            System.out.println("-----------------");
-//
-//            System.out.println("sk_counter " + sk_counter + " / " + this.tmpStoreNodes.size() + " = " + sk_counter / this.tmpStoreNodes.size()); //average candidate hotels of each hotel
-//            index_s = System.nanoTime() - index_s;
-
-//            for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
-//                myNode my_n = entry.getValue();
-//                for (path p : my_n.skyPaths) {
-//                    if (!p.rels.isEmpty()) {
-//                        long ats = System.nanoTime();
-//                        addToSkylineResult(p, my_n.d_list);
-//                        addResult_rt += System.nanoTime() - ats;
-////                    System.out.println(p);
-//                    }
-//                }
-//            }
-
-//            System.out.println("begin to analyze");
-//
-//            HashSet<Integer> r_id = new HashSet<>();
-//            for (Result r : this.skyPaths) {
-//                r_id.add(r.end.getPlaceId());
-//            }
-//
-//            System.out.println("=================");
-            int in_counter = 0;
-            int not_in_counter = 0;
-//            for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
-//                myNode my_n = entry.getValue();
-//                for (path p : my_n.skyPaths) {
-//
-//
-//                    boolean f = false;
-//                    for (Result r : this.skyPaths) {
-//                        if (p.equals(r.p)) {
-//                            f = true;
-//                            break;
-//                        }
-//                    }
-//
-////                    if (!f && !p.rels.isEmpty()) {
-////                        System.out.println("false " + p);
-////                        not_in_counter++;
-////                    } else {
-////                        in_counter++;
-////                        System.out.println("true " + p);
-////                    }
-//                }
-//            }
-//            System.out.println("in_counter:" + in_counter + " not_in_counter:" + not_in_counter);
-//
-//            System.out.println("==================================================");
-//            System.out.println("There are " + r_id.size() + " different hotels returned in final results");
-            long exploration_rt = System.currentTimeMillis() - rt;
             sb.append(bbs_rt + "," + nn_rt + "," + exploration_rt + "," + (index_s / 1000000));
             tx.success();
         }
@@ -348,37 +269,28 @@ public class BaseMethod5 {
 //        sb.append("\nadd_to_Skyline_result " + this.add_counter + "  " + this.pro_add_result_counter + "  " + this.sky_add_result_counter + " ");
 //        sb.append((double) this.sky_add_result_counter / this.pro_add_result_counter);
 
-        Result r2 = null;
         List<Result> sortedList = new ArrayList(this.skyPaths);
-//        hotels_scope.clear();
-//
         Collections.sort(sortedList);
+
+        HashSet<Long> final_bus_stops = new HashSet<>();
+
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
-//            if (r.end.getPlaceId() == 9) {
-//                System.out.println(r);
-//            }
 
-//            int c_id = r.end.getPlaceId();
-//            if (hotels_scope.containsKey(c_id)) {
-//                HashSet<Long> t = hotels_scope.get(c_id);
-//                if (r.p != null) {
-//                    t.add(r.p.endNode.getId());
-//                } else {
-//                    t.add(9999999L);
-//                }
-//            } else {
-//                HashSet<Long> t = new HashSet<>();
-//                if (r.p != null) {
-//                    t.add(r.p.endNode.getId());
-//                } else {
-//                    t.add(9999999L);
-//                }
-//                hotels_scope.put(c_id, t);
-//            }
+            if (r.p != null) {
+                for (Node nn : r.p.nodes) {
+                    final_bus_stops.add(nn.getId());
+                }
+            }
         }
 
+
         sb.append(finalDatas.size() + " " + this.skyPaths.size());
+
+        int visited_bus_stop = this.tmpStoreNodes.size();
+        int bus_stop_in_result = final_bus_stops.size();
+
+        sb.append("  "+visited_bus_stop + "," + bus_stop_in_result+","+(double)bus_stop_in_result/visited_bus_stop+"   "+this.sky_add_result_counter);
 
         System.out.println(sb.toString());
 
@@ -392,20 +304,6 @@ public class BaseMethod5 {
 //        System.out.println(addResult_rt + "/" + add_counter + "=" + (double) addResult_rt / add_counter / 1000000);
 //        System.out.println(sky_add_result_counter + "/" + add_counter + "=" + (double) sky_add_result_counter / add_counter);
 
-        for (Result r : this.skyPaths) {
-////            if (r.p != null && r.p.startNode.getId() == 35) {
-//            if (r.p != null && r.p.startNode.getId() == 29) {
-//                System.out.println(r);
-//            }
-//
-//            if (r.p != null) {
-//                System.out.println(r.end.getPlaceId() + " " + r.p.startNode.getId() + " " + r.p.endNode.getId());
-//            } else {
-//                System.out.println(r.end.getPlaceId() + " " + null);
-//
-//            }
-        }
-
     }
 
     private boolean addToSkylineResult(path np, ArrayList<Data> d_list) {
@@ -417,6 +315,19 @@ public class BaseMethod5 {
         }
         this.checkEmpty += System.nanoTime() - r2a;
 
+
+//        if (np.startNode.getId() == 286 && np.endNode.getId() == 1862) {
+//            System.out.println(np);
+//
+//            for (Data d : d_list) {
+//                if (d.getPlaceId() == 62) {
+//                    System.out.println("true");
+//                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                }
+//            }
+//        }
+
+
         long rr = System.nanoTime();
         myNode my_endNode = this.tmpStoreNodes.get(np.endNode.getId());
         this.map_operation += System.nanoTime() - rr;
@@ -424,12 +335,19 @@ public class BaseMethod5 {
         long dsad = System.nanoTime();
         long d1 = 0, d2 = 0;
         boolean flag = false;
+
         for (Data d : d_list) {
+//            if (np.startNode.getId() == 286 && np.endNode.getId() == 1862) {
+//                if (d.getPlaceId() == 62) {
+//                    System.out.println("true");
+//                }
+//            }
+
             this.pro_add_result_counter++;
             long rrr = System.nanoTime();
 
             if (d.getPlaceId() == queryD.getPlaceId()) {
-                return false;
+                continue;
             }
 
             double[] final_costs = new double[np.costs.length + 3];
@@ -438,9 +356,15 @@ public class BaseMethod5 {
 
             final_costs[0] += end_distance;
             //lemma3
-            //Todo: find somewhere to update the information from hotel to the query point
-            //Todo: Add one pruning condition that the distance also need to less than the distance form query point to the hotels which dominate d w.r.t q
             //double d3 = Math.sqrt(Math.pow(d.location[0] - queryD.location[0], 2) + Math.pow(d.location[1] - queryD.location[1], 2));
+
+//            if (np.startNode.getId() == 286 && np.endNode.getId() == 1862) {
+//                System.out.println(d);
+//                System.out.println(final_costs[0] < d.distance_q);
+//                System.out.println(final_costs[0] < this.dominated_checking.get(d.getPlaceId()));
+//                System.out.println(np);
+//                System.out.println("-------------------------------");
+//            }
 
 
             if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId())) {
@@ -464,6 +388,7 @@ public class BaseMethod5 {
                 long rrrr = System.nanoTime();
                 this.sky_add_result_counter++;
                 boolean t = addToSkyline(r);
+
 //                if (d.getPlaceId() == 23) {
 //                    System.out.println(r + " " + (final_costs[0] < d.distance_q) + " " + (final_costs[0] < this.dominated_checking.get(d.getPlaceId())) + " " + t);
 //                }
@@ -633,14 +558,11 @@ public class BaseMethod5 {
                 } else {
                     linenumber++;
                 }
-
-
-//                System.out.println(pixelID+","+pixelNorthing+","+pixelEasting+",");
             }
             br.close();
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Can not open the Pixel file, please check it. ");
+            System.err.println("Can not open the file, please check it. ");
         }
 
         return queryD;

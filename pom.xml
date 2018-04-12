@@ -54,11 +54,11 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>GoogleMaps</finalName>
+                    <finalName>baselineMethod</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>testTools.GoogleMaps</mainClass>
+                            <mainClass>BaseLine.BaseMethod5</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
