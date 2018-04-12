@@ -34,28 +34,28 @@ public class GoogleMaps {
 
         GoogleMaps g = new GoogleMaps();
 
-        double lat1 = 40.90549300;
-        double long1 = -73.84960400;
-        double lat2 = 40.90364300;
-        double long2 = -73.85031800;
+        double lat1 = 43.153826 ;
+        double long1 = -77.65942;
+        double lat2 = 43.173793 ;
+        double long2 = -77.667754;
 
-//        g.distanceInMeters(lat1, long1, lat2, long2);
-        g.readBusInfo();
-        System.out.println(g.busStations.size());
+        g.distanceInMeters(lat1, long1, lat2, long2);
+//        g.readBusInfo();
+//        System.out.println(g.busStations.size());
 //        g.statisticInRange(range);
 //        g.averageDistance();
 //        g.findDistanceToBusStop(37.75731290, -122.42150700);
 
 
-        int i = 0;
-        for (Map.Entry<Pair<Double, Double>, String> e : g.busStations.entrySet()) {
-            System.out.println("------------");
-            System.out.println(e.getValue());
-            g.findDetailsOfBusStation(e.getKey().getKey(), e.getKey().getValue());
-            if (i++ == 2) {
-                break;
-            }
-        }
+//        int i = 0;
+//        for (Map.Entry<Pair<Double, Double>, String> e : g.busStations.entrySet()) {
+//            System.out.println("------------");
+//            System.out.println(e.getValue());
+//            g.findDetailsOfBusStation(e.getKey().getKey(), e.getKey().getValue());
+//            if (i++ == 2) {
+//                break;
+//            }
+//        }
     }
 
     private void averageDistance() {
@@ -183,21 +183,22 @@ public class GoogleMaps {
 
     private double distanceInMeters(double lat1, double long1, double lat2, double long2) {
         long R = 6371000;
+        double d;
+
         double r_lat1 = Math.PI / 180 * lat1;
         double r_lat2 = Math.PI / 180 * lat2;
         double delta_lat = Math.PI / 180 * (lat2 - lat1);
         double delta_long = Math.PI / 180 * (long2 - long1);
-        double d;
-//        double a = Math.sin(delta_lat / 2) * Math.sin(delta_lat / 2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.sin(delta_long / 2) * Math.sin(delta_long / 2);
-//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//        double d = R * c;
-//        System.out.println(d);
-//        double x = Math.PI / 180 * (long2 - long1) * Math.cos(Math.PI / 180 * (lat1 + lat2) / 2);
-//        double y = Math.PI / 180 * (lat2 - lat1);
-//        d = Math.sqrt(x * x + y * y) * R;
-//        System.out.println(d);
+        double a = Math.sin(delta_lat / 2) * Math.sin(delta_lat / 2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.sin(delta_long / 2) * Math.sin(delta_long / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        d = R * c;
+        System.out.println(d);
+        double x = Math.PI / 180 * (long2 - long1) * Math.cos(Math.PI / 180 * (lat1 + lat2) / 2);
+        double y = Math.PI / 180 * (lat2 - lat1);
+        d = Math.sqrt(x * x + y * y) * R;
+        System.out.println(d);
         d = Math.acos(Math.sin(r_lat1) * Math.sin(r_lat2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.cos(delta_long)) * R;
-//        System.out.println(d);
+        System.out.println(d);
         return d;
     }
 
