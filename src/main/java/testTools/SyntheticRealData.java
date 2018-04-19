@@ -6,6 +6,7 @@ import RstarTree.Node;
 import RstarTree.RTree;
 
 import java.io.*;
+import java.util.HashSet;
 import java.util.Random;
 
 public class SyntheticRealData {
@@ -13,10 +14,15 @@ public class SyntheticRealData {
     Random r = new Random(System.nanoTime());
 
     String path_base = "/home/gqxwolf/shared_git/bConstrainSkyline/data/";
-    String bus_data = path_base + "IOP_data";
+    String poi_data = path_base + "IOP_data";
+
+
+    String tree_path = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
 
     String[] cities = new String[]{"New York", "San Francisco", "Los Angeles"};
     String[] p_types = new String[]{"food", "lodging", "restaurant"};
+
+    HashSet<String> list = new HashSet<>();
 
     int max_id = 0;
 
@@ -39,9 +45,22 @@ public class SyntheticRealData {
     }
 
     private void readPOIsData() {
+
+        File fp = new File(tree_path);
+
+        if (fp.exists()) {
+            fp.delete();
+        }
+
+        RTree rt = new RTree(tree_path, Constants.BLOCKLENGTH, Constants.CACHESIZE, dimension);
+
+
+
+
+        long counter = 0;
         for (String city : this.cities) {
             for (String type : p_types) {
-                String path = "outfilename_" + type + "_" + city;
+                String path = this.poi_data + "/outfilename_" + type + "_" + city;
                 try {
                     File f = new File(path);
                     BufferedReader b = new BufferedReader(new FileReader(f));
@@ -50,17 +69,64 @@ public class SyntheticRealData {
                     POIObject poi_obj = new POIObject();
 
                     poi_obj.placeID = this.max_id;
-                    poi_obj.data = new float[dimension];
+                    poi_obj.data = new float[]{-1, -1, -1};
                     poi_obj.g_p_id = "";
-                    poi_obj.locations = new float[2];
+                    poi_obj.locations = new double[]{-1, -1};
 
                     while (((line = b.readLine()) != null)) {
 
+                        counter++;
+
+//                        if (counter % 308 == 0) {
+//                            break;
+//                        }
+
                         if (line.startsWith("=======================================================================")) {
                             //Todo:Create new data and clean the data
-                        }
 
-                        //Todo:find attributes
+                            if (!this.list.contains(poi_obj.g_p_id) && poi_obj.locations[0] != -1 && poi_obj.locations[1] != -1) {
+                                this.max_id++;
+                                this.list.add(poi_obj.g_p_id);
+
+                                Data d = new Data(dimension);
+                                d.setPlaceId(poi_obj.placeID);
+                                d.setLocation(poi_obj.locations);
+
+                                for (int i = 0; i < poi_obj.data.length; i++) {
+                                    if (poi_obj.data[i] == -1) {
+                                        poi_obj.data[i] = getGaussian(2.5, 5 / 6);
+                                    }
+                                }
+
+
+
+                                d.setData(poi_obj.data);
+
+                                System.out.println(d);
+
+
+                                rt.insert(d);
+
+
+                            } else {
+
+                            }
+
+                            poi_obj.cleanContents();
+                            poi_obj.placeID = this.max_id;
+
+                        } else if (line.startsWith("placeId")) {
+                            poi_obj.g_p_id = line.split(":")[1].trim();
+                        } else if (line.startsWith("rating:")) {
+                            poi_obj.data[0] = Float.valueOf(line.split(":")[1].trim());
+                        } else if (line.startsWith("pricelevel:")) {
+                            poi_obj.data[1] = Float.valueOf(line.split(":")[1].trim());
+                        } else if (line.startsWith("[")) {
+                            poi_obj.data[2] = line.split(",").length;
+                        } else if (line.startsWith("   locations:")) {
+                            poi_obj.locations[0] = Double.parseDouble(line.split(":")[1].trim().split(",")[0]);
+                            poi_obj.locations[1] = Double.parseDouble(line.split(":")[1].trim().split(",")[1]);
+                        }
 
 
                     }
@@ -72,28 +138,27 @@ public class SyntheticRealData {
             }
         }
 
+        rt.delete(); //write tree to disk
+
+        System.out.println(counter);
+        System.out.println(this.list.size());
+
     }
 
-
     public void testStaticRTree() {
-        RTree rt = new RTree("/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr", Constants.CACHESIZE);
+        RTree rt = new RTree(this.tree_path, Constants.CACHESIZE);
 
         System.out.println((((Node) rt.root_ptr).get_num_of_data()));
 //        System.out.println((((RTDataNode) rt.root_ptr).data[0].getPlaceId()));
     }
 
-    public float randomFloatInRange(float min, float max) {
-        float random = min + r.nextFloat() * (max - min);
-        return random;
-    }
-
-    private double getGaussian(double mean, double sd) {
+    private float getGaussian(double mean, double sd) {
         double value = r.nextGaussian() * sd + mean;
 
         while (value <= 0) {
             value = r.nextGaussian() * sd + mean;
         }
 
-        return value;
+        return (float)value;
     }
 }
