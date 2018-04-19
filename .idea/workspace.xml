@@ -7,11 +7,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1927bf6b-a886-486f-9482-a756607011b0" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod_approx.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/BusStation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/POIObject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/SegObj.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/tmpStop.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -27,29 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BaseMethod5.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
+      <file leaf-file-name="BaseMethod_approx.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod_approx.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-378">
-              <caret column="16" selection-start-column="8" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="394">
-              <caret line="56" column="45" selection-start-line="56" selection-start-column="45" selection-end-line="56" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseMethod1.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-620">
-              <caret line="133" column="30" selection-start-line="133" selection-start-column="17" selection-end-line="133" selection-end-column="30" />
+            <state relative-caret-position="378">
+              <caret line="58" column="9" lean-forward="true" selection-start-line="53" selection-start-column="8" selection-end-line="58" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -57,38 +44,95 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Result.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Result.java">
+      <file leaf-file-name="CreateDB.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-672">
-              <caret line="11" column="47" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="47" />
+            <state relative-caret-position="288">
+              <caret line="25" column="79" lean-forward="true" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="79" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="path.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/path.java">
+      <file leaf-file-name="ReadRealDataSet.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+            <state relative-caret-position="425">
+              <caret line="97" column="49" lean-forward="true" selection-start-line="97" selection-start-column="49" selection-end-line="97" selection-end-column="49" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="myNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/myNode.java">
+      <file leaf-file-name="SyntheticRealData.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+            <state relative-caret-position="682">
+              <caret line="62" column="46" selection-start-line="62" selection-start-column="46" selection-end-line="62" selection-end-column="46" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Skyline.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java">
+      <file leaf-file-name="POIObject.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/POIObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1224">
-              <caret line="71" column="16" selection-start-line="71" selection-start-column="16" selection-end-line="71" selection-end-column="16" />
+            <state relative-caret-position="126">
+              <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Data.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/Data.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2345">
+              <caret line="358" column="16" selection-start-line="358" selection-start-column="16" selection-end-line="358" selection-end-column="16" />
+              <folding>
+                <element signature="e#10444#10445#0" expanded="true" />
+                <element signature="e#10482#10483#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SegObj.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SegObj.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="702">
+              <caret line="39" column="37" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tmpStop.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/tmpStop.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="18" column="5" selection-start-line="14" selection-start-column="4" selection-end-line="18" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BusStation.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/BusStation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="522">
+              <caret line="33" column="54" selection-start-line="33" selection-end-line="34" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#239#240#0" expanded="true" />
+                <element signature="e#267#268#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="generateGraph.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -104,9 +148,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>08378</find>
-      <find>0,12</find>
-      <find>0,128</find>
       <find>System.arraycopy(</find>
       <find>!!!!!</find>
       <find>(706)-[2624]-(46)-[288]-(515)</find>
@@ -134,6 +175,9 @@
       <find>62</find>
       <find>####</find>
       <find>true</find>
+      <find>41732400</find>
+      <find>37.80713200,-122.41732400</find>
+      <find>qqq</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -142,15 +186,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/RstarTree/Test.java" />
-        <option value="$PROJECT_DIR$/src/main/java/RstarTree/RTDataNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/RstarTree/DirEntry.java" />
-        <option value="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/DataQueue.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/constants.java" />
-        <option value="$PROJECT_DIR$/src/main/java/aRtree/aRtree.java" />
-        <option value="$PROJECT_DIR$/src/main/java/aRtree/LinList.java" />
-        <option value="$PROJECT_DIR$/src/main/java/aRtree/SortMbr.java" />
         <option value="$PROJECT_DIR$/src/main/java/aRtree/Sortable.java" />
         <option value="$PROJECT_DIR$/src/main/java/aRtree/Streamable.java" />
         <option value="$PROJECT_DIR$/src/main/java/aRtree/aRTNode.java" />
@@ -187,12 +222,21 @@
         <option value="$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/BusInfos.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java" />
-        <option value="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod_approx.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/lineComparator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/tmpStop.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/BusStation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/SegObj.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/Synthetic_Real_Data.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/POIObject.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java" />
       </list>
     </option>
   </component>
@@ -220,244 +264,6 @@
     <option name="width" value="923" />
     <option name="height" value="789" />
   </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>Abstraction issuesJava</id>
-          </State>
-          <State>
-            <id>Android</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Accessibility</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Correctness</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Correctness &gt; Messages</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Internationalization</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Internationalization &gt; Bidirectional Text</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Performance</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Security</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Usability</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Usability &gt; Icons</id>
-          </State>
-          <State>
-            <id>Android &gt; Lint &gt; Usability &gt; Typography</id>
-          </State>
-          <State>
-            <id>Android Lint for Kotlin</id>
-          </State>
-          <State>
-            <id>Assignment issuesJava</id>
-          </State>
-          <State>
-            <id>Class metricsJava</id>
-          </State>
-          <State>
-            <id>Class structureJava</id>
-          </State>
-          <State>
-            <id>Cloning issuesJava</id>
-          </State>
-          <State>
-            <id>Code style issuesJava</id>
-          </State>
-          <State>
-            <id>Concurrency annotation issuesJava</id>
-          </State>
-          <State>
-            <id>Control flow issuesGroovy</id>
-          </State>
-          <State>
-            <id>Control flow issuesJava</id>
-          </State>
-          <State>
-            <id>Data flow issuesJava</id>
-          </State>
-          <State>
-            <id>Declaration redundancyJava</id>
-          </State>
-          <State>
-            <id>Dependency issuesJava</id>
-          </State>
-          <State>
-            <id>Encapsulation issuesJava</id>
-          </State>
-          <State>
-            <id>Error handlingGroovy</id>
-          </State>
-          <State>
-            <id>Error handlingJava</id>
-          </State>
-          <State>
-            <id>General</id>
-          </State>
-          <State>
-            <id>Groovy</id>
-          </State>
-          <State>
-            <id>Inheritance issuesJava</id>
-          </State>
-          <State>
-            <id>Initialization issuesJava</id>
-          </State>
-          <State>
-            <id>Internationalization issues</id>
-          </State>
-          <State>
-            <id>Internationalization issuesJava</id>
-          </State>
-          <State>
-            <id>J2ME issuesJava</id>
-          </State>
-          <State>
-            <id>JUnit issuesJava</id>
-          </State>
-          <State>
-            <id>Java</id>
-          </State>
-          <State>
-            <id>Java 5Java language level migration aidsJava</id>
-          </State>
-          <State>
-            <id>Java 7Java language level migration aidsJava</id>
-          </State>
-          <State>
-            <id>Java 9Java language level migration aidsJava</id>
-          </State>
-          <State>
-            <id>Java interop issuesKotlin</id>
-          </State>
-          <State>
-            <id>Java language level migration aidsJava</id>
-          </State>
-          <State>
-            <id>JavaBeans issuesJava</id>
-          </State>
-          <State>
-            <id>Javadoc issuesJava</id>
-          </State>
-          <State>
-            <id>Kotlin</id>
-          </State>
-          <State>
-            <id>Logging issuesJava</id>
-          </State>
-          <State>
-            <id>Method metricsGroovy</id>
-          </State>
-          <State>
-            <id>Method metricsJava</id>
-          </State>
-          <State>
-            <id>Modularization issuesJava</id>
-          </State>
-          <State>
-            <id>Naming conventionsJava</id>
-          </State>
-          <State>
-            <id>Numeric issuesJava</id>
-          </State>
-          <State>
-            <id>Other problemsKotlin</id>
-          </State>
-          <State>
-            <id>Packaging issuesJava</id>
-          </State>
-          <State>
-            <id>Performance issuesJava</id>
-          </State>
-          <State>
-            <id>Plugin DevKit</id>
-          </State>
-          <State>
-            <id>Portability issuesJava</id>
-          </State>
-          <State>
-            <id>Potentially confusing code constructsGroovy</id>
-          </State>
-          <State>
-            <id>Probable bugsGroovy</id>
-          </State>
-          <State>
-            <id>Probable bugsJava</id>
-          </State>
-          <State>
-            <id>Probable bugsKotlin</id>
-          </State>
-          <State>
-            <id>Properties Files</id>
-          </State>
-          <State>
-            <id>Redundant constructsKotlin</id>
-          </State>
-          <State>
-            <id>RegExp</id>
-          </State>
-          <State>
-            <id>Resource management issuesJava</id>
-          </State>
-          <State>
-            <id>Serialization issuesJava</id>
-          </State>
-          <State>
-            <id>Style issuesKotlin</id>
-          </State>
-          <State>
-            <id>TestNGJava</id>
-          </State>
-          <State>
-            <id>Threading issuesGroovy</id>
-          </State>
-          <State>
-            <id>Threading issuesJava</id>
-          </State>
-          <State>
-            <id>UI Form Problems</id>
-          </State>
-          <State>
-            <id>Validity issuesGroovy</id>
-          </State>
-          <State>
-            <id>Visibility issuesJava</id>
-          </State>
-          <State>
-            <id>XML</id>
-          </State>
-          <State>
-            <id>XPath</id>
-          </State>
-          <State>
-            <id>toString() issuesJava</id>
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>Android</id>
-          </State>
-        </selected-state>
-      </profile-state>
-    </entry>
-  </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -466,6 +272,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -473,13 +281,85 @@
               <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
               <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseLine" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="Baseline2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="GPSkyline" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="GraphPartition" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="neo4jTools" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="Pindex" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="testTools" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -491,7 +371,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -509,6 +389,7 @@
       <recent name="unDirectionalGraph" />
     </key>
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="testTools" />
       <recent name="aRtree" />
       <recent name="BaseLine" />
       <recent name="twoHop" />
@@ -544,25 +425,25 @@
         </pattern>
       </extension>
     </configuration>
+    <configuration name="BaseMethod_approx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="BaseLine.BaseMethod_approx" />
+      <module name="qixugong" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="BaseLine.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+    </configuration>
     <configuration name="Build m" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="BaseLine.BaseMethod5" />
+      <option name="MAIN_CLASS_NAME" value="testTools.ReadRealDataSet" />
       <module name="qixugong" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <shortenClasspath name="NONE" />
       <method>
         <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="assembly:single" />
       </method>
-    </configuration>
-    <configuration name="BusInfos" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="testTools.BusInfos" />
-      <module name="qixugong" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="testTools.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
     </configuration>
     <configuration name="CreateDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="neo4jTools.CreateDB" />
@@ -586,8 +467,8 @@
         </pattern>
       </extension>
     </configuration>
-    <configuration name="SyntheticData" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="testTools.SyntheticData" />
+    <configuration name="ReadRealDataSet" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="testTools.ReadRealDataSet" />
       <module name="qixugong" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -653,19 +534,19 @@
     </configuration>
     <list>
       <item itemvalue="Application.Build m" />
-      <item itemvalue="Application.CreateDB" />
-      <item itemvalue="Application.SyntheticData" />
-      <item itemvalue="Application.BusInfos" />
       <item itemvalue="Application.GoogleMaps" />
       <item itemvalue="Application.BaseMethod5" />
+      <item itemvalue="Application.BaseMethod_approx" />
+      <item itemvalue="Application.ReadRealDataSet" />
+      <item itemvalue="Application.CreateDB" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.CreateDB" />
+        <item itemvalue="Application.ReadRealDataSet" />
+        <item itemvalue="Application.BaseMethod_approx" />
         <item itemvalue="Application.BaseMethod5" />
         <item itemvalue="Application.GoogleMaps" />
-        <item itemvalue="Application.SyntheticData" />
-        <item itemvalue="Application.BusInfos" />
-        <item itemvalue="Application.CreateDB" />
       </list>
     </recent_temporary>
   </component>
@@ -712,14 +593,13 @@
       <window_info id="Image Layers" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5106732" side_tool="true" weight="0.5183246" />
-      <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.3294766" />
+      <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32984293" />
       <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" weight="0.6264428" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.23754789" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32528856" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.24028462" />
       <window_info id="Structure" order="1" sideWeight="0.49577168" side_tool="true" weight="0.12643678" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
@@ -731,15 +611,17 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32528856" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32528856" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
-      <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" visible="true" weight="0.6264428" />
+      <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" weight="0.6264428" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.23754789" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24028462" />
       <window_info id="Structure" order="1" sideWeight="0.49577168" side_tool="true" weight="0.12643678" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
@@ -747,7 +629,6 @@
       <window_info id="Image Layers" order="6" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32528856" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.6128017" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info anchor="bottom" id="Terminal" order="9" />
@@ -757,7 +638,7 @@
       <window_info id="Capture Tool" order="2" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.3231899" />
-      <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.3294766" />
+      <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
       <window_info id="Favorites" order="5" sideWeight="0.50422835" side_tool="true" weight="0.16822916" />
     </layout-to-restore>
   </component>
@@ -800,62 +681,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="42" selection-start-line="42" selection-end-line="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/RTNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6678">
-          <caret line="371" column="19" selection-start-line="371" selection-start-column="15" selection-end-line="371" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="5" lean-forward="true" selection-start-line="5" selection-start-column="4" selection-end-line="11" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/aRtree/aRTNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="591">
-          <caret line="44" column="26" selection-start-line="44" selection-start-column="15" selection-end-line="44" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/BlockFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4">
-          <caret line="105" column="31" lean-forward="true" selection-start-line="105" selection-start-column="31" selection-end-line="105" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/CachedBlockFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="517">
-          <caret line="251" column="5" lean-forward="true" selection-start-line="243" selection-start-column="4" selection-end-line="251" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/aRtree/CachedBlockFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="619">
-          <caret line="179" column="5" selection-start-line="179" selection-start-column="5" selection-end-line="179" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/RTDirNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10350">
-          <caret line="577" column="9" selection-start-line="560" selection-start-column="8" selection-end-line="577" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/aRtree/Node.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
@@ -989,13 +814,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/Data.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="308" column="33" lean-forward="true" selection-start-line="308" selection-start-column="33" selection-end-line="308" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/aRtree/Data.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5310">
@@ -1024,32 +842,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/myNodePriorityQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2448">
-          <caret line="158" column="44" selection-start-line="158" selection-start-column="44" selection-end-line="158" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/lang/Double.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
           <caret line="48" column="19" selection-start-line="48" selection-start-column="19" selection-end-line="48" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/BusInfos.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="23" column="9" selection-start-line="17" selection-start-column="8" selection-end-line="23" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="54" column="19" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -1075,26 +871,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BD_test/BaseMethod5.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-954">
-          <caret line="57" column="9" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="39" column="40" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1224">
+        <state relative-caret-position="1188">
           <caret line="71" column="16" selection-start-line="71" selection-start-column="16" selection-end-line="71" selection-end-column="16" />
         </state>
       </provider>
@@ -1122,14 +901,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Result.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-672">
+        <state relative-caret-position="198">
           <caret line="11" column="47" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-620">
+        <state relative-caret-position="2268">
           <caret line="133" column="30" selection-start-line="133" selection-start-column="17" selection-end-line="133" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1137,17 +916,134 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/BusInfos.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="56" column="45" selection-start-line="56" selection-start-column="45" selection-end-line="56" selection-end-column="45" />
+        <state relative-caret-position="72">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/myNodePriorityQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="35" column="50" lean-forward="true" selection-start-line="35" selection-start-column="42" selection-end-line="35" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/lineComparator.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3114">
+          <caret line="183" column="4" selection-start-line="183" selection-start-column="4" selection-end-line="202" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-378">
-          <caret column="16" selection-start-column="8" selection-end-column="16" />
+        <state relative-caret-position="810">
+          <caret line="54" column="21" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/tmpStop.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="18" column="5" selection-start-line="14" selection-start-column="4" selection-end-line="18" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/BusStation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="33" column="54" selection-start-line="33" selection-end-line="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#239#240#0" expanded="true" />
+            <element signature="e#267#268#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SegObj.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="39" column="37" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1116">
+          <caret line="62" column="30" selection-start-line="62" selection-start-column="30" selection-end-line="62" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="38" column="75" lean-forward="true" selection-end-line="108" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="25" column="79" lean-forward="true" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod_approx.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="58" column="9" lean-forward="true" selection-start-line="53" selection-start-column="8" selection-end-line="58" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/Data.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2345">
+          <caret line="358" column="16" selection-start-line="358" selection-start-column="16" selection-end-line="358" selection-end-column="16" />
+          <folding>
+            <element signature="e#10444#10445#0" expanded="true" />
+            <element signature="e#10482#10483#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="97" column="49" lean-forward="true" selection-start-line="97" selection-start-column="49" selection-end-line="97" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/POIObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="682">
+          <caret line="62" column="46" selection-start-line="62" selection-start-column="46" selection-end-line="62" selection-end-column="46" />
         </state>
       </provider>
     </entry>
