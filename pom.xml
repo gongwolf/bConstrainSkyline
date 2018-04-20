@@ -54,11 +54,11 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>ReadRealDataSet</finalName>
+                    <finalName>ReadRealDataSet_int</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>testTools.ReadRealDataSet</mainClass>
+                            <mainClass>testTools.ReadRealDataSet_int</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

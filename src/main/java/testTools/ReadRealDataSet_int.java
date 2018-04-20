@@ -13,7 +13,7 @@ import org.neo4j.graphdb.Transaction;
 import java.io.*;
 import java.util.*;
 
-public class ReadRealDataSet {
+public class ReadRealDataSet_int {
     String DB_PATH = "";
     String path_base = "/home/gqxwolf/shared_git/bConstrainSkyline/data/";
     String bus_data = path_base + "Bus_data/output.txt";
@@ -27,21 +27,19 @@ public class ReadRealDataSet {
     private GraphDatabaseService graphdb;
 
 
-    public ReadRealDataSet(double distance_range, boolean deleteBefore) {
+    public ReadRealDataSet_int(double distance_range, boolean deleteBefore) {
         this.max_id = 0;
         this.distance_range = distance_range;
 
-        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_" + (int)distance_range + "/data/";
-        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_real_" + (int)distance_range + "/databases/graph.db";
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_" + (int)distance_range + "_int/data/";
+        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_real_" + (int)distance_range + "_int/databases/graph.db";
         EdgesPath = DBBase + "SegInfo.txt";
         NodePath = DBBase + "NodeInfo.txt";
-
 
         System.out.println(this.DBBase);
         System.out.println(this.DB_PATH);
         System.out.println(this.EdgesPath);
         System.out.println(this.NodePath);
-
 
         if (deleteBefore) {
             File dataF = new File(DBBase);
@@ -56,7 +54,7 @@ public class ReadRealDataSet {
     }
 
     public static void main(String args[]) {
-        double distance_range = 30;
+        double distance_range = 50;
         boolean deleteBefore = true;
         boolean createDB = false;
 
@@ -67,11 +65,11 @@ public class ReadRealDataSet {
         }
 
 
-        ReadRealDataSet reReal = new ReadRealDataSet(distance_range, deleteBefore);
-        reReal.ReadBusStop();
+        ReadRealDataSet_int reReal_int = new ReadRealDataSet_int(distance_range, deleteBefore);
+        reReal_int.ReadBusStop();
 
         if (createDB) {
-            reReal.createDatabase();
+            reReal_int.createDatabase();
         }
 
     }
@@ -217,9 +215,9 @@ public class ReadRealDataSet {
                     double d = distanceInMeters(this.stops_list.get(t.id).center[0], this.stops_list.get(t.id).center[1], this.stops_list.get(t_1.id).center[0], this.stops_list.get(t_1.id).center[1]);
 
                     if (d >= distance_range) {
-                        double d1 = getGussianRandomValue(d * 2, d * 0.3);
-                        double d2 = getGussianRandomValue(d * 1.5, d * 0.4);
-                        SegObj s = new SegObj(sid, did, d, d1, d2);
+                        double d1 = (int)getGussianRandomValue(d * 2, d * 0.3);
+                        double d2 = (int)getGussianRandomValue(d * 1.5, d * 0.4);
+                        SegObj s = new SegObj(sid, did, (int)d, d1, d2);
                         this.seg_list.add(s);
                     }
                 }

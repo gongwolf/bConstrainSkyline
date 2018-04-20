@@ -1,5 +1,6 @@
-package BaseLine;
+package BaseLine.approximate;
 
+import BaseLine.approximate.path;
 import RstarTree.Data;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -17,14 +18,16 @@ public class myNode {
     public double[] locations = new double[2];
     public ArrayList<Data> d_list;
 
-    public myNode(Data queryNode, Node current, GraphDatabaseService graphdb) {
+    public myNode(Data queryNode, Node current, GraphDatabaseService graphdb, int distance_threshold) {
         this.node = current;
         this.qNode = queryNode;
         this.id = current.getId();
         skyPaths = new ArrayList<>();
         setLocations(graphdb);
-        path dp = new path(this);
-        this.skyPaths.add(dp);
+        if (this.distance_q <= distance_threshold) {
+            path dp = new path(this);
+            this.skyPaths.add(dp);
+        }
     }
 
     public double[] getLocations() {
@@ -37,7 +40,7 @@ public class myNode {
             locations[1] = (double) this.node.getProperty("log");
 //            this.distance_q = Math.sqrt(Math.pow(locations[0] - qNode.location[0], 2) + Math.pow(locations[1] - qNode.location[1], 2));
 
-            this.distance_q = GoogleMaps.distanceInMeters(locations[0],locations[1],qNode.location[0],qNode.location[1]);
+            this.distance_q = GoogleMaps.distanceInMeters(locations[0], locations[1], qNode.location[0], qNode.location[1]);
             tx.success();
 
         }
@@ -80,7 +83,7 @@ public class myNode {
 
     private boolean checkDominated(double[] costs, double[] estimatedCosts) {
         for (int i = 0; i < costs.length; i++) {
-            if (costs[i]*(1) > estimatedCosts[i]) {
+            if (costs[i] * (1) > estimatedCosts[i]) {
                 return false;
             }
         }

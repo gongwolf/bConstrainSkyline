@@ -181,7 +181,7 @@ public class GoogleMaps {
 
     }
 
-    private double distanceInMeters(double lat1, double long1, double lat2, double long2) {
+    public static double distanceInMeters(double lat1, double long1, double lat2, double long2) {
         long R = 6371000;
         double d;
 
@@ -192,13 +192,13 @@ public class GoogleMaps {
         double a = Math.sin(delta_lat / 2) * Math.sin(delta_lat / 2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.sin(delta_long / 2) * Math.sin(delta_long / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         d = R * c;
-        System.out.println(d);
-        double x = Math.PI / 180 * (long2 - long1) * Math.cos(Math.PI / 180 * (lat1 + lat2) / 2);
-        double y = Math.PI / 180 * (lat2 - lat1);
-        d = Math.sqrt(x * x + y * y) * R;
-        System.out.println(d);
-        d = Math.acos(Math.sin(r_lat1) * Math.sin(r_lat2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.cos(delta_long)) * R;
-        System.out.println(d);
+//        System.out.println(d);
+//        double x = Math.PI / 180 * (long2 - long1) * Math.cos(Math.PI / 180 * (lat1 + lat2) / 2);
+//        double y = Math.PI / 180 * (lat2 - lat1);
+//        d = Math.sqrt(x * x + y * y) * R;
+//        System.out.println(d);
+//        d = Math.acos(Math.sin(r_lat1) * Math.sin(r_lat2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.cos(delta_long)) * R;
+//        System.out.println(d);
         return d;
     }
 

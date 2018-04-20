@@ -1,16 +1,19 @@
 package neo4jTools;
 
 import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.io.fs.FileUtils;
+import org.neo4j.jmx.JmxUtils;
 
+import javax.management.ObjectName;
 import java.io.File;
 import java.io.IOException;
 
 public class connector {
-    String DB_PATH = "/home/gqxwolf/neo4j323/testdb/databases/graph.db";
-    String conFile = "/home/gqxwolf/neo4j323/conf/neo4j.conf";
+    String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
+    String conFile = "/home/gqxwolf/neo4j334/conf/neo4j.conf";
     GraphDatabaseService graphDB;
 
     public connector(String DB_PATH) {
@@ -19,25 +22,6 @@ public class connector {
 
     public connector() {
     }
-
-    public void startDB() {
-        //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
-        this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(this.DB_PATH))
-//                .loadPropertiesFromFile(conFile)
-                .setConfig(GraphDatabaseSettings.mapped_memory_page_size, "2k")
-                .setConfig(GraphDatabaseSettings.pagecache_memory, "2M")
-                .newGraphDatabase();
-        //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(DB_PATH)).loadPropertiesFromFile("/home/gqxwolf/neo4j/conf/neo4j.properties").newGraphDatabase();
-
-
-        registerShutdownHook(this.graphDB);
-//        if (graphDB == null) {
-//            System.out.println("Initialize fault");
-//        } else {
-//            System.out.println("Initialize success");
-//        }
-    }
-
 
     private static void registerShutdownHook(final GraphDatabaseService graphDb) {
         // Registers a shutdown hook for the Neo4j instance so that it
@@ -49,6 +33,36 @@ public class connector {
                 graphDb.shutdown();
             }
         });
+    }
+
+    public static void main(String args[]) {
+        connector n = new connector();
+//        n.test();
+//        n.clean();
+        System.out.println(n.getNumberofNodes());
+
+        n.shutdownDB();
+    }
+
+    public void startDB() {
+        //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
+        GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(this.DB_PATH));
+//        builder.loadPropertiesFromFile(conFile)
+        builder.setConfig(GraphDatabaseSettings.mapped_memory_page_size, "2k")
+                .setConfig(GraphDatabaseSettings.pagecache_memory, "2M");
+
+        this.graphDB = builder.newGraphDatabase();
+
+
+        //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(DB_PATH)).loadPropertiesFromFile("/home/gqxwolf/neo4j/conf/neo4j.properties").newGraphDatabase();
+
+
+        registerShutdownHook(this.graphDB);
+//        if (graphDB == null) {
+//            System.out.println("Initialize fault");
+//        } else {
+//            System.out.println("Initialize success");
+//        }
     }
 
     public void shutdownDB() {
@@ -94,16 +108,11 @@ public class connector {
             relationship.setProperty("OOPS", "YES");
             relationship.setProperty("FP", "YES");
             tx.success();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         System.out.println("Done successfully");
         shutdownDB();
-
-    }
-
-    public static void main(String args[]) {
-        connector n = new connector();
-//        n.test();
-        n.clean();
 
     }
 
@@ -121,12 +130,40 @@ public class connector {
 
 
     public long getNumberofNodes() {
+        startDB();
         long result = 0;
         try (Transaction tx = this.graphDB.beginTx()) {
             ResourceIterable<Node> r = this.graphDB.getAllNodes();
             tx.success();
             result = r.stream().count();
         }
+        System.out.println("dbms.memory.pagecache.size ~~~~  " + Long.valueOf((String) getFromManagementBean("Configuration", "dbms.memory.pagecache.size")) / 1024+"k");
+        System.out.println("NumberOfCommittedTransactions ~~~~  " + (long) getFromManagementBean("Transactions", "NumberOfCommittedTransactions"));
+        System.out.println("TotalStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TotalStoreSize")/1024+"k");
+        System.out.println("StringStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "StringStoreSize") / 1024+"k");
+        System.out.println("TransactionLogsSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TransactionLogsSize") / 1024+"k");
+
+
+
+
+
+
+//        System.out.println("~~~~  " + Long.valueOf((String)getFromManagementBean("Configuration", "dbms.memory.heap.initial_size"))/1024);
+//        System.out.println("~~~~  " + Long.valueOf((String)getFromManagementBean("Configuration", "dbms.memory.heap.max_size"))/1024);
+
+
+//        for (Map.Entry e : Neo4jManager.get().getConfiguration().entrySet()) {
+//            System.out.println(e.getValue()+"   "+e.getKey());
+//        }
+
+
         return result;
+    }
+
+
+    private Object getFromManagementBean(String Object, String Attribuite) {
+        ObjectName objectName = JmxUtils.getObjectName(this.graphDB, Object);
+        Object value = JmxUtils.getAttribute(objectName, Attribuite);
+        return value;
     }
 }

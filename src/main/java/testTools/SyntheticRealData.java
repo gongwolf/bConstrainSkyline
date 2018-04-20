@@ -54,14 +54,26 @@ public class SyntheticRealData {
 
         RTree rt = new RTree(tree_path, Constants.BLOCKLENGTH, Constants.CACHESIZE, dimension);
 
+        File file = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt");
+        if (file.exists()) {
+            file.delete();
+        }
 
+        FileWriter fw = null;
+        BufferedWriter bw = null;
 
 
         long counter = 0;
         for (String city : this.cities) {
             for (String type : p_types) {
                 String path = this.poi_data + "/outfilename_" + type + "_" + city;
+
+
                 try {
+
+                    fw = new FileWriter(file.getAbsoluteFile(), true);
+                    bw = new BufferedWriter(fw);
+
                     File f = new File(path);
                     BufferedReader b = new BufferedReader(new FileReader(f));
                     String line = "";
@@ -102,7 +114,10 @@ public class SyntheticRealData {
 
                                 d.setData(poi_obj.data);
 
-                                System.out.println(d);
+
+                                bw.write(poi_obj.placeID+","+poi_obj.locations[0]+","+poi_obj.locations[1]+","+poi_obj.data[0]+","+poi_obj.data[1]+","+poi_obj.data[2]+"\n");
+                                System.out.println(poi_obj.placeID+","+poi_obj.locations[0]+","+poi_obj.locations[1]+","+poi_obj.data[0]+","+poi_obj.data[1]+","+poi_obj.data[2]);
+
 
 
                                 rt.insert(d);
@@ -118,11 +133,11 @@ public class SyntheticRealData {
                         } else if (line.startsWith("placeId")) {
                             poi_obj.g_p_id = line.split(":")[1].trim();
                         } else if (line.startsWith("rating:")) {
-                            poi_obj.data[0] = Float.valueOf(line.split(":")[1].trim());
+                            poi_obj.data[0] = 5-Float.valueOf(line.split(":")[1].trim());
                         } else if (line.startsWith("pricelevel:")) {
                             poi_obj.data[1] = Float.valueOf(line.split(":")[1].trim());
                         } else if (line.startsWith("[")) {
-                            poi_obj.data[2] = line.split(",").length;
+                            poi_obj.data[2] = 10-line.split(",").length;
                         } else if (line.startsWith("   locations:")) {
                             poi_obj.locations[0] = Double.parseDouble(line.split(":")[1].trim().split(",")[0]);
                             poi_obj.locations[1] = Double.parseDouble(line.split(":")[1].trim().split(",")[1]);
@@ -130,10 +145,24 @@ public class SyntheticRealData {
 
 
                     }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+
+                    try {
+
+                        if (bw != null)
+                            bw.close();
+
+                        if (fw != null)
+                            fw.close();
+//                System.out.println("Done!! See MCP_Results.csv for MCP of each cow for each day.");
+
+                    } catch (IOException ex) {
+
+                        ex.printStackTrace();
+
+                    }
                 }
             }
         }
