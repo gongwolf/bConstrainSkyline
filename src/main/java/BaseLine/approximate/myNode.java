@@ -15,11 +15,12 @@ public class myNode {
     public Data qNode;
     public ArrayList<path> skyPaths;
     public double distance_q;
-    public double[] locations = new double[2];
+    public double[] locations;
     public ArrayList<Data> d_list;
 
     public myNode(Data queryNode, Node current, GraphDatabaseService graphdb, int distance_threshold) {
         this.node = current;
+        this.locations = new double[2];
         this.qNode = queryNode;
         this.id = current.getId();
         skyPaths = new ArrayList<>();

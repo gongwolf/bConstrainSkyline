@@ -5,24 +5,18 @@
       <artifact name="qixugong:jar" />
     </artifacts-to-build>
   </component>
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/main/java/TestCase/queueTest.java" line="37" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="1927bf6b-a886-486f-9482-a756607011b0" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/Result.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNodePriorityQueue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/TestCase/queueTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qixugong.iml" beforeDir="false" afterPath="$PROJECT_DIR$/qixugong.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod_approx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNodePriorityQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNodePriorityQueue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -41,8 +35,8 @@
       <file leaf-file-name="BaseMethod_approx.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3564">
-              <caret line="213" column="113" selection-start-line="213" selection-start-column="113" selection-end-line="213" selection-end-column="113" />
+            <state>
+              <caret column="29" selection-start-column="8" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -50,29 +44,93 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="connector.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/connector.java">
+      <file leaf-file-name="myNodePriorityQueue.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNodePriorityQueue.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="17" column="19" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="myNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="43" column="52" selection-start-line="43" selection-start-column="52" selection-end-line="43" selection-end-column="52" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GoogleMaps.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="563">
+              <caret line="194" selection-start-line="194" selection-end-line="200" selection-end-column="32" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="queueTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/TestCase/queueTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="676">
+              <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="56" column="48" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="path.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="972">
+              <caret line="54" selection-start-line="54" selection-end-line="54" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ArrayList.java" pinned="false" current-in-tab="false">
+        <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/util/ArrayList.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="100">
-              <caret line="150" column="140" selection-start-line="150" selection-start-column="140" selection-end-line="150" selection-end-column="140" />
+              <caret line="181" column="79" lean-forward="true" selection-start-line="181" selection-start-column="79" selection-end-line="181" selection-end-column="79" />
               <folding>
-                <element signature="e#478#479#0" expanded="true" />
-                <element signature="e#516#517#0" expanded="true" />
-                <element signature="e#1738#1866#0" expanded="true" />
-                <element signature="e#1865#1866#0" expanded="true" />
+                <element signature="e#13713#13714#0" expanded="true" />
+                <element signature="e#13768#13769#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReadRealDataSet.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java">
+      <file leaf-file-name="Arrays.java" pinned="false" current-in-tab="false">
+        <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/util/Arrays.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="720">
-              <caret line="42" column="42" selection-start-line="42" selection-start-column="42" selection-end-line="42" selection-end-column="42" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="677">
+              <caret line="3207" column="92" selection-start-line="3207" selection-start-column="85" selection-end-line="3207" selection-end-column="92" />
             </state>
           </provider>
         </entry>
@@ -80,79 +138,10 @@
       <file leaf-file-name="ReadRealDataSet_int.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="38" selection-start-line="38" selection-end-line="41" selection-end-column="42" />
+            <state relative-caret-position="1098">
+              <caret line="61" column="57" selection-start-line="61" selection-start-column="57" selection-end-line="61" selection-end-column="57" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
-              <caret line="60" column="68" selection-start-line="60" selection-start-column="68" selection-end-line="60" selection-end-column="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SyntheticRealData.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1072">
-              <caret line="145" selection-start-line="145" selection-end-line="145" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="path.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
-              <caret line="55" column="67" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="67" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseMethod.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1746">
-              <caret line="130" column="65" selection-start-line="130" selection-start-column="65" selection-end-line="130" selection-end-column="65" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="myshortestPathUseNodeFinal.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/GPSkyline/BFS/myshortestPathUseNodeFinal.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="74" column="78" selection-start-line="74" selection-start-column="23" selection-end-line="74" selection-end-column="78" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Data.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/Data.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="33" column="18" selection-start-line="33" selection-start-column="18" selection-end-line="33" selection-end-column="18" />
-              <folding>
-                <element signature="e#10444#10445#0" expanded="true" />
-                <element signature="e#10482#10483#0" expanded="true" />
-                <element signature="e#10532#10533#0" expanded="true" />
-                <element signature="e#10612#10613#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -169,8 +158,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>(2)-[34]-(7)(2)-[34]-(7)</find>
-      <find>(2)-[34]-(7)</find>
       <find>(13)-[75]-(9)-[6]-(12)-[62]-(6)</find>
       <find>(13)-[53]-(14)-[84]-(7)</find>
       <find>(13)-[53]-(14)-[84]-(7)-[74]-(18)(13)-[53]-(14)-[84]-(7)-[74]-(18)</find>
@@ -199,6 +186,8 @@
       <find>page</find>
       <find>334</find>
       <find>faul</find>
+      <find>add</find>
+      <find>queue</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -207,7 +196,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/aRtree/Node.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod2.java" />
         <option value="$PROJECT_DIR$/src/main/java/aRtree/Data.java" />
         <option value="$PROJECT_DIR$/src/main/java/Baseline2/path.java" />
@@ -248,16 +236,17 @@
         <option value="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod_approx.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNodePriorityQueue.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/Result.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" />
         <option value="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNodePriorityQueue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/TestCase/queueTest.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java" />
       </list>
     </option>
   </component>
@@ -293,8 +282,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -352,48 +341,7 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="GPSkyline" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="GPSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="BFS" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="GraphPartition" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="neo4jTools" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="Pindex" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="testTools" type="462c0819:PsiDirectoryNode" />
+              <item name="TestCase" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -447,7 +395,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Build m">
+  <component name="RunManager" selected="Application.BaseMethod_approx">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HEIGHT" value="0" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
@@ -465,24 +413,13 @@
       </extension>
     </configuration>
     <configuration name="Build m" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="testTools.ReadRealDataSet_int" />
+      <option name="MAIN_CLASS_NAME" value="BaseLine.approximate.BaseMethod_approx" />
       <module name="qixugong" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <shortenClasspath name="NONE" />
       <method>
         <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="assembly:single" />
       </method>
-    </configuration>
-    <configuration name="CreateDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="neo4jTools.CreateDB" />
-      <module name="qixugong" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="neo4jTools.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
     </configuration>
     <configuration name="ReadRealDataSet_int" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="testTools.ReadRealDataSet_int" />
@@ -519,6 +456,17 @@
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration name="queueTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestCase.queueTest" />
+      <module name="qixugong" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="TestCase.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -574,18 +522,18 @@
     <list>
       <item itemvalue="Application.Build m" />
       <item itemvalue="Application.BaseMethod_approx" />
-      <item itemvalue="Application.CreateDB" />
       <item itemvalue="Application.SyntheticRealData" />
       <item itemvalue="Application.SyntheticData" />
       <item itemvalue="Application.ReadRealDataSet_int" />
+      <item itemvalue="Application.queueTest" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ReadRealDataSet_int" />
         <item itemvalue="Application.BaseMethod_approx" />
+        <item itemvalue="Application.queueTest" />
+        <item itemvalue="Application.ReadRealDataSet_int" />
         <item itemvalue="Application.SyntheticRealData" />
         <item itemvalue="Application.SyntheticData" />
-        <item itemvalue="Application.CreateDB" />
       </list>
     </recent_temporary>
   </component>
@@ -633,13 +581,13 @@
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5106732" side_tool="true" weight="0.5183246" />
       <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32984293" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948583" />
       <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" weight="0.6253935" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.23973727" />
-      <window_info id="Structure" order="1" sideWeight="0.49577168" side_tool="true" weight="0.12643678" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49859944" weight="0.242474" />
+      <window_info id="Structure" order="1" sideWeight="0.5014006" side_tool="true" weight="0.242474" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
       <window_info anchor="right" id="Theme Preview" order="6" />
@@ -660,8 +608,8 @@
       <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" visible="true" weight="0.6253935" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23973727" />
-      <window_info id="Structure" order="1" sideWeight="0.49577168" side_tool="true" weight="0.12643678" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49859944" visible="true" weight="0.242474" />
+      <window_info id="Structure" order="1" sideWeight="0.5014006" side_tool="true" visible="true" weight="0.242474" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -673,7 +621,7 @@
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5106732" side_tool="true" weight="0.5183246" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32984293" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948583" />
       <window_info id="Capture Tool" order="2" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.3221406" />
@@ -720,41 +668,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/aRtree/DirEntry.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="31" column="16" selection-start-line="31" selection-start-column="10" selection-end-line="31" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/aRtree/aRTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="592">
-          <caret line="141" selection-start-line="141" selection-end-line="141" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/aRtree/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="196" selection-start-line="196" selection-end-line="196" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/aRtree/aRTDirNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-840">
-          <caret line="425" column="63" selection-start-line="425" selection-start-column="61" selection-end-line="425" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/aRtree/aRTDataNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8046">
-          <caret line="453" selection-start-line="453" selection-end-line="453" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Baseline2/BaseMethod4.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1488">
@@ -839,9 +752,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2268">
           <caret line="133" column="30" selection-start-line="133" selection-start-column="17" selection-end-line="133" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -878,11 +788,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="522">
           <caret line="33" column="54" selection-start-line="33" selection-end-line="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#239#240#0" expanded="true" />
-            <element signature="e#267#268#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -921,45 +826,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="187" column="45" selection-start-line="187" selection-start-column="45" selection-end-line="187" selection-end-column="45" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/myNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
           <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-          <folding>
-            <element signature="e#881#882#0" expanded="true" />
-            <element signature="e#913#914#0" expanded="true" />
-            <element signature="e#1489#1490#0" expanded="true" />
-            <element signature="e#1514#1515#0" expanded="true" />
-            <element signature="e#1548#1549#0" expanded="true" />
-            <element signature="e#1576#1577#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="32" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNodePriorityQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="24" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -977,19 +847,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="55" column="67" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="67" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/Data.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
+        <state relative-caret-position="576">
           <caret line="33" column="18" selection-start-line="33" selection-start-column="18" selection-end-line="33" selection-end-column="18" />
           <folding>
             <element signature="e#10444#10445#0" expanded="true" />
@@ -1002,17 +862,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1746">
+        <state relative-caret-position="2178">
           <caret line="130" column="65" selection-start-line="130" selection-start-column="65" selection-end-line="130" selection-end-column="65" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/GPSkyline/BFS/myshortestPathUseNodeFinal.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
+        <state relative-caret-position="1008">
           <caret line="74" column="78" selection-start-line="74" selection-start-column="23" selection-end-line="74" selection-end-column="78" />
         </state>
       </provider>
@@ -1045,19 +902,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3564">
-          <caret line="213" column="113" selection-start-line="213" selection-start-column="113" selection-end-line="213" selection-end-column="113" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1072">
+        <state relative-caret-position="2610">
           <caret line="145" selection-start-line="145" selection-end-line="145" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1067,31 +914,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/connector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
+        <state relative-caret-position="2376">
           <caret line="150" column="140" selection-start-line="150" selection-start-column="140" selection-end-line="150" selection-end-column="140" />
-          <folding>
-            <element signature="e#478#479#0" expanded="true" />
-            <element signature="e#516#517#0" expanded="true" />
-            <element signature="e#1738#1866#0" expanded="true" />
-            <element signature="e#1865#1866#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="38" selection-start-line="38" selection-end-line="41" selection-end-column="42" />
+        <state relative-caret-position="756">
+          <caret line="42" column="42" selection-start-line="42" selection-start-column="42" selection-end-line="42" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="42" column="42" selection-start-line="42" selection-start-column="42" selection-end-line="42" selection-end-column="42" />
+        <state relative-caret-position="1098">
+          <caret line="61" column="57" selection-start-line="61" selection-start-column="57" selection-end-line="61" selection-end-column="57" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1100,8 +941,104 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
-          <caret line="60" column="68" selection-start-line="60" selection-start-column="68" selection-end-line="60" selection-end-column="68" />
+        <state relative-caret-position="396">
+          <caret line="56" column="48" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/util/PriorityQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="353" column="16" selection-start-line="353" selection-start-column="16" selection-end-line="353" selection-end-column="16" />
+          <folding>
+            <element signature="e#14892#14893#0" expanded="true" />
+            <element signature="e#14931#14932#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/TestCase/queueTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="676">
+          <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/util/Collection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="206" column="13" selection-start-line="206" selection-start-column="13" selection-end-line="206" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="29" selection-start-column="8" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNodePriorityQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="17" column="19" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="43" column="52" selection-start-line="43" selection-start-column="52" selection-end-line="43" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="563">
+          <caret line="194" selection-start-line="194" selection-end-line="200" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/util/Arrays.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="677">
+          <caret line="3207" column="92" selection-start-line="3207" selection-start-column="85" selection-end-line="3207" selection-end-column="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/util/ArrayList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="181" column="79" lean-forward="true" selection-start-line="181" selection-start-column="79" selection-end-line="181" selection-end-column="79" />
+          <folding>
+            <element signature="e#13713#13714#0" expanded="true" />
+            <element signature="e#13768#13769#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="972">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

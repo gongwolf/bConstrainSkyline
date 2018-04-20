@@ -159,7 +159,7 @@ public class BaseMethod_approx {
         System.out.println("==========" + this.skyPaths.size());
 
 
-        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
+        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50_int/databases/graph.db";
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
         n.startDB();

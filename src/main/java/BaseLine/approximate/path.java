@@ -11,16 +11,17 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class path {
-    public double[] costs = new double[constants.path_dimension];
+    public double[] costs;
     public boolean expaned;
     public Node startNode, endNode;
 
-    public ArrayList<Node> nodes = new ArrayList<>();
-    public ArrayList<Relationship> rels = new ArrayList<>();
-    public ArrayList<String> propertiesName = new ArrayList<>();
+    public ArrayList<Node> nodes;
+    public ArrayList<Relationship> rels;
+    public ArrayList<String> propertiesName;
 
 
     public path(myNode current) {
+        this.costs = new double[constants.path_dimension];
         costs[0] = current.distance_q;
         costs[1] = costs[2] = costs[3] = 0;
 //        constants.print(costs);
@@ -28,22 +29,31 @@ public class path {
         this.endNode = current.node;
         this.expaned = false;
 
+        this.nodes = new ArrayList<>();
+        this.rels = new ArrayList<>();
+        this.propertiesName = new ArrayList<>();
+
+
         this.nodes.add(startNode);
 
         this.setPropertiesName();
     }
 
     public path(path old_path, Relationship rel) {
+
+        this.costs = new double[constants.path_dimension];
+        this.nodes = new ArrayList<>(old_path.nodes);
+        this.rels = new ArrayList<>(old_path.rels);
+        this.propertiesName = new ArrayList<>(old_path.propertiesName);
+
+
         this.startNode = old_path.startNode;
         this.endNode = rel.getEndNode();
+
         expaned = false;
 
-        this.nodes.addAll(old_path.nodes);
         this.nodes.add(rel.getEndNode());
-
-        this.rels.addAll(old_path.rels);
         this.rels.add(rel);
-        this.propertiesName = old_path.propertiesName;
 
         System.arraycopy(old_path.costs, 0, this.costs, 0, this.costs.length);
 
