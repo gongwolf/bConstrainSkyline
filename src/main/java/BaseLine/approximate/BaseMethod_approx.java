@@ -71,7 +71,7 @@ public class BaseMethod_approx {
         for (int i = 0; i < query_num; i++) {
             BaseMethod_approx b_appx = new BaseMethod_approx(graph_size, degree);
             int random_place_id = b_appx.getRandomNumberInRange_int(0, hotels_num - 1);
-            Data queryD = b_appx.getDataById(628);
+            Data queryD = b_appx.getDataById(random_place_id);
             queryList[i] = queryD;
         }
 
