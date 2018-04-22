@@ -1,5 +1,6 @@
 package BaseLine;
 
+import BaseLine.approximate.BaseMethod_approx;
 import RstarTree.Data;
 import neo4jTools.connector;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -83,6 +84,14 @@ public class BaseMethod5 {
         for (int i = 0; i < query_num; i++) {
             BaseMethod5 Lemmas_method = new BaseMethod5(graph_size, degree);
             Lemmas_method.baseline(queryList[i]);
+
+        }
+        System.out.println("=====================================================");
+
+
+        for (int i = 0; i < query_num; i++) {
+            BaseMethod_approx approx_method = new BaseMethod_approx(graph_size, degree);
+            approx_method.baseline(queryList[i]);
 
         }
     }
@@ -293,7 +302,7 @@ public class BaseMethod5 {
         int visited_bus_stop = this.tmpStoreNodes.size();
         int bus_stop_in_result = final_bus_stops.size();
 
-        sb.append("  "+visited_bus_stop + "," + bus_stop_in_result+","+(double)bus_stop_in_result/visited_bus_stop+"   "+this.sky_add_result_counter);
+        sb.append("  " + visited_bus_stop + "," + bus_stop_in_result + "," + (double) bus_stop_in_result / visited_bus_stop + "   " + this.sky_add_result_counter);
 
         System.out.println(sb.toString());
 

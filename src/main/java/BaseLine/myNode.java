@@ -35,9 +35,9 @@ public class myNode {
         try (Transaction tx = graphdb.beginTx()) {
             locations[0] = (double) this.node.getProperty("lat");
             locations[1] = (double) this.node.getProperty("log");
-//            this.distance_q = Math.sqrt(Math.pow(locations[0] - qNode.location[0], 2) + Math.pow(locations[1] - qNode.location[1], 2));
+            this.distance_q = Math.sqrt(Math.pow(locations[0] - qNode.location[0], 2) + Math.pow(locations[1] - qNode.location[1], 2));
 
-            this.distance_q = GoogleMaps.distanceInMeters(locations[0],locations[1],qNode.location[0],qNode.location[1]);
+//            this.distance_q = GoogleMaps.distanceInMeters(locations[0],locations[1],qNode.location[0],qNode.location[1]);
             tx.success();
 
         }

@@ -50,6 +50,7 @@ public class connector {
     }
 
     public void startDB() {
+        this.graphDB=null;
         //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
         GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(this.DB_PATH));
 //        builder.loadPropertiesFromFile(conFile)
@@ -63,7 +64,7 @@ public class connector {
 
 
         registerShutdownHook(this.graphDB);
-//        getPropertiesName();
+        getPropertiesName();
 //        if (graphDB == null) {
 //            System.out.println("Initialize fault");
 //        } else {
@@ -169,10 +170,10 @@ public class connector {
         return value;
     }
 
-    public static ArrayList<Relationship> getOutgoutingEdges(long edge_id) {
+    public static ArrayList<Relationship> getOutgoutingEdges(long Node_id) {
         ArrayList<Relationship> results = new ArrayList<>();
         try (Transaction tx = graphDB.beginTx()) {
-            Iterable<Relationship> rels = graphDB.getRelationshipById(edge_id).getEndNode().getRelationships(Line.Linked, Direction.OUTGOING);
+            Iterable<Relationship> rels = graphDB.getNodeById(Node_id).getRelationships(Line.Linked, Direction.OUTGOING);
             Iterator<Relationship> rel_Iter = rels.iterator();
             while (rel_Iter.hasNext()) {
                 Relationship rel = rel_Iter.next();
@@ -186,6 +187,7 @@ public class connector {
 
 
     public static void getPropertiesName() {
+        propertiesName.clear();
         try (Transaction tx = graphDB.beginTx()) {
 
             Iterable<Relationship> rels = graphDB.getNodeById(0).getRelationships(Line.Linked, Direction.BOTH);
@@ -200,6 +202,8 @@ public class connector {
             } else {
                 System.err.println("There is no edge from or to this node " + graphDB.getNodeById(0).getId());
             }
+
+//            System.out.println(propertiesName.size());
             tx.success();
         }
     }

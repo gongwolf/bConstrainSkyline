@@ -33,6 +33,7 @@ public class path {
         this.nodes.add(startNode);
 
         this.setPropertiesName();
+//        System.out.println(this.propertiesName.size());
     }
 
     public path(path old_path, Relationship rel) {
@@ -44,7 +45,7 @@ public class path {
 
 
         this.startNode = old_path.startNode;
-        this.endNode = rel.getEndNode().getId();
+        this.endNode = rel.getEndNodeId();
 
         expaned = false;
 
@@ -60,9 +61,9 @@ public class path {
         ArrayList<path> result = new ArrayList<>();
 
         ArrayList<Relationship> outgoing_rels = connector.getOutgoutingEdges(this.endNode);
+//        System.out.println(outgoing_rels.size());
 
-        for(Relationship r:outgoing_rels)
-        {
+        for (Relationship r : outgoing_rels) {
             path nPath = new path(this, r);
             result.add(nPath);
         }
@@ -70,11 +71,31 @@ public class path {
     }
 
 
+//    public ArrayList<path> expand() {
+//        ArrayList<path> result = new ArrayList<>();
+//
+//        try (Transaction tx = connector.graphDB.beginTx()) {
+//            Iterable<Relationship> rels = connector.graphDB.getNodeById(this.endNode).getRelationships(Line.Linked, Direction.OUTGOING);
+//            Iterator<Relationship> rel_Iter = rels.iterator();
+//            while (rel_Iter.hasNext()) {
+//                Relationship rel = rel_Iter.next();
+//                path nPath = new path(this, rel);
+//                result.add(nPath);
+//            }
+//            tx.success();
+//        }
+//        return result;
+//    }
+
+
     private void calculateCosts(Relationship rel) {
+//        System.out.println(this.propertiesName.size());
         if (this.startNode != this.endNode) {
             int i = 1;
             for (String pname : this.propertiesName) {
-                this.costs[i] = this.costs[i] + Double.parseDouble(rel.getProperty(pname).toString());
+//                System.out.println(i+" "+this.costs[i]+"  "+Double.parseDouble(rel.getProperty(pname).toString()));
+
+                this.costs[i] = this.costs[i] + (double) rel.getProperty(pname);
                 i++;
             }
         }
@@ -89,7 +110,7 @@ public class path {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         if (this.rels.isEmpty()) {
-            sb.append("(" + this.startNode+ ")");
+            sb.append("(" + this.startNode + ")");
         } else {
             int i;
             for (i = 0; i < this.nodes.size() - 1; i++) {
@@ -114,7 +135,7 @@ public class path {
 
         if (obj == null && this == null) {
             return true;
-        } else if((obj==null && this!=null) || (obj!=null&&this==null)){
+        } else if ((obj == null && this != null) || (obj != null && this == null)) {
             return false;
         }
 

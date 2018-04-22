@@ -1,6 +1,6 @@
+
 package BaseLine.approximate;
 
-import BaseLine.Skyline;
 import BaseLine.constants;
 import RstarTree.Data;
 import neo4jTools.connector;
@@ -17,12 +17,12 @@ import java.util.*;
 public class BaseMethod_approx {
     public ArrayList<path> qqqq = new ArrayList<>();
     Random r;
-//    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
-//    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
+    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
 
-    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
-
-    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
+//    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
+//
+//    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
     int graph_size;
     String degree;
     long add_oper = 0;
@@ -57,7 +57,6 @@ public class BaseMethod_approx {
         String degree = "4";
         int query_num = 1;
         int hotels_num = 25854;
-        double distance_range = 25854;
 
         if (args.length == 4) {
             graph_size = Integer.parseInt(args[0]);

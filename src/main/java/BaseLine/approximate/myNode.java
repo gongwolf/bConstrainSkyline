@@ -17,16 +17,16 @@ public class myNode {
     public double[] locations;
     public ArrayList<Data> d_list;
 
-    public myNode(Data queryNode, long current, int distance_threshold) {
-        this.node = this.id = current;
+    public myNode(Data queryNode, long current_id, int distance_threshold) {
+        this.node = this.id = current_id;
         this.locations = new double[2];
         this.qNode = queryNode;
         skyPaths = new ArrayList<>();
         setLocations();
-        if (this.distance_q <= distance_threshold) {
+//        if (this.distance_q <= distance_threshold) {
             path dp = new path(this);
             this.skyPaths.add(dp);
-        }
+//        }
     }
 
     public double[] getLocations() {
