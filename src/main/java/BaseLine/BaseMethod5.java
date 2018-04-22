@@ -66,7 +66,7 @@ public class BaseMethod5 {
         for (int i = 0; i < query_num; i++) {
             BaseMethod5 bm5 = new BaseMethod5(graph_size, degree);
             int random_place_id = bm5.getRandomNumberInRange_int(0, hotels_num - 1);
-            Data queryD = bm5.getDataById(251);
+            Data queryD = bm5.getDataById(random_place_id);
             queryList[i] = queryD;
         }
 

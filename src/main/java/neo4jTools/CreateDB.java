@@ -19,11 +19,11 @@ public class CreateDB {
     private GraphDatabaseService graphdb = null;
 
     public CreateDB(int graphsize, int degree) {
-        //this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
-        //this.DB_PATH = "/home/gqxwolf/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
+        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
 
-        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real/data/";
-        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_real/databases/graph.db";
+        //this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real/data/";
+        //this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_real/databases/graph.db";
 
         NodesPath = DBBase + "NodeInfo.txt";
         SegsPath = DBBase + "SegInfo.txt";
@@ -31,8 +31,8 @@ public class CreateDB {
 
     public static void main(String args[]) {
 
-        int graphsize = 4000;
-        int degree =5;
+        int graphsize = 2000;
+        int degree =4;
         int dimension=3;
 
         if (args.length == 3) {
@@ -42,7 +42,7 @@ public class CreateDB {
         }
 
         generateGraph g = new generateGraph(graphsize, degree, dimension);
-        //g.generateG(true);
+        g.generateG(true);
 
         CreateDB db = new CreateDB(graphsize, degree);
 //        db.createDatabasewithIndex("Id");
