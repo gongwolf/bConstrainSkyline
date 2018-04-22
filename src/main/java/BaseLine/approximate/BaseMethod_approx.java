@@ -17,7 +17,11 @@ import java.util.*;
 public class BaseMethod_approx {
     public ArrayList<path> qqqq = new ArrayList<>();
     Random r;
-    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
+//    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
+//    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+
+    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
+
     String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
     int graph_size;
     String degree;
@@ -28,7 +32,7 @@ public class BaseMethod_approx {
     long read_data = 0;
     //Todo: each hotel know the distance to the hotel than dominate it.
     HashMap<Integer, Double> dominated_checking = new HashMap<>(); //
-    int distance_threshold = 200;
+    int distance_threshold = Integer.MAX_VALUE;
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
@@ -52,7 +56,7 @@ public class BaseMethod_approx {
         int graph_size = 2000;
         String degree = "4";
         int query_num = 1;
-        int hotels_num = 1000;
+        int hotels_num = 25854;
         double distance_range = 25854;
 
         if (args.length == 4) {
@@ -119,6 +123,9 @@ public class BaseMethod_approx {
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
 
+        System.out.println("there are " + this.sNodes.size() + " BBS hotels");
+
+
         for (Data d : sNodes) {
             double[] c = new double[constants.path_dimension + 3];
             c[0] = d.distance_q;
@@ -133,7 +140,7 @@ public class BaseMethod_approx {
                 addToSkyline(r);
             }
         }
-//        System.out.println(this.skyPaths.size());
+        System.out.println(this.skyPaths.size());
 
 
         //find the minimum distance from query point to the skyline hotel that dominate non-skyline hotel cand_d
@@ -159,7 +166,7 @@ public class BaseMethod_approx {
         System.out.println("==========" + this.skyPaths.size());
 
 
-        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50_int/databases/graph.db";
+        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
         n.startDB();
@@ -170,16 +177,19 @@ public class BaseMethod_approx {
         long expasion_rt = 0;
 
 
-        try (Transaction tx = this.graphdb.beginTx()) {
-            db_time = System.currentTimeMillis() - db_time;
-            r1 = System.currentTimeMillis();
-            Node startNode = nearestNetworkNode(queryD);
-            long nn_rt = System.currentTimeMillis() - r1;
-            System.out.println("find the nearest bus stop " + nn_rt + "  ms  ");
+        db_time = System.currentTimeMillis() - db_time;
+        r1 = System.currentTimeMillis();
+        long startNode_id = nearestNetworkNode(queryD);
+        long nn_rt = System.currentTimeMillis() - r1;
+        System.out.println("find the nearest bus stop " + nn_rt + "  ms  ");
+
+
+        try (Transaction tx = connector.graphDB.beginTx()) {
+
 
             long rt = System.currentTimeMillis();
 
-            myNode s = new myNode(queryD, startNode, this.graphdb, this.distance_threshold);
+            myNode s = new myNode(queryD, startNode_id, this.distance_threshold);
             System.out.println(s.distance_q);
 
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
@@ -202,15 +212,15 @@ public class BaseMethod_approx {
                         expasion_rt += (System.nanoTime() - ee);
                         for (path np : new_paths) {
                             myNode next_n;
-                            if (this.tmpStoreNodes.containsKey(np.endNode.getId())) {
-                                next_n = tmpStoreNodes.get(np.endNode.getId());
+                            if (this.tmpStoreNodes.containsKey(np.endNode)) {
+                                next_n = tmpStoreNodes.get(np.endNode);
                             } else {
-                                next_n = new myNode(queryD, np.endNode, this.graphdb, this.distance_threshold);
+                                next_n = new myNode(queryD, np.endNode, this.distance_threshold);
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
 
                             //lemma 2
-                            if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q)) {
+                            if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
 //                            if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q) && next_n.distance_q <= 10000) {
                                 if (next_n.addToSkyline(np)) {
                                     mqueue.add(next_n);
@@ -298,8 +308,8 @@ public class BaseMethod_approx {
             this.finalDatas.add(r.end);
 
             if (r.p != null) {
-                for (Node nn : r.p.nodes) {
-                    final_bus_stops.add(nn.getId());
+                for (long nn : r.p.nodes) {
+                    final_bus_stops.add(nn);
                 }
             }
         }
@@ -349,7 +359,7 @@ public class BaseMethod_approx {
 
 
         long rr = System.nanoTime();
-        myNode my_endNode = this.tmpStoreNodes.get(np.endNode.getId());
+        myNode my_endNode = this.tmpStoreNodes.get(np.endNode);
         this.map_operation += System.nanoTime() - rr;
 
         long dsad = System.nanoTime();
@@ -449,24 +459,29 @@ public class BaseMethod_approx {
         return random;
     }
 
-    public Node nearestNetworkNode(Data queryD) {
+    public long nearestNetworkNode(Data queryD) {
 
         Node nn_node = null;
         double distz = Float.MAX_VALUE;
 
-        ResourceIterable<Node> iter = this.graphdb.getAllNodes();
-        for (Node n : iter) {
-            double lat = (double) n.getProperty("lat");
-            double log = (double) n.getProperty("log");
+        try (Transaction tx = connector.graphDB.beginTx()) {
 
-            double temp_distz = (Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
-            if (distz > temp_distz) {
-                nn_node = n;
-                distz = temp_distz;
+            ResourceIterable<Node> iter = connector.graphDB.getAllNodes();
+            for (Node n : iter) {
+                double lat = (double) n.getProperty("lat");
+                double log = (double) n.getProperty("log");
 
+                double temp_distz = (Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
+                if (distz > temp_distz) {
+                    nn_node = n;
+                    distz = temp_distz;
+
+                }
             }
+
+            tx.success();
         }
-        return nn_node;
+        return nn_node.getId();
     }
 
 

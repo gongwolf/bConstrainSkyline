@@ -16,6 +16,9 @@ public class BaseMethod5 {
     Random r;
     String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
     String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
+
+    String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+
     int graph_size;
     String degree;
     long add_oper = 0;
@@ -41,12 +44,13 @@ public class BaseMethod5 {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
+        this.graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
     }
 
     public static void main(String args[]) {
         int graph_size = 2000;
         String degree = "4";
-        int query_num = 10;
+        int query_num = 1;
         int hotels_num = 300;
 
         if (args.length == 4) {
@@ -62,7 +66,7 @@ public class BaseMethod5 {
         for (int i = 0; i < query_num; i++) {
             BaseMethod5 bm5 = new BaseMethod5(graph_size, degree);
             int random_place_id = bm5.getRandomNumberInRange_int(0, hotels_num - 1);
-            Data queryD = bm5.getDataById(random_place_id);
+            Data queryD = bm5.getDataById(251);
             queryList[i] = queryD;
         }
 
@@ -146,7 +150,6 @@ public class BaseMethod5 {
 //        System.out.println("==========" + this.skyPaths.size());
 
 
-        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
         n.startDB();

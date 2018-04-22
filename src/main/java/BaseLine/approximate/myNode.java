@@ -1,9 +1,8 @@
 package BaseLine.approximate;
 
-import BaseLine.approximate.path;
+
 import RstarTree.Data;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
+import neo4jTools.connector;
 import org.neo4j.graphdb.Transaction;
 import testTools.GoogleMaps;
 
@@ -11,20 +10,19 @@ import java.util.ArrayList;
 
 public class myNode {
     public long id;
-    public Node node;
+    public long node;
     public Data qNode;
     public ArrayList<path> skyPaths;
     public double distance_q;
     public double[] locations;
     public ArrayList<Data> d_list;
 
-    public myNode(Data queryNode, Node current, GraphDatabaseService graphdb, int distance_threshold) {
-        this.node = current;
+    public myNode(Data queryNode, long current, int distance_threshold) {
+        this.node = this.id = current;
         this.locations = new double[2];
         this.qNode = queryNode;
-        this.id = current.getId();
         skyPaths = new ArrayList<>();
-        setLocations(graphdb);
+        setLocations();
         if (this.distance_q <= distance_threshold) {
             path dp = new path(this);
             this.skyPaths.add(dp);
@@ -35,15 +33,14 @@ public class myNode {
         return locations;
     }
 
-    public void setLocations(GraphDatabaseService graphdb) {
-        try (Transaction tx = graphdb.beginTx()) {
-            locations[0] = (double) this.node.getProperty("lat");
-            locations[1] = (double) this.node.getProperty("log");
+    public void setLocations() {
+        try (Transaction tx = connector.graphDB.beginTx()) {
+            locations[0] = (double) connector.graphDB.getNodeById(this.id).getProperty("lat");
+            locations[1] = (double) connector.graphDB.getNodeById(this.id).getProperty("log");
 //            this.distance_q = Math.sqrt(Math.pow(locations[0] - qNode.location[0], 2) + Math.pow(locations[1] - qNode.location[1], 2));
 
             this.distance_q = GoogleMaps.distanceInMeters(locations[0], locations[1], qNode.location[0], qNode.location[1]);
             tx.success();
-
         }
     }
 
@@ -52,7 +49,7 @@ public class myNode {
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.node = this.id = id;
     }
 
     public boolean addToSkyline(path np) {

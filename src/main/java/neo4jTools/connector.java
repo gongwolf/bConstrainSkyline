@@ -10,11 +10,16 @@ import org.neo4j.jmx.JmxUtils;
 import javax.management.ObjectName;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class connector {
     String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
     String conFile = "/home/gqxwolf/neo4j334/conf/neo4j.conf";
-    GraphDatabaseService graphDB;
+    public static GraphDatabaseService graphDB;
+    public static ArrayList<String> propertiesName=new ArrayList<>();
+
 
     public connector(String DB_PATH) {
         this.DB_PATH = DB_PATH;
@@ -58,6 +63,7 @@ public class connector {
 
 
         registerShutdownHook(this.graphDB);
+//        getPropertiesName();
 //        if (graphDB == null) {
 //            System.out.println("Initialize fault");
 //        } else {
@@ -137,15 +143,11 @@ public class connector {
             tx.success();
             result = r.stream().count();
         }
-        System.out.println("dbms.memory.pagecache.size ~~~~  " + Long.valueOf((String) getFromManagementBean("Configuration", "dbms.memory.pagecache.size")) / 1024+"k");
+        System.out.println("dbms.memory.pagecache.size ~~~~  " + Long.valueOf((String) getFromManagementBean("Configuration", "dbms.memory.pagecache.size")) / 1024 + "k");
         System.out.println("NumberOfCommittedTransactions ~~~~  " + (long) getFromManagementBean("Transactions", "NumberOfCommittedTransactions"));
-        System.out.println("TotalStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TotalStoreSize")/1024+"k");
-        System.out.println("StringStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "StringStoreSize") / 1024+"k");
-        System.out.println("TransactionLogsSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TransactionLogsSize") / 1024+"k");
-
-
-
-
+        System.out.println("TotalStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TotalStoreSize") / 1024 + "k");
+        System.out.println("StringStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "StringStoreSize") / 1024 + "k");
+        System.out.println("TransactionLogsSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TransactionLogsSize") / 1024 + "k");
 
 
 //        System.out.println("~~~~  " + Long.valueOf((String)getFromManagementBean("Configuration", "dbms.memory.heap.initial_size"))/1024);
@@ -165,5 +167,40 @@ public class connector {
         ObjectName objectName = JmxUtils.getObjectName(this.graphDB, Object);
         Object value = JmxUtils.getAttribute(objectName, Attribuite);
         return value;
+    }
+
+    public static ArrayList<Relationship> getOutgoutingEdges(long edge_id) {
+        ArrayList<Relationship> results = new ArrayList<>();
+        try (Transaction tx = graphDB.beginTx()) {
+            Iterable<Relationship> rels = graphDB.getRelationshipById(edge_id).getEndNode().getRelationships(Line.Linked, Direction.OUTGOING);
+            Iterator<Relationship> rel_Iter = rels.iterator();
+            while (rel_Iter.hasNext()) {
+                Relationship rel = rel_Iter.next();
+                results.add(rel);
+            }
+            tx.success();
+        }
+
+        return results;
+    }
+
+
+    public static void getPropertiesName() {
+        try (Transaction tx = graphDB.beginTx()) {
+
+            Iterable<Relationship> rels = graphDB.getNodeById(0).getRelationships(Line.Linked, Direction.BOTH);
+            if (rels.iterator().hasNext()) {
+                Relationship rel = rels.iterator().next();
+//                System.out.println(rel);
+                Map<String, Object> pnamemap = rel.getAllProperties();
+//                System.out.println(pnamemap.size());
+                for (Map.Entry<String, Object> entry : pnamemap.entrySet()) {
+                    propertiesName.add(entry.getKey());
+                }
+            } else {
+                System.err.println("There is no edge from or to this node " + graphDB.getNodeById(0).getId());
+            }
+            tx.success();
+        }
     }
 }
