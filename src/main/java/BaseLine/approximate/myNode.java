@@ -1,6 +1,7 @@
 package BaseLine.approximate;
 
 
+import BaseLine.constants;
 import RstarTree.Data;
 import neo4jTools.connector;
 import org.neo4j.graphdb.Transaction;
@@ -21,12 +22,12 @@ public class myNode {
         this.node = this.id = current_id;
         this.locations = new double[2];
         this.qNode = queryNode;
-        skyPaths = new ArrayList<>();
+        skyPaths = new ArrayList<>(400);
         setLocations();
-//        if (this.distance_q <= distance_threshold) {
+        if (this.distance_q <= distance_threshold) {
             path dp = new path(this);
             this.skyPaths.add(dp);
-//        }
+        }
     }
 
     public double[] getLocations() {
@@ -86,5 +87,25 @@ public class myNode {
             }
         }
         return true;
+    }
+
+
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof myNode)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        myNode c = (myNode) o;
+
+        // Compare the data members and return accordingly
+        return c.id == this.id;
     }
 }

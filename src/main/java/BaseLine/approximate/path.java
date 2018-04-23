@@ -3,6 +3,7 @@ package BaseLine.approximate;
 import BaseLine.constants;
 import neo4jTools.*;
 import org.neo4j.graphdb.Relationship;
+
 import java.util.ArrayList;
 
 
@@ -25,32 +26,43 @@ public class path {
         this.endNode = current.node;
         this.expaned = false;
 
-        this.nodes = new ArrayList<>();
-        this.rels = new ArrayList<>();
+        this.nodes = new ArrayList<>(200);
+        this.rels = new ArrayList<>(200);
         this.propertiesName = new ArrayList<>();
 
 
         this.nodes.add(startNode);
 
         this.setPropertiesName();
-//        System.out.println(this.propertiesName.size());
+
+        //store the Long Objects
+        this.nodes.add(getLongObject_Node(this.endNode));
     }
 
     public path(path old_path, Relationship rel) {
 
         this.costs = new double[constants.path_dimension];
-        this.nodes = new ArrayList<>(old_path.nodes);
-        this.rels = new ArrayList<>(old_path.rels);
-        this.propertiesName = new ArrayList<>(old_path.propertiesName);
-
-
         this.startNode = old_path.startNode;
         this.endNode = rel.getEndNodeId();
 
+
+        this.nodes = new ArrayList<>(200);
+        for (Long n : old_path.nodes) {
+            this.nodes.add(getLongObject_Node(n));
+        }
+
+        this.rels = new ArrayList<>(200);
+        for (long e : old_path.rels) {
+            this.rels.add(getLongObject_Edge(e));
+        }
+
+        this.propertiesName = new ArrayList<>(old_path.propertiesName);
+
+
         expaned = false;
 
-        this.nodes.add(this.endNode);
-        this.rels.add(rel.getId());
+        this.nodes.add(getLongObject_Node(this.endNode));
+        this.rels.add(getLongObject_Edge(rel.getId()));
 
         System.arraycopy(old_path.costs, 0, this.costs, 0, this.costs.length);
 
@@ -150,5 +162,30 @@ public class path {
             return false;
         }
         return true;
+    }
+
+    public Long getLongObject_Node(long id) {
+        Long Lobj;
+        if (!constants.accessedNodes.containsKey(id)) {
+            Lobj = new Long(id);
+            constants.accessedNodes.put(id, Lobj);
+        } else {
+            Lobj = constants.accessedNodes.get(id);
+        }
+
+        return Lobj;
+    }
+
+
+    public Long getLongObject_Edge(long id) {
+        Long Lobj;
+        if (!constants.accessedEdges.containsKey(id)) {
+            Lobj = new Long(id);
+            constants.accessedEdges.put(id, Lobj);
+        } else {
+            Lobj = constants.accessedEdges.get(id);
+        }
+
+        return Lobj;
     }
 }

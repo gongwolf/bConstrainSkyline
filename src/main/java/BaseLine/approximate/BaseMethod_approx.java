@@ -20,7 +20,7 @@ public class BaseMethod_approx {
     String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
     String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
 
-//    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
+    //    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //
 //    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
     int graph_size;
@@ -32,7 +32,8 @@ public class BaseMethod_approx {
     long read_data = 0;
     //Todo: each hotel know the distance to the hotel than dominate it.
     HashMap<Integer, Double> dominated_checking = new HashMap<>(); //
-    int distance_threshold = Integer.MAX_VALUE;
+//    int distance_threshold = Integer.MAX_VALUE;
+    int distance_threshold = 300;
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
@@ -136,6 +137,7 @@ public class BaseMethod_approx {
                     c[i] = d_attrs[i - 4];
                 }
                 Result r = new Result(queryD, d, c, null);
+                System.out.println(r);
                 addToSkyline(r);
             }
         }
@@ -200,6 +202,10 @@ public class BaseMethod_approx {
 
                 myNode v = mqueue.pop();
                 counter++;
+
+//                if (counter % 1000 == 0) {
+//                    debuggerFunction();
+//                }
 
                 for (int i = 0; i < v.skyPaths.size(); i++) {
                     path p = v.skyPaths.get(i);
@@ -335,6 +341,12 @@ public class BaseMethod_approx {
 
     }
 
+//    private void debuggerFunction() {
+//        System.out.println("adjsaldaklsjdaksjdklasd");
+//        int i =0;
+//
+//    }
+
     private boolean addToSkylineResult(path np, ArrayList<Data> d_list) {
 //    private boolean addToSkylineResult(path np, Data d) {
         this.add_counter++;
@@ -383,6 +395,8 @@ public class BaseMethod_approx {
             System.arraycopy(np.costs, 0, final_costs, 0, np.costs.length);
 //            double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
             double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
+
+
 
             final_costs[0] += end_distance;
             //lemma3
