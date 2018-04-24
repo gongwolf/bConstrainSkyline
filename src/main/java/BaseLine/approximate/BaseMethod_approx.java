@@ -97,6 +97,27 @@ public class BaseMethod_approx {
     public void baseline(Data queryD) {
         this.tmpStoreNodes.clear();
         System.out.println(queryD);
+        long r1 = System.currentTimeMillis();
+
+        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
+//        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        System.out.println(graphPath);
+        long db_time = System.currentTimeMillis();
+        connector n = new connector(graphPath);
+        n.startDB();
+        this.graphdb = n.getDBObject();
+
+        long counter = 0;
+        long addResult_rt = 0;
+        long expasion_rt = 0;
+
+
+        db_time = System.currentTimeMillis() - db_time;
+        r1 = System.currentTimeMillis();
+        long startNode_id = nearestNetworkNode(queryD);
+        long nn_rt = System.currentTimeMillis() - r1;
+        System.out.println("find the nearest bus stop " + nn_rt + "  ms  ");
+
 
         this.queryD = queryD;
         StringBuffer sb = new StringBuffer();
@@ -118,7 +139,7 @@ public class BaseMethod_approx {
         long s_sum = System.currentTimeMillis();
         long index_s = 0;
 
-        long r1 = System.currentTimeMillis();
+        r1 = System.currentTimeMillis();
         //Find the hotels that aren't dominated by the query point
         sky.BBS(queryD);
         long bbs_rt = System.currentTimeMillis() - r1;
@@ -165,27 +186,10 @@ public class BaseMethod_approx {
             dominated_checking.put(cand_d.getPlaceId(), h_to_h_dist);
         }
 
-        System.out.println("==========" + this.skyPaths.size());
+//        System.out.println("==========" + this.skyPaths.size());
 
 
-        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50_int/databases/graph.db";
-//        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
-        System.out.println(graphPath);
-        long db_time = System.currentTimeMillis();
-        connector n = new connector(graphPath);
-        n.startDB();
-        this.graphdb = n.getDBObject();
 
-        long counter = 0;
-        long addResult_rt = 0;
-        long expasion_rt = 0;
-
-
-        db_time = System.currentTimeMillis() - db_time;
-        r1 = System.currentTimeMillis();
-        long startNode_id = nearestNetworkNode(queryD);
-        long nn_rt = System.currentTimeMillis() - r1;
-        System.out.println("find the nearest bus stop " + nn_rt + "  ms  ");
 
 
         try (Transaction tx = connector.graphDB.beginTx()) {
@@ -255,6 +259,8 @@ public class BaseMethod_approx {
 
             int sk_counter = 0; //the number of total candidate hotels of each bus station
 //            hotels_scope = new HashMap<>();
+
+            System.out.println("there are "+this.tmpStoreNodes.size()+" bus stops are visited");
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 long t_index_s = System.nanoTime();
 
@@ -275,7 +281,7 @@ public class BaseMethod_approx {
                     }
                 }
 
-                my_n.d_list = new ArrayList<>(d_list);
+                //my_n.d_list = new ArrayList<>(d_list);
                 sk_counter += d_list.size();
 
                 index_s += (System.nanoTime() - t_index_s);
@@ -284,7 +290,7 @@ public class BaseMethod_approx {
 //                    if (!p.rels.isEmpty()) {
                     long ats = System.nanoTime();
 
-                    boolean f = addToSkylineResult(p, my_n.d_list);
+                    boolean f = addToSkylineResult(p, d_list);
 
                     addResult_rt += System.nanoTime() - ats;
 //                    }
@@ -504,6 +510,8 @@ public class BaseMethod_approx {
 //                    System.out.println(temp_distz);
                 }
             }
+
+            this.distance_threshold = (int)Math.ceil(distz);
 
             tx.success();
         }

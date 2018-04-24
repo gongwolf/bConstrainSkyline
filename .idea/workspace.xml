@@ -11,12 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1927bf6b-a886-486f-9482-a756607011b0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/Skyline.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/Skyline.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -32,19 +27,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BaseMethod_approx.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BaseMethod_approx.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="82" lean-forward="true" selection-start-line="82" selection-end-line="82" />
+            <state relative-caret-position="216">
+              <caret line="101" column="65" selection-start-line="101" selection-start-column="65" selection-end-line="101" selection-end-column="65" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
+            <state relative-caret-position="1008">
               <caret line="56" column="48" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
             </state>
           </provider>
@@ -53,7 +48,7 @@
       <file leaf-file-name="SyntheticData.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-150">
+            <state relative-caret-position="360">
               <caret line="29" selection-start-line="29" selection-end-line="29" />
             </state>
           </provider>
@@ -62,8 +57,8 @@
       <file leaf-file-name="BaseMethod5.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="94" column="93" selection-start-line="94" selection-start-column="93" selection-end-line="94" selection-end-column="93" />
+            <state relative-caret-position="1944">
+              <caret line="120" selection-start-line="120" selection-end-line="120" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -74,7 +69,7 @@
       <file leaf-file-name="BaseMethod1.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
+            <state relative-caret-position="324">
               <caret line="25" column="11" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="11" />
             </state>
           </provider>
@@ -83,7 +78,7 @@
       <file leaf-file-name="Result.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/Result.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1245">
+            <state relative-caret-position="1494">
               <caret line="84" selection-start-line="84" selection-end-line="84" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -95,7 +90,7 @@
       <file leaf-file-name="myNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
+            <state relative-caret-position="630">
               <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
             </state>
           </provider>
@@ -104,7 +99,7 @@
       <file leaf-file-name="Skyline.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/Skyline.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="2160">
               <caret line="126" column="16" selection-start-line="126" selection-start-column="16" selection-end-line="126" selection-end-column="16" />
             </state>
           </provider>
@@ -113,7 +108,7 @@
       <file leaf-file-name="path.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="835">
+            <state relative-caret-position="1314">
               <caret line="77" column="30" selection-start-line="77" selection-start-column="12" selection-end-line="77" selection-end-column="30" />
             </state>
           </provider>
@@ -122,7 +117,7 @@
       <file leaf-file-name="constants.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/constants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
+            <state relative-caret-position="270">
               <caret line="16" column="9" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
             </state>
           </provider>
@@ -262,148 +257,7 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="AndroidView" />
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="BaseLine" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="BaseLine" type="462c0819:PsiDirectoryNode" />
-              <item name="approximate" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="Baseline2" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="GPSkyline" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="GPSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="BFS" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="GPSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="landmark" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="GPSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="modifyFinal" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="GraphPartition" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="neo4jTools" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="Pindex" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="RstarTree" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="TestCase" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="testTools" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="GenerateAntBuildDialog.backupFiles" value="true" />
@@ -452,7 +306,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.BaseMethod_approx">
+  <component name="RunManager" selected="Application.Build m">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HEIGHT" value="0" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
@@ -628,23 +482,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="39" y="25" width="1881" height="1055" extended-state="6" />
+    <frame x="46" y="-11" width="1875" height="1092" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.31880978" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.31794333" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info id="Image Layers" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5106732" side_tool="true" weight="0.5183246" />
       <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948583" />
-      <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" weight="0.49946865" />
+      <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" visible="true" weight="0.49842602" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="3" />
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49859944" weight="0.24401914" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32306057" />
       <window_info id="Structure" order="1" sideWeight="0.5014006" side_tool="true" weight="0.24192666" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
@@ -656,15 +510,17 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32306057" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32306057" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
-      <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" visible="true" weight="0.49946865" />
+      <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" visible="true" weight="0.49842602" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49859944" visible="true" weight="0.24401914" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49859944" weight="0.24401914" />
       <window_info id="Structure" order="1" sideWeight="0.5014006" side_tool="true" weight="0.24192666" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
@@ -672,7 +528,6 @@
       <window_info id="Image Layers" order="6" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32306057" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.2646121" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info anchor="bottom" id="Terminal" order="9" />
@@ -681,7 +536,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948583" />
       <window_info id="Capture Tool" order="2" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.31880978" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.31794333" />
       <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
       <window_info id="Favorites" order="5" sideWeight="0.50422835" side_tool="true" weight="0.16822916" />
     </layout-to-restore>
@@ -977,14 +832,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/constants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
+        <state relative-caret-position="270">
           <caret line="16" column="9" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/Result.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1245">
+        <state relative-caret-position="1494">
           <caret line="84" selection-start-line="84" selection-end-line="84" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1001,29 +856,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="835">
+        <state relative-caret-position="1314">
           <caret line="77" column="30" selection-start-line="77" selection-start-column="12" selection-end-line="77" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
+        <state relative-caret-position="324">
           <caret line="25" column="11" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-150">
+        <state relative-caret-position="360">
           <caret line="29" selection-start-line="29" selection-end-line="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="94" column="93" selection-start-line="94" selection-start-column="93" selection-end-line="94" selection-end-column="93" />
+        <state relative-caret-position="1944">
+          <caret line="120" selection-start-line="120" selection-end-line="120" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1032,29 +887,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/Skyline.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="2160">
           <caret line="126" column="16" selection-start-line="126" selection-start-column="16" selection-end-line="126" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
+        <state relative-caret-position="630">
           <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="82" lean-forward="true" selection-start-line="82" selection-end-line="82" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
+        <state relative-caret-position="1008">
           <caret line="56" column="48" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="101" column="65" selection-start-line="101" selection-start-column="65" selection-end-line="101" selection-end-column="65" />
         </state>
       </provider>
     </entry>
