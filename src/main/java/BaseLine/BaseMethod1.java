@@ -23,7 +23,7 @@ public class BaseMethod1 {
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
-    private ArrayList<Result> skyPaths = new ArrayList<>();
+    public  ArrayList<Result> skyPaths = new ArrayList<>();
     private HashSet<Data> finalDatas = new HashSet<>();
     private long add_counter;
     private long pro_add_result_counter;

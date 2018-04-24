@@ -15,7 +15,7 @@ public class SyntheticData {
     Random r = new Random(System.nanoTime());
 
     public static void main(String args[]) {
-        int numberOfNodes = 300;
+        int numberOfNodes = 1000;
         int dimension =3;
 
         if (args.length == 2) {

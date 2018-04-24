@@ -16,11 +16,11 @@ import java.util.*;
 public class BaseMethod_approx {
     public ArrayList<path> qqqq = new ArrayList<>();
     Random r;
-//    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
-//    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
+    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
 
-    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
-    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
+//    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
+//    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
 
     int graph_size;
     String degree;
@@ -31,13 +31,13 @@ public class BaseMethod_approx {
     long read_data = 0;
     //Todo: each hotel know the distance to the hotel than dominate it.
     HashMap<Integer, Double> dominated_checking = new HashMap<>(); //
-        int distance_threshold = Integer.MAX_VALUE;
-//    int distance_threshold = 120;
+//        int distance_threshold = Integer.MAX_VALUE;
+    int distance_threshold = 4;
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
-    private ArrayList<Result> skyPaths = new ArrayList<>();
-    private ArrayList<Data> sky_hotel;
+    public ArrayList<Result> skyPaths = new ArrayList<>();
+    public ArrayList<Data> sky_hotel;
     private HashSet<Data> finalDatas = new HashSet<>();
     private int checkedDataId = 9;
     private long add_counter; // how many times call the addtoResult function
@@ -45,10 +45,11 @@ public class BaseMethod_approx {
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
 
-    public BaseMethod_approx(int graph_size, String degree) {
+    public BaseMethod_approx(int graph_size, String degree,int distance_threshold) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
+        this.distance_threshold = distance_threshold;
     }
 
 
@@ -69,15 +70,15 @@ public class BaseMethod_approx {
         Data[] queryList = new Data[query_num];
 //        int[] numbers = new int[]{241};
         for (int i = 0; i < query_num; i++) {
-            BaseMethod_approx b_appx = new BaseMethod_approx(graph_size, degree);
+            BaseMethod_approx b_appx = new BaseMethod_approx(graph_size, degree,5);
             int random_place_id = b_appx.getRandomNumberInRange_int(0, hotels_num - 1);
-            Data queryD = b_appx.getDataById(17944);
+            Data queryD = b_appx.getDataById(random_place_id);
             queryList[i] = queryD;
         }
 
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod_approx bMethod = new BaseMethod_approx(graph_size, degree);
+            BaseMethod_approx bMethod = new BaseMethod_approx(graph_size, degree,120);
             bMethod.baseline(queryList[i]);
 
         }
@@ -167,7 +168,9 @@ public class BaseMethod_approx {
         System.out.println("==========" + this.skyPaths.size());
 
 
-        String graphPath = "/home/gqxwolf/neo4j334/testdb2000_4/databases/graph.db";
+        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50_int/databases/graph.db";
+//        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        System.out.println(graphPath);
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
         n.startDB();
@@ -265,7 +268,7 @@ public class BaseMethod_approx {
                         double d2 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], d.location[0], d.location[1]);
 //                        double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
 //                        double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2 && d2 <= this.distance_threshold) {
+                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
                             d_list.add(d);
                             break;
                         }
@@ -399,8 +402,8 @@ public class BaseMethod_approx {
 
             double[] final_costs = new double[np.costs.length + 3];
             System.arraycopy(np.costs, 0, final_costs, 0, np.costs.length);
-            double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
-//            double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
+//            double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
+            double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
 
 
             final_costs[0] += end_distance;
@@ -417,7 +420,6 @@ public class BaseMethod_approx {
 
 
             if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId())) {
-
 
                 double[] d_attrs = d.getData();
                 for (int i = 4; i < final_costs.length; i++) {
@@ -490,8 +492,8 @@ public class BaseMethod_approx {
                 double lat = (double) n.getProperty("lat");
                 double log = (double) n.getProperty("log");
 
-                double temp_distz = (Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
-//                double temp_distz = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
+//                double temp_distz = (Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
+                double temp_distz = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
                 if (distz > temp_distz) {
                     nn_node = n;
                     distz = temp_distz;
@@ -505,7 +507,9 @@ public class BaseMethod_approx {
 
             tx.success();
         }
-        System.out.println(counter_in_range + " bus stations within hotel");
+
+
+        System.out.println(counter_in_range + " bus stations within hotel "+ this.distance_threshold);
         return nn_node.getId();
     }
 

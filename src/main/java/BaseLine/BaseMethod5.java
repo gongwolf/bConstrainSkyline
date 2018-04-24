@@ -1,6 +1,8 @@
 package BaseLine;
 
 import BaseLine.approximate.BaseMethod_approx;
+
+
 import RstarTree.Data;
 import neo4jTools.connector;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -40,6 +42,7 @@ public class BaseMethod5 {
     private long pro_add_result_counter; // how many path + hotel combination of the results are generated
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
+    private static int nn_dist;
 
     public BaseMethod5(int graph_size, String degree) {
         r = new Random();
@@ -49,7 +52,7 @@ public class BaseMethod5 {
     }
 
     public static void main(String args[]) {
-        int graph_size = 2000;
+        int graph_size = 4000;
         String degree = "4";
         int query_num = 1;
         int hotels_num = 300;
@@ -71,9 +74,11 @@ public class BaseMethod5 {
             queryList[i] = queryD;
         }
 
+        BaseMethod1 bMethod = new BaseMethod1(graph_size, degree);
+        BaseMethod5 Lemmas_method = new BaseMethod5(graph_size, degree);
+
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod1 bMethod = new BaseMethod1(graph_size, degree);
             bMethod.baseline(queryList[i]);
 
         }
@@ -82,18 +87,59 @@ public class BaseMethod5 {
 
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod5 Lemmas_method = new BaseMethod5(graph_size, degree);
             Lemmas_method.baseline(queryList[i]);
 
         }
         System.out.println("=====================================================");
 
+        BaseMethod_approx approx_method = new BaseMethod_approx(graph_size, degree, nn_dist*2);
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod_approx approx_method = new BaseMethod_approx(graph_size, degree);
             approx_method.baseline(queryList[i]);
-
         }
+
+
+        System.out.println("=====================================================");
+        HashSet<Integer> differ_base_with_apprx = new HashSet<>();
+        for (Result r : bMethod.skyPaths) {
+            boolean flag = false;
+            for (BaseLine.approximate.Result r1 : approx_method.skyPaths) {
+                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
+                    flag = true;
+                    break;
+                }
+
+            }
+            if (!flag)
+                differ_base_with_apprx.add(r.end.getPlaceId());
+        }
+
+//        for (int i : differ_base_with_apprx) {
+//            System.out.println(i);
+//        }
+        System.out.println(differ_base_with_apprx.size());
+
+        System.out.println("=====================================================");
+        HashSet<Integer> differ_apprx_with_base = new HashSet<>();
+        for (BaseLine.approximate.Result r1 : approx_method.skyPaths) {
+            boolean flag = false;
+            for (Result r : bMethod.skyPaths) {
+                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
+                    flag = true;
+                    break;
+                }
+
+            }
+            if (!flag)
+                differ_apprx_with_base.add(r1.end.getPlaceId());
+        }
+        System.out.println(differ_apprx_with_base.size());
+
+//        for (int i : differ_apprx_with_base) {
+//            System.out.println(i);
+//        }
+
+
     }
 
     public void baseline(Data queryD) {
@@ -454,9 +500,10 @@ public class BaseMethod5 {
             if (distz > temp_distz) {
                 nn_node = n;
                 distz = temp_distz;
-
             }
         }
+        
+        nn_dist = (int)Math.ceil(distz);
         return nn_node;
     }
 
@@ -493,44 +540,6 @@ public class BaseMethod5 {
     }
 
     private boolean checkDominated(double[] costs, double[] estimatedCosts) {
-        for (int i = 0; i < costs.length; i++) {
-            if (costs[i] * (1.0) > estimatedCosts[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    public boolean addToSkyline_p(path np) {
-        int i = 0;
-        if (this.qqqq.isEmpty()) {
-            this.qqqq.add(np);
-        } else {
-            boolean can_insert_np = true;
-            for (; i < qqqq.size(); ) {
-                if (checkDominated_p(qqqq.get(i).costs, np.costs)) {
-                    can_insert_np = false;
-                    break;
-                } else {
-                    if (checkDominated_p(np.costs, qqqq.get(i).costs)) {
-
-                        this.qqqq.remove(i);
-                    } else {
-                        i++;
-                    }
-                }
-            }
-
-            if (can_insert_np) {
-                this.qqqq.add(np);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean checkDominated_p(double[] costs, double[] estimatedCosts) {
         for (int i = 0; i < costs.length; i++) {
             if (costs[i] * (1.0) > estimatedCosts[i]) {
                 return false;
