@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class myNode {
     public long id;
     public long node;
-    public Data qNode;
+//    public Data qNode;
     public ArrayList<path> skyPaths;
     public double distance_q;
     public double[] locations;
@@ -21,9 +21,9 @@ public class myNode {
     public myNode(Data queryNode, long current_id, int distance_threshold) {
         this.node = this.id = current_id;
         this.locations = new double[2];
-        this.qNode = queryNode;
+//        this.qNode = queryNode;
         skyPaths = new ArrayList<>(400);
-        setLocations();
+        setLocations(queryNode);
         if (this.distance_q <= distance_threshold) {
             path dp = new path(this);
             this.skyPaths.add(dp);
@@ -34,13 +34,13 @@ public class myNode {
         return locations;
     }
 
-    public void setLocations() {
+    public void setLocations(Data queryNode) {
         try (Transaction tx = connector.graphDB.beginTx()) {
             locations[0] = (double) connector.graphDB.getNodeById(this.id).getProperty("lat");
             locations[1] = (double) connector.graphDB.getNodeById(this.id).getProperty("log");
-//            this.distance_q = Math.sqrt(Math.pow(locations[0] - qNode.location[0], 2) + Math.pow(locations[1] - qNode.location[1], 2));
+            this.distance_q = Math.sqrt(Math.pow(locations[0] - queryNode.location[0], 2) + Math.pow(locations[1] - queryNode.location[1], 2));
 
-            this.distance_q = GoogleMaps.distanceInMeters(locations[0], locations[1], qNode.location[0], qNode.location[1]);
+//            this.distance_q = GoogleMaps.distanceInMeters(locations[0], locations[1], queryNode.location[0], queryNode.location[1]);
             tx.success();
         }
     }
@@ -57,6 +57,7 @@ public class myNode {
         int i = 0;
         if (skyPaths.isEmpty()) {
             this.skyPaths.add(np);
+            return true;
         } else {
             boolean can_insert_np = true;
             for (; i < skyPaths.size(); ) {
