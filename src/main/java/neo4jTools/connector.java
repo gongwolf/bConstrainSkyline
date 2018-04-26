@@ -139,7 +139,7 @@ public class connector {
 
 
     public long getNumberofNodes() {
-        startDB();
+//        startDB();
         long result = 0;
         try (Transaction tx = this.graphDB.beginTx()) {
             ResourceIterable<Node> r = this.graphDB.getAllNodes();

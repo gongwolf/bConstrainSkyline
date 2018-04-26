@@ -15,13 +15,14 @@ import java.util.*;
 
 public class BaseMethod_approx {
     public ArrayList<path> qqqq = new ArrayList<>();
+    public ArrayList<Result> skyPaths = new ArrayList<>();
+    public ArrayList<Data> sky_hotel;
     Random r;
+
+    //    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
+//    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
     String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
     String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
-
-//    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
-//    String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
-
     int graph_size;
     String degree;
     long add_oper = 0;
@@ -31,13 +32,11 @@ public class BaseMethod_approx {
     long read_data = 0;
     //Todo: each hotel know the distance to the hotel than dominate it.
     HashMap<Integer, Double> dominated_checking = new HashMap<>(); //
-//        int distance_threshold = Integer.MAX_VALUE;
+    //        int distance_threshold = Integer.MAX_VALUE;
     int distance_threshold = 4;
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
-    public ArrayList<Result> skyPaths = new ArrayList<>();
-    public ArrayList<Data> sky_hotel;
     private HashSet<Data> finalDatas = new HashSet<>();
     private int checkedDataId = 9;
     private long add_counter; // how many times call the addtoResult function
@@ -45,7 +44,7 @@ public class BaseMethod_approx {
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
 
-    public BaseMethod_approx(int graph_size, String degree,int distance_threshold) {
+    public BaseMethod_approx(int graph_size, String degree, int distance_threshold) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
@@ -58,19 +57,22 @@ public class BaseMethod_approx {
         String degree = "4";
         int query_num = 1;
         int hotels_num = 25854;
+        int dis_t = 120;
 
-        if (args.length == 4) {
-            graph_size = Integer.parseInt(args[0]);
-            degree = args[1];
-            query_num = Integer.parseInt(args[2]);
-            hotels_num = Integer.parseInt(args[3]);
+        if (args.length == 1) {
+//            graph_size = Integer.parseInt(args[0]);
+//            degree = args[1];
+//            query_num = Integer.parseInt(args[2]);
+//            hotels_num = Integer.parseInt(args[3]);
+            dis_t = Integer.parseInt(args[0]);
         }
 
 
         Data[] queryList = new Data[query_num];
+        BaseMethod_approx b_appx = new BaseMethod_approx(graph_size, degree, dis_t);
+
 //        int[] numbers = new int[]{241};
         for (int i = 0; i < query_num; i++) {
-            BaseMethod_approx b_appx = new BaseMethod_approx(graph_size, degree,5);
             int random_place_id = b_appx.getRandomNumberInRange_int(0, hotels_num - 1);
             Data queryD = b_appx.getDataById(random_place_id);
             queryList[i] = queryD;
@@ -78,9 +80,7 @@ public class BaseMethod_approx {
 
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod_approx bMethod = new BaseMethod_approx(graph_size, degree,120);
-            bMethod.baseline(queryList[i]);
-
+            b_appx.baseline(queryList[i]);
         }
 
 //        System.out.println("=====================================================");
@@ -189,9 +189,6 @@ public class BaseMethod_approx {
 //        System.out.println("==========" + this.skyPaths.size());
 
 
-
-
-
         try (Transaction tx = connector.graphDB.beginTx()) {
 
 
@@ -260,8 +257,11 @@ public class BaseMethod_approx {
             int sk_counter = 0; //the number of total candidate hotels of each bus station
 //            hotels_scope = new HashMap<>();
 
-            System.out.println("there are "+this.tmpStoreNodes.size()+" bus stops are visited");
+            System.out.println("there are " + this.tmpStoreNodes.size() + " bus stops are visited");
+
+            int process_visited_stations = 0;
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
+                process_visited_stations++;
                 long t_index_s = System.nanoTime();
 
                 myNode my_n = entry.getValue();
@@ -294,6 +294,10 @@ public class BaseMethod_approx {
 
                     addResult_rt += System.nanoTime() - ats;
 //                    }
+                }
+
+                if (process_visited_stations % 1000 == 0) {
+                    System.out.println("processed visited stations : " + process_visited_stations + ".................");
                 }
 
 
@@ -511,13 +515,13 @@ public class BaseMethod_approx {
                 }
             }
 
-            this.distance_threshold = (int)Math.ceil(distz);
+//            this.distance_threshold = (int)Math.ceil(distz);
 
             tx.success();
         }
 
 
-        System.out.println(counter_in_range + " bus stations within hotel "+ this.distance_threshold);
+        System.out.println(counter_in_range + " bus stations within hotel " + this.distance_threshold);
         return nn_node.getId();
     }
 
