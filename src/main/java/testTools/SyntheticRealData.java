@@ -6,11 +6,14 @@ import RstarTree.Node;
 import RstarTree.RTree;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Random;
 
 public class SyntheticRealData {
     int dimension;
+    private DecimalFormat df2 = new DecimalFormat(".##");
+
     Random r = new Random(System.nanoTime());
 
     String path_base = "/home/gqxwolf/shared_git/bConstrainSkyline/data/";
@@ -54,7 +57,7 @@ public class SyntheticRealData {
 
         RTree rt = new RTree(tree_path, Constants.BLOCKLENGTH, Constants.CACHESIZE, dimension);
 
-        File file = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt");
+        File file = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt");
         if (file.exists()) {
             file.delete();
         }
@@ -94,8 +97,6 @@ public class SyntheticRealData {
 //                        }
 
                         if (line.startsWith("=======================================================================")) {
-                            //Todo:Create new data and clean the data
-
                             if (!this.list.contains(poi_obj.g_p_id) && poi_obj.locations[0] != -1 && poi_obj.locations[1] != -1) {
                                 this.max_id++;
                                 this.list.add(poi_obj.g_p_id);
@@ -108,16 +109,16 @@ public class SyntheticRealData {
                                     if (poi_obj.data[i] == -1) {
                                         poi_obj.data[i] = getGaussian(2.5, 5 / 6);
                                     }
-                                }
 
+                                    poi_obj.data[i] = Float.parseFloat(df2.format(poi_obj.data[i]));
+                                }
 
 
                                 d.setData(poi_obj.data);
 
 
-                                bw.write(poi_obj.placeID+","+poi_obj.locations[0]+","+poi_obj.locations[1]+","+poi_obj.data[0]+","+poi_obj.data[1]+","+poi_obj.data[2]+"\n");
-                                System.out.println(poi_obj.placeID+","+poi_obj.locations[0]+","+poi_obj.locations[1]+","+poi_obj.data[0]+","+poi_obj.data[1]+","+poi_obj.data[2]);
-
+                                bw.write(poi_obj.placeID + "," + poi_obj.locations[0] + "," + poi_obj.locations[1] + "," + poi_obj.data[0] + "," + poi_obj.data[1] + "," + poi_obj.data[2] + "\n");
+                                System.out.println(poi_obj.placeID + "," + poi_obj.locations[0] + "," + poi_obj.locations[1] + "," + poi_obj.data[0] + "," + poi_obj.data[1] + "," + poi_obj.data[2]);
 
 
                                 rt.insert(d);
@@ -133,11 +134,11 @@ public class SyntheticRealData {
                         } else if (line.startsWith("placeId")) {
                             poi_obj.g_p_id = line.split(":")[1].trim();
                         } else if (line.startsWith("rating:")) {
-                            poi_obj.data[0] = 5-Float.valueOf(line.split(":")[1].trim());
+                            poi_obj.data[0] = 5 - Float.valueOf(line.split(":")[1].trim());
                         } else if (line.startsWith("pricelevel:")) {
                             poi_obj.data[1] = Float.valueOf(line.split(":")[1].trim());
                         } else if (line.startsWith("[")) {
-                            poi_obj.data[2] = 10-line.split(",").length;
+                            poi_obj.data[2] = 10 - line.split(",").length;
                         } else if (line.startsWith("   locations:")) {
                             poi_obj.locations[0] = Double.parseDouble(line.split(":")[1].trim().split(",")[0]);
                             poi_obj.locations[1] = Double.parseDouble(line.split(":")[1].trim().split(",")[1]);
@@ -184,10 +185,10 @@ public class SyntheticRealData {
     private float getGaussian(double mean, double sd) {
         double value = r.nextGaussian() * sd + mean;
 
-        while (value <= 0) {
+        while (value < 0 || value > 5) {
             value = r.nextGaussian() * sd + mean;
         }
 
-        return (float)value;
+        return (float) value;
     }
 }

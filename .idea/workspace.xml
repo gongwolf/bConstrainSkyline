@@ -10,13 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1927bf6b-a886-486f-9482-a756607011b0" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/BetaDistributionTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/statistic.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qixugong.iml" beforeDir="false" afterPath="$PROJECT_DIR$/qixugong.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/BetaDistributionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/BetaDistributionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -35,20 +32,26 @@
       <file leaf-file-name="BaseMethod_approx.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="658">
-              <caret line="414" column="155" selection-start-line="414" selection-start-column="36" selection-end-line="414" selection-end-column="155" />
+            <state relative-caret-position="15">
+              <caret line="418" column="43" selection-start-line="418" selection-start-column="43" selection-end-line="418" selection-end-column="43" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BetaDistributionTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SyntheticRealData.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="295">
+              <caret line="112" column="99" selection-start-line="112" selection-start-column="99" selection-end-line="112" selection-end-column="99" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BetaDistributionTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/testTools/BetaDistributionTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="10" column="55" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="55" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="251">
+              <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -56,20 +59,8 @@
       <file leaf-file-name="GoogleMaps.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="101">
-              <caret line="118" column="45" lean-forward="true" selection-start-line="118" selection-end-line="119" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="statistic.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/statistic.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="167" lean-forward="true" selection-start-line="162" selection-start-column="8" selection-end-line="167" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="1620">
+              <caret line="118" column="45" selection-start-line="118" selection-end-line="119" />
             </state>
           </provider>
         </entry>
@@ -77,7 +68,7 @@
       <file leaf-file-name="connector.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/connector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-39">
+            <state relative-caret-position="1860">
               <caret line="142" column="20" selection-start-line="142" selection-start-column="20" selection-end-line="142" selection-end-column="20" />
               <folding>
                 <element signature="e#768#769#0" expanded="true" />
@@ -90,8 +81,8 @@
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="610">
-              <caret line="38" column="26" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
+            <state relative-caret-position="675">
+              <caret line="45" column="26" selection-start-line="45" selection-start-column="26" selection-end-line="45" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -99,7 +90,7 @@
       <file leaf-file-name="SyntheticData.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
+            <state relative-caret-position="690">
               <caret line="55" column="61" selection-start-line="55" selection-start-column="57" selection-end-line="55" selection-end-column="61" />
             </state>
           </provider>
@@ -108,7 +99,7 @@
       <file leaf-file-name="generateGraph.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2459">
+            <state relative-caret-position="2400">
               <caret line="164" column="19" selection-start-line="164" selection-start-column="19" selection-end-line="164" selection-end-column="19" />
             </state>
           </provider>
@@ -117,7 +108,7 @@
       <file leaf-file-name="BaseMethod5.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
+            <state relative-caret-position="570">
               <caret line="50" column="69" selection-start-line="50" selection-end-line="51" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -129,7 +120,7 @@
       <file leaf-file-name="myNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
+            <state relative-caret-position="525">
               <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
             </state>
           </provider>
@@ -210,7 +201,6 @@
         <option value="$PROJECT_DIR$/src/main/java/testTools/SegObj.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/Synthetic_Real_Data.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/POIObject.java" />
-        <option value="$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod_approx.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java" />
@@ -235,6 +225,7 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/BetaDistribution.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/BetaDistributionTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java" />
       </list>
     </option>
   </component>
@@ -270,9 +261,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -326,6 +314,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -375,7 +366,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.BetaDistributionTest">
+  <component name="RunManager" selected="Application.SyntheticRealData">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HEIGHT" value="0" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
@@ -423,8 +414,8 @@
         <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="assembly:single" />
       </method>
     </configuration>
-    <configuration name="SyntheticData" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="testTools.SyntheticData" />
+    <configuration name="SyntheticRealData" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="testTools.SyntheticRealData" />
       <module name="qixugong" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -503,17 +494,17 @@
       <item itemvalue="Application.Build m" />
       <item itemvalue="Application.BaseMethod_approx" />
       <item itemvalue="Application.BaseMethod5" />
-      <item itemvalue="Application.SyntheticData" />
       <item itemvalue="Application.statistic" />
       <item itemvalue="Application.BetaDistributionTest" />
+      <item itemvalue="Application.SyntheticRealData" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.SyntheticRealData" />
         <item itemvalue="Application.BetaDistributionTest" />
         <item itemvalue="Application.statistic" />
         <item itemvalue="Application.BaseMethod_approx" />
         <item itemvalue="Application.BaseMethod5" />
-        <item itemvalue="Application.SyntheticData" />
       </list>
     </recent_temporary>
   </component>
@@ -551,23 +542,22 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="46" y="-11" width="1875" height="1092" extended-state="6" />
+    <frame x="39" y="25" width="1881" height="1055" extended-state="6" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.31794333" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.3177471" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info id="Image Layers" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5106732" side_tool="true" weight="0.5183246" />
       <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948583" />
-      <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" weight="0.49842602" />
+      <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" weight="0.49840596" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49859944" weight="0.24356869" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3221406" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49859944" weight="0.2434875" />
       <window_info id="Structure" order="1" sideWeight="0.5014006" side_tool="true" weight="0.24192666" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
@@ -579,15 +569,17 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3221406" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3221406" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
-      <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" visible="true" weight="0.49842602" />
+      <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48932678" visible="true" weight="0.49840596" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49859944" visible="true" weight="0.24356869" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49859944" weight="0.2434875" />
       <window_info id="Structure" order="1" sideWeight="0.5014006" side_tool="true" weight="0.24192666" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
@@ -595,7 +587,6 @@
       <window_info id="Image Layers" order="6" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3221406" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.2646121" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info anchor="bottom" id="Terminal" order="9" />
@@ -604,7 +595,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948583" />
       <window_info id="Capture Tool" order="2" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.31794333" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.3177471" />
       <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
       <window_info id="Favorites" order="5" sideWeight="0.50422835" side_tool="true" weight="0.16822916" />
     </layout-to-restore>
@@ -736,13 +727,6 @@
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-jmx/3.3.4/neo4j-jmx-3.3.4-sources.jar!/org/neo4j/jmx/JmxUtils.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2610">
-          <caret line="145" selection-start-line="145" selection-end-line="145" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="756">
@@ -874,9 +858,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1494">
           <caret line="84" selection-start-line="84" selection-end-line="84" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -910,14 +891,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
+        <state relative-caret-position="525">
           <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
+        <state relative-caret-position="570">
           <caret line="50" column="69" selection-start-line="50" selection-end-line="51" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -927,7 +908,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/connector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-39">
+        <state relative-caret-position="1860">
           <caret line="142" column="20" selection-start-line="142" selection-start-column="20" selection-end-line="142" selection-end-column="20" />
           <folding>
             <element signature="e#768#769#0" expanded="true" />
@@ -938,56 +919,51 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
+        <state relative-caret-position="690">
           <caret line="55" column="61" selection-start-line="55" selection-start-column="57" selection-end-line="55" selection-end-column="61" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2459">
+        <state relative-caret-position="2400">
           <caret line="164" column="19" selection-start-line="164" selection-start-column="19" selection-end-line="164" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="658">
-          <caret line="414" column="155" selection-start-line="414" selection-start-column="36" selection-end-line="414" selection-end-column="155" />
+        <state relative-caret-position="15">
+          <caret line="418" column="43" selection-start-line="418" selection-start-column="43" selection-end-line="418" selection-end-column="43" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="610">
-          <caret line="38" column="26" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
+        <state relative-caret-position="675">
+          <caret line="45" column="26" selection-start-line="45" selection-start-column="26" selection-end-line="45" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="118" column="45" lean-forward="true" selection-start-line="118" selection-end-line="119" />
+        <state relative-caret-position="1620">
+          <caret line="118" column="45" selection-start-line="118" selection-end-line="119" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/statistic.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="167" lean-forward="true" selection-start-line="162" selection-start-column="8" selection-end-line="167" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/statistic.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/testTools/BetaDistributionTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="55" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="55" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="251">
+          <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="112" column="99" selection-start-line="112" selection-start-column="99" selection-end-line="112" selection-end-column="99" />
         </state>
       </provider>
     </entry>

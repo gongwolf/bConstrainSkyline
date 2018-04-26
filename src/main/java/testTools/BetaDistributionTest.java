@@ -32,5 +32,10 @@ public class BetaDistributionTest {
         }
 
 
+        double d = 3.4456412318732123;
+        System.out.println(d*100.0);
+        System.out.println(d*100.0/100.0);
+
+
     }
 }
