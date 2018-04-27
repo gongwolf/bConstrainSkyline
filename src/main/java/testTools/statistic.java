@@ -50,7 +50,7 @@ public class statistic {
     }
 
     public static void main(String args[]) {
-        statistic s = new statistic(4000, 4, 9);
+        statistic s = new statistic(8000, 4, 6);
         s.HotelsToBuesWithinRange();
 
 //        s.shutdown();

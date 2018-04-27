@@ -48,14 +48,14 @@ public class BaseMethod_approx {
         this.graph_size = graph_size;
         this.degree = degree;
         this.distance_threshold = distance_threshold;
-//        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_"+graph_size+"_"+degree+"_"+range+".rtr";
-//        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_"+graph_size+"_"+degree+"_"+range+".txt";
+        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_"+graph_size+"_"+degree+"_"+range+".rtr";
+        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_"+graph_size+"_"+degree+"_"+range+".txt";
 //        System.out.println(this.treePath);
 //        System.out.println(this.dataPath);
 //        System.exit(0);
 
-        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
-        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+//        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
+//        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
     }
 
 
@@ -106,8 +106,8 @@ public class BaseMethod_approx {
         System.out.println(queryD);
         long r1 = System.currentTimeMillis();
 
-        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50_int/databases/graph.db";
-//        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+//        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50_int/databases/graph.db";
+        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         System.out.println(graphPath);
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -266,9 +266,9 @@ public class BaseMethod_approx {
 
             System.out.println("there are " + this.tmpStoreNodes.size() + " bus stops are visited");
 
-            int process_visited_stations = 0;
+//            int process_visited_stations = 0;
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
-                process_visited_stations++;
+//                process_visited_stations++;
                 long t_index_s = System.nanoTime();
 
                 myNode my_n = entry.getValue();
@@ -288,11 +288,16 @@ public class BaseMethod_approx {
                     }
                 }
 
-                my_n.d_list = new ArrayList<>(d_list);
+//                my_n.d_list = new ArrayList<>(d_list);
                 sk_counter += d_list.size();
-                mqueue.add(my_n);
 
                 index_s += (System.nanoTime() - t_index_s);
+
+                for (path p : my_n.skyPaths) {
+                    long ats = System.nanoTime();
+                    boolean f = addToSkylineResult(p, d_list);
+                    addResult_rt += System.nanoTime() - ats;
+                }
 //
 //                for (path p : my_n.skyPaths) {
 ////                    if (!p.rels.isEmpty()) {
@@ -304,26 +309,13 @@ public class BaseMethod_approx {
 ////                    }
 //                }
 
-                if (process_visited_stations % 2000 == 0) {
-                    System.out.println("processed visited stations : " + process_visited_stations + "................." + this.skyPaths.size());
-                }
+//                if (process_visited_stations % 200 == 0) {
+//                    System.out.println("processed visited stations : " + process_visited_stations + "................." + this.skyPaths.size());
+//                }
+
             }
 
             visited_bus_stop = this.tmpStoreNodes.size();
-//            this.tmpStoreNodes.clear();
-            process_visited_stations = 0;
-            while (!mqueue.isEmpty()) {
-                process_visited_stations++;
-                myNode v = mqueue.pop();
-                for (path p : v.skyPaths) {
-                    long ats = System.nanoTime();
-                    boolean f = addToSkylineResult(p, v.d_list);
-                    addResult_rt += System.nanoTime() - ats;
-                }
-                if (process_visited_stations % 20 == 0) {
-                    System.out.println("processed visited stations : " + process_visited_stations + "................." + this.skyPaths.size()+"  "+mqueue.size());
-                }
-            }
 
 
 //            System.out.println(sk_counter);

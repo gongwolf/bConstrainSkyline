@@ -40,7 +40,8 @@ public class BaseMethod1 {
         this.graph_size = graph_size;
         this.degree = degree;
         this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_"+graph_size+"_"+degree+"_"+range+".rtr";
-        System.out.println(treePath);
+//        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
+//        System.out.println(treePath);
     }
 
     public static void main(String args[]) {
@@ -84,6 +85,8 @@ public class BaseMethod1 {
 //        System.out.println("Find candidate static node by BBS " + (System.currentTimeMillis() - r1) + "ms " + sky.skylineStaticNodes.size());
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.allNodes;
+//        System.out.println(sNodes.size());
+//        System.out.println("=====================================================");
 
 
         for (Data d : sNodes) {
@@ -98,6 +101,10 @@ public class BaseMethod1 {
             addToSkyline(r);
         }
 //        System.out.println(this.skyPaths.size());
+//        for (Result r : this.skyPaths) {
+//            System.out.println(r);
+//        }
+//        System.out.println("=====================================================");
 
 //        System.out.println("==========");
 //

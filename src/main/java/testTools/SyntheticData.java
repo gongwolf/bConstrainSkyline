@@ -34,12 +34,12 @@ public class SyntheticData {
     }
 
     public static void main(String args[]) {
-        int numberOfNodes = 1000;
+        int numberOfNodes = 2000;
         int dimension = 3;
 
-        int graphsize = 4000;
+        int graphsize = 8000;
         int degree = 4;
-        double range = 10;
+        double range = 6;
 
         if (args.length == 5) {
             numberOfNodes = Integer.parseInt(args[0]);

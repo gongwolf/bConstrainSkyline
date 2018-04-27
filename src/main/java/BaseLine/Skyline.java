@@ -97,6 +97,7 @@ public class Skyline {
         }
 
         queryPoint.distance_q = 0;
+        this.allNodes.add(queryPoint);
     }
 
     public Data generateQueryData() {
