@@ -16,7 +16,7 @@ import java.util.*;
 
 public class BaseMethod5 {
     public ArrayList<path> qqqq = new ArrayList<>();
-    Random r;
+    Random r = new Random(System.nanoTime());
     String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
     String dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
 
@@ -44,18 +44,22 @@ public class BaseMethod5 {
     private Data queryD;
     private static int nn_dist;
 
-    public BaseMethod5(int graph_size, String degree) {
-        r = new Random();
+    public BaseMethod5(int graph_size, String degree,double range) {
+        r = new Random(System.nanoTime());
         this.graph_size = graph_size;
         this.degree = degree;
         this.graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_"+this.graph_size+"_"+this.degree+"_"+range+".rtr";
+        System.out.println(treePath);
     }
 
     public static void main(String args[]) {
         int graph_size = 4000;
         String degree = "4";
         int query_num = 1;
-        int hotels_num = 300;
+        int hotels_num = 1000;
+        double range=9;
+        double threshold = 10;
 
         if (args.length == 4) {
             graph_size = Integer.parseInt(args[0]);
@@ -66,16 +70,18 @@ public class BaseMethod5 {
 
 
         Data[] queryList = new Data[query_num];
-//        int[] numbers = new int[]{241};
+
+        BaseMethod1 bMethod = new BaseMethod1(graph_size, degree,range);
+        BaseMethod5 all_lemmas = new BaseMethod5(graph_size, degree,range);
+
         for (int i = 0; i < query_num; i++) {
-            BaseMethod5 bm5 = new BaseMethod5(graph_size, degree);
+            BaseMethod5 bm5 = new BaseMethod5(graph_size, degree,range);
             int random_place_id = bm5.getRandomNumberInRange_int(0, hotels_num - 1);
             Data queryD = bm5.getDataById(random_place_id);
             queryList[i] = queryD;
         }
 
-        BaseMethod1 bMethod = new BaseMethod1(graph_size, degree);
-        BaseMethod5 Lemmas_method = new BaseMethod5(graph_size, degree);
+
 
 
         for (int i = 0; i < query_num; i++) {
@@ -87,53 +93,52 @@ public class BaseMethod5 {
 
 
         for (int i = 0; i < query_num; i++) {
-            Lemmas_method.baseline(queryList[i]);
+            all_lemmas.baseline(queryList[i]);
 
         }
-        System.out.println("=====================================================");
-
-        BaseMethod_approx approx_method = new BaseMethod_approx(graph_size, degree, nn_dist*2);
-
-        for (int i = 0; i < query_num; i++) {
-            approx_method.baseline(queryList[i]);
-        }
-
-
-        System.out.println("=====================================================");
-        HashSet<Integer> differ_base_with_apprx = new HashSet<>();
-        for (Result r : bMethod.skyPaths) {
-            boolean flag = false;
-            for (BaseLine.approximate.Result r1 : approx_method.skyPaths) {
-                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                    flag = true;
-                    break;
-                }
-
-            }
-            if (!flag)
-                differ_base_with_apprx.add(r.end.getPlaceId());
-        }
-
-//        for (int i : differ_base_with_apprx) {
-//            System.out.println(i);
+//        System.out.println("=====================================================");
+//
+//        BaseMethod_approx approx_method = new BaseMethod_approx(graph_size, degree, threshold,range);
+//        for (int i = 0; i < query_num; i++) {
+//            approx_method.baseline(queryList[i]);
 //        }
-        System.out.println(differ_base_with_apprx.size());
-
-        System.out.println("=====================================================");
-        HashSet<Integer> differ_apprx_with_base = new HashSet<>();
-        for (BaseLine.approximate.Result r1 : approx_method.skyPaths) {
-            boolean flag = false;
-            for (Result r : bMethod.skyPaths) {
-                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                    flag = true;
-                    break;
-                }
-
-            }
-            if (!flag)
-                differ_apprx_with_base.add(r1.end.getPlaceId());
-        }
-        System.out.println(differ_apprx_with_base.size());
+//
+//
+//        System.out.println("=====================================================");
+//        HashSet<Integer> differ_base_with_apprx = new HashSet<>();
+//        for (Result r : bMethod.skyPaths) {
+//            boolean flag = false;
+//            for (BaseLine.approximate.Result r1 : approx_method.skyPaths) {
+//                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
+//                    flag = true;
+//                    break;
+//                }
+//
+//            }
+//            if (!flag)
+//                differ_base_with_apprx.add(r.end.getPlaceId());
+//        }
+//
+////        for (int i : differ_base_with_apprx) {
+////            System.out.println(i);
+////        }
+//        System.out.println(differ_base_with_apprx.size());
+//
+//        System.out.println("=====================================================");
+//        HashSet<Integer> differ_apprx_with_base = new HashSet<>();
+//        for (BaseLine.approximate.Result r1 : approx_method.skyPaths) {
+//            boolean flag = false;
+//            for (Result r : bMethod.skyPaths) {
+//                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
+//                    flag = true;
+//                    break;
+//                }
+//
+//            }
+//            if (!flag)
+//                differ_apprx_with_base.add(r1.end.getPlaceId());
+//        }
+//        System.out.println(differ_apprx_with_base.size());
 
 //        for (int i : differ_apprx_with_base) {
 //            System.out.println(i);
@@ -185,8 +190,9 @@ public class BaseMethod5 {
         //find the minimum distance from query point to the skyline hotel that dominate non-skyline hotel cand_d
         for (Data cand_d : sNodes) {
             double h_to_h_dist = Double.MAX_VALUE;
-            if (!this.sky_hotel.contains(cand_d)) {
-                for (Data s_h : this.sky_hotel) {
+
+            if (!sky_hotel.contains(cand_d)) {
+                for (Data s_h : sky_hotel) {
                     if (checkDominated(s_h.getData(), cand_d.getData())) {
 //                        double tmep_dist = Math.pow(s_h.location[0] - queryD.location[0], 2) + Math.pow(s_h.location[1] - queryD.location[1], 2);
 //                        tmep_dist = Math.sqrt(tmep_dist);
@@ -196,9 +202,8 @@ public class BaseMethod5 {
                         }
                     }
                 }
-            } else {
-                h_to_h_dist = Double.MAX_VALUE;
             }
+
             dominated_checking.put(cand_d.getPlaceId(), h_to_h_dist);
         }
 

@@ -40,9 +40,9 @@ public class GoogleMaps {
         double long2 = -77.667754;
 
         g.distanceInMeters(lat1, long1, lat2, long2);
-//        g.readBusInfo();
-//        System.out.println(g.busStations.size());
-//        g.statisticInRange(range);
+        g.readBusInfo();
+        System.out.println(g.busStations.size());
+        g.statisticInRange(range);
 //        g.averageDistance();
 //        g.findDistanceToBusStop(37.75731290, -122.42150700);
 

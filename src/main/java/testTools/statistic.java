@@ -19,18 +19,22 @@ public class statistic {
 
     int graph_size;
     int degree;
+    double range;
 
     connector conn;
     HashMap<Integer, Pair<Double, Double>> buses;
     HashMap<Integer, Pair<Double, Double>> hotels;
 
 
-    public statistic(int graph_size, int degree) {
+    public statistic(int graph_size, int degree, double range) {
         this.graph_size = graph_size;
         this.degree = degree;
+        this.range = range;
+
+
         this.graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         this.infoPath = "/home/gqxwolf/mydata/projectData/testGraph" + this.graph_size + "_" + this.degree + "/data";
-        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode.txt";
+        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + this.range + ".txt";
 
 
         buses = new HashMap<>();
@@ -46,8 +50,8 @@ public class statistic {
     }
 
     public static void main(String args[]) {
-        statistic s = new statistic(2000, 4);
-        s.HotelsToBuesWithinRange(10);
+        statistic s = new statistic(4000, 4, 9);
+        s.HotelsToBuesWithinRange();
 
 //        s.shutdown();
     }
@@ -130,8 +134,7 @@ public class statistic {
     }
 
 
-
-    private void HotelsToBuesWithinRange(int range) {
+    private void HotelsToBuesWithinRange() {
         HashMap<Integer, Integer> rs = new HashMap<>(); //# of bus stops that have # of hotels in range
         for (Map.Entry<Integer, Pair<Double, Double>> h : this.hotels.entrySet()) {
             double h_lat = h.getValue().getKey();

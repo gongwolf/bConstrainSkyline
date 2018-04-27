@@ -12,7 +12,7 @@ import java.util.*;
 public class BaseMethod1 {
     public ArrayList<path> qqqq = new ArrayList<>();
     Random r;
-    String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
+    String treePath;
     int graph_size;
     String degree;
     long add_oper = 0;
@@ -35,10 +35,12 @@ public class BaseMethod1 {
 //    HashMap<Integer, Double> dominated_checking = new HashMap<>();
 
 
-    public BaseMethod1(int graph_size, String degree) {
+    public BaseMethod1(int graph_size, String degree,double range) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
+        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_"+graph_size+"_"+degree+"_"+range+".rtr";
+        System.out.println(treePath);
     }
 
     public static void main(String args[]) {
@@ -53,7 +55,7 @@ public class BaseMethod1 {
         }
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree);
+            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree,10);
 //            Data queryD = bm.generateQueryData();
 ////
 //            System.out.println(queryD);
@@ -401,41 +403,5 @@ public class BaseMethod1 {
         return true;
     }
 
-
-    public boolean addToSkyline_p(path np) {
-        int i = 0;
-        if (this.qqqq.isEmpty()) {
-            this.qqqq.add(np);
-        } else {
-            boolean can_insert_np = true;
-            for (; i < qqqq.size(); ) {
-                if (checkDominated_p(qqqq.get(i).costs, np.costs)) {
-                    can_insert_np = false;
-                    break;
-                } else {
-                    if (checkDominated_p(np.costs, qqqq.get(i).costs)) {
-                        this.qqqq.remove(i);
-                    } else {
-                        i++;
-                    }
-                }
-            }
-
-            if (can_insert_np) {
-                this.qqqq.add(np);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean checkDominated_p(double[] costs, double[] estimatedCosts) {
-        for (int i = 0; i < costs.length; i++) {
-            if (costs[i] * (1.0) > estimatedCosts[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
 
 }
