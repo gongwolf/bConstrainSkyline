@@ -11,6 +11,7 @@ import java.util.*;
 
 public class BaseMethod1 {
     public ArrayList<path> qqqq = new ArrayList<>();
+    public ArrayList<Result> skyPaths = new ArrayList<>();
     Random r;
     String treePath;
     int graph_size;
@@ -20,26 +21,25 @@ public class BaseMethod1 {
     long map_operation = 0;
     long checkEmpty = 0;
     long read_data = 0;
+    double threshold = 0;
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
-    public  ArrayList<Result> skyPaths = new ArrayList<>();
     private HashSet<Data> finalDatas = new HashSet<>();
     private long add_counter;
     private long pro_add_result_counter;
     private long sky_add_result_counter;
-
-
     private ArrayList<Data> sky_hotel;
     private boolean add;
 //    HashMap<Integer, Double> dominated_checking = new HashMap<>();
 
 
-    public BaseMethod1(int graph_size, String degree,double range) {
+    public BaseMethod1(int graph_size, String degree, double threshold, double range,int hotels_num) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
-        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_"+graph_size+"_"+degree+"_"+range+".rtr";
+        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range+"_"+hotels_num + ".rtr";
+        this.threshold = threshold;
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
     }
@@ -56,7 +56,7 @@ public class BaseMethod1 {
         }
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree,10);
+            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree, 25,10,5000);
 //            Data queryD = bm.generateQueryData();
 ////
 //            System.out.println(queryD);
@@ -236,7 +236,7 @@ public class BaseMethod1 {
         int visited_bus_stop = this.tmpStoreNodes.size();
         int bus_stop_in_result = final_bus_stops.size();
 
-        sb.append("  "+visited_bus_stop + "," + bus_stop_in_result+","+(double)bus_stop_in_result/visited_bus_stop+"   "+this.sky_add_result_counter);
+        sb.append("  " + visited_bus_stop + "," + bus_stop_in_result + "," + (double) bus_stop_in_result / visited_bus_stop + "   " + this.sky_add_result_counter);
 
         System.out.println(sb.toString());
 //        this.finalDatas.stream().forEach(f -> System.out.println(f));

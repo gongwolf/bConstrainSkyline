@@ -1,7 +1,6 @@
-package BaseLine.approximate;
+package BaseLine.approximate.range;
 
 import RstarTree.*;
-import testTools.GoogleMaps;
 
 import java.util.ArrayList;
 import java.util.Random;

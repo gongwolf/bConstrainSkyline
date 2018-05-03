@@ -1,10 +1,14 @@
-package BaseLine.approximate;
+package BaseLine.approximate.range;
 
 import BaseLine.constants;
+import neo4jTools.Line;
 import neo4jTools.connector;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class path {
@@ -12,7 +16,7 @@ public class path {
     public boolean expaned;
     public long startNode, endNode;
 
-    //    public ArrayList<Long> nodes;
+//    public ArrayList<Long> nodes;
 //    public ArrayList<Long> rels;
     public ArrayList<String> propertiesName;
 
@@ -26,8 +30,8 @@ public class path {
         this.endNode = current.node;
         this.expaned = false;
 
-//        this.nodes = new ArrayList<>(200);
-//        this.rels = new ArrayList<>(200);
+//        this.nodes = new ArrayList<>();
+//        this.rels = new ArrayList<>();
         this.propertiesName = new ArrayList<>();
 
         this.setPropertiesName();
@@ -43,12 +47,12 @@ public class path {
         this.endNode = rel.getEndNodeId();
 
 
-//        this.nodes = new ArrayList<>(200);
+//        this.nodes = new ArrayList<>();
 //        for (long n : old_path.nodes) {
 //            this.nodes.add(getLongObject_Node(n));
 //        }
 //
-//        this.rels = new ArrayList<>(200);
+//        this.rels = new ArrayList<>();
 //        for (long e : old_path.rels) {
 //            this.rels.add(getLongObject_Edge(e));
 //        }
@@ -66,36 +70,36 @@ public class path {
         calculateCosts(rel);
     }
 
-    public ArrayList<path> expand() {
-        ArrayList<path> result = new ArrayList<>();
-
-        ArrayList<Relationship> outgoing_rels = connector.getOutgoutingEdges(this.endNode);
-//        System.out.println("  expand " +this.endNode+" "+outgoing_rels.size()+" | "+this.nodes.size()+" "+this.rels.size());
-//        System.out.println(outgoing_rels.size());
-
-        for (Relationship r : outgoing_rels) {
-            path nPath = new path(this, r);
-            result.add(nPath);
-        }
-        return result;
-    }
-
-
 //    public ArrayList<path> expand() {
 //        ArrayList<path> result = new ArrayList<>();
 //
-//        try (Transaction tx = connector.graphDB.beginTx()) {
-//            Iterable<Relationship> rels = connector.graphDB.getNodeById(this.endNode).getRelationships(Line.Linked, Direction.OUTGOING);
-//            Iterator<Relationship> rel_Iter = rels.iterator();
-//            while (rel_Iter.hasNext()) {
-//                Relationship rel = rel_Iter.next();
-//                path nPath = new path(this, rel);
-//                result.add(nPath);
-//            }
-//            tx.success();
+//        ArrayList<Relationship> outgoing_rels = connector.getOutgoutingEdges(this.endNode);
+////        System.out.println("  expand " +this.endNode+" "+outgoing_rels.size()+" | "+this.nodes.size()+" "+this.rels.size());
+////        System.out.println(outgoing_rels.size());
+//
+//        for (Relationship r : outgoing_rels) {
+//            path nPath = new path(this, r);
+//            result.add(nPath);
 //        }
 //        return result;
 //    }
+
+
+    public ArrayList<path> expand() {
+        ArrayList<path> result = new ArrayList<>();
+
+        try (Transaction tx = connector.graphDB.beginTx()) {
+            Iterable<Relationship> rels = connector.graphDB.getNodeById(this.endNode).getRelationships(Line.Linked, Direction.OUTGOING);
+            Iterator<Relationship> rel_Iter = rels.iterator();
+            while (rel_Iter.hasNext()) {
+                Relationship rel = rel_Iter.next();
+                path nPath = new path(this, rel);
+                result.add(nPath);
+            }
+            tx.success();
+        }
+        return result;
+    }
 
 
     private void calculateCosts(Relationship rel) {

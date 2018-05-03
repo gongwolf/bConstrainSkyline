@@ -26,7 +26,7 @@ public class statistic {
     HashMap<Integer, Pair<Double, Double>> hotels;
 
 
-    public statistic(int graph_size, int degree, double range) {
+    public statistic(int graph_size, int degree, double range,int num_hotels) {
         this.graph_size = graph_size;
         this.degree = degree;
         this.range = range;
@@ -34,7 +34,7 @@ public class statistic {
 
         this.graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         this.infoPath = "/home/gqxwolf/mydata/projectData/testGraph" + this.graph_size + "_" + this.degree + "/data";
-        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + this.range + ".txt";
+        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + this.range+"_"+num_hotels + ".txt";
 
 
         buses = new HashMap<>();
@@ -50,7 +50,7 @@ public class statistic {
     }
 
     public static void main(String args[]) {
-        statistic s = new statistic(8000, 4, 6);
+        statistic s = new statistic(20000, 4, 6,5000);
         s.HotelsToBuesWithinRange();
 
 //        s.shutdown();
@@ -149,7 +149,7 @@ public class statistic {
                 double b_log = b.getValue().getValue();
 
                 double d = Math.sqrt(Math.pow(b_lat - h_lat, 2) + Math.pow(b_log - h_log, 2));
-                if (d <= range) {
+                if (d <= 7) {
                     counter++;
                 }
             }

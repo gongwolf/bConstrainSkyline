@@ -1,4 +1,4 @@
-package BaseLine.approximate;
+package BaseLine.approximate.range;
 
 import BaseLine.constants;
 import RstarTree.Data;

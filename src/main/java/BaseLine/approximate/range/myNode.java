@@ -1,11 +1,9 @@
-package BaseLine.approximate;
+package BaseLine.approximate.range;
 
 
-import BaseLine.constants;
 import RstarTree.Data;
 import neo4jTools.connector;
 import org.neo4j.graphdb.Transaction;
-import testTools.GoogleMaps;
 
 import java.util.ArrayList;
 
@@ -22,8 +20,9 @@ public class myNode {
         this.node = this.id = current_id;
         this.locations = new double[2];
 //        this.qNode = queryNode;
-        skyPaths = new ArrayList<>(400);
+        skyPaths = new ArrayList<>();
         setLocations(queryNode);
+//        System.out.println(this.distance_q+"     "+distance_threshold);
         if (this.distance_q <= distance_threshold) {
             path dp = new path(this);
             this.skyPaths.add(dp);

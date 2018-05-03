@@ -34,7 +34,7 @@ public class myNode {
         this.id = String.valueOf(this.current.getId());
         this.setEduDist();
         path p = new path(startNode, startNode);
-        propertiesName = new ArrayList<String>(p.getPropertiesName());
+        propertiesName = new ArrayList<>(p.getPropertiesName());
         this.lowerBound = new double[p.NumberOfProperties];
         this.processed = new boolean[p.NumberOfProperties];
         this.degree = current.getDegree(Direction.OUTGOING);

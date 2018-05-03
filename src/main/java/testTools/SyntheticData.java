@@ -5,6 +5,7 @@ import RstarTree.Data;
 import RstarTree.Node;
 import RstarTree.RTree;
 import javafx.util.Pair;
+import org.apache.commons.cli.*;
 import org.apache.commons.math3.distribution.BetaDistribution;
 
 import java.io.*;
@@ -16,13 +17,14 @@ public class SyntheticData {
     private final int dimension;
     private final int grahsize;
     private final int degree;
+    private final int upper;
     private final String info_path;
     Random r = new Random(System.nanoTime());
     HashSet<Pair<Double, Double>> busLocation = new HashSet<>();
-    BetaDistribution bt = new BetaDistribution(1.89, 19);
+    BetaDistribution bt = new BetaDistribution(2, 19);
     private double range = 0;
 
-    public SyntheticData(int numberOfNodes, int dimension, int graphsize, int degree, double range) {
+    public SyntheticData(int numberOfNodes, int dimension, int graphsize, int degree, double range, int upper) {
         this.numberOfNodes = numberOfNodes;
         this.dimension = dimension;
 
@@ -30,35 +32,96 @@ public class SyntheticData {
         this.degree = degree;
         this.info_path = "/home/gqxwolf/mydata/projectData/testGraph" + this.grahsize + "_" + this.degree + "/data";
 
+        this.upper = upper;
+
         this.range = range;
     }
 
-    public static void main(String args[]) {
-        int numberOfNodes = 2000;
-        int dimension = 3;
+    public static void arguements() {
 
-        int graphsize = 8000;
-        int degree = 4;
-        double range = 6;
 
-        if (args.length == 5) {
-            numberOfNodes = Integer.parseInt(args[0]);
-            dimension = Integer.parseInt(args[1]);
-            graphsize = Integer.parseInt(args[2]);
-            degree = Integer.parseInt(args[3]);
-            range = Double.parseDouble(args[4]);
+    }
+
+    public static void main(String args[]) throws ParseException {
+        //deal with the parameter
+        int numberOfNodes, dimension, graphsize, degree, upper;
+        double range;
+
+        Options options = new Options();
+        options.addOption("g", "grahpsize", true, "number of nodes in the graph");
+        options.addOption("n", "numberofNode", true, "number of nodes you want to generate");
+        options.addOption("di", "dimension", true, "number of dimension");
+        options.addOption("r", "range", true, "range of the distance to be considered");
+        options.addOption("de", "degree", true, "degree of the graphe");
+        options.addOption("u", "upperbound", true, "upper bound of the beta distribution sampling");
+        options.addOption("h","help",false,"print the help of this command");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
+
+        String g_str = cmd.getOptionValue("g");
+        String n_str = cmd.getOptionValue("n");
+        String di_str = cmd.getOptionValue("di");
+        String r_str = cmd.getOptionValue("r");
+        String de_str = cmd.getOptionValue("de");
+        String u_str = cmd.getOptionValue("u");
+        if (cmd.hasOption("h")) {
+            HelpFormatter formatter = new HelpFormatter();
+            String header = "Generate Synthetic Data, the number of bus stop within the given range follows the beta distribution:";
+            formatter.printHelp("java -jar SyntheticData.jar", header, options, "", false);
+        } else {
+
+            if (g_str == null) {
+                graphsize = 2000;
+            } else {
+                graphsize = Integer.parseInt(g_str);
+            }
+
+            if (n_str == null) {
+                numberOfNodes = 1000;
+            } else {
+                numberOfNodes = Integer.parseInt(n_str);
+            }
+
+            if (di_str == null) {
+                dimension = 3;
+            } else {
+                dimension = Integer.parseInt(di_str);
+            }
+
+            if (r_str == null) {
+                range = 10;
+            } else {
+                range = Double.parseDouble(r_str);
+            }
+
+            if (de_str == null) {
+                degree = 4;
+            } else {
+                degree = Integer.parseInt(de_str);
+            }
+
+            if (u_str == null) {
+                upper = 60;
+            } else {
+                upper = Integer.parseInt(u_str);
+            }
+
+
+            SyntheticData sd = new SyntheticData(numberOfNodes, dimension, graphsize, degree, range, upper);
+            sd.test();
+//        sd.createStaticNodes(numberOfNodes, dimension);
+            sd.testStaticRTree();
+
         }
 
-        SyntheticData sd = new SyntheticData(numberOfNodes, dimension, graphsize, degree, range);
-        sd.test();
-//        sd.createStaticNodes(numberOfNodes, dimension);
-        sd.testStaticRTree();
+
     }
 
     private void test() {
         readNodeInfo();
 
-        String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + grahsize + "_" + degree + "_" + range + ".rtr";
+        String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + grahsize + "_" + degree + "_" + range + "_" + numberOfNodes + ".rtr";
         File fp = new File(treePath);
 
         if (fp.exists()) {
@@ -66,7 +129,7 @@ public class SyntheticData {
         }
 
 
-        String infoPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_" + grahsize + "_" + degree + "_" + range + ".txt";
+        String infoPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_" + grahsize + "_" + degree + "_" + range + "_" + numberOfNodes + ".txt";
         File file = new File(infoPath);
         if (file.exists()) {
             file.delete();
@@ -86,16 +149,17 @@ public class SyntheticData {
 
             int i = 0;
             while (i < this.numberOfNodes) {
-                int numberOfBusStopInRange = (int) Math.floor(bt.sample() * 50);
+                int numberOfBusStopInRange = (int) Math.floor(bt.sample() * upper);
                 int counter = 0;
 
-                System.out.println(i + "  " + numberOfBusStopInRange);
+//                System.out.println(i + "  " + numberOfBusStopInRange);
 
                 Data d = new Data(this.dimension);
                 d.setPlaceId(i);
 
                 float latitude, longitude;
                 do {
+
                     latitude = randomFloatInRange(0f, 360f);
                     longitude = randomFloatInRange(0f, 360f);
 
@@ -248,7 +312,7 @@ public class SyntheticData {
 
 
     public void testStaticRTree() {
-        String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + grahsize + "_" + degree + "_" + range + ".rtr";
+        String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + grahsize + "_" + degree + "_" + range + "_" + this.numberOfNodes + ".rtr";
 
         RTree rt = new RTree(treePath, Constants.CACHESIZE);
 

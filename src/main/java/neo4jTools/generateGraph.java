@@ -1,6 +1,7 @@
 package neo4jTools;
 
 import javafx.util.Pair;
+import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
@@ -26,13 +27,53 @@ public class generateGraph {
     }
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws ParseException {
         int numberNodes = 4000;
         int numberofDegree = 5;
         int numberofDimen = 3;
-        generateGraph g = new generateGraph(numberNodes, numberofDegree, numberofDimen);
-        g.generateG(true);
 
+
+        Options options = new Options();
+        options.addOption("g", "grahpsize", true, "number of nodes in the graph");
+        options.addOption("de", "degree", true, "degree of the graphe");
+        options.addOption("di","dimension",true,"dimension of the graph");
+        options.addOption("h", "help", false, "print the help of this command");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
+
+        String g_str = cmd.getOptionValue("g");
+        String de_str = cmd.getOptionValue("de");
+        String di_str = cmd.getOptionValue("di");
+
+
+        if (cmd.hasOption("h")) {
+            HelpFormatter formatter = new HelpFormatter();
+            String header = "Run the code to generate the graph :";
+            formatter.printHelp("java -jar generateGraph.jar", header, options, "", false);
+        } else {
+
+            if (g_str == null) {
+                numberNodes = 2000;
+            } else {
+                numberNodes = Integer.parseInt(g_str);
+            }
+
+            if (de_str == null) {
+                numberofDegree = 4;
+            } else {
+                numberofDegree = Integer.parseInt(de_str);
+            }
+
+            if (di_str == null) {
+                numberofDimen = 3;
+            } else {
+                numberofDimen = Integer.parseInt(di_str);
+            }
+
+            generateGraph g = new generateGraph(numberNodes, numberofDegree, numberofDimen);
+            g.generateG(true);
+        }
     }
 
     public void generateG(boolean deleteBefore) {
@@ -70,11 +111,11 @@ public class generateGraph {
             double x2 = Double.valueOf(Nodes.get(endNode)[0]);
             double y2 = Double.valueOf(Nodes.get(endNode)[1]);
 
-            double dist = Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+            double dist = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
             String[] costs = new String[numberofDimens];
             for (int j = 0; j < numberofDimens; j++) {
-                costs[j] = String.valueOf(getGaussian(dist, dist*0.2));
+                costs[j] = String.valueOf(getGaussian(dist, dist * 0.2));
             }
 
 
@@ -102,11 +143,11 @@ public class generateGraph {
                 double x2 = Double.valueOf(Nodes.get(endNode)[0]);
                 double y2 = Double.valueOf(Nodes.get(endNode)[1]);
 
-                double dist = Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+                double dist = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
                 String[] costs = new String[numberofDimens];
                 for (int j = 0; j < numberofDimens; j++) {
-                    costs[j] = String.valueOf(getGaussian(dist*2, dist*0.3));
+                    costs[j] = String.valueOf(getGaussian(dist * 2, dist * 0.3));
                 }
 
                 Edges.put(new Pair(startNode, endNode), costs);
