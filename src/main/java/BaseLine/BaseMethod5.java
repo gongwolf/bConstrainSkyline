@@ -161,6 +161,12 @@ public class BaseMethod5 {
 
                 testTools.statistic.goodnessAnalyze(all_lemmas.skyPaths, approx_method.skyPaths, "edu");
                 testTools.statistic.goodnessAnalyze(all_lemmas.skyPaths, approx_sub.skyPaths, "edu");
+
+
+                for(Result r : approx_sub.skyPaths)
+                {
+                    System.out.println(r);
+                }
             }
         }
     }

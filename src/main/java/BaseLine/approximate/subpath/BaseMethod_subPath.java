@@ -59,12 +59,12 @@ public class BaseMethod_subPath {
 
 
     public static void main(String args[]) {
-        int graph_size = 2000;
+        int graph_size = 4000;
         String degree = "4";
         int query_num = 1;
-        int hotels_num = 1000;
-        double dis_t = 0.829618265137109;
-        double range = 13;
+        int hotels_num = 2000;
+        double dis_t = 10;
+        double range = 10;
 
 
         Data[] queryList = new Data[query_num];
@@ -144,23 +144,24 @@ public class BaseMethod_subPath {
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
 
-        sb.append(this.sNodes.size()+" "+this.sky_hotel.size()+" ");
+        sb.append(this.sNodes.size() + " " + this.sky_hotel.size() + " ");
 
 
         for (Data d : sNodes) {
             double[] c = new double[constants.path_dimension + 3];
             c[0] = d.distance_q;
 
-            if (c[0] <= this.distance_threshold) {
-                double[] d_attrs = d.getData();
-                for (int i = 4; i < c.length; i++) {
-                    c[i] = d_attrs[i - 4];
-                }
-                Result r = new Result(queryD, d, c, null);
-//                System.out.println(r);
-                addToSkyline(r);
+//            if (c[0] <= this.distance_threshold) {
+            double[] d_attrs = d.getData();
+            for (int i = 4; i < c.length; i++) {
+                c[i] = d_attrs[i - 4];
             }
+            Result r = new Result(queryD, d, c, null);
+//                System.out.println(r);
+            addToSkyline(r);
+//            }
         }
+        System.out.println(this.skyPaths.size());
 
 
         //find the minimum distance from query point to the skyline hotel that dominate non-skyline hotel cand_d
@@ -188,8 +189,8 @@ public class BaseMethod_subPath {
 
             long rt = System.currentTimeMillis();
 
-            myNode s = new myNode(queryD, startNode_id, this.distance_threshold);
-//            myNode s = new myNode(queryD, startNode_id, -1);
+//            myNode s = new myNode(queryD, startNode_id, this.distance_threshold);
+            myNode s = new myNode(queryD, startNode_id, -1);
 
 //            myNodePriorityQueueNoCp mqueue = new myNodePriorityQueueNoCp();
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
@@ -200,43 +201,58 @@ public class BaseMethod_subPath {
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
+                System.out.println("================================");
+                System.out.println(v.id + "   ");
                 counter++;
                 ArrayList<path> needToProcess = new ArrayList<>();
 
                 int index;
+                System.out.println(v.skyPaths.size());
 
                 for (index = 0; index < v.skyPaths.size(); index++) {
                     path p = v.skyPaths.get(index);
                     if (!p.expaned) {
+                        System.out.println("+++++" + p);
                         if (p.isDummyPath()) {
                             needToProcess.add(p);
                         } else {
                             if (needToProcess.isEmpty()) {
                                 needToProcess.add(p);
                             } else {
-                                for (int i = 1; i < constants.path_dimension; i++) {
-                                    int pp_index = 0;
-                                    for (; pp_index < needToProcess.size(); ) {
-                                        path pp = needToProcess.get(pp_index);
-                                        if (pp.costs[i] > 0 && p.costs[i] > 0 && p.costs[i] < pp.costs[i]) {
-                                            needToProcess.add(p);
+                                boolean needToInsert = false;
+                                needToProcess.add(p);
+                                int pp_index = 0;
+
+                                //Todo: Change this function to find the shortest path on each dimension
+                                for (; pp_index < needToProcess.size(); ) {
+                                    path pp = needToProcess.get(pp_index);
+                                    System.out.println("  pp:" + pp);
+                                    for (int i = 1; i < constants.path_dimension; i++) {
+                                        if (pp.costs[i] > 0 && p.costs[i] < pp.costs[i]) {
                                             needToProcess.remove(pp_index);
+
+                                            if (!needToInsert) {
+                                                needToInsert = true;
+                                            }
                                         } else {
                                             pp_index++;
                                         }
                                     }
                                 }
+
                             }
                         }
                     }
                 }
 
+                System.out.println(needToProcess.size());
 
-                for (index = 0; index < v.skyPaths.size();) {
+                for (index = 0; index < v.skyPaths.size(); ) {
                     path p = v.skyPaths.get(index);
 
                     if (!p.expaned) {
                         if (needToProcess.indexOf(p) != -1) {
+                            System.out.println(p);
                             p.expaned = true;
 
                             long ee = System.nanoTime();
@@ -250,8 +266,8 @@ public class BaseMethod_subPath {
                                     next_n = tmpStoreNodes.get(np.endNode);
 //                                System.out.println("old "+next_n.id);
                                 } else {
-//                                    next_n = new myNode(queryD, np.endNode, -1);
-                                    next_n = new myNode(queryD, np.endNode, this.distance_threshold);
+                                    next_n = new myNode(queryD, np.endNode, -1);
+//                                    next_n = new myNode(queryD, np.endNode, this.distance_threshold);
                                     this.tmpStoreNodes.put(next_n.id, next_n);
 //                                System.out.println("new "+next_n.id);
                                 }
@@ -261,6 +277,7 @@ public class BaseMethod_subPath {
 //                            if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q) && next_n.distance_q <= 10000) {
 //                            System.out.println(next_n.skyPaths.isEmpty());
                                     if (next_n.addToSkyline(np)) {
+                                        System.out.println("----" + np);
                                         mqueue.add(next_n);
                                     }
                                 }
@@ -308,8 +325,8 @@ public class BaseMethod_subPath {
 //                        double d2 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], d.location[0], d.location[1]);
                         double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
                         double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2 && this.distance_threshold > d2) {
-//                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
+//                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2 && this.distance_threshold > d2) {
+                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
                             d_list.add(d);
                             break;
                         }
@@ -322,11 +339,11 @@ public class BaseMethod_subPath {
                 index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-//                    if (!p.rels.isEmpty()) {
-                    long ats = System.nanoTime();
-                    boolean f = addToSkylineResult(p, d_list);
-                    addResult_rt += System.nanoTime() - ats;
-//                    }
+                    if (!p.rels.isEmpty()) {
+                        long ats = System.nanoTime();
+                        boolean f = addToSkylineResult(p, d_list);
+                        addResult_rt += System.nanoTime() - ats;
+                    }
                 }
             }
 
@@ -364,7 +381,7 @@ public class BaseMethod_subPath {
         }
 
 
-        sb.append(finalDatas.size() + " " + this.skyPaths.size()+" "+sk_counter);
+        sb.append(finalDatas.size() + " " + this.skyPaths.size() + " " + sk_counter);
 
         int bus_stop_in_result = final_bus_stops.size();
 
