@@ -154,7 +154,7 @@ public class BaseMethod3 {
 
             long rt = System.currentTimeMillis();
 
-            myNode s = new myNode(queryD, startNode, this.graphdb);
+            myNode s = new myNode(queryD, startNode.getId(),-1);
 
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
@@ -188,16 +188,16 @@ public class BaseMethod3 {
                         expasion_rt += (System.nanoTime() - ee);
                         for (path np : new_paths) {
                             myNode next_n;
-                            if (this.tmpStoreNodes.containsKey(np.endNode.getId())) {
-                                next_n = tmpStoreNodes.get(np.endNode.getId());
+                            if (this.tmpStoreNodes.containsKey(np.endNode)) {
+                                next_n = tmpStoreNodes.get(np.endNode);
                             } else {
-                                next_n = new myNode(queryD, np.endNode, this.graphdb);
+                                next_n = new myNode(queryD, np.endNode, -1);
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
 
 
                             //lemma 2
-                            if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q)) {
+                            if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
                                 if (!extend_f)
                                     extend_f = true;
 
@@ -306,7 +306,7 @@ public class BaseMethod3 {
         this.checkEmpty += System.nanoTime() - r2a;
 
         long rr = System.nanoTime();
-        myNode my_endNode = this.tmpStoreNodes.get(np.endNode.getId());
+        myNode my_endNode = this.tmpStoreNodes.get(np.endNode);
         this.map_operation += System.nanoTime() - rr;
 
         long dsad = System.nanoTime();

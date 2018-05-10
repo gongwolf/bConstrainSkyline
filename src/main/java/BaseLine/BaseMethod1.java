@@ -34,11 +34,11 @@ public class BaseMethod1 {
 //    HashMap<Integer, Double> dominated_checking = new HashMap<>();
 
 
-    public BaseMethod1(int graph_size, String degree, double threshold, double range,int hotels_num) {
+    public BaseMethod1(int graph_size, String degree, double threshold, double range, int hotels_num) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
-        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range+"_"+hotels_num + ".rtr";
+        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
         this.threshold = threshold;
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
@@ -56,7 +56,7 @@ public class BaseMethod1 {
         }
 
         for (int i = 0; i < query_num; i++) {
-            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree, 25,10,5000);
+            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree, 25, 10, 5000);
 //            Data queryD = bm.generateQueryData();
 ////
 //            System.out.println(queryD);
@@ -135,7 +135,7 @@ public class BaseMethod1 {
 
             long rt = System.currentTimeMillis();
 
-            myNode s = new myNode(queryD, startNode, this.graphdb);
+            myNode s = new myNode(queryD, startNode.getId(), -1);
 
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
@@ -154,24 +154,17 @@ public class BaseMethod1 {
 
                     //constants.print(p.costs);
                     if (!p.expaned) {
-//                        System.out.println(counter + "  ......  ");
                         p.expaned = true;
-//                        System.out.println("++: " + p);
-//                        constants.print(p.costs);
-
-//                        long rr = System.nanoTime();
-//                        addToSkylineResult(p, queryD);
-//                        addResult_rt += (System.nanoTime() - rr);
 
                         long ee = System.nanoTime();
                         ArrayList<path> new_paths = p.expand();
                         expasion_rt += (System.nanoTime() - ee);
                         for (path np : new_paths) {
                             myNode next_n;
-                            if (this.tmpStoreNodes.containsKey(np.endNode.getId())) {
-                                next_n = tmpStoreNodes.get(np.endNode.getId());
+                            if (this.tmpStoreNodes.containsKey(np.endNode)) {
+                                next_n = tmpStoreNodes.get(np.endNode);
                             } else {
-                                next_n = new myNode(queryD, np.endNode, this.graphdb);
+                                next_n = new myNode(queryD, np.endNode, -1);
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
 
@@ -224,8 +217,8 @@ public class BaseMethod1 {
             this.finalDatas.add(r.end);
 
             if (r.p != null) {
-                for (Node nn : r.p.nodes) {
-                    final_bus_stops.add(nn.getId());
+                for (Long nn : r.p.nodes) {
+                    final_bus_stops.add(nn);
                 }
             }
         }
@@ -273,7 +266,7 @@ public class BaseMethod1 {
         this.checkEmpty += System.nanoTime() - r2a;
 
         long rr = System.nanoTime();
-        myNode my_endNode = this.tmpStoreNodes.get(np.endNode.getId());
+        myNode my_endNode = this.tmpStoreNodes.get(np.endNode);
         this.map_operation += System.nanoTime() - rr;
 
         long dsad = System.nanoTime();

@@ -1,45 +1,49 @@
 package BaseLine;
 
+
 import RstarTree.Data;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
+import neo4jTools.connector;
 import org.neo4j.graphdb.Transaction;
-import testTools.GoogleMaps;
 
 import java.util.ArrayList;
 
 public class myNode {
     public long id;
-    public Node node;
-    public Data qNode;
+    public long node;
+    //    public Data qNode;
     public ArrayList<path> skyPaths;
     public double distance_q;
-    public double[] locations = new double[2];
-    public ArrayList<Data> d_list;
+    public double[] locations;
 
-    public myNode(Data queryNode, Node current, GraphDatabaseService graphdb) {
-        this.node = current;
-        this.qNode = queryNode;
-        this.id = current.getId();
+    public myNode(Data queryNode, long current_id, double distance_threshold) {
+        this.node = this.id = current_id;
+        this.locations = new double[2];
+//        this.qNode = queryNode;
         skyPaths = new ArrayList<>();
-        setLocations(graphdb);
-        path dp = new path(this);
-        this.skyPaths.add(dp);
+        setLocations(queryNode);
+//        System.out.println(this.distance_q+"     "+distance_threshold);
+
+        if (distance_threshold != -1 && this.distance_q <= distance_threshold) {
+            path dp = new path(this);
+            this.skyPaths.add(dp);
+        } else if (distance_threshold == -1) {
+            path dp = new path(this);
+            this.skyPaths.add(dp);
+        }
     }
 
     public double[] getLocations() {
         return locations;
     }
 
-    public void setLocations(GraphDatabaseService graphdb) {
-        try (Transaction tx = graphdb.beginTx()) {
-            locations[0] = (double) this.node.getProperty("lat");
-            locations[1] = (double) this.node.getProperty("log");
-            this.distance_q = Math.sqrt(Math.pow(locations[0] - qNode.location[0], 2) + Math.pow(locations[1] - qNode.location[1], 2));
+    public void setLocations(Data queryNode) {
+        try (Transaction tx = connector.graphDB.beginTx()) {
+            locations[0] = (double) connector.graphDB.getNodeById(this.id).getProperty("lat");
+            locations[1] = (double) connector.graphDB.getNodeById(this.id).getProperty("log");
+            this.distance_q = Math.sqrt(Math.pow(locations[0] - queryNode.location[0], 2) + Math.pow(locations[1] - queryNode.location[1], 2));
 
-//            this.distance_q = GoogleMaps.distanceInMeters(locations[0],locations[1],qNode.location[0],qNode.location[1]);
+//            this.distance_q = GoogleMaps.distanceInMeters(locations[0], locations[1], queryNode.location[0], queryNode.location[1]);
             tx.success();
-
         }
     }
 
@@ -48,13 +52,14 @@ public class myNode {
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.node = this.id = id;
     }
 
     public boolean addToSkyline(path np) {
         int i = 0;
         if (skyPaths.isEmpty()) {
             this.skyPaths.add(np);
+            return true;
         } else {
             boolean can_insert_np = true;
             for (; i < skyPaths.size(); ) {
@@ -80,10 +85,30 @@ public class myNode {
 
     private boolean checkDominated(double[] costs, double[] estimatedCosts) {
         for (int i = 0; i < costs.length; i++) {
-            if (costs[i]*(1) > estimatedCosts[i]) {
+            if (costs[i] * (1) > estimatedCosts[i]) {
                 return false;
             }
         }
         return true;
+    }
+
+
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof myNode)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        myNode c = (myNode) o;
+
+        // Compare the data members and return accordingly
+        return c.id == this.id;
     }
 }

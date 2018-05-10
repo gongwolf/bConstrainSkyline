@@ -1,25 +1,27 @@
 package BaseLine;
 
 import neo4jTools.Line;
+import neo4jTools.connector;
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+
 
 public class path {
-    public double[] costs = new double[constants.path_dimension];
+    public double[] costs;
     public boolean expaned;
-    public Node startNode, endNode;
+    public long startNode, endNode;
 
-    public ArrayList<Node> nodes = new ArrayList<>();
-    public ArrayList<Relationship> rels = new ArrayList<>();
-    public ArrayList<String> propertiesName = new ArrayList<>();
+    public ArrayList<Long> nodes;
+    public ArrayList<Long> rels;
+    public ArrayList<String> propertiesName;
 
 
     public path(myNode current) {
+        this.costs = new double[constants.path_dimension];
         costs[0] = current.distance_q;
         costs[1] = costs[2] = costs[3] = 0;
 //        constants.print(costs);
@@ -27,47 +29,86 @@ public class path {
         this.endNode = current.node;
         this.expaned = false;
 
-        this.nodes.add(startNode);
+        this.nodes = new ArrayList<>();
+        this.rels = new ArrayList<>();
+        this.propertiesName = new ArrayList<>();
 
         this.setPropertiesName();
+
+        //store the Long Objects
+        this.nodes.add(getLongObject_Node(this.endNode));
     }
 
     public path(path old_path, Relationship rel) {
+
+        this.costs = new double[constants.path_dimension];
         this.startNode = old_path.startNode;
-        this.endNode = rel.getEndNode();
+        this.endNode = rel.getEndNodeId();
+
+
+        this.nodes = new ArrayList<>();
+        for (long n : old_path.nodes) {
+            this.nodes.add(getLongObject_Node(n));
+        }
+
+        this.rels = new ArrayList<>();
+        for (long e : old_path.rels) {
+            this.rels.add(getLongObject_Edge(e));
+        }
+
+        this.propertiesName = new ArrayList<>(old_path.propertiesName);
+
+
         expaned = false;
 
-        this.nodes.addAll(old_path.nodes);
-        this.nodes.add(rel.getEndNode());
-
-        this.rels.addAll(old_path.rels);
-        this.rels.add(rel);
-        this.propertiesName = old_path.propertiesName;
+        this.nodes.add(getLongObject_Node(this.endNode));
+        this.rels.add(getLongObject_Edge(rel.getId()));
 
         System.arraycopy(old_path.costs, 0, this.costs, 0, this.costs.length);
 
         calculateCosts(rel);
     }
 
+//    public ArrayList<path> expand() {
+//        ArrayList<path> result = new ArrayList<>();
+//
+//        ArrayList<Relationship> outgoing_rels = connector.getOutgoutingEdges(this.endNode);
+////        System.out.println("  expand " +this.endNode+" "+outgoing_rels.size()+" | "+this.nodes.size()+" "+this.rels.size());
+////        System.out.println(outgoing_rels.size());
+//
+//        for (Relationship r : outgoing_rels) {
+//            path nPath = new path(this, r);
+//            result.add(nPath);
+//        }
+//        return result;
+//    }
+
+
     public ArrayList<path> expand() {
         ArrayList<path> result = new ArrayList<>();
 
-        Iterable<Relationship> rels = this.endNode.getRelationships(Line.Linked, Direction.OUTGOING);
-        Iterator<Relationship> rel_Iter = rels.iterator();
-        while (rel_Iter.hasNext()) {
-            Relationship rel = rel_Iter.next();
-            path nPath = new path(this, rel);
-            result.add(nPath);
+        try (Transaction tx = connector.graphDB.beginTx()) {
+            Iterable<Relationship> rels = connector.graphDB.getNodeById(this.endNode).getRelationships(Line.Linked, Direction.OUTGOING);
+            Iterator<Relationship> rel_Iter = rels.iterator();
+            while (rel_Iter.hasNext()) {
+                Relationship rel = rel_Iter.next();
+                path nPath = new path(this, rel);
+                result.add(nPath);
+            }
+            tx.success();
         }
         return result;
     }
 
 
     private void calculateCosts(Relationship rel) {
-        if (this.startNode.getId() != this.endNode.getId()) {
+//        System.out.println(this.propertiesName.size());
+        if (this.startNode != this.endNode) {
             int i = 1;
             for (String pname : this.propertiesName) {
-                this.costs[i] = this.costs[i] + Double.parseDouble(rel.getProperty(pname).toString());
+//                System.out.println(i+" "+this.costs[i]+"  "+Double.parseDouble(rel.getProperty(pname).toString()));
+
+                this.costs[i] = this.costs[i] + (double) rel.getProperty(pname);
                 i++;
             }
         }
@@ -75,38 +116,30 @@ public class path {
 
 
     public void setPropertiesName() {
-        Iterable<Relationship> rels = this.startNode.getRelationships(Line.Linked, Direction.BOTH);
-        if (rels.iterator().hasNext()) {
-            Relationship rel = rels.iterator().next();
-            Map<String, Object> pnamemap = rel.getAllProperties();
-            for (Map.Entry<String, Object> entry : pnamemap.entrySet()) {
-                this.propertiesName.add(entry.getKey());
-            }
-        } else {
-            System.err.println("There is no edge from or to this node " + this.startNode.getId());
-        }
+        this.propertiesName = connector.propertiesName;
     }
 
     public String toString() {
+//        System.out.println("dasdasd:   "+this.nodes.size()+"  "+this.rels.size());
         StringBuffer sb = new StringBuffer();
-        if (this.rels.isEmpty()) {
-            sb.append("(" + this.startNode.getId() + ")");
-        } else {
-            int i;
-            for (i = 0; i < this.nodes.size() - 1; i++) {
-                sb.append("(" + this.nodes.get(i).getId() + ")");
-                // sb.append("-[Linked," + this.relationships.get(i).getId() +
-                // "]->");
-                sb.append("-[" + this.rels.get(i).getId() + "]-");
-            }
-            sb.append("(" + this.nodes.get(i).getId() + ")");
-        }
-
-//        sb.append(",[");
-//        for (double d : this.costs) {
-//            sb.append(" " + d);
+//        if (this.rels.isEmpty()) {
+//            sb.append("(" + this.startNode + ")");
+//        } else {
+//            int i;
+//            for (i = 0; i < this.nodes.size() - 1; i++) {
+//                sb.append("(" + this.nodes.get(i) + ")");
+//                // sb.append("-[Linked," + this.relationships.get(i).getId() +
+//                // "]->");
+//                sb.append("-[" + this.rels.get(i) + "]-");
+//            }
+//            sb.append("(" + this.nodes.get(i) + ")");
 //        }
-//        sb.append("]");
+
+        sb.append(",[");
+        for (double d : this.costs) {
+            sb.append(" " + d);
+        }
+        sb.append("]");
         return sb.toString();
     }
 
@@ -115,7 +148,7 @@ public class path {
 
         if (obj == null && this == null) {
             return true;
-        } else if((obj==null && this!=null) || (obj!=null&&this==null)){
+        } else if ((obj == null && this != null) || (obj != null && this == null)) {
             return false;
         }
 
@@ -126,8 +159,54 @@ public class path {
 
 
         path o_path = (path) obj;
+        if (o_path.endNode != endNode || o_path.startNode != startNode) {
+            return false;
+        }
+
+        for (int i = 0; i < costs.length; i++) {
+            if (o_path.costs[i] != costs[i]) {
+                return false;
+            }
+        }
+
         if (!o_path.nodes.equals(this.nodes) || !o_path.rels.equals(this.rels)) {
             return false;
+        }
+        return true;
+    }
+
+    public Long getLongObject_Node(long id) {
+        Long id_obj = new Long(id);
+        Long Lobj;
+        if (!constants.accessedNodes.containsKey(id_obj)) {
+            Lobj = new Long(id);
+            constants.accessedNodes.put(id_obj, Lobj);
+        } else {
+            Lobj = constants.accessedNodes.get(id_obj);
+        }
+
+        return Lobj;
+    }
+
+
+    public Long getLongObject_Edge(long id) {
+        Long id_obj = new Long(id);
+        Long Lobj;
+        if (!constants.accessedEdges.containsKey(id_obj)) {
+            Lobj = new Long(id);
+            constants.accessedEdges.put(id_obj, Lobj);
+        } else {
+            Lobj = constants.accessedEdges.get(id_obj);
+        }
+
+        return Lobj;
+    }
+
+    public boolean isDummyPath() {
+        for (int i = 1; i < this.costs.length; i++) {
+            if (this.costs[i] != 0) {
+                return false;
+            }
         }
         return true;
     }

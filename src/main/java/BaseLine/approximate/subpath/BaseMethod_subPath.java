@@ -1,4 +1,4 @@
-package BaseLine.approximate.range;
+package BaseLine.approximate.subpath;
 
 import BaseLine.*;
 import RstarTree.Data;
@@ -12,8 +12,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 
-public class BaseMethod_approx {
-    public ArrayList<path> qqqq = new ArrayList<>();
+public class BaseMethod_subPath {
     public ArrayList<Result> skyPaths = new ArrayList<>();
     public ArrayList<Data> sky_hotel;
     Random r;
@@ -43,7 +42,7 @@ public class BaseMethod_approx {
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
 
-    public BaseMethod_approx(int graph_size, String degree, double distance_threshold, double range, int hotels_num) {
+    public BaseMethod_subPath(int graph_size, String degree, double distance_threshold, double range, int hotels_num) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
@@ -60,16 +59,16 @@ public class BaseMethod_approx {
 
 
     public static void main(String args[]) {
-        int graph_size = 80000;
+        int graph_size = 2000;
         String degree = "4";
-        int query_num = 20;
-        int hotels_num = 100;
+        int query_num = 1;
+        int hotels_num = 1000;
         double dis_t = 0.829618265137109;
-        double range = 2;
+        double range = 13;
 
 
         Data[] queryList = new Data[query_num];
-        BaseMethod_approx b_appx = new BaseMethod_approx(graph_size, degree, dis_t, range, hotels_num);
+        BaseMethod_subPath b_appx = new BaseMethod_subPath(graph_size, degree, dis_t, range, hotels_num);
 
 //        int[] numbers = new int[]{241};
         for (int i = 0; i < query_num; i++) {
@@ -102,7 +101,6 @@ public class BaseMethod_approx {
 
 //        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
         String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
-//        System.out.println(graphPath);
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -112,7 +110,6 @@ public class BaseMethod_approx {
         long counter = 0;
         long addResult_rt = 0;
         long expasion_rt = 0;
-
 
         db_time = System.currentTimeMillis() - db_time;
         r1 = System.currentTimeMillis();
@@ -138,7 +135,6 @@ public class BaseMethod_approx {
 //        System.out.println("there are " + this.sky_hotel.size() + " skyline hotels");
 //        System.out.println("-------------------------");
 
-
         long index_s = 0;
 
         r1 = System.currentTimeMillis();
@@ -147,15 +143,11 @@ public class BaseMethod_approx {
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
 
-//        System.out.println("there are " + this.sNodes.size() + " BBS hotels");
-
-
         for (Data d : sNodes) {
             double[] c = new double[constants.path_dimension + 3];
             c[0] = d.distance_q;
 
             if (c[0] <= this.distance_threshold) {
-
                 double[] d_attrs = d.getData();
                 for (int i = 4; i < c.length; i++) {
                     c[i] = d_attrs[i - 4];
@@ -165,7 +157,6 @@ public class BaseMethod_approx {
                 addToSkyline(r);
             }
         }
-//        System.out.println("there are initial skyline hotels " + this.skyPaths.size());
 
 
         //find the minimum distance from query point to the skyline hotel that dominate non-skyline hotel cand_d
@@ -186,7 +177,6 @@ public class BaseMethod_approx {
             dominated_checking.put(cand_d.getPlaceId(), h_to_h_dist);
         }
 
-//        System.out.println("==========" + this.skyPaths.size());
 
         int visited_bus_stop = 0;
         try (Transaction tx = connector.graphDB.beginTx()) {
@@ -195,8 +185,9 @@ public class BaseMethod_approx {
             long rt = System.currentTimeMillis();
 
             myNode s = new myNode(queryD, startNode_id, this.distance_threshold);
-//            System.out.println(s.distance_q);
+//            myNode s = new myNode(queryD, startNode_id, -1);
 
+//            myNodePriorityQueueNoCp mqueue = new myNodePriorityQueueNoCp();
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
 
@@ -206,39 +197,78 @@ public class BaseMethod_approx {
 
                 myNode v = mqueue.pop();
                 counter++;
-//                System.out.println(v.id+"   ");
-//                System.out.println("=================================");
+                ArrayList<path> needToProcess = new ArrayList<>();
 
-                for (int i = 0; i < v.skyPaths.size(); i++) {
-                    path p = v.skyPaths.get(i);
+                int index;
+
+                for (index = 0; index < v.skyPaths.size(); index++) {
+                    path p = v.skyPaths.get(index);
                     if (!p.expaned) {
-                        p.expaned = true;
-
-                        long ee = System.nanoTime();
-                        ArrayList<path> new_paths = p.expand();
-//                        System.out.println(new_paths.size()+"   ~~~~");
-                        expasion_rt += (System.nanoTime() - ee);
-                        for (path np : new_paths) {
-//                            System.out.println(this.tmpStoreNodes.size()+"  "+np);
-                            myNode next_n;
-                            if (this.tmpStoreNodes.containsKey(np.endNode)) {
-                                next_n = tmpStoreNodes.get(np.endNode);
-//                                System.out.println("old "+next_n.id);
+                        if (p.isDummyPath()) {
+                            needToProcess.add(p);
+                        } else {
+                            if (needToProcess.isEmpty()) {
+                                needToProcess.add(p);
                             } else {
-                                next_n = new myNode(queryD, np.endNode, this.distance_threshold);
-                                this.tmpStoreNodes.put(next_n.id, next_n);
-//                                System.out.println("new "+next_n.id);
-                            }
-
-                            //lemma 2
-                            if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
-//                            if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q) && next_n.distance_q <= 10000) {
-//                            System.out.println(next_n.skyPaths.isEmpty());
-                                if (next_n.addToSkyline(np)) {
-                                    mqueue.add(next_n);
+                                for (int i = 1; i < constants.path_dimension; i++) {
+                                    int pp_index = 0;
+                                    for (; pp_index < needToProcess.size(); ) {
+                                        path pp = needToProcess.get(pp_index);
+                                        if (pp.costs[i] > 0 && p.costs[i] < pp.costs[i]) {
+                                            needToProcess.add(p);
+                                            needToProcess.remove(pp_index);
+                                        } else {
+                                            pp_index++;
+                                        }
+                                    }
                                 }
                             }
                         }
+                    }
+                }
+
+
+                for (index = 0; index < v.skyPaths.size(); index++) {
+                    path p = v.skyPaths.get(index);
+
+                    if (!p.expaned) {
+                        if (needToProcess.indexOf(p) != -1) {
+                            p.expaned = true;
+
+                            long ee = System.nanoTime();
+                            ArrayList<path> new_paths = p.expand();
+//                        System.out.println(new_paths.size()+"   ~~~~");
+                            expasion_rt += (System.nanoTime() - ee);
+                            for (path np : new_paths) {
+//                            System.out.println(this.tmpStoreNodes.size()+"  "+np);
+                                myNode next_n;
+                                if (this.tmpStoreNodes.containsKey(np.endNode)) {
+                                    next_n = tmpStoreNodes.get(np.endNode);
+//                                System.out.println("old "+next_n.id);
+                                } else {
+//                                    next_n = new myNode(queryD, np.endNode, -1);
+                                    next_n = new myNode(queryD, np.endNode, this.distance_threshold);
+                                    this.tmpStoreNodes.put(next_n.id, next_n);
+//                                System.out.println("new "+next_n.id);
+                                }
+
+                                //lemma 2
+                                if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
+//                            if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q) && next_n.distance_q <= 10000) {
+//                            System.out.println(next_n.skyPaths.isEmpty());
+                                    if (next_n.addToSkyline(np)) {
+                                        mqueue.add(next_n);
+                                    }
+                                }
+                            }
+
+                            index++;
+                        } else {
+                            v.skyPaths.remove(index);
+                        }
+
+                    } else {
+                        index++;
                     }
                 }
             }
@@ -327,6 +357,7 @@ public class BaseMethod_approx {
         shut_db_time = System.currentTimeMillis() - shut_db_time;
 
         s_sum = System.currentTimeMillis() - s_sum;
+//        System.out.println(s_sum+" "+db_time+" "+shut_db_time+" "+index_s);
         sb.append("|" + (s_sum - db_time - shut_db_time - (index_s / 1000000)) + "|");
         sb.append("," + this.skyPaths.size() + "," + counter + "|");
         sb.append(addResult_rt / 1000000 + "(" + (this.add_oper / 1000000) + "+" + (this.check_add_oper / 1000000)
@@ -499,10 +530,10 @@ public class BaseMethod_approx {
                     distz = temp_distz;
                 }
 
-                if (temp_distz <= this.distance_threshold) {
-                    counter_in_range++;
-//                    System.out.println(temp_distz);
-                }
+//                if (temp_distz <= this.distance_threshold) {
+//                    counter_in_range++;
+////                    System.out.println(temp_distz);
+//                }
             }
 
 //            this.distance_threshold = distz;
@@ -511,7 +542,7 @@ public class BaseMethod_approx {
         }
 
 
-        System.out.println(counter_in_range + " bus stations within hotel " + this.distance_threshold);
+//        System.out.println(counter_in_range + " bus stations within hotel " + this.distance_threshold);
         return nn_node.getId();
     }
 

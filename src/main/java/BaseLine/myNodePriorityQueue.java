@@ -33,6 +33,9 @@ public class myNodePriorityQueue {
 }
 
 
+
+
+
 class NodeComparator implements Comparator<myNode> {
     @Override
     public int compare(myNode o1, myNode o2) {
@@ -191,9 +194,9 @@ class defaultComparator implements Comparator {
         float r;
         int i;
 
-        float points[] = new float[mbr.length/2];
+        float points[] = new float[mbr.length / 2];
 
-        for (i = 0; i < points.length ; i++) {
+        for (i = 0; i < points.length; i++) {
             if (points[i] < mbr[2 * i]) {
                 r = mbr[2 * i];
             } else {
@@ -211,7 +214,7 @@ class defaultComparator implements Comparator {
 
     private double getDistance_Point(float[] mbr) {
         double dist = 0;
-        for (int i = 0; i < mbr.length ; i += 2) {
+        for (int i = 0; i < mbr.length; i += 2) {
             dist += Math.pow(mbr[i], 2);
         }
         return Math.sqrt(dist);

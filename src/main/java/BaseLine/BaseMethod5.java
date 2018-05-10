@@ -1,6 +1,7 @@
 package BaseLine;
 
 import BaseLine.approximate.range.BaseMethod_approx;
+import BaseLine.approximate.subpath.BaseMethod_subPath;
 import RstarTree.Data;
 import neo4jTools.connector;
 import org.apache.commons.cli.*;
@@ -64,7 +65,7 @@ public class BaseMethod5 {
         options.addOption("hn", "hotelsnum", true, "number of hotels in the graph");
         options.addOption("r", "range", true, "range of the distance to be considered");
         options.addOption("t", "threshold", true, "Just consider the bus stops in threshold");
-        options.addOption("h","help",false,"print the help of this command");
+        options.addOption("h", "help", false, "print the help of this command");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -84,7 +85,7 @@ public class BaseMethod5 {
         } else {
 
             if (g_str == null) {
-                graph_size = 2000;
+                graph_size = 10000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -96,30 +97,30 @@ public class BaseMethod5 {
             }
 
             if (qn_str == null) {
-                query_num = 3;
+                query_num = 20;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
 
             if (hn_str == null) {
-                hotels_num = 1000;
+                hotels_num = 8000;
             } else {
                 hotels_num = Integer.parseInt(hn_str);
             }
 
             if (r_str == null) {
-                range = 13;
+                range = 8;
             } else {
                 range = Integer.parseInt(r_str);
             }
 
             if (t_str == null) {
-                threshold = 10;
+                threshold = 8;
             } else {
                 threshold = Integer.parseInt(t_str);
             }
 
-
+//            int[] id_list = new int[]{462,472,791};
             Data[] queryList = new Data[query_num];
 
 
@@ -131,16 +132,20 @@ public class BaseMethod5 {
             }
 
 
-//        for (int i = 0; i < query_num; i++) {
-//            BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range,hotels_num);
-//            bMethod.baseline(queryList[i]);
-//
-//        }
-
-            System.out.println("=====================================================");
-
-
             for (int i = 0; i < query_num; i++) {
+//                BaseMethod base = new BaseMethod(graph_size, degree, threshold, range, hotels_num);
+//                base.baseline(queryList[i]);
+//
+//                System.out.println("=====================================================");
+//
+//
+//                BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
+//                bMethod.baseline(queryList[i]);
+
+
+                System.out.println("=====================================================");
+
+
                 System.out.println("=====================================================");
 
                 BaseMethod5 all_lemmas = new BaseMethod5(graph_size, degree, range, hotels_num);
@@ -151,45 +156,11 @@ public class BaseMethod5 {
                 approx_method.baseline(queryList[i]);
 
 
-//            System.out.println("=====================================================");
-                HashSet<Integer> differ_base_with_apprx = new HashSet<>();
-                for (Result r : all_lemmas.skyPaths) {
-                    boolean flag = false;
-                    for (BaseLine.approximate.range.Result r1 : approx_method.skyPaths) {
-                        if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                            flag = true;
-                            break;
-                        }
+                BaseMethod_subPath approx_sub = new BaseMethod_subPath(graph_size, degree, threshold, range, hotels_num);
+                approx_sub.baseline(queryList[i]);
 
-                    }
-                    if (!flag)
-                        differ_base_with_apprx.add(r.end.getPlaceId());
-                }
-
-//            for (int i : differ_base_with_apprx) {
-//                System.out.println(i);
-//            }
-                System.out.print(differ_base_with_apprx.size());
-
-//            System.out.println("=====================================================");
-                HashSet<Integer> differ_apprx_with_base = new HashSet<>();
-                for (BaseLine.approximate.range.Result r1 : approx_method.skyPaths) {
-                    boolean flag = false;
-                    for (Result r : all_lemmas.skyPaths) {
-                        if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                            flag = true;
-                            break;
-                        }
-
-                    }
-                    if (!flag)
-                        differ_apprx_with_base.add(r1.end.getPlaceId());
-                }
-                System.out.println("    " + differ_apprx_with_base.size());
-
-//            for (int i : differ_apprx_with_base) {
-//                System.out.println(i);
-//            }
+                testTools.statistic.goodnessAnalyze(all_lemmas.skyPaths, approx_method.skyPaths, "edu");
+                testTools.statistic.goodnessAnalyze(all_lemmas.skyPaths, approx_sub.skyPaths, "edu");
             }
         }
     }
@@ -279,7 +250,7 @@ public class BaseMethod5 {
 
             long rt = System.currentTimeMillis();
 
-            myNode s = new myNode(queryD, startNode, this.graphdb);
+            myNode s = new myNode(queryD, startNode.getId(), -1);
 
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
@@ -301,15 +272,15 @@ public class BaseMethod5 {
                         expasion_rt += (System.nanoTime() - ee);
                         for (path np : new_paths) {
                             myNode next_n;
-                            if (this.tmpStoreNodes.containsKey(np.endNode.getId())) {
-                                next_n = tmpStoreNodes.get(np.endNode.getId());
+                            if (this.tmpStoreNodes.containsKey(np.endNode)) {
+                                next_n = tmpStoreNodes.get(np.endNode);
                             } else {
-                                next_n = new myNode(queryD, np.endNode, this.graphdb);
+                                next_n = new myNode(queryD, np.endNode, -1);
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
 
                             //lemma 2
-                            if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q)) {
+                            if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
                                 if (next_n.addToSkyline(np)) {
                                     mqueue.add(next_n);
                                 }
@@ -392,8 +363,8 @@ public class BaseMethod5 {
             this.finalDatas.add(r.end);
 
             if (r.p != null) {
-                for (Node nn : r.p.nodes) {
-                    final_bus_stops.add(nn.getId());
+                for (Long nn : r.p.nodes) {
+                    final_bus_stops.add(nn);
                 }
             }
         }
@@ -443,7 +414,7 @@ public class BaseMethod5 {
 
 
         long rr = System.nanoTime();
-        myNode my_endNode = this.tmpStoreNodes.get(np.endNode.getId());
+        myNode my_endNode = this.tmpStoreNodes.get(np.endNode);
         this.map_operation += System.nanoTime() - rr;
 
         long dsad = System.nanoTime();
