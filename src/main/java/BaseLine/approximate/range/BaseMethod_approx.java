@@ -112,6 +112,7 @@ public class BaseMethod_approx {
         long counter = 0;
         long addResult_rt = 0;
         long expasion_rt = 0;
+        int sk_counter = 0; //the number of total candidate hotels of each bus station
 
 
         db_time = System.currentTimeMillis() - db_time;
@@ -147,7 +148,7 @@ public class BaseMethod_approx {
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
 
-//        System.out.println("there are " + this.sNodes.size() + " BBS hotels");
+        sb.append(this.sNodes.size()+" "+this.sky_hotel.size()+" ");
 
 
         for (Data d : sNodes) {
@@ -244,24 +245,17 @@ public class BaseMethod_approx {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
-//            System.out.println("expansion " + exploration_rt + "  ms  ");
-
-//            if (true) {
-//                System.out.println(this.tmpStoreNodes.size());
-//                n.shutdownDB();
-//                return;
-//            }
 
             long tt_sl = 0;
 
 
-            int sk_counter = 0; //the number of total candidate hotels of each bus station
 //            hotels_scope = new HashMap<>();
 
 //            System.out.println("there are " + this.tmpStoreNodes.size() + " bus stops are visited");
 
 //            int process_visited_stations = 0;
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
+                sk_counter += entry.getValue().skyPaths.size();
 //                process_visited_stations++;
                 long t_index_s = System.nanoTime();
 
@@ -275,7 +269,7 @@ public class BaseMethod_approx {
 //                        double d2 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], d.location[0], d.location[1]);
                         double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
                         double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2 && d2 <= this.distance_threshold) {
+                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2 && this.distance_threshold > d2) {
 //                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
                             d_list.add(d);
                             break;
@@ -284,32 +278,15 @@ public class BaseMethod_approx {
                 }
 
 //                my_n.d_list = new ArrayList<>(d_list);
-                sk_counter += d_list.size();
+//                sk_counter += d_list.size();
 
                 index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-//                    if (!p.rels.isEmpty()) {
                     long ats = System.nanoTime();
                     boolean f = addToSkylineResult(p, d_list);
                     addResult_rt += System.nanoTime() - ats;
-//                    }
                 }
-//
-//                for (path p : my_n.skyPaths) {
-////                    if (!p.rels.isEmpty()) {
-//                    long ats = System.nanoTime();
-//
-//                    boolean f = addToSkylineResult(p, d_list);
-//
-//                    addResult_rt += System.nanoTime() - ats;
-////                    }
-//                }
-
-//                if (process_visited_stations % 200 == 0) {
-//                    System.out.println("processed visited stations : " + process_visited_stations + "................." + this.skyPaths.size());
-//                }
-
             }
 
             visited_bus_stop = this.tmpStoreNodes.size();
@@ -341,18 +318,11 @@ public class BaseMethod_approx {
         HashSet<Long> final_bus_stops = new HashSet<>();
 
         for (Result r : sortedList) {
-//            System.out.println(r);
             this.finalDatas.add(r.end);
-
-//            if (r.p != null) {
-//                for (long nn : r.p.nodes) {
-//                    final_bus_stops.add(nn);
-//                }
-//            }
         }
 
 
-        sb.append(finalDatas.size() + " " + this.skyPaths.size());
+        sb.append(finalDatas.size() + " " + this.skyPaths.size()+" "+sk_counter );
 
         int bus_stop_in_result = final_bus_stops.size();
 

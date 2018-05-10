@@ -85,7 +85,7 @@ public class BaseMethod5 {
         } else {
 
             if (g_str == null) {
-                graph_size = 10000;
+                graph_size = 4000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -97,25 +97,25 @@ public class BaseMethod5 {
             }
 
             if (qn_str == null) {
-                query_num = 20;
+                query_num = 1;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
 
             if (hn_str == null) {
-                hotels_num = 8000;
+                hotels_num = 2000;
             } else {
                 hotels_num = Integer.parseInt(hn_str);
             }
 
             if (r_str == null) {
-                range = 8;
+                range = 10;
             } else {
                 range = Integer.parseInt(r_str);
             }
 
             if (t_str == null) {
-                threshold = 8;
+                threshold = 10;
             } else {
                 threshold = Integer.parseInt(t_str);
             }
@@ -185,12 +185,14 @@ public class BaseMethod5 {
 
         long s_sum = System.currentTimeMillis();
         long index_s = 0;
+        int sk_counter = 0; //the number of total candidate hotels of each bus station
 
         long r1 = System.currentTimeMillis();
         //Find the hotels that aren't dominated by the query point
         sky.BBS(queryD);
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
+        sb.append(this.sNodes.size()+" "+this.sky_hotel.size()+" ");
 
         for (Data d : sNodes) {
             double[] c = new double[constants.path_dimension + 3];
@@ -297,9 +299,10 @@ public class BaseMethod5 {
             long tt_sl = 0;
 
 
-            int sk_counter = 0; //the number of total candidate hotels of each bus station
 //            hotels_scope = new HashMap<>();
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
+                sk_counter += entry.getValue().skyPaths.size();
+
                 long t_index_s = System.nanoTime();
 
                 myNode my_n = entry.getValue();
@@ -317,9 +320,6 @@ public class BaseMethod5 {
                     }
                 }
 
-//                my_n.d_list = new ArrayList<>(d_list);
-                sk_counter += d_list.size();
-
                 index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
@@ -334,7 +334,6 @@ public class BaseMethod5 {
 
 
             }
-//            System.out.println(sk_counter);
 
 
             sb.append(bbs_rt + "," + nn_rt + "," + exploration_rt + "," + (index_s / 1000000));
@@ -370,7 +369,7 @@ public class BaseMethod5 {
         }
 
 
-        sb.append(finalDatas.size() + " " + this.skyPaths.size());
+        sb.append(finalDatas.size() + " " + this.skyPaths.size()+" "+sk_counter);
 
         int visited_bus_stop = this.tmpStoreNodes.size();
         int bus_stop_in_result = final_bus_stops.size();

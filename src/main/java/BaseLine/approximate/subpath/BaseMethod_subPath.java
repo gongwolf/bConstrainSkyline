@@ -110,6 +110,7 @@ public class BaseMethod_subPath {
         long counter = 0;
         long addResult_rt = 0;
         long expasion_rt = 0;
+        int sk_counter = 0; //the number of total candidate hotels of each bus station
 
         db_time = System.currentTimeMillis() - db_time;
         r1 = System.currentTimeMillis();
@@ -142,6 +143,9 @@ public class BaseMethod_subPath {
         sky.BBS(queryD);
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
+
+        sb.append(this.sNodes.size()+" "+this.sky_hotel.size()+" ");
+
 
         for (Data d : sNodes) {
             double[] c = new double[constants.path_dimension + 3];
@@ -214,7 +218,7 @@ public class BaseMethod_subPath {
                                     int pp_index = 0;
                                     for (; pp_index < needToProcess.size(); ) {
                                         path pp = needToProcess.get(pp_index);
-                                        if (pp.costs[i] > 0 && p.costs[i] < pp.costs[i]) {
+                                        if (pp.costs[i] > 0 && p.costs[i] > 0 && p.costs[i] < pp.costs[i]) {
                                             needToProcess.add(p);
                                             needToProcess.remove(pp_index);
                                         } else {
@@ -228,7 +232,7 @@ public class BaseMethod_subPath {
                 }
 
 
-                for (index = 0; index < v.skyPaths.size(); index++) {
+                for (index = 0; index < v.skyPaths.size();) {
                     path p = v.skyPaths.get(index);
 
                     if (!p.expaned) {
@@ -285,14 +289,13 @@ public class BaseMethod_subPath {
             long tt_sl = 0;
 
 
-            int sk_counter = 0; //the number of total candidate hotels of each bus station
 //            hotels_scope = new HashMap<>();
 
 //            System.out.println("there are " + this.tmpStoreNodes.size() + " bus stops are visited");
 
 //            int process_visited_stations = 0;
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
-//                process_visited_stations++;
+                sk_counter += entry.getValue().skyPaths.size();
                 long t_index_s = System.nanoTime();
 
                 myNode my_n = entry.getValue();
@@ -305,7 +308,7 @@ public class BaseMethod_subPath {
 //                        double d2 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], d.location[0], d.location[1]);
                         double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
                         double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2 && d2 <= this.distance_threshold) {
+                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2 && this.distance_threshold > d2) {
 //                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
                             d_list.add(d);
                             break;
@@ -314,7 +317,7 @@ public class BaseMethod_subPath {
                 }
 
 //                my_n.d_list = new ArrayList<>(d_list);
-                sk_counter += d_list.size();
+//                sk_counter += d_list.size();
 
                 index_s += (System.nanoTime() - t_index_s);
 
@@ -325,21 +328,6 @@ public class BaseMethod_subPath {
                     addResult_rt += System.nanoTime() - ats;
 //                    }
                 }
-//
-//                for (path p : my_n.skyPaths) {
-////                    if (!p.rels.isEmpty()) {
-//                    long ats = System.nanoTime();
-//
-//                    boolean f = addToSkylineResult(p, d_list);
-//
-//                    addResult_rt += System.nanoTime() - ats;
-////                    }
-//                }
-
-//                if (process_visited_stations % 200 == 0) {
-//                    System.out.println("processed visited stations : " + process_visited_stations + "................." + this.skyPaths.size());
-//                }
-
             }
 
             visited_bus_stop = this.tmpStoreNodes.size();
@@ -372,18 +360,11 @@ public class BaseMethod_subPath {
         HashSet<Long> final_bus_stops = new HashSet<>();
 
         for (Result r : sortedList) {
-//            System.out.println(r);
             this.finalDatas.add(r.end);
-
-//            if (r.p != null) {
-//                for (long nn : r.p.nodes) {
-//                    final_bus_stops.add(nn);
-//                }
-//            }
         }
 
 
-        sb.append(finalDatas.size() + " " + this.skyPaths.size());
+        sb.append(finalDatas.size() + " " + this.skyPaths.size()+" "+sk_counter);
 
         int bus_stop_in_result = final_bus_stops.size();
 
