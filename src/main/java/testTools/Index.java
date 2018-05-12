@@ -261,10 +261,10 @@ public class Index {
                     //It means the hotel could be a candidate hotel of the bus stop n.
                     for (Data d : sk.allNodes) {
                         for (Data s_d : sk.sky_hotels) {
-                            double d1 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], s_d.location[0], s_d.location[1]);
-                            double d2 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], d.location[0], d.location[1]);
-//                            double d1 = Math.sqrt(Math.pow(node.locations[0] - s_d.location[0], 2) + Math.pow(node.locations[1] - s_d.location[1], 2));
-//                            double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
+//                            double d1 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], s_d.location[0], s_d.location[1]);
+//                            double d2 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], d.location[0], d.location[1]);
+                            double d1 = Math.sqrt(Math.pow(node.locations[0] - s_d.location[0], 2) + Math.pow(node.locations[1] - s_d.location[1], 2));
+                            double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
                             if (d1 > d2 && this.distance_threshold > d2 && checkDominated(s_d.getData(), d.getData())) {
                                 d_list.add(d);
                                 break;
