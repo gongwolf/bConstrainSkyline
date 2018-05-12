@@ -148,7 +148,7 @@ public class BaseMethod_approx {
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
 
-        sb.append(this.sNodes.size()+" "+this.sky_hotel.size()+" ");
+        sb.append(this.sNodes.size() + " " + this.sky_hotel.size() + " ");
 
 
         for (Data d : sNodes) {
@@ -283,9 +283,11 @@ public class BaseMethod_approx {
                 index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-                    long ats = System.nanoTime();
-                    boolean f = addToSkylineResult(p, d_list);
-                    addResult_rt += System.nanoTime() - ats;
+                    if (!p.rels.isEmpty()) {
+                        long ats = System.nanoTime();
+                        boolean f = addToSkylineResult(p, d_list);
+                        addResult_rt += System.nanoTime() - ats;
+                    }
                 }
             }
 
@@ -322,7 +324,7 @@ public class BaseMethod_approx {
         }
 
 
-        sb.append(finalDatas.size() + " " + this.skyPaths.size()+" "+sk_counter );
+        sb.append(finalDatas.size() + " " + this.skyPaths.size() + " " + sk_counter + "  " + add_counter + " ");
 
         int bus_stop_in_result = final_bus_stops.size();
 

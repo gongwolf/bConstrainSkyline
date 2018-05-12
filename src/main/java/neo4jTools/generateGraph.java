@@ -28,15 +28,13 @@ public class generateGraph {
 
 
     public static void main(String args[]) throws ParseException {
-        int numberNodes = 4000;
-        int numberofDegree = 5;
-        int numberofDimen = 3;
+        int numberNodes, numberofDegree, numberofDimen;
 
 
         Options options = new Options();
         options.addOption("g", "grahpsize", true, "number of nodes in the graph");
         options.addOption("de", "degree", true, "degree of the graphe");
-        options.addOption("di","dimension",true,"dimension of the graph");
+        options.addOption("di", "dimension", true, "dimension of the graph");
         options.addOption("h", "help", false, "print the help of this command");
 
         CommandLineParser parser = new DefaultParser();
@@ -54,13 +52,13 @@ public class generateGraph {
         } else {
 
             if (g_str == null) {
-                numberNodes = 2000;
+                numberNodes = 8000;
             } else {
                 numberNodes = Integer.parseInt(g_str);
             }
 
             if (de_str == null) {
-                numberofDegree = 4;
+                numberofDegree = 3;
             } else {
                 numberofDegree = Integer.parseInt(de_str);
             }

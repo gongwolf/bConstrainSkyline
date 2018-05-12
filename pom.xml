@@ -68,11 +68,11 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>BaseMethod5</finalName>
+                    <finalName>generateGraph</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>BaseLine.BaseMethod5</mainClass>
+                            <mainClass>neo4jTools.generateGraph</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

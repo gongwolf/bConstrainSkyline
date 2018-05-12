@@ -85,7 +85,7 @@ public class BaseMethod5 {
         } else {
 
             if (g_str == null) {
-                graph_size = 4000;
+                graph_size = 8000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -97,25 +97,25 @@ public class BaseMethod5 {
             }
 
             if (qn_str == null) {
-                query_num = 1;
+                query_num = 3;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
 
             if (hn_str == null) {
-                hotels_num = 2000;
+                hotels_num = 5000;
             } else {
                 hotels_num = Integer.parseInt(hn_str);
             }
 
             if (r_str == null) {
-                range = 10;
+                range = 8;
             } else {
                 range = Integer.parseInt(r_str);
             }
 
             if (t_str == null) {
-                threshold = 10;
+                threshold = 8;
             } else {
                 threshold = Integer.parseInt(t_str);
             }
@@ -163,10 +163,10 @@ public class BaseMethod5 {
                 testTools.statistic.goodnessAnalyze(all_lemmas.skyPaths, approx_sub.skyPaths, "edu");
 
 
-                for(Result r : approx_sub.skyPaths)
-                {
-                    System.out.println(r);
-                }
+//                for(Result r : approx_sub.skyPaths)
+//                {
+//                    System.out.println(r);
+//                }
             }
         }
     }
@@ -375,7 +375,7 @@ public class BaseMethod5 {
         }
 
 
-        sb.append(finalDatas.size() + " " + this.skyPaths.size()+" "+sk_counter);
+        sb.append(finalDatas.size() + " " + this.skyPaths.size() + " " + sk_counter+"  "+add_counter+" ");
 
         int visited_bus_stop = this.tmpStoreNodes.size();
         int bus_stop_in_result = final_bus_stops.size();

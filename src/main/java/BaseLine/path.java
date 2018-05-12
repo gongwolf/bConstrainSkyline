@@ -169,9 +169,9 @@ public class path {
             }
         }
 
-        if (!o_path.nodes.equals(this.nodes) || !o_path.rels.equals(this.rels)) {
-            return false;
-        }
+//        if (!o_path.nodes.equals(this.nodes) || !o_path.rels.equals(this.rels)) {
+//            return false;
+//        }
         return true;
     }
 
