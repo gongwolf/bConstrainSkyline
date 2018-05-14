@@ -31,6 +31,8 @@ public class BaseMethod1 {
     private long sky_add_result_counter;
     private ArrayList<Data> sky_hotel;
     private boolean add;
+    String home_folder = System.getProperty("user.home");
+
 //    HashMap<Integer, Double> dominated_checking = new HashMap<>();
 
 
@@ -38,7 +40,7 @@ public class BaseMethod1 {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
-        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
+        this.treePath = home_folder+"/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
         this.threshold = threshold;
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
@@ -109,7 +111,7 @@ public class BaseMethod1 {
 //        System.out.println("==========");
 //
 
-        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        String graphPath = home_folder+"/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         //System.out.println(graphPath);
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);

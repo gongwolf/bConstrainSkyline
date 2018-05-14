@@ -41,14 +41,15 @@ public class BaseMethod5 {
     private long pro_add_result_counter; // how many path + hotel combination of the results are generated
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
+    String home_folder = System.getProperty("user.home");
 
     public BaseMethod5(int graph_size, String degree, double range, int hotels_num) {
         r = new Random(System.nanoTime());
         this.graph_size = graph_size;
         this.degree = degree;
-        this.graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
-        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
-        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath = home_folder+"/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        this.treePath = home_folder+"/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
+        this.dataPath = home_folder+"/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
     }
@@ -133,14 +134,14 @@ public class BaseMethod5 {
 
 
             for (int i = 0; i < query_num; i++) {
-//                BaseMethod base = new BaseMethod(graph_size, degree, threshold, range, hotels_num);
-//                base.baseline(queryList[i]);
-//
-//                System.out.println("=====================================================");
-//
-//
-//                BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
-//                bMethod.baseline(queryList[i]);
+                BaseMethod base = new BaseMethod(graph_size, degree, threshold, range, hotels_num);
+                base.baseline(queryList[i]);
+
+                System.out.println("=====================================================");
+
+
+                BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
+                bMethod.baseline(queryList[i]);
 
 
                 System.out.println("=====================================================");

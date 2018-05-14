@@ -44,19 +44,22 @@ public class BaseMethod_subPath {
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
 
+    String home_folder = System.getProperty("user.home");
+
+
     public BaseMethod_subPath(int graph_size, String degree, double distance_threshold, double range, int hotels_num) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
         this.distance_threshold = distance_threshold;
-//        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
-//        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".txt";
+//        this.treePath = home_folder+"/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
+//        this.dataPath = home_folder+"/shared_git/bConstrainSkyline/data/staticNode_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".txt";
 //        System.out.println(this.treePath);
 //        System.out.println(this.dataPath);
 //        System.exit(0);
 
-        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
-        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+        this.treePath = home_folder+"/shared_git/bConstrainSkyline/data/real_tree.rtr";
+        this.dataPath = home_folder+"/shared_git/bConstrainSkyline/data/staticNode_real.txt";
     }
 
 
@@ -101,8 +104,8 @@ public class BaseMethod_subPath {
 //        System.out.println(queryD);
         long r1 = System.currentTimeMillis();
 
-        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
-//        String graphPath = "/home/gqxwolf/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        String graphPath = home_folder+"/neo4j334/testdb_real_50/databases/graph.db";
+//        String graphPath = home_folder+"/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);

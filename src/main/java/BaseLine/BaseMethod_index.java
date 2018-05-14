@@ -31,7 +31,6 @@ public class BaseMethod_index {
     long map_operation = 0;
     long checkEmpty = 0;
     long read_data = 0;
-    //Todo: each hotel know the distance to the hotel than dominate it.
     HashMap<Integer, Double> dominated_checking = new HashMap<>(); //
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
@@ -44,6 +43,8 @@ public class BaseMethod_index {
     private long pro_add_result_counter; // how many path + hotel combination of the results are generated
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
+    String home_folder = System.getProperty("user.home");
+
 
     public BaseMethod_index(int graph_size, String degree, double range, int hotels_num, double distance_threshold) {
         r = new Random(System.nanoTime());
@@ -55,9 +56,9 @@ public class BaseMethod_index {
 //        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
 
 
-        this.graphPath = "/home/gqxwolf/neo4j334/testdb_real_50_int/databases/graph.db";
-        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
-        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+        this.graphPath = home_folder+"/neo4j334/testdb_real_50_int/databases/graph.db";
+        this.treePath = home_folder+"/shared_git/bConstrainSkyline/data/real_tree.rtr";
+        this.dataPath = home_folder+"/shared_git/bConstrainSkyline/data/staticNode_real.txt";
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
     }
@@ -136,7 +137,7 @@ public class BaseMethod_index {
             for (int i = 0; i < query_num; i++) {
                 BaseMethod_index index_bm = new BaseMethod_index(graph_size, degree, range, hotels_num, threshold);
                 int random_place_id = index_bm.getRandomNumberInRange_int(0, hotels_num - 1);
-                Data queryD = index_bm.getDataById(13043);
+                Data queryD = index_bm.getDataById(random_place_id);
                 queryList[i] = queryD;
             }
 
