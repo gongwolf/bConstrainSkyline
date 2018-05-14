@@ -31,14 +31,14 @@ public class Index {
     public Index() {
         this.distance_threshold = 6;
 
-        this.home_folder = base + "/test_20000_4_6.0_8000/";
+        this.home_folder = base + "/test_2000_4_12.0_1000/";
 //        this.source_data_tree = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
 //        this.neo4j_db = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
 //        this.node_info_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50_int/data/NodeInfo.txt";
 
-        this.source_data_tree = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_20000_4_6.0_8000.rtr";
-        this.neo4j_db = "/home/gqxwolf/neo4j334/testdb20000_4/databases/graph.db";
-        this.node_info_path = "/home/gqxwolf/mydata/projectData/testGraph20000_4/data/NodeInfo.txt";
+        this.source_data_tree = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_2000_4_12.0_1000.rtr";
+        this.neo4j_db = "/home/gqxwolf/neo4j334/testdb2000_4/databases/graph.db";
+        this.node_info_path = "/home/gqxwolf/mydata/projectData/testGraph2000_4/data/NodeInfo.txt";
 
 
         this.num_nodes = getLineNumbers();

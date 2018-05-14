@@ -78,7 +78,7 @@ public class BaseMethod_subPath {
 //        int[] numbers = new int[]{241};
         for (int i = 0; i < query_num; i++) {
             int random_place_id = b_appx.getRandomNumberInRange_int(0, hotels_num - 1);
-            Data queryD = b_appx.getDataById(random_place_id);
+            Data queryD = b_appx.getDataById(983);
             queryList[i] = queryD;
         }
 

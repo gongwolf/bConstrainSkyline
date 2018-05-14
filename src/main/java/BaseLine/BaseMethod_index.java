@@ -59,7 +59,7 @@ public class BaseMethod_index {
         this.graphPath = home_folder+"/neo4j334/testdb_real_50_int/databases/graph.db";
         this.treePath = home_folder+"/shared_git/bConstrainSkyline/data/real_tree.rtr";
         this.dataPath = home_folder+"/shared_git/bConstrainSkyline/data/staticNode_real.txt";
-//        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
+        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
     }
 
@@ -95,7 +95,7 @@ public class BaseMethod_index {
         } else {
 
             if (g_str == null) {
-                graph_size = 8000;
+                graph_size = 2000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -107,25 +107,25 @@ public class BaseMethod_index {
             }
 
             if (qn_str == null) {
-                query_num = 3;
+                query_num = 1;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
 
             if (hn_str == null) {
-                hotels_num = 5000;
+                hotels_num = 1000;
             } else {
                 hotels_num = Integer.parseInt(hn_str);
             }
 
             if (r_str == null) {
-                range = 8;
+                range = 12;
             } else {
                 range = Integer.parseInt(r_str);
             }
 
             if (t_str == null) {
-                threshold = 300;
+                threshold = 12;
             } else {
                 threshold = Integer.parseInt(t_str);
             }
@@ -193,7 +193,7 @@ public class BaseMethod_index {
                 addToSkyline(r);
             }
         }
-//        System.out.println(this.skyPaths.size());
+        System.out.println(this.skyPaths.size());
 //        for (Result r : this.skyPaths) {
 //            System.out.println(r);
 //        }
@@ -290,7 +290,7 @@ public class BaseMethod_index {
             System.out.println("expansion step finished in " + expasion_rt + " ms");
 
 
-            Index idx = new Index(300);
+            Index idx = new Index();
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 sk_counter += entry.getValue().skyPaths.size();
 
@@ -400,11 +400,9 @@ public class BaseMethod_index {
         boolean flag = false;
 
         for (Data d : d_list) {
-//            if (np.startNode.getId() == 286 && np.endNode.getId() == 1862) {
-//                if (d.getPlaceId() == 62) {
-//                    System.out.println("true");
-//                }
-//            }
+            if (!this.dominated_checking.containsKey(d.getPlaceId()) || d.getPlaceId() == queryD.getPlaceId()) {
+                continue;
+            }
 
             this.pro_add_result_counter++;
             long rrr = System.nanoTime();
@@ -416,6 +414,8 @@ public class BaseMethod_index {
             double[] final_costs = new double[np.costs.length + 3];
             System.arraycopy(np.costs, 0, final_costs, 0, np.costs.length);
 //            double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
+//            d.distance_q = Math.sqrt(Math.pow(queryD.location[0] - d.location[0], 2) + Math.pow(queryD.location[1] - d.location[1], 2));
+
             double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
             d.distance_q = GoogleMaps.distanceInMeters(queryD.location[0], queryD.location[1], d.location[0], d.location[1]);
 
