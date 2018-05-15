@@ -154,7 +154,7 @@ public class BaseMethod3 {
 
             long rt = System.currentTimeMillis();
 
-            myNode s = new myNode(queryD, startNode.getId(),-1);
+            myNode s = new myNode(queryD, startNode.getId(), -1);
 
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
@@ -300,7 +300,10 @@ public class BaseMethod3 {
 //    private boolean addToSkylineResult(path np, Data d) {
         this.add_counter++;
         long r2a = System.nanoTime();
-        if (np.rels.isEmpty()) {
+//        if (np.rels.isEmpty()) {
+//            return false;
+//        }
+        if (np.isDummyPath()) {
             return false;
         }
         this.checkEmpty += System.nanoTime() - r2a;

@@ -4,6 +4,7 @@ import BaseLine.Skyline;
 import BaseLine.myNode;
 import RstarTree.Data;
 import neo4jTools.connector;
+import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.neo4j.graphdb.Transaction;
 
@@ -14,17 +15,15 @@ import java.util.Comparator;
 import java.util.Random;
 
 public class Index {
-    private final String source_data_tree;
-    private final String neo4j_db;
-    //    private final int pagesize_data;
-    private final int pagesize_list;
-    private final String node_info_path;
-
-
-    private final String base = "/home/gqxwolf/shared_git/bConstrainSkyline/data/index";
-    private final long num_nodes;
-
+    private final String base = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/index";
+    private int bits_place_id;
     String home_folder;
+    private String source_data_tree;
+    private String neo4j_db;
+    //    private final int pagesize_data;
+    private int pagesize_list;
+    private String node_info_path;
+    private long num_nodes;
     private double distance_threshold;
 
 
@@ -47,17 +46,21 @@ public class Index {
 //        this.pagesize_data = 2048;
     }
 
-    public Index(double distance_threshold) {
-        this.distance_threshold = distance_threshold;
 
-        this.home_folder = base + "/real_data_" + this.distance_threshold + "/";
-        this.source_data_tree = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
-        this.neo4j_db = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
-        this.node_info_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50_int/data/NodeInfo.txt";
+    public Index(int graphsize, String degree, double range, int num_hotels, double distance_thresholds) {
+        this.distance_threshold = distance_thresholds;
 
-//        this.source_data_tree = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_8000_4_8.0_5000.rtr";
-//        this.neo4j_db = "/home/gqxwolf/neo4j334/testdb8000_4/databases/graph.db";
-//        this.node_info_path = "/home/gqxwolf/mydata/projectData/testGraph8000_4/data/NodeInfo.txt";
+        if (distance_thresholds != -1) {
+            this.home_folder = base + "/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels;
+            this.source_data_tree = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels + ".rtr";
+            this.neo4j_db = System.getProperty("user.home") + "/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
+            this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/NodeInfo.txt";
+        }else{
+            this.home_folder = base + "/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels+"_all";
+            this.source_data_tree = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels + ".rtr";
+            this.neo4j_db = System.getProperty("user.home") + "/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
+            this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/NodeInfo.txt";
+        }
 
 
         this.num_nodes = getLineNumbers();
@@ -66,23 +69,99 @@ public class Index {
 
     }
 
-    public static void main(String args[]) {
-        //int[] t_list = new int[]{300, 500, 800};
-        //for (int threshold : t_list) {
-        Index idx = new Index();
-        idx.buildIndex(true);
-        //}
-//        idx.test();
-//        idx.read_d_list_from_disk(678);
+    public Index(double distance_threshold) {
+        this.distance_threshold = distance_threshold;
 
+        this.home_folder = base + "/real_data_" + this.distance_threshold + "/";
+        this.source_data_tree = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/real_tree.rtr";
+        this.neo4j_db = System.getProperty("user.home") + "/neo4j334/testdb_real_50/databases/graph.db";
+        this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph_real_50_int/data/NodeInfo.txt";
+
+//        this.source_data_tree = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_8000_4_8.0_5000.rtr";
+//        this.neo4j_db = "/home/gqxwolf/neo4j334/testdb8000_4/databases/graph.db";
+//        this.node_info_path = "/home/gqxwolf/mydata/projectData/testGraph8000_4/data/NodeInfo.txt";
+
+
+        this.num_nodes = getLineNumbers();
+        
+        this.bits_place_id = Long.toBinaryString(this.num_nodes).length();
+
+        this.pagesize_list = 1024;
+
+    }
+
+    public static void main(String args[]) throws ParseException {
+
+
+        int graph_size, hotels_num;
+        String degree;
+        double range, distance_thresholds;
+
+        Options options = new Options();
+        options.addOption("g", "grahpsize", true, "number of nodes in the graph");
+        options.addOption("de", "degree", true, "degree of the graphe");
+        options.addOption("hn", "hotelsnum", true, "number of hotels in the graph");
+        options.addOption("r", "range", true, "range of the distance to be considered");
+        options.addOption("t", "distance_thresholds", true, "threshold within");
+        options.addOption("h", "help", false, "print the help of this command");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
+
+        String g_str = cmd.getOptionValue("g");
+        String de_str = cmd.getOptionValue("de");
+        String hn_str = cmd.getOptionValue("hn");
+        String r_str = cmd.getOptionValue("r");
+        String t_str = cmd.getOptionValue("y");
+
+
+        if (cmd.hasOption("h")) {
+            HelpFormatter formatter = new HelpFormatter();
+            String header = "Build index for given graph and data set :";
+            formatter.printHelp("java -jar BuildIndex.jar", header, options, "", false);
+        } else {
+
+            if (g_str == null) {
+                graph_size = 2000;
+            } else {
+                graph_size = Integer.parseInt(g_str);
+            }
+
+            if (de_str == null) {
+                degree = "4";
+            } else {
+                degree = de_str;
+            }
+
+            if (hn_str == null) {
+                hotels_num = 1000;
+            } else {
+                hotels_num = Integer.parseInt(hn_str);
+            }
+
+            if (r_str == null) {
+                range = 12;
+            } else {
+                range = Double.parseDouble(r_str);
+            }
+
+            if (t_str == null) {
+                distance_thresholds = -1;
+            } else {
+                distance_thresholds = Double.parseDouble(t_str);
+            }
+
+            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds);
+            idx.buildIndex(true);
+        }
 
     }
 
     public ArrayList<Data> read_d_list_from_disk(long node_id) {
 
-        String header_name = this.home_folder + "header.idx";
-        String list_name = this.home_folder + "list.idx";
-        String Data_file = this.home_folder + "data.dat";
+        String header_name = this.home_folder + "/header.idx";
+        String list_name = this.home_folder + "/list.idx";
+        String Data_file = this.home_folder + "/data.dat";
         ArrayList<Data> d_list = new ArrayList<>();
 
         try {
@@ -107,7 +186,6 @@ public class Index {
                 byte[] b_d = new byte[d.get_size()];
                 data_f.read(b_d);
                 d.read_from_buffer(b_d);
-//                System.out.println(d);
                 d_list.add(d);
             }
 
@@ -168,7 +246,7 @@ public class Index {
 
     private void writeDataToDisk(ArrayList<Data> allNodes) {
         ArrayList<Data> an = new ArrayList<>(allNodes);
-        String Data_file = this.home_folder + "data.dat";
+        String Data_file = this.home_folder + "/data.dat";
         try {
             RandomAccessFile data_f = new RandomAccessFile(Data_file, "rw");
             data_f.seek(0);
@@ -176,30 +254,18 @@ public class Index {
             Collections.sort(an, new Comparator<Data>() {
                 @Override
                 public int compare(Data lhs, Data rhs) {
-                    // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
                     return lhs.getPlaceId() > rhs.getPlaceId() ? 1 : (lhs.getPlaceId() < rhs.getPlaceId()) ? -1 : 0;
                 }
             });
 
 
             for (int i = 0; i < an.size(); i++) {
-//                if (i == 3) {
-//                    break;
-//                }
                 Data d = an.get(i);
-//                System.out.println(data_f.getFilePointer());
-//                System.out.println(d.get_size());
                 byte[] b_d = new byte[d.get_size()];
                 d.write_to_buffer(b_d);
-//                System.out.println(d);
                 data_f.write(b_d);
-//                Data newd = new Data(3);
-//                newd.read_from_buffer(b_d);
-//                System.out.println(newd);
-//                System.out.println(data_f.getFilePointer());
             }
 
-//            System.out.println(data_f.getFilePointer());
             data_f.close();
 
 
@@ -230,8 +296,8 @@ public class Index {
         System.out.println(sk.sky_hotels.size());
         writeDataToDisk(sk.allNodes);
 
-        String header_name = this.home_folder + "header.idx";
-        String list_name = this.home_folder + "list.idx";
+        String header_name = this.home_folder + "/header.idx";
+        String list_name = this.home_folder + "/list.idx";
 
         System.out.println(this.num_nodes);
 
@@ -265,22 +331,22 @@ public class Index {
 //                            double d2 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], d.location[0], d.location[1]);
                             double d1 = Math.sqrt(Math.pow(node.locations[0] - s_d.location[0], 2) + Math.pow(node.locations[1] - s_d.location[1], 2));
                             double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
-                            if (d1 > d2 && this.distance_threshold > d2 && checkDominated(s_d.getData(), d.getData())) {
-                                d_list.add(d);
-                                break;
+                            if (this.distance_threshold != -1) {
+                                if (d1 > d2 && this.distance_threshold > d2 && checkDominated(s_d.getData(), d.getData())) {
+                                    d_list.add(d);
+                                    break;
+                                }
+                            } else {
+                                if (d1 > d2 && checkDominated(s_d.getData(), d.getData())) {
+                                    d_list.add(d);
+                                    break;
+                                }
                             }
 
                         }
                     }
 
                     int d_size = d_list.size();
-
-//                    if (node_id == 678) {
-//                        System.out.println(node_id + "   " + d_size + "  " + page_list_number + "  ");
-//                        for (Data d : d_list) {
-//                            System.out.println(d.getPlaceId());
-//                        }
-//                    }
 
 
                     header_f.writeInt(page_list_number); //start page of the list file

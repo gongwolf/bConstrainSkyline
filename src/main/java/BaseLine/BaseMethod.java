@@ -2,14 +2,20 @@ package BaseLine;
 
 import RstarTree.Data;
 import neo4jTools.connector;
+import org.apache.commons.cli.*;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class BaseMethod {
+    private final long num_nodes;
     public ArrayList<Result> skyPaths = new ArrayList<>();
     Random r;
     String treePath;
@@ -21,6 +27,7 @@ public class BaseMethod {
     long checkEmpty = 0;
     long read_data = 0;
     double threshold = 0;
+    String home_folder = System.getProperty("user.home");
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
@@ -30,7 +37,7 @@ public class BaseMethod {
     private long sky_add_result_counter;
     private ArrayList<Data> sky_hotel;
     private boolean add;
-    String home_folder = System.getProperty("user.home");
+    private String node_info_path;
 
 //    HashMap<Integer, Double> dominated_checking = new HashMap<>();
 
@@ -39,38 +46,81 @@ public class BaseMethod {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
-        this.treePath = this.home_folder+"/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
+        this.treePath = this.home_folder + "/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
         this.threshold = threshold;
-//        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
-//        System.out.println(treePath);
+        this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph" + graph_size + "_" + degree + "/data/NodeInfo.txt";
+
+        this.num_nodes = getLineNumbers();
+
     }
 
-    public static void main(String args[]) {
-        int graph_size = 10;
-        String degree = "5";
-        int query_num = 1;
+    public static void main(String args[]) throws ParseException {
+        int graph_size, query_num, hotels_num;
+        String degree;
+        double range, threshold;
 
-        if (args.length == 3) {
-            graph_size = Integer.parseInt(args[0]);
-            degree = args[1];
-            query_num = Integer.parseInt(args[2]);
-        }
+        Options options = new Options();
+        options.addOption("g", "grahpsize", true, "number of nodes in the graph");
+        options.addOption("de", "degree", true, "degree of the graphe");
+        options.addOption("qn", "querynum", true, "number of querys");
+        options.addOption("hn", "hotelsnum", true, "number of hotels in the graph");
+        options.addOption("r", "range", true, "range of the distance to be considered");
+        options.addOption("t", "threshold", true, "Just consider the bus stops in threshold");
+        options.addOption("h", "help", false, "print the help of this command");
 
-        for (int i = 0; i < query_num; i++) {
-            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree, 25, 10, 5000);
-//            Data queryD = bm.generateQueryData();
-////
-//            System.out.println(queryD);
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
 
-            Data queryD = new Data(3);
-            queryD.setPlaceId(9999999);
-            queryD.setLocation(new double[]{20.380422592163086, 9.294476509094238});
-            queryD.setData(new float[]{4.3136826f, 0.45063168f, 3.711781f});
-//            constants.print(queryD.location);
-//            constants.print(queryD.getData());
+        String g_str = cmd.getOptionValue("g");
+        String de_str = cmd.getOptionValue("de");
+        String qn_str = cmd.getOptionValue("qn");
+        String hn_str = cmd.getOptionValue("hn");
+        String r_str = cmd.getOptionValue("r");
+        String t_str = cmd.getOptionValue("t");
 
 
-            bm1.baseline(queryD);
+        if (cmd.hasOption("h")) {
+            HelpFormatter formatter = new HelpFormatter();
+            String header = "Run the code of base line 5 :";
+            formatter.printHelp("java -jar Baseline_5.jar", header, options, "", false);
+        } else {
+
+            if (g_str == null) {
+                graph_size = 2000;
+            } else {
+                graph_size = Integer.parseInt(g_str);
+            }
+
+            if (de_str == null) {
+                degree = "4";
+            } else {
+                degree = de_str;
+            }
+
+            if (qn_str == null) {
+                query_num = 1;
+            } else {
+                query_num = Integer.parseInt(qn_str);
+            }
+
+            if (hn_str == null) {
+                hotels_num = 1000;
+            } else {
+                hotels_num = Integer.parseInt(hn_str);
+            }
+
+            if (r_str == null) {
+                range = 12;
+            } else {
+                range = Integer.parseInt(r_str);
+            }
+
+            if (t_str == null) {
+                threshold = range;
+            } else {
+                threshold = Integer.parseInt(t_str);
+            }
+
         }
     }
 
@@ -81,13 +131,10 @@ public class BaseMethod {
         ArrayList<path> Results = new ArrayList<>();
         Skyline sky = new Skyline(treePath);
         long r1 = System.currentTimeMillis();
-        sky.allDatas(queryD);
+        sky.BBS(queryD);
 
-//        System.out.println("Find candidate static node by BBS " + (System.currentTimeMillis() - r1) + "ms " + sky.skylineStaticNodes.size());
         long bbs_rt = System.currentTimeMillis() - r1;
-        sNodes = sky.allNodes;
-//        System.out.println(sNodes.size());
-//        System.out.println("=====================================================");
+        sNodes = sky.skylineStaticNodes;
 
 
         for (Data d : sNodes) {
@@ -101,16 +148,8 @@ public class BaseMethod {
             Result r = new Result(queryD, d, c, null);
             addToSkyline(r);
         }
-//        System.out.println(this.skyPaths.size());
-//        for (Result r : this.skyPaths) {
-//            System.out.println(r);
-//        }
-//        System.out.println("=====================================================");
 
-//        System.out.println("==========");
-//
-
-        String graphPath = home_folder+"/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        String graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         //System.out.println(graphPath);
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -127,67 +166,70 @@ public class BaseMethod {
 
         try (Transaction tx = this.graphdb.beginTx()) {
             db_time = System.currentTimeMillis() - db_time;
-            r1 = System.currentTimeMillis();
-            Node startNode = nearestNetworkNode(queryD);
-            long nn_rt = System.currentTimeMillis() - r1;
-//            System.out.println("Find nearest road network " + nn_rt + " ms");
-//            System.out.println(startNode.getProperty("lat") + " " + startNode.getProperty("log"));
-
-
             long rt = System.currentTimeMillis();
 
-            myNode s = new myNode(queryD, startNode.getId(), -1);
 
-            myNodePriorityQueue mqueue = new myNodePriorityQueue();
-            mqueue.add(s);
+            for (int node_id = 0; node_id < num_nodes; node_id++) {
+//                System.out.println(node_id);
+                myNode s;
+                if (!tmpStoreNodes.containsKey(node_id)) {
+                    s = new myNode(queryD, node_id, -1);
+                } else {
+                    s = tmpStoreNodes.get(node_id);
+//                    path dp = new path(s);
+//                    s.addToSkyline(dp);
+                }
+                myNodePriorityQueue mqueue = new myNodePriorityQueue();
+                mqueue.add(s);
 
-            this.tmpStoreNodes.put(s.id, s);
+                while (!mqueue.isEmpty()) {
 
-            while (!mqueue.isEmpty()) {
+                    myNode v = mqueue.pop();
 
-                myNode v = mqueue.pop();
+                    counter++;
+                    //if (++counter % 1000 == 0) {
+                    //}
+                    for (int i = 0; i < v.skyPaths.size(); i++) {
+                        path p = v.skyPaths.get(i);
 
-                counter++;
-                //if (++counter % 1000 == 0) {
-                //}
-                for (int i = 0; i < v.skyPaths.size(); i++) {
-                    path p = v.skyPaths.get(i);
+                        //constants.print(p.costs);
+                        if (!p.expaned) {
+                            p.expaned = true;
 
-                    //constants.print(p.costs);
-                    if (!p.expaned) {
-                        p.expaned = true;
+                            long ee = System.nanoTime();
+                            ArrayList<path> new_paths = p.expand();
+                            expasion_rt += (System.nanoTime() - ee);
+                            for (path np : new_paths) {
+                                myNode next_n;
+                                if (this.tmpStoreNodes.containsKey(np.endNode)) {
+                                    next_n = tmpStoreNodes.get(np.endNode);
+                                } else {
+                                    next_n = new myNode(queryD, np.endNode, -1);
+                                    this.tmpStoreNodes.put(next_n.id, next_n);
+                                }
 
-                        long ee = System.nanoTime();
-                        ArrayList<path> new_paths = p.expand();
-                        expasion_rt += (System.nanoTime() - ee);
-                        for (path np : new_paths) {
-                            myNode next_n;
-                            if (this.tmpStoreNodes.containsKey(np.endNode)) {
-                                next_n = tmpStoreNodes.get(np.endNode);
-                            } else {
-                                next_n = new myNode(queryD, np.endNode, -1);
-                                this.tmpStoreNodes.put(next_n.id, next_n);
-                            }
-
-                            if (next_n.addToSkyline(np)) {
-                                addToSkylineResult(np, queryD);
-                                mqueue.add(next_n);
+                                if (next_n.addToSkyline(np)) {
+                                    mqueue.add(next_n);
+                                }
                             }
                         }
                     }
-                }
 
 //                break;
+                }
+
             }
+
 
             long exploration_rt = System.currentTimeMillis() - rt;
 
             for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
                 for (path np : mm.getValue().skyPaths) {
+                    addToSkylineResult(np, queryD);
                 }
             }
 
-            sb.append(bbs_rt + "," + nn_rt + "," + exploration_rt + ",");
+            sb.append(bbs_rt + "," + 0 + "," + exploration_rt + ",");
 
             tx.success();
         }
@@ -217,11 +259,11 @@ public class BaseMethod {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
 
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 
@@ -233,35 +275,16 @@ public class BaseMethod {
         sb.append("  " + visited_bus_stop + "," + bus_stop_in_result + "," + (double) bus_stop_in_result / visited_bus_stop + "   " + this.sky_add_result_counter);
 
         System.out.println(sb.toString());
-//        this.finalDatas.stream().forEach(f -> System.out.println(f));
-
-//        for (Result rrrrrrrr : this.skyPaths) {
-//            if (rrrrrrrr.end.getPlaceId() == 62) {
-//                System.out.println(rrrrrrrr);
-//                break;
-//            }
-//        }
-
-
-//        System.out.println(addResult_rt + "/" + add_counter + "=" + (double) addResult_rt / add_counter / 1000000);
-//
-//
-//        long tt_sl = 0;
-//        for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
-//            tt_sl += entry.getValue().skyPaths.size();
-////            for (path p : entry.getValue().skyPaths) {
-////                addToSkyline_p(p);
-////
-////            }
-//        }
-//
-//        System.out.println(this.tmpStoreNodes.size()+"   " + tt_sl);
     }
 
     private boolean addToSkylineResult(path np, Data queryD) {
         this.add_counter++;
         long r2a = System.nanoTime();
-        if (np.rels.isEmpty()) {
+//        if (np.rels.isEmpty()) {
+//            return false;
+//        }
+
+        if (np.isDummyPath()) {
             return false;
         }
         this.checkEmpty += System.nanoTime() - r2a;
@@ -404,5 +427,28 @@ public class BaseMethod {
         return true;
     }
 
+
+    public long getLineNumbers() {
+//        System.out.println(node_info_path);
+        long lines = 0;
+        try {
+            File file = new File(this.node_info_path);
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+                long l = Long.valueOf(line.split(" ")[0]);
+                if (l > lines) {
+                    lines = l;
+                }
+            }
+            fileReader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lines;
+    }
 
 }

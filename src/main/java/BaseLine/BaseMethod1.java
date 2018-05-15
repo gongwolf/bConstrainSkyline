@@ -22,6 +22,7 @@ public class BaseMethod1 {
     long checkEmpty = 0;
     long read_data = 0;
     double threshold = 0;
+    String home_folder = System.getProperty("user.home");
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
@@ -31,7 +32,6 @@ public class BaseMethod1 {
     private long sky_add_result_counter;
     private ArrayList<Data> sky_hotel;
     private boolean add;
-    String home_folder = System.getProperty("user.home");
 
 //    HashMap<Integer, Double> dominated_checking = new HashMap<>();
 
@@ -40,7 +40,7 @@ public class BaseMethod1 {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
-        this.treePath = home_folder+"/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
         this.threshold = threshold;
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
@@ -111,7 +111,7 @@ public class BaseMethod1 {
 //        System.out.println("==========");
 //
 
-        String graphPath = home_folder+"/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        String graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         //System.out.println(graphPath);
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -218,11 +218,11 @@ public class BaseMethod1 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
 
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 
@@ -262,7 +262,11 @@ public class BaseMethod1 {
     private boolean addToSkylineResult(path np, Data queryD) {
         this.add_counter++;
         long r2a = System.nanoTime();
-        if (np.rels.isEmpty()) {
+//        if (np.rels.isEmpty()) {
+//            return false;
+//        }
+
+        if (np.isDummyPath()) {
             return false;
         }
         this.checkEmpty += System.nanoTime() - r2a;

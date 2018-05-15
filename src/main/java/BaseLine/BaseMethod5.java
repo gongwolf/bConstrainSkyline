@@ -1,7 +1,5 @@
 package BaseLine;
 
-import BaseLine.approximate.range.BaseMethod_approx;
-import BaseLine.approximate.subpath.BaseMethod_subPath;
 import RstarTree.Data;
 import neo4jTools.connector;
 import org.apache.commons.cli.*;
@@ -30,6 +28,7 @@ public class BaseMethod5 {
     long read_data = 0;
     //Todo: each hotel know the distance to the hotel than dominate it.
     HashMap<Integer, Double> dominated_checking = new HashMap<>(); //
+    String home_folder = System.getProperty("user.home");
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
@@ -41,15 +40,15 @@ public class BaseMethod5 {
     private long pro_add_result_counter; // how many path + hotel combination of the results are generated
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
-    String home_folder = System.getProperty("user.home");
+    private long d_list_num = 0;
 
     public BaseMethod5(int graph_size, String degree, double range, int hotels_num) {
         r = new Random(System.nanoTime());
         this.graph_size = graph_size;
         this.degree = degree;
-        this.graphPath = home_folder+"/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
-        this.treePath = home_folder+"/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
-        this.dataPath = home_folder+"/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
     }
@@ -86,7 +85,7 @@ public class BaseMethod5 {
         } else {
 
             if (g_str == null) {
-                graph_size = 8000;
+                graph_size = 4000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -104,19 +103,19 @@ public class BaseMethod5 {
             }
 
             if (hn_str == null) {
-                hotels_num = 5000;
+                hotels_num = 2000;
             } else {
                 hotels_num = Integer.parseInt(hn_str);
             }
 
             if (r_str == null) {
-                range = 8;
+                range = 10;
             } else {
                 range = Integer.parseInt(r_str);
             }
 
             if (t_str == null) {
-                threshold = 8;
+                threshold = range;
             } else {
                 threshold = Integer.parseInt(t_str);
             }
@@ -134,42 +133,38 @@ public class BaseMethod5 {
 
 
             for (int i = 0; i < query_num; i++) {
-                BaseMethod base = new BaseMethod(graph_size, degree, threshold, range, hotels_num);
-                base.baseline(queryList[i]);
-
-                System.out.println("=====================================================");
-
-
+//                BaseMethod base = new BaseMethod(graph_size, degree, threshold, range, hotels_num);
+//                base.baseline(queryList[i]);
+//
+//
                 BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
                 bMethod.baseline(queryList[i]);
+            }
 
+            System.out.println("=================================");
 
-                System.out.println("=====================================================");
-
-
-                System.out.println("=====================================================");
-
+            for (int i = 0; i < query_num; i++) {
                 BaseMethod5 all_lemmas = new BaseMethod5(graph_size, degree, range, hotels_num);
                 all_lemmas.baseline(queryList[i]);
+            }
 
+//                BaseMethod_index bs_index = new BaseMethod_index(graph_size, degree, range, hotels_num, threshold);
+//                bs_index.baseline(queryList[i]);
+//
+//
+//                BaseMethod_subPath approx_sub = new BaseMethod_subPath(graph_size, degree, threshold, range, hotels_num);
+//                approx_sub.baseline(queryList[i]);
 
-                BaseMethod_approx approx_method = new BaseMethod_approx(graph_size, degree, threshold, range, hotels_num);
-                approx_method.baseline(queryList[i]);
-
-
-                BaseMethod_subPath approx_sub = new BaseMethod_subPath(graph_size, degree, threshold, range, hotels_num);
-                approx_sub.baseline(queryList[i]);
-
-                testTools.statistic.goodnessAnalyze(all_lemmas.skyPaths, approx_method.skyPaths, "edu");
-                testTools.statistic.goodnessAnalyze(all_lemmas.skyPaths, approx_sub.skyPaths, "edu");
+//                testTools.statistic.goodnessAnalyze(all_lemmas.skyPaths, approx_method.skyPaths, "edu");
+//                testTools.statistic.goodnessAnalyze(all_lemmas.skyPaths, approx_sub.skyPaths, "edu");
 
 
 //                for(Result r : approx_sub.skyPaths)
 //                {
 //                    System.out.println(r);
 //                }
-            }
         }
+
     }
 
     public void baseline(Data queryD) {
@@ -199,7 +194,7 @@ public class BaseMethod5 {
         sky.BBS(queryD);
         long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
-        sb.append(this.sNodes.size()+" "+this.sky_hotel.size()+" ");
+        sb.append(this.sNodes.size() + " " + this.sky_hotel.size() + " ");
 
         for (Data d : sNodes) {
             double[] c = new double[constants.path_dimension + 3];
@@ -309,34 +304,43 @@ public class BaseMethod5 {
 //            hotels_scope = new HashMap<>();
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 sk_counter += entry.getValue().skyPaths.size();
+                myNode my_n = entry.getValue();
 
                 long t_index_s = System.nanoTime();
 
-                myNode my_n = entry.getValue();
-                ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
-                //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
-                //It means the hotel could be a candidate hotel of the bus stop n.
-                for (Data d : this.sNodes) {
-                    for (Data s_d : this.sky_hotel) {
-                        double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
-                        double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
-                            d_list.add(d);
-                            break;
-                        }
-                    }
-                }
+//                ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
+//                //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
+//                //It means the hotel could be a candidate hotel of the bus stop n.
+//                for (Data d : this.sNodes) {
+//                    for (Data s_d : this.sky_hotel) {
+//                        double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
+//                        double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
+//                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
+//                            d_list.add(d);
+//                            break;
+//                        }
+//                    }
+//                }
+
+//                if (my_n.id == 1) {
+//                    System.out.println("============================");
+//                    System.out.println(sNodes.size() + "    " + skyPaths.size() + " " + d_list.size());
+//                    for (Data d : d_list) {
+//                        System.out.println(d);
+//                    }
+//                    System.out.println("============================");
+//                }
 
                 index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-                    if (!p.rels.isEmpty()) {
-                        long ats = System.nanoTime();
+//                    if (!p.rels.isEmpty()) {
+                    long ats = System.nanoTime();
 
-                        boolean f = addToSkylineResult(p, d_list);
+                    boolean f = addToSkylineResult(p, sNodes);
 
-                        addResult_rt += System.nanoTime() - ats;
-                    }
+                    addResult_rt += System.nanoTime() - ats;
+//                    }
                 }
 
 
@@ -368,20 +372,22 @@ public class BaseMethod5 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
 
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 
-        sb.append(finalDatas.size() + " " + this.skyPaths.size() + " " + sk_counter+"  "+add_counter+" ");
+        sb.append(finalDatas.size() + " " + this.skyPaths.size() + " " + sk_counter + "  " + add_counter + " ");
 
         int visited_bus_stop = this.tmpStoreNodes.size();
         int bus_stop_in_result = final_bus_stops.size();
 
         sb.append("  " + visited_bus_stop + "," + bus_stop_in_result + "," + (double) bus_stop_in_result / visited_bus_stop + "   " + this.sky_add_result_counter);
+
+        sb.append(" " + sNodes.size());
 
         System.out.println(sb.toString());
 
@@ -401,7 +407,10 @@ public class BaseMethod5 {
 //    private boolean addToSkylineResult(path np, Data d) {
         this.add_counter++;
         long r2a = System.nanoTime();
-        if (np.rels.isEmpty()) {
+//        if (np.rels.isEmpty()) {
+//            return false;
+//        }
+        if (np.isDummyPath()) {
             return false;
         }
         this.checkEmpty += System.nanoTime() - r2a;

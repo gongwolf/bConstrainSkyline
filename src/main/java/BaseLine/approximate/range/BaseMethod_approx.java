@@ -284,11 +284,11 @@ public class BaseMethod_approx {
                 index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-                    if (!p.rels.isEmpty()) {
+//                    if (!p.rels.isEmpty()) {
                         long ats = System.nanoTime();
                         boolean f = addToSkylineResult(p, d_list);
                         addResult_rt += System.nanoTime() - ats;
-                    }
+//                    }
                 }
             }
 
