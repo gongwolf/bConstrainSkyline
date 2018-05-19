@@ -32,7 +32,7 @@ public class BaseMethod5 {
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
-    private ArrayList<Result> skyPaths = new ArrayList<>();
+    public ArrayList<Result> skyPaths = new ArrayList<>();
     private ArrayList<Data> sky_hotel;
     private HashSet<Data> finalDatas = new HashSet<>();
     private int checkedDataId = 9;
@@ -372,11 +372,11 @@ public class BaseMethod5 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
 
-//            if (r.p != null) {
-//                for (Long nn : r.p.nodes) {
-//                    final_bus_stops.add(nn);
-//                }
-//            }
+            if (r.p != null) {
+                for (Long nn : r.p.nodes) {
+                    final_bus_stops.add(nn);
+                }
+            }
         }
 
 
@@ -407,12 +407,12 @@ public class BaseMethod5 {
 //    private boolean addToSkylineResult(path np, Data d) {
         this.add_counter++;
         long r2a = System.nanoTime();
-//        if (np.rels.isEmpty()) {
-//            return false;
-//        }
-        if (np.isDummyPath()) {
+        if (np.rels.isEmpty()) {
             return false;
         }
+//        if (np.isDummyPath()) {
+//            return false;
+//        }
         this.checkEmpty += System.nanoTime() - r2a;
 
 
@@ -632,7 +632,7 @@ public class BaseMethod5 {
 
     }
 
-    private int getRandomNumberInRange_int(int min, int max) {
+    public int getRandomNumberInRange_int(int min, int max) {
 
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");

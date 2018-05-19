@@ -1,4 +1,4 @@
-package BaseLine.approximate.subpath;
+package BaseLine.approximate.range;
 
 import BaseLine.*;
 import RstarTree.Data;
@@ -7,14 +7,15 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
-import testTools.GoogleMaps;
+import testTools.Index;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 
-public class BaseMethod_subPath {
+public class BaseMethod_approx_index {
     private final int hotels_num;
+    public ArrayList<path> qqqq = new ArrayList<>();
     public ArrayList<Result> skyPaths = new ArrayList<>();
     public ArrayList<Data> sky_hotel;
     Random r;
@@ -45,8 +46,7 @@ public class BaseMethod_subPath {
     private long sky_add_result_counter; // how many results are taken the addtoskyline operation
     private Data queryD;
 
-
-    public BaseMethod_subPath(int graph_size, String degree, double distance_threshold, double range, int hotels_num) {
+    public BaseMethod_approx_index(int graph_size, String degree, double distance_threshold, double range, int hotels_num) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
@@ -58,22 +58,22 @@ public class BaseMethod_subPath {
 //        System.out.println(this.dataPath);
 //        System.exit(0);
 
-//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree.rtr";
-//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+//        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
+//        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
     }
 
 
     public static void main(String args[]) {
-        int graph_size = 2000;
+        int graph_size = 80000;
         String degree = "4";
-        int query_num = 1;
-        int hotels_num = 1000;
-        double dis_t = 12;
-        double range = 12;
+        int query_num = 20;
+        int hotels_num = 100;
+        double dis_t = 0.829618265137109;
+        double range = 2;
 
 
         Data[] queryList = new Data[query_num];
-        BaseMethod_subPath b_appx = new BaseMethod_subPath(graph_size, degree, dis_t, range, hotels_num);
+        BaseMethod_approx_index b_appx = new BaseMethod_approx_index(graph_size, degree, dis_t, range, hotels_num);
 
 //        int[] numbers = new int[]{241};
         for (int i = 0; i < query_num; i++) {
@@ -104,8 +104,9 @@ public class BaseMethod_subPath {
 //        System.out.println(queryD);
         long r1 = System.currentTimeMillis();
 
-//        String graphPath = home_folder + "/neo4j334/testdb_real_50/databases/graph.db";
+//        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
         String graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+//        System.out.println(graphPath);
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -116,6 +117,7 @@ public class BaseMethod_subPath {
         long addResult_rt = 0;
         long expasion_rt = 0;
         int sk_counter = 0; //the number of total candidate hotels of each bus station
+
 
         db_time = System.currentTimeMillis() - db_time;
         r1 = System.currentTimeMillis();
@@ -141,6 +143,7 @@ public class BaseMethod_subPath {
 //        System.out.println("there are " + this.sky_hotel.size() + " skyline hotels");
 //        System.out.println("-------------------------");
 
+
         long index_s = 0;
 
         r1 = System.currentTimeMillis();
@@ -156,14 +159,19 @@ public class BaseMethod_subPath {
             double[] c = new double[constants.path_dimension + 3];
             c[0] = d.distance_q;
 
-            double[] d_attrs = d.getData();
-            for (int i = 4; i < c.length; i++) {
-                c[i] = d_attrs[i - 4];
-            }
-            Result r = new Result(queryD, d, c, null);
+            if (c[0] <= this.distance_threshold) {
+
+                double[] d_attrs = d.getData();
+                for (int i = 4; i < c.length; i++) {
+                    c[i] = d_attrs[i - 4];
+                }
+                Result r = new Result(queryD, d, c, null);
 //                System.out.println(r);
-            addToSkyline(r);
+                addToSkyline(r);
+            }
         }
+//        System.out.println("there are initial skyline hotels " + this.skyPaths.size());
+
 
         //find the minimum distance from query point to the skyline hotel that dominate non-skyline hotel cand_d
         for (Data cand_d : sNodes) {
@@ -183,6 +191,7 @@ public class BaseMethod_subPath {
             dominated_checking.put(cand_d.getPlaceId(), h_to_h_dist);
         }
 
+//        System.out.println("==========" + this.skyPaths.size());
 
         int visited_bus_stop = 0;
         try (Transaction tx = connector.graphDB.beginTx()) {
@@ -190,10 +199,9 @@ public class BaseMethod_subPath {
 
             long rt = System.currentTimeMillis();
 
-//            myNode s = new myNode(queryD, startNode_id, this.distance_threshold);
-            myNode s = new myNode(queryD, startNode_id, -1);
+            myNode s = new myNode(queryD, startNode_id, this.distance_threshold);
+//            System.out.println(s.distance_q);
 
-//            myNodePriorityQueueNoCp mqueue = new myNodePriorityQueueNoCp();
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
 
@@ -202,51 +210,35 @@ public class BaseMethod_subPath {
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
-
                 counter++;
+//                System.out.println(v.id+"   ");
+//                System.out.println("=================================");
 
-                path[] needToProcess = new path[constants.path_dimension];
-                for (path p : v.skyPaths) {
-//                    if (!p.expaned) {
-                    if (p.isDummyPath()) {
-                        needToProcess[0] = p;
-                    } else if (needToProcess[1] == null) {
-                        for (int i = 1; i < needToProcess.length; i++) {
-                            needToProcess[i] = p;
-                        }
-                    } else {
-                        for (int i = 1; i < needToProcess.length; i++) {
-                            if (needToProcess[i].costs[i] > p.costs[i]) {
-                                needToProcess[i] = p;
-                            }
-                        }
-                    }
-//                    }
-                }
-
-                for (int i = 0; i < needToProcess.length; i++) {
-
-                    path p = needToProcess[i];
-                    if (p != null && !p.expaned) {
+                for (int i = 0; i < v.skyPaths.size(); i++) {
+                    path p = v.skyPaths.get(i);
+                    if (!p.expaned) {
                         p.expaned = true;
 
                         long ee = System.nanoTime();
                         ArrayList<path> new_paths = p.expand();
+//                        System.out.println(new_paths.size()+"   ~~~~");
                         expasion_rt += (System.nanoTime() - ee);
-
-
                         for (path np : new_paths) {
+//                            System.out.println(this.tmpStoreNodes.size()+"  "+np);
                             myNode next_n;
                             if (this.tmpStoreNodes.containsKey(np.endNode)) {
                                 next_n = tmpStoreNodes.get(np.endNode);
+//                                System.out.println("old "+next_n.id);
                             } else {
-                                next_n = new myNode(queryD, np.endNode, -1);
-//                                next_n = new myNode(queryD, np.endNode, -1);
+                                next_n = new myNode(queryD, np.endNode, this.distance_threshold);
                                 this.tmpStoreNodes.put(next_n.id, next_n);
+//                                System.out.println("new "+next_n.id);
                             }
 
                             //lemma 2
                             if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
+//                            if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q) && next_n.distance_q <= 10000) {
+//                            System.out.println(next_n.skyPaths.isEmpty());
                                 if (next_n.addToSkyline(np)) {
                                     mqueue.add(next_n);
                                 }
@@ -265,43 +257,22 @@ public class BaseMethod_subPath {
 
 //            System.out.println("there are " + this.tmpStoreNodes.size() + " bus stops are visited");
 
-            int process_visited_stations = 0;
+            Index idx = new Index(this.graph_size, this.degree, this.distance_threshold, this.hotels_num, this.distance_threshold);
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 sk_counter += entry.getValue().skyPaths.size();
-            }
-
-//            System.out.println(sk_counter+"~~~~~");
-
-
-            for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 long t_index_s = System.nanoTime();
-
                 myNode my_n = entry.getValue();
-                ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
-                //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
-                //It means the hotel could be a candidate hotel of the bus stop n.
-                for (Data d : this.sNodes) {
-                    for (Data s_d : this.sky_hotel) {
-//                        double d1 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], s_d.location[0], s_d.location[1]);
-//                        double d2 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], d.location[0], d.location[1]);
-                        double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
-                        double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
-                            d_list.add(d);
-                            break;
-                        }
-                    }
-                }
+                ArrayList<Data> d_list = idx.read_d_list_from_disk(my_n.id);
+                index_s += (System.nanoTime() - t_index_s);
+
 
 //                index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-                    if (!p.rels.isEmpty() && p.expaned) {
-                        if (p.expaned) {
-                            long ats = System.nanoTime();
-                            boolean f = addToSkylineResult(p, d_list);
-                            addResult_rt += System.nanoTime() - ats;
-                        }
+                    if (!p.rels.isEmpty()) {
+                        long ats = System.nanoTime();
+                        boolean f = addToSkylineResult(p, d_list);
+                        addResult_rt += System.nanoTime() - ats;
                     }
                 }
             }
@@ -321,7 +292,6 @@ public class BaseMethod_subPath {
         shut_db_time = System.currentTimeMillis() - shut_db_time;
 
         s_sum = System.currentTimeMillis() - s_sum;
-//        System.out.println(s_sum+" "+db_time+" "+shut_db_time+" "+index_s);
         sb.append("|" + (s_sum - db_time - shut_db_time - (index_s / 1000000)) + "|");
         sb.append("," + this.skyPaths.size() + "," + counter + "|");
         sb.append(addResult_rt / 1000000 + "(" + (this.add_oper / 1000000) + "+" + (this.check_add_oper / 1000000)
@@ -393,12 +363,13 @@ public class BaseMethod_subPath {
             long rrr = System.nanoTime();
 
 
+
             double[] final_costs = new double[np.costs.length + 3];
             System.arraycopy(np.costs, 0, final_costs, 0, np.costs.length);
             double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
-//            d.distance_q = Math.sqrt(Math.pow(queryD.location[0] - d.location[0], 2) + Math.pow(queryD.location[1] - d.location[1], 2));
+            d.distance_q = Math.sqrt(Math.pow(queryD.location[0] - d.location[0], 2) + Math.pow(queryD.location[1] - d.location[1], 2));
+
 //            double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
-//            d.distance_q = GoogleMaps.distanceInMeters(queryD.location[0], queryD.location[1], d.location[0], d.location[1]);
 
 
             final_costs[0] += end_distance;
@@ -487,16 +458,17 @@ public class BaseMethod_subPath {
                 double lat = (double) n.getProperty("lat");
                 double log = (double) n.getProperty("log");
 
-//                double temp_distz = Math.sqrt(Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
-                double temp_distz = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
+                double temp_distz = Math.sqrt(Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
+//                double temp_distz = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
                 if (distz > temp_distz) {
                     nn_node = n;
                     distz = temp_distz;
                 }
 
-//                if (temp_distz <= this.distance_threshold) {
-//                    counter_in_range++;
-//                }
+                if (temp_distz <= this.distance_threshold) {
+                    counter_in_range++;
+//                    System.out.println(temp_distz);
+                }
             }
 
 //            this.distance_threshold = distz;

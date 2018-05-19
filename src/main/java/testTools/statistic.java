@@ -68,7 +68,8 @@ public class statistic {
         double[] all_min_array = getBoundsArray(all, "min");
         double[] approx_max_array = getBoundsArray(approx, "max");
         double[] approx_min_array = getBoundsArray(approx, "min");
-        System.out.print(Math.sqrt(25 * 7) + "   ---  ");
+        double max = Math.sqrt(7);
+        System.out.print(max + "   ---  ");
 
 
         HashSet<Integer> differ_base_with_apprx = new HashSet<>();
@@ -78,27 +79,43 @@ public class statistic {
             boolean flag = false;
             double min_distance = Double.POSITIVE_INFINITY;
             for (Result r1 : approx) {
+                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
+                    double d = 0;
 
-                double d = 0;
-                switch (dist_measure) {
-                    case "edu":
-                        d = EduclidianDist(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                    switch (dist_measure) {
+                        case "edu":
+                            d = EduclidianDist(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                            break;
+                        case "cos":
+                            d = CosineSimilarity(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                            break;
+                    }
+
+                    if (d < min_distance) {
+                        min_distance = d;
+                    }
                 }
-
-                if (d < min_distance) {
-                    min_distance = d;
-                }
-
 
                 if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                    flag = true;
+                    if (!flag) {
+                        flag = true;
+                    }
                 }
             }
 
-            sum_up_all += min_distance;
 
             if (!flag) {
                 differ_base_with_apprx.add(r.end.getPlaceId());
+            } else {
+                switch (dist_measure) {
+                    case "edu":
+                        sum_up_all += (max - min_distance);
+                        break;
+                    case "cos":
+                        sum_up_all += (1 - min_distance);
+                        break;
+                }
+
             }
         }
 
@@ -111,32 +128,47 @@ public class statistic {
             double min_distance = Double.POSITIVE_INFINITY;
 
             for (Result r : all) {
+                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
+                    double d = 0;
+                    switch (dist_measure) {
+                        case "edu":
+                            d = EduclidianDist(r1, r, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                            break;
+                        case "cos":
+                            d = CosineSimilarity(r1, r, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                            break;
+                    }
 
-                double d = 0;
-                switch (dist_measure) {
-                    case "edu":
-                        d = EduclidianDist(r1, r, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                    if (d < min_distance) {
+                        min_distance = d;
+                    }
                 }
-
-                if (d < min_distance) {
-                    min_distance = d;
-                }
-
 
                 if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                    flag = true;
+                    if (!flag) {
+                        flag = true;
+                    }
                 }
-
             }
 
-            sum_up_approx += min_distance;
 
             if (!flag) {
                 differ_apprx_with_base.add(r1.end.getPlaceId());
+            } else {
+                switch (dist_measure) {
+                    case "edu":
+                        sum_up_approx += (max - min_distance);
+                        break;
+                    case "cos":
+                        sum_up_approx += (1 - min_distance);
+                        break;
+                }
+
             }
         }
-        System.out.println("    " + differ_apprx_with_base.size() + "   " + (sum_up_approx / approx_n) );
+        System.out.println("    " + differ_apprx_with_base.size() + "   " + (sum_up_approx / approx_n));
     }
+
 
     private static double[] getBoundsArray(ArrayList<Result> all, String type) {
         int costs_length = 0;
@@ -176,12 +208,12 @@ public class statistic {
         for (int i = 0; i < cost_length; i++) {
             double i_max = all_max_array[i] > approx_max_array[i] ? all_max_array[i] : approx_max_array[i];
             double i_min = all_min_array[i] < approx_min_array[i] ? all_min_array[i] : approx_min_array[i];
-            double v1 = (r.costs[i] - i_min) * 5 / (i_max - i_min);
-            double v2 = (r1.costs[i] - i_min) * 5 / (i_max - i_min);
+            double v1 = (r.costs[i] - i_min) / (i_max - i_min);
+            double v2 = (r1.costs[i] - i_min) / (i_max - i_min);
 
-            if (v2 > 5 || v2 < 0) {
-//                System.out.println("Normalization error !!!!!!!");
-                d = 25 * cost_length;
+            if (v2 > 1 || v2 < 0) {
+                System.out.println("Normalization error !!!!!!!");
+                d = cost_length;
                 break;
 //                System.exit(0);
             }
@@ -190,6 +222,34 @@ public class statistic {
         }
         d = Math.sqrt(d);
         return d;
+    }
+
+    private static double CosineSimilarity(Result r1, Result r, double[] all_max_array, double[] all_min_array, double[] approx_max_array, double[] approx_min_array) {
+        int cost_length = r.costs.length;
+        double d = 0;
+        double d1 = 0;
+        double d2 = 0;
+        double d3 = 0;
+        for (int i = 0; i < cost_length; i++) {
+            double i_max = all_max_array[i] > approx_max_array[i] ? all_max_array[i] : approx_max_array[i];
+            double i_min = all_min_array[i] < approx_min_array[i] ? all_min_array[i] : approx_min_array[i];
+            double v1 = (r.costs[i] - i_min) / (i_max - i_min);
+            double v2 = (r1.costs[i] - i_min) / (i_max - i_min);
+
+            if (v2 > 1 || v2 < 0) {
+                System.out.println("Normalization error !!!!!!!");
+                d = 25 * cost_length;
+                break;
+//                System.exit(0);
+            }
+
+            d1 += v1 * v2;
+            d2 += v1 * v1;
+            d3 += v2 * v2;
+//            d += Math.pow(v1 - v2, 2);
+        }
+        d = d1 / (Math.sqrt(d2) * Math.sqrt(d3));
+        return (1-d);
     }
 
     private void readHotels() {

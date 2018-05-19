@@ -351,6 +351,7 @@ public class ReadRealDataSet {
         System.out.println("Database is created, the location of the db file is " + this.DB_PATH);
     }
 
+    //Create the edge with given source node, destination node with the given costs
     private void createRelation(String src, String des, double eDistence, double metersDistance, double runningTime) {
         try {
             Node srcNode = this.graphdb.findNode(BNode.BusNode, "name", src);

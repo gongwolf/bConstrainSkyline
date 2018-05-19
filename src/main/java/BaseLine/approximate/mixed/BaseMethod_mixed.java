@@ -1,4 +1,4 @@
-package BaseLine.approximate.subpath;
+package BaseLine.approximate.mixed;
 
 import BaseLine.*;
 import RstarTree.Data;
@@ -8,12 +8,13 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
 import testTools.GoogleMaps;
+import testTools.Index;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 
-public class BaseMethod_subPath {
+public class BaseMethod_mixed {
     private final int hotels_num;
     public ArrayList<Result> skyPaths = new ArrayList<>();
     public ArrayList<Data> sky_hotel;
@@ -46,7 +47,7 @@ public class BaseMethod_subPath {
     private Data queryD;
 
 
-    public BaseMethod_subPath(int graph_size, String degree, double distance_threshold, double range, int hotels_num) {
+    public BaseMethod_mixed(int graph_size, String degree, double distance_threshold, double range, int hotels_num) {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
@@ -64,16 +65,16 @@ public class BaseMethod_subPath {
 
 
     public static void main(String args[]) {
-        int graph_size = 2000;
+        int graph_size = 8000;
         String degree = "4";
         int query_num = 1;
-        int hotels_num = 1000;
-        double dis_t = 12;
-        double range = 12;
+        int hotels_num = 20000;
+        double dis_t = 300;
+        double range = 300;
 
 
         Data[] queryList = new Data[query_num];
-        BaseMethod_subPath b_appx = new BaseMethod_subPath(graph_size, degree, dis_t, range, hotels_num);
+        BaseMethod_mixed b_appx = new BaseMethod_mixed(graph_size, degree, dis_t, range, hotels_num);
 
 //        int[] numbers = new int[]{241};
         for (int i = 0; i < query_num; i++) {
@@ -105,7 +106,7 @@ public class BaseMethod_subPath {
         long r1 = System.currentTimeMillis();
 
 //        String graphPath = home_folder + "/neo4j334/testdb_real_50/databases/graph.db";
-        String graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        String graphPath = home_folder+"/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -156,13 +157,15 @@ public class BaseMethod_subPath {
             double[] c = new double[constants.path_dimension + 3];
             c[0] = d.distance_q;
 
-            double[] d_attrs = d.getData();
-            for (int i = 4; i < c.length; i++) {
-                c[i] = d_attrs[i - 4];
-            }
-            Result r = new Result(queryD, d, c, null);
+            if (c[0] <= this.distance_threshold) {
+                double[] d_attrs = d.getData();
+                for (int i = 4; i < c.length; i++) {
+                    c[i] = d_attrs[i - 4];
+                }
+                Result r = new Result(queryD, d, c, null);
 //                System.out.println(r);
-            addToSkyline(r);
+                addToSkyline(r);
+            }
         }
 
         //find the minimum distance from query point to the skyline hotel that dominate non-skyline hotel cand_d
@@ -190,8 +193,8 @@ public class BaseMethod_subPath {
 
             long rt = System.currentTimeMillis();
 
-//            myNode s = new myNode(queryD, startNode_id, this.distance_threshold);
-            myNode s = new myNode(queryD, startNode_id, -1);
+            myNode s = new myNode(queryD, startNode_id, this.distance_threshold);
+//            myNode s = new myNode(queryD, startNode_id, -1);
 
 //            myNodePriorityQueueNoCp mqueue = new myNodePriorityQueueNoCp();
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
@@ -240,7 +243,7 @@ public class BaseMethod_subPath {
                             if (this.tmpStoreNodes.containsKey(np.endNode)) {
                                 next_n = tmpStoreNodes.get(np.endNode);
                             } else {
-                                next_n = new myNode(queryD, np.endNode, -1);
+                                next_n = new myNode(queryD, np.endNode, this.distance_threshold);
 //                                next_n = new myNode(queryD, np.endNode, -1);
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
@@ -272,8 +275,10 @@ public class BaseMethod_subPath {
 
 //            System.out.println(sk_counter+"~~~~~");
 
+//            Index idx = new Index(this.graph_size, this.degree, this.distance_threshold, this.hotels_num, this.distance_threshold);
 
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
+                sk_counter += entry.getValue().skyPaths.size();
                 long t_index_s = System.nanoTime();
 
                 myNode my_n = entry.getValue();
@@ -286,7 +291,7 @@ public class BaseMethod_subPath {
 //                        double d2 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], d.location[0], d.location[1]);
                         double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
                         double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
+                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2 && this.distance_threshold > d2) {
                             d_list.add(d);
                             break;
                         }
@@ -337,6 +342,7 @@ public class BaseMethod_subPath {
 
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
+
             if (r.p != null) {
                 for (Long nn : r.p.nodes) {
                     final_bus_stops.add(nn);
@@ -487,8 +493,8 @@ public class BaseMethod_subPath {
                 double lat = (double) n.getProperty("lat");
                 double log = (double) n.getProperty("log");
 
-//                double temp_distz = Math.sqrt(Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
-                double temp_distz = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
+                double temp_distz = Math.sqrt(Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
+//                double temp_distz = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
                 if (distz > temp_distz) {
                     nn_node = n;
                     distz = temp_distz;

@@ -218,11 +218,11 @@ public class BaseMethod1 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
 
-//            if (r.p != null) {
-//                for (Long nn : r.p.nodes) {
-//                    final_bus_stops.add(nn);
-//                }
-//            }
+            if (r.p != null) {
+                for (Long nn : r.p.nodes) {
+                    final_bus_stops.add(nn);
+                }
+            }
         }
 
 
@@ -262,13 +262,13 @@ public class BaseMethod1 {
     private boolean addToSkylineResult(path np, Data queryD) {
         this.add_counter++;
         long r2a = System.nanoTime();
-//        if (np.rels.isEmpty()) {
-//            return false;
-//        }
-
-        if (np.isDummyPath()) {
+        if (np.rels.isEmpty()) {
             return false;
         }
+
+//        if (np.isDummyPath()) {
+//            return false;
+//        }
         this.checkEmpty += System.nanoTime() - r2a;
 
         long rr = System.nanoTime();

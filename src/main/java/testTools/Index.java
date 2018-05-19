@@ -146,7 +146,7 @@ public class Index {
             }
 
             if (t_str == null) {
-                distance_thresholds = -1;
+                distance_thresholds = range;
             } else {
                 distance_thresholds = Double.parseDouble(t_str);
             }

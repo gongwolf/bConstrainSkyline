@@ -12,22 +12,15 @@ import java.util.Random;
 
 public class SyntheticRealData {
     int dimension;
-    private DecimalFormat df2 = new DecimalFormat(".##");
-
     Random r = new Random(System.nanoTime());
-
     String path_base = "/home/gqxwolf/shared_git/bConstrainSkyline/data/";
     String poi_data = path_base + "IOP_data";
-
-
     String tree_path = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
-
     String[] cities = new String[]{"New York", "San Francisco", "Los Angeles"};
     String[] p_types = new String[]{"food", "lodging", "restaurant"};
-
     HashSet<String> list = new HashSet<>();
-
     int max_id = 0;
+    private DecimalFormat df2 = new DecimalFormat(".##");
 
     public SyntheticRealData(int dimension) {
         this.dimension = dimension;
@@ -44,7 +37,7 @@ public class SyntheticRealData {
 
         SyntheticRealData sd = new SyntheticRealData(dimension);
         sd.readPOIsData();
-        sd.testStaticRTree();
+//        sd.testStaticRTree();
     }
 
     private void readPOIsData() {
@@ -55,21 +48,28 @@ public class SyntheticRealData {
             fp.delete();
         }
 
-        RTree rt = new RTree(tree_path, Constants.BLOCKLENGTH, Constants.CACHESIZE, dimension);
 
-        File file = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt");
-        if (file.exists()) {
-            file.delete();
-        }
 
         FileWriter fw = null;
         BufferedWriter bw = null;
 
 
-        long counter = 0;
+        long sum_counter = 0;
         for (String city : this.cities) {
+            this.max_id=0;
+            long counter = 0;
+
+            File file = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real_"+city+".txt");
+            String t_path = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree_"+city+".rtr";
+            RTree rt = new RTree(t_path, Constants.BLOCKLENGTH, Constants.CACHESIZE, dimension);
+
+            if (file.exists()) {
+                file.delete();
+            }
+
             for (String type : p_types) {
                 String path = this.poi_data + "/outfilename_" + type + "_" + city;
+
 
 
                 try {
@@ -124,8 +124,6 @@ public class SyntheticRealData {
                                 rt.insert(d);
 
 
-                            } else {
-
                             }
 
                             poi_obj.cleanContents();
@@ -166,11 +164,12 @@ public class SyntheticRealData {
                     }
                 }
             }
+            rt.delete(); //write tree to disk
+            sum_counter+=counter;
         }
 
-        rt.delete(); //write tree to disk
 
-        System.out.println(counter);
+        System.out.println(sum_counter);
         System.out.println(this.list.size());
 
     }
