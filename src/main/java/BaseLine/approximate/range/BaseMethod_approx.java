@@ -151,7 +151,6 @@ public class BaseMethod_approx {
             c[0] = d.distance_q;
 
             if (c[0] <= this.distance_threshold) {
-
                 double[] d_attrs = d.getData();
                 for (int i = 4; i < c.length; i++) {
                     c[i] = d_attrs[i - 4];
@@ -253,21 +252,31 @@ public class BaseMethod_approx {
                 long t_index_s = System.nanoTime();
 
                 myNode my_n = entry.getValue();
-                ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
-                //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
-                //It means the hotel could be a candidate hotel of the bus stop n.
-                for (Data d : this.sNodes) {
-                    for (Data s_d : this.sky_hotel) {
-//                        double d1 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], s_d.location[0], s_d.location[1]);
-//                        double d2 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], d.location[0], d.location[1]);
-                        double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
-                        double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2 && this.distance_threshold > d2) {
-                            d_list.add(d);
-                            break;
-                        }
-                    }
-                }
+//                ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
+//                //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
+//                //It means the hotel could be a candidate hotel of the bus stop n.
+//                for (Data d : this.sNodes) {
+//                    boolean flag = true;
+//                    double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
+//                    double min_dist = Double.MAX_VALUE;
+//                    for (Data s_d : this.sky_hotel) {
+//                        double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
+//                        if (checkDominated(s_d.getData(), d.getData()) && d1 < min_dist) {
+//                            min_dist = d1;
+//                        }
+//                    }
+//
+//                    if (this.distance_threshold != -1) {
+//                        if (min_dist > d2 && this.distance_threshold > d2) {
+//                            d_list.add(d);
+//                        }
+//                    } else {
+////                            System.out.println("--------------------");
+//                        if (min_dist > d2) {
+//                            d_list.add(d);
+//                        }
+//                    }
+//                }
 
 //                my_n.d_list = new ArrayList<>(d_list);
 //                sk_counter += d_list.size();
@@ -277,7 +286,7 @@ public class BaseMethod_approx {
                 for (path p : my_n.skyPaths) {
                     if (!p.rels.isEmpty()) {
                         long ats = System.nanoTime();
-                        boolean f = addToSkylineResult(p, d_list);
+                        boolean f = addToSkylineResult(p, this.sNodes);
                         addResult_rt += System.nanoTime() - ats;
                     }
                 }
@@ -357,11 +366,13 @@ public class BaseMethod_approx {
             System.arraycopy(np.costs, 0, final_costs, 0, np.costs.length);
             double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
 //            double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
+            double d3 = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
+
 
 
             final_costs[0] += end_distance;
             //lemma3
-            //double d3 = Math.sqrt(Math.pow(d.location[0] - queryD.location[0], 2) + Math.pow(d.location[1] - queryD.location[1], 2));
+//            double d3 = Math.sqrt(Math.pow(d.location[0] - queryD.location[0], 2) + Math.pow(d.location[1] - queryD.location[1], 2));
 
 //            if (np.startNode.getId() == 286 && np.endNode.getId() == 1862) {
 //                System.out.println(d);
@@ -372,7 +383,8 @@ public class BaseMethod_approx {
 //            }
 
 
-            if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId())) {
+//            System.out.println(this.distance_threshold);
+            if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId()) && d3 < this.distance_threshold) {
 
                 double[] d_attrs = d.getData();
                 for (int i = 4; i < final_costs.length; i++) {

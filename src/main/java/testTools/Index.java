@@ -17,7 +17,7 @@ import java.util.Random;
 public class Index {
     private final String base = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/index";
     private int bits_place_id;
-    String home_folder;
+    public String home_folder;
     private String source_data_tree;
     private String neo4j_db;
     //    private final int pagesize_data;
@@ -55,8 +55,8 @@ public class Index {
             this.source_data_tree = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels + ".rtr";
             this.neo4j_db = System.getProperty("user.home") + "/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
             this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/NodeInfo.txt";
-        }else{
-            this.home_folder = base + "/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels+"_all";
+        } else {
+            this.home_folder = base + "/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels + "_all";
             this.source_data_tree = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels + ".rtr";
             this.neo4j_db = System.getProperty("user.home") + "/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
             this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/NodeInfo.txt";
@@ -83,7 +83,7 @@ public class Index {
 
 
         this.num_nodes = getLineNumbers();
-        
+
         this.bits_place_id = Long.toBinaryString(this.num_nodes).length();
 
         this.pagesize_list = 1024;
@@ -122,7 +122,7 @@ public class Index {
         } else {
 
             if (g_str == null) {
-                graph_size = 2000;
+                graph_size = 10000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -134,25 +134,26 @@ public class Index {
             }
 
             if (hn_str == null) {
-                hotels_num = 1000;
+                hotels_num = 5000;
             } else {
                 hotels_num = Integer.parseInt(hn_str);
             }
 
             if (r_str == null) {
-                range = 12;
+                range = 6;
             } else {
                 range = Double.parseDouble(r_str);
             }
 
             if (t_str == null) {
-                distance_thresholds = range;
+                distance_thresholds = -1;
             } else {
                 distance_thresholds = Double.parseDouble(t_str);
             }
 
             Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds);
             idx.buildIndex(true);
+//            idx.read_d_list_from_disk(452);
         }
 
     }
@@ -187,6 +188,7 @@ public class Index {
                 data_f.read(b_d);
                 d.read_from_buffer(b_d);
                 d_list.add(d);
+//                System.out.println(d_id);
             }
 
             data_f.close();
@@ -203,7 +205,8 @@ public class Index {
     }
 
     private void test() {
-        String Data_file = this.home_folder + "data.dat";
+        String Data_file = this.home_folder + "/data.dat";
+        System.out.println(Data_file);
         try {
 
             long d_id = getRandomNumberInRange_int(0, 1000);
@@ -216,8 +219,8 @@ public class Index {
             d.read_from_buffer(b_d);
             System.out.println(d);
 
-            String header_name = this.home_folder + "header.idx";
-            String list_name = this.home_folder + "list.idx";
+            String header_name = this.home_folder + "/header.idx";
+            String list_name = this.home_folder + "/list.idx";
             RandomAccessFile header_f = new RandomAccessFile(header_name, "rw");
             long node_id = getRandomNumberInRange_int(0, 1000);
             header_f.seek((678 * 8));
@@ -326,25 +329,56 @@ public class Index {
                     //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
                     //It means the hotel could be a candidate hotel of the bus stop n.
                     for (Data d : sk.allNodes) {
+                        boolean flag = true;
+                        double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
+                        double min_dist = Double.MAX_VALUE;
                         for (Data s_d : sk.sky_hotels) {
-//                            double d1 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], s_d.location[0], s_d.location[1]);
-//                            double d2 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], d.location[0], d.location[1]);
                             double d1 = Math.sqrt(Math.pow(node.locations[0] - s_d.location[0], 2) + Math.pow(node.locations[1] - s_d.location[1], 2));
-                            double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
-                            if (this.distance_threshold != -1) {
-                                if (d1 > d2 && this.distance_threshold > d2 && checkDominated(s_d.getData(), d.getData())) {
-                                    d_list.add(d);
-                                    break;
-                                }
-                            } else {
-                                if (d1 > d2 && checkDominated(s_d.getData(), d.getData())) {
-                                    d_list.add(d);
-                                    break;
-                                }
+                            if (checkDominated(s_d.getData(), d.getData()) && d1 < min_dist) {
+                                min_dist = d1;
                             }
-
                         }
+
+                        if (this.distance_threshold != -1) {
+                            if (min_dist > d2 && this.distance_threshold > d2) {
+                                d_list.add(d);
+                            }
+                        } else {
+//                            System.out.println("--------------------");
+                            if (min_dist > d2 ) {
+                                d_list.add(d);
+                            }
+                        }
+
                     }
+
+
+
+//                    System.out.println(d_list.size());
+
+//                    ArrayList<Data> d_list = new ArrayList<>(sk.sky_hotels);
+//                    //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
+//                    //It means the hotel could be a candidate hotel of the bus stop n.
+//                    for (Data d : sk.allNodes) {
+//                        for (Data s_d : sk.sky_hotels) {
+////                            double d1 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], s_d.location[0], s_d.location[1]);
+////                            double d2 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], d.location[0], d.location[1]);
+//                            double d1 = Math.sqrt(Math.pow(node.locations[0] - s_d.location[0], 2) + Math.pow(node.locations[1] - s_d.location[1], 2));
+//                            double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
+//                            if (this.distance_threshold != -1) {
+//                                if (d1 > d2 && this.distance_threshold > d2 && checkDominated(s_d.getData(), d.getData())) {
+//                                    d_list.add(d);
+//                                    break;
+//                                }
+//                            } else {
+//                                if (d1 > d2 && checkDominated(s_d.getData(), d.getData())) {
+//                                    d_list.add(d);
+//                                    break;
+//                                }
+//                            }
+//
+//                        }
+//                    }
 
                     int d_size = d_list.size();
 
@@ -352,11 +386,18 @@ public class Index {
                     header_f.writeInt(page_list_number); //start page of the list file
                     header_f.writeInt(d_size); //the size of the list of current node
 
-
+//                    if(node.id == 452)
+//                    {
+//                        System.out.println(d_list.size()+" "+page_list_number);
+//                    }
 //                    System.out.println(d_list.size());
                     int records = 0;
                     for (Data d : d_list) {
                         list_f.writeInt(d.PlaceId);
+//                        if(node.id == 452)
+//                        {
+//                            System.out.println(d.PlaceId);
+//                        }
                         records++;
                         //if page is full, page number ++
                         if ((this.pagesize_list / 4) < (records + 1)) {

@@ -277,21 +277,21 @@ public class BaseMethod_subPath {
                 long t_index_s = System.nanoTime();
 
                 myNode my_n = entry.getValue();
-                ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
-                //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
-                //It means the hotel could be a candidate hotel of the bus stop n.
-                for (Data d : this.sNodes) {
-                    for (Data s_d : this.sky_hotel) {
-//                        double d1 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], s_d.location[0], s_d.location[1]);
-//                        double d2 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], d.location[0], d.location[1]);
-                        double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
-                        double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
-                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
-                            d_list.add(d);
-                            break;
-                        }
-                    }
-                }
+//                ArrayList<Data> d_list = new ArrayList<>(this.sky_hotel);
+//                //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
+//                //It means the hotel could be a candidate hotel of the bus stop n.
+//                for (Data d : this.sNodes) {
+//                    for (Data s_d : this.sky_hotel) {
+////                        double d1 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], s_d.location[0], s_d.location[1]);
+////                        double d2 = GoogleMaps.distanceInMeters(my_n.locations[0], my_n.locations[1], d.location[0], d.location[1]);
+//                        double d1 = Math.sqrt(Math.pow(my_n.locations[0] - s_d.location[0], 2) + Math.pow(my_n.locations[1] - s_d.location[1], 2));
+//                        double d2 = Math.sqrt(Math.pow(my_n.locations[0] - d.location[0], 2) + Math.pow(my_n.locations[1] - d.location[1], 2));
+//                        if (checkDominated(s_d.getData(), d.getData()) && d1 > d2) {
+//                            d_list.add(d);
+//                            break;
+//                        }
+//                    }
+//                }
 
 //                index_s += (System.nanoTime() - t_index_s);
 
@@ -299,7 +299,7 @@ public class BaseMethod_subPath {
                     if (!p.rels.isEmpty() && p.expaned) {
                         if (p.expaned) {
                             long ats = System.nanoTime();
-                            boolean f = addToSkylineResult(p, d_list);
+                            boolean f = addToSkylineResult(p, sNodes);
                             addResult_rt += System.nanoTime() - ats;
                         }
                     }

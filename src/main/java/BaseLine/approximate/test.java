@@ -41,7 +41,7 @@ public class test {
         } else {
 
             if (g_str == null) {
-                graph_size = 1000;
+                graph_size = 2000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -53,7 +53,7 @@ public class test {
             }
 
             if (qn_str == null) {
-                query_num = 3;
+                query_num = 1;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
@@ -65,7 +65,7 @@ public class test {
             }
 
             if (r_str == null) {
-                range = 14;
+                range = 12;
             } else {
                 range = Integer.parseInt(r_str);
             }
@@ -77,7 +77,7 @@ public class test {
             for (int i = 0; i < query_num; i++) {
                 BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
                 int random_place_id = bm5.getRandomNumberInRange_int(0, hotels_num - 1);
-                Data queryD = bm5.getDataById(random_place_id);
+                Data queryD = bm5.getDataById(68);
                 queryList[i] = queryD;
             }
 
@@ -106,8 +106,12 @@ public class test {
         bs_mix_index.baseline(queryD);
         testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "edu");
         testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos");
+        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx_index.skyPaths, "edu");
+        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx_index.skyPaths, "cos");
         testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "edu");
         testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos");
+        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "edu");
+        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos");
         testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix_index.skyPaths, "edu");
         testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix_index.skyPaths, "cos");
 //        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bm5.skyPaths, "edu");
