@@ -16,8 +16,8 @@ import java.util.Random;
 
 public class Index {
     private final String base = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/index";
-    private int bits_place_id;
     public String home_folder;
+    private int bits_place_id;
     private String source_data_tree;
     private String neo4j_db;
     //    private final int pagesize_data;
@@ -122,7 +122,7 @@ public class Index {
         } else {
 
             if (g_str == null) {
-                graph_size = 10000;
+                graph_size = 2000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -134,19 +134,19 @@ public class Index {
             }
 
             if (hn_str == null) {
-                hotels_num = 5000;
+                hotels_num = 1000;
             } else {
                 hotels_num = Integer.parseInt(hn_str);
             }
 
             if (r_str == null) {
-                range = 6;
+                range = 12;
             } else {
                 range = Double.parseDouble(r_str);
             }
 
             if (t_str == null) {
-                distance_thresholds = -1;
+                distance_thresholds = range;
             } else {
                 distance_thresholds = Double.parseDouble(t_str);
             }
@@ -325,7 +325,20 @@ public class Index {
                 try (Transaction tx = connector.graphDB.beginTx()) {
                     myNode node = new myNode(node_id);
 
-                    ArrayList<Data> d_list = new ArrayList<>(sk.sky_hotels);
+                    ArrayList<Data> d_list;
+                    if (this.distance_threshold == -1) {
+                        d_list = new ArrayList<>(sk.sky_hotels);
+                    } else {
+                        d_list = new ArrayList<>();
+                        for (Data d : sk.sky_hotels) {
+                            double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
+                            if (d2 < this.distance_threshold) {
+                                d_list.add(d);
+                            }
+                        }
+
+                    }
+
                     //if we can find the distance from the bus_stop n to the hotel d is shorter than the distance to one of the skyline hotels s_d
                     //It means the hotel could be a candidate hotel of the bus stop n.
                     for (Data d : sk.allNodes) {
@@ -335,23 +348,32 @@ public class Index {
                         for (Data s_d : sk.sky_hotels) {
                             double d1 = Math.sqrt(Math.pow(node.locations[0] - s_d.location[0], 2) + Math.pow(node.locations[1] - s_d.location[1], 2));
                             if (checkDominated(s_d.getData(), d.getData()) && d1 < min_dist) {
-                                min_dist = d1;
+                                if (distance_threshold == -1) {
+                                    min_dist = d1;
+                                } else {
+                                    if (d1 < this.distance_threshold) {
+                                        min_dist = d1;
+                                    }
+                                }
                             }
                         }
 
                         if (this.distance_threshold != -1) {
+
                             if (min_dist > d2 && this.distance_threshold > d2) {
                                 d_list.add(d);
+//                                if (d.getPlaceId() == 394 && node_id == 453) {
+//                                    System.out.println(distance_threshold + " " + d2 + " " + (this.distance_threshold > d2));
+//                                }
                             }
                         } else {
 //                            System.out.println("--------------------");
-                            if (min_dist > d2 ) {
+                            if (min_dist > d2) {
                                 d_list.add(d);
                             }
                         }
 
                     }
-
 
 
 //                    System.out.println(d_list.size());
@@ -393,6 +415,9 @@ public class Index {
 //                    System.out.println(d_list.size());
                     int records = 0;
                     for (Data d : d_list) {
+//                        if (node_id == 453) {
+//                            System.out.println(d);
+//                        }
                         list_f.writeInt(d.PlaceId);
 //                        if(node.id == 452)
 //                        {

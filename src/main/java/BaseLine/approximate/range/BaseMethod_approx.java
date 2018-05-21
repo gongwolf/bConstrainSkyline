@@ -372,16 +372,13 @@ public class BaseMethod_approx {
 
             final_costs[0] += end_distance;
             //lemma3
-//            double d3 = Math.sqrt(Math.pow(d.location[0] - queryD.location[0], 2) + Math.pow(d.location[1] - queryD.location[1], 2));
-
-//            if (np.startNode.getId() == 286 && np.endNode.getId() == 1862) {
-//                System.out.println(d);
+//            if(my_endNode.id==453 && d.getPlaceId()==394){
+//                System.out.println(np);
+//                System.out.println(final_costs[0]+" "+d.distance_q+" "+d3);
 //                System.out.println(final_costs[0] < d.distance_q);
 //                System.out.println(final_costs[0] < this.dominated_checking.get(d.getPlaceId()));
-//                System.out.println(np);
-//                System.out.println("-------------------------------");
+//                System.out.println(d3 < this.distance_threshold);
 //            }
-
 
 //            System.out.println(this.distance_threshold);
             if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId()) && d3 < this.distance_threshold) {
@@ -392,6 +389,7 @@ public class BaseMethod_approx {
                 }
 
                 Result r = new Result(this.queryD, d, final_costs, np);
+
 //            if (np.startNode.getId() == 0 && np.endNode.getId() == 7&& np.nodes.size() == 4 && np.rels.size() == 3) {
 //                System.out.println((final_costs[0] < d.distance_q) + " " +
 //                        (final_costs[0] < this.dominated_checking.get(d.getPlaceId())) + " " +

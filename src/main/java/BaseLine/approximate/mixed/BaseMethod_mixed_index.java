@@ -311,7 +311,7 @@ public class BaseMethod_mixed_index {
 
         s_sum = System.currentTimeMillis() - s_sum;
 //        System.out.println(s_sum+" "+db_time+" "+shut_db_time+" "+index_s);
-        sb.append("|" + (s_sum - db_time - shut_db_time - (index_s / 1000000)) + "|");
+        sb.append("|" + (s_sum - db_time - shut_db_time) + "|");
         sb.append("," + this.skyPaths.size() + "," + counter + "|");
         sb.append(addResult_rt / 1000000 + "(" + (this.add_oper / 1000000) + "+" + (this.check_add_oper / 1000000)
                 + "+" + (this.map_operation / 1000000) + "+" + (this.checkEmpty / 1000000) + "+" + (this.read_data / 1000000) + "),");

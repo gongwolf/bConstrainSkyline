@@ -270,6 +270,9 @@ public class BaseMethod_approx_index {
 
                 for (path p : my_n.skyPaths) {
                     if (!p.rels.isEmpty()) {
+//                        if(my_n.id==453){
+//                            System.out.println(p);
+//                        }
                         long ats = System.nanoTime();
                         boolean f = addToSkylineResult(p, d_list);
                         addResult_rt += System.nanoTime() - ats;
@@ -292,7 +295,7 @@ public class BaseMethod_approx_index {
         shut_db_time = System.currentTimeMillis() - shut_db_time;
 
         s_sum = System.currentTimeMillis() - s_sum;
-        sb.append("|" + (s_sum - db_time - shut_db_time - (index_s / 1000000)) + "|");
+        sb.append("|" + (s_sum - db_time - shut_db_time) + "|");
         sb.append("," + this.skyPaths.size() + "," + counter + "|");
         sb.append(addResult_rt / 1000000 + "(" + (this.add_oper / 1000000) + "+" + (this.check_add_oper / 1000000)
                 + "+" + (this.map_operation / 1000000) + "+" + (this.checkEmpty / 1000000) + "+" + (this.read_data / 1000000) + "),");

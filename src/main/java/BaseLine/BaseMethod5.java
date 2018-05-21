@@ -18,6 +18,7 @@ public class BaseMethod5 {
     private final int hotels_num;
     private final double range;
     public ArrayList<path> qqqq = new ArrayList<>();
+    public ArrayList<Result> skyPaths = new ArrayList<>();
     Random r = new Random(System.nanoTime());
     String treePath;
     String dataPath;
@@ -35,7 +36,6 @@ public class BaseMethod5 {
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
-    public ArrayList<Result> skyPaths = new ArrayList<>();
     private ArrayList<Data> sky_hotel;
     private HashSet<Integer> finalDatas = new HashSet<>();
     private int checkedDataId = 9;
@@ -153,12 +153,12 @@ public class BaseMethod5 {
                 all_lemmas.baseline(queryList[i]);
             }
 
-            System.out.println("=================================");
-
-            for (int i = 0; i < query_num; i++) {
-                BaseMethod5 all_lemmas = new BaseMethod5(graph_size, degree, range, hotels_num);
-                all_lemmas.baseline_index(queryList[i]);
-            }
+//            System.out.println("=================================");
+//
+//            for (int i = 0; i < query_num; i++) {
+//                BaseMethod5 all_lemmas = new BaseMethod5(graph_size, degree, range, hotels_num);
+//                all_lemmas.baseline_index(queryList[i]);
+//            }
 
 
 //                BaseMethod_index bs_index = new BaseMethod_index(graph_size, degree, range, hotels_num, threshold);
@@ -324,13 +324,13 @@ public class BaseMethod5 {
                 index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-//                    if (!p.rels.isEmpty()) {
-                    long ats = System.nanoTime();
+                    if (!p.rels.isEmpty()) {
+                        long ats = System.nanoTime();
 
-                    boolean f = addToSkylineResult(p, sNodes);
+                        boolean f = addToSkylineResult(p, sNodes);
 
-                    addResult_rt += System.nanoTime() - ats;
-//                    }
+                        addResult_rt += System.nanoTime() - ats;
+                    }
                 }
 
 

@@ -122,18 +122,18 @@ public class path {
     public String toString() {
 //        System.out.println("dasdasd:   "+this.nodes.size()+"  "+this.rels.size());
         StringBuffer sb = new StringBuffer();
-//        if (this.rels.isEmpty()) {
-//            sb.append("(" + this.startNode + ")");
-//        } else {
-//            int i;
-//            for (i = 0; i < this.nodes.size() - 1; i++) {
-//                sb.append("(" + this.nodes.get(i) + ")");
-//                // sb.append("-[Linked," + this.relationships.get(i).getId() +
-//                // "]->");
-//                sb.append("-[" + this.rels.get(i) + "]-");
-//            }
-//            sb.append("(" + this.nodes.get(i) + ")");
-//        }
+        if (this.rels.isEmpty()) {
+            sb.append("(" + this.startNode + ")");
+        } else {
+            int i;
+            for (i = 0; i < this.nodes.size() - 1; i++) {
+                sb.append("(" + this.nodes.get(i) + ")");
+                // sb.append("-[Linked," + this.relationships.get(i).getId() +
+                // "]->");
+                sb.append("-[" + this.rels.get(i) + "]-");
+            }
+            sb.append("(" + this.nodes.get(i) + ")");
+        }
 
         sb.append(",[");
         for (double d : this.costs) {

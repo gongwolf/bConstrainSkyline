@@ -68,11 +68,11 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>BuildIndex</finalName>
+                    <finalName>approx_test</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>testTools.Index</mainClass>
+                            <mainClass>BaseLine.approximate.test</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
