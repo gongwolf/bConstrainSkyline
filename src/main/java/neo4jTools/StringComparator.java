@@ -9,3 +9,12 @@ public class StringComparator implements Comparator<String> {
         return Integer.parseInt(o1) - Integer.parseInt(o2);
     }
 }
+
+
+class IntegerComparator implements Comparator<Integer> {
+
+    @Override
+    public int compare(Integer o1, Integer o2) {
+        return o1-o2;
+    }
+}

@@ -1,13 +1,10 @@
 package neo4jTools;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
+import javafx.util.Pair;
+import org.apache.commons.io.FileUtils;
+
+import java.io.*;
+import java.util.*;
 
 public class mimicBusLine {
     String DBBase = "/home/gqxwolf/mydata/projectData/busline/data/";
@@ -19,22 +16,56 @@ public class mimicBusLine {
     final int leftbuttom = 3;
     final int lefttop = 4;
     private final int numofNode;
+
+    double movement = 20;
+    private double samnode_t = 2;
+
     HashMap<Integer, node> Nodes = new HashMap<>();
+    HashMap<Pair<Integer, Integer>, String[]> Edges = new HashMap<>();
+
     int max_node_id;
 
     public mimicBusLine(int numofNode) {
         this.numofNode = numofNode;
         this.max_node_id = 0;
+
+
     }
 
     public static void main(String args[]) {
-        mimicBusLine m = new mimicBusLine(100);
-        m.generateBusline();
+        int graphsize = 100;
+        mimicBusLine m = new mimicBusLine(graphsize);
+//        m.generateGraph(true);
+        m.readFromDist();
+        while (m.findComponent(m.Nodes).size() != graphsize) {
+            m.connectedComponent();
+        }
+    }
+
+    public void generateGraph(boolean deleteBefore) {
+        if (deleteBefore) {
+            File dataF = new File(DBBase);
+            try {
+                FileUtils.deleteDirectory(dataF);
+                dataF.mkdirs();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        while (Nodes.size() < this.numofNode) {
+            generateBusline();
+        }
+        writeNodeToDisk();
+        writeEdgeToDisk();
     }
 
     public void generateBusline() {
+
         int num_bus_inLine;
-        if (numofNode - Nodes.size() < 10) {
+
+
+        if (numofNode - Nodes.size() < 20) {
             num_bus_inLine = numofNode - Nodes.size();
         } else {
             num_bus_inLine = getRandomNumberInRange_int(10, 20);
@@ -44,13 +75,61 @@ public class mimicBusLine {
         int[] bus_ids = new int[num_bus_inLine];
 
         for (int i = 0; i < num_bus_inLine; i++) {
-            System.out.println(i);
             node new_n = new node();
 
-            if (i < 2) {
+//            System.out.print(i);
+            if (i == 0) {
                 new_n.latitude = getRandomNumberInRange(0, 360);
                 new_n.longitude = getRandomNumberInRange(0, 360);
-                System.out.println(new_n.latitude+" "+new_n.longitude);
+////                System.out.println(new_n.latitude + " " + new_n.longitude);
+            } else if (i == 1) {
+
+
+                double p_l = Nodes.get(bus_ids[i - 1]).latitude;
+                double p_g = Nodes.get(bus_ids[i - 1]).longitude;
+
+                int next_direction = getRandomNumberInRange_int(1, 4);
+                switch (next_direction) {
+                    case righttop:
+                        new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                        new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
+                        break;
+                    case rightbuttom:
+                        new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                        new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
+                        break;
+                    case leftbuttom:
+                        new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                        new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
+                        break;
+                    case lefttop:
+                        new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                        new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
+                        break;
+                }
+
+                while (Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, 2)) < samnode_t) {
+                    next_direction = getRandomNumberInRange_int(1, 4);
+                    switch (next_direction) {
+                        case righttop:
+                            new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                            new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
+                            break;
+                        case rightbuttom:
+                            new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                            new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
+                            break;
+                        case leftbuttom:
+                            new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                            new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
+                            break;
+                        case lefttop:
+                            new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                            new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
+                            break;
+                    }
+                }
+
             } else {
                 int not_go_direction = 0;
                 if (Nodes.get(bus_ids[i - 1]).latitude - Nodes.get(bus_ids[i - 2]).latitude >= 0 && Nodes.get(bus_ids[i - 1]).longitude - Nodes.get(bus_ids[i - 2]).longitude >= 0) {
@@ -70,21 +149,44 @@ public class mimicBusLine {
 
                 switch (next_direction) {
                     case righttop:
-                        new_n.latitude = getRandomNumberInRange(p_l, p_l + 10);
-                        new_n.longitude = getRandomNumberInRange(p_g, p_g + 10);
+                        new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                        new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
                         break;
                     case rightbuttom:
-                        new_n.latitude = getRandomNumberInRange(p_l, p_l + 10);
-                        new_n.longitude = getRandomNumberInRange(p_g - 10, p_g);
+                        new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                        new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
                         break;
                     case leftbuttom:
-                        new_n.latitude = getRandomNumberInRange(p_l - 10, p_l);
-                        new_n.longitude = getRandomNumberInRange(p_g - 10, p_g);
+                        new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                        new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
                         break;
                     case lefttop:
-                        new_n.latitude = getRandomNumberInRange(p_l - 10, p_l);
-                        new_n.longitude = getRandomNumberInRange(p_g, p_g + 10);
+                        new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                        new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
                         break;
+                }
+
+                while (Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, 2)) < samnode_t ||
+                        Math.sqrt(Math.pow(new_n.latitude - Nodes.get(bus_ids[i - 2]).latitude, 2) + Math.pow(new_n.longitude - Nodes.get(bus_ids[i - 2]).longitude, 2)) < samnode_t) {
+                    next_direction = getRandomDirection(not_go_direction);
+                    switch (next_direction) {
+                        case righttop:
+                            new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                            new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
+                            break;
+                        case rightbuttom:
+                            new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                            new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
+                            break;
+                        case leftbuttom:
+                            new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                            new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
+                            break;
+                        case lefttop:
+                            new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                            new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
+                            break;
+                    }
                 }
 
 
@@ -101,6 +203,24 @@ public class mimicBusLine {
             }
             new_n.id = newid;
             bus_ids[i] = newid;
+
+
+            if (i > 0) {
+                double p_l = Nodes.get(bus_ids[i - 1]).latitude;
+                double p_g = Nodes.get(bus_ids[i - 1]).longitude;
+                double dist = Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, samnode_t));
+
+                System.out.println(newid + "  " + bus_ids[i - 1] + "  " + new_n.latitude + " " + new_n.longitude + " " + p_l + " " + p_g + " " + dist);
+
+                String[] costs = new String[3];
+                for (int j = 0; j < 3; j++) {
+                    costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+                }
+
+                System.out.println(bus_ids[i - 1] + "," + new_n.id + " " + costs[0] + " " + costs[1] + " " + costs[2]);
+
+                Edges.put(new Pair<>(bus_ids[i - 1], new_n.id), costs);
+            }
         }
 
 
@@ -109,9 +229,9 @@ public class mimicBusLine {
     private int hasNodes(node node) {
         int flag = -1;
         for (Map.Entry<Integer, neo4jTools.node> n : this.Nodes.entrySet()) {
-            if (Math.sqrt(Math.pow(n.getValue().latitude - node.latitude, 2) + Math.pow(n.getValue().longitude - node.longitude, 2)) < 2) {
+            if (Math.sqrt(Math.pow(n.getValue().latitude - node.latitude, 2) + Math.pow(n.getValue().longitude - node.longitude, 2)) < samnode_t) {
                 flag = n.getKey();
-                System.out.println("find a node "+flag);
+//                System.out.println("find a node " + flag);
             }
         }
         return flag;
@@ -134,12 +254,14 @@ public class mimicBusLine {
             throw new IllegalArgumentException("max must be greater than min");
         }
 
-        Random r = new Random(System.currentTimeMillis());
+        Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
 
     private int getRandomDirection(int not_go_dirct) {
         int direction = getRandomNumberInRange_int(1, 4);
+
+
         while (direction == not_go_dirct) {
             direction = getRandomNumberInRange_int(1, 4);
         }
@@ -147,7 +269,7 @@ public class mimicBusLine {
     }
 
     private double getGaussian(double mean, double sd) {
-        Random r = new Random(System.currentTimeMillis());
+        Random r = new Random();
         double value = r.nextGaussian() * sd + mean;
 
         while (value <= 0) {
@@ -158,22 +280,321 @@ public class mimicBusLine {
     }
 
 
-    private void writeNodeToDisk(HashMap<String, String[]> nodes) {
+    private void writeNodeToDisk() {
         try (FileWriter fw = new FileWriter(NodePath, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
             System.out.println(NodePath);
-            TreeMap<String, String[]> tm = new TreeMap<String, String[]>(new StringComparator());
-            tm.putAll(nodes);
-            for (Map.Entry<String, String[]> node : tm.entrySet()) {
+            TreeMap<Integer, node> tm = new TreeMap<Integer, node>(new IntegerComparator());
+            tm.putAll(Nodes);
+            for (Map.Entry<Integer, node> node : tm.entrySet()) {
                 StringBuffer sb = new StringBuffer();
-                String nodeId = node.getKey();
+                Integer nodeId = node.getKey();
                 sb.append(nodeId).append(" ");
+                sb.append(node.getValue().latitude).append(" ");
+                sb.append(node.getValue().longitude).append(" ");
+                out.println(sb.toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void writeEdgeToDisk() {
+        try (FileWriter fw = new FileWriter(EdgesPath, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            for (Map.Entry<Pair<Integer, Integer>, String[]> node : this.Edges.entrySet()) {
+//                System.out.println(EdgesPath);
+                StringBuffer sb = new StringBuffer();
+                int snodeId = node.getKey().getKey();
+                int enodeId = node.getKey().getValue();
+                sb.append(snodeId).append(" ");
+                sb.append(enodeId).append(" ");
                 for (String cost : node.getValue()) {
                     sb.append(cost).append(" ");
                 }
                 out.println(sb.toString());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void connectedComponent() {
+        ArrayList<HashSet<Integer>> component_list = new ArrayList<>();
+        System.out.println(this.Nodes.size() + " " + this.Edges.size());
+        HashMap<Integer, node> reamming_nodes = new HashMap<>(this.Nodes);
+
+        while (reamming_nodes.size() > 1) {
+            HashSet<Integer> nodesets = findComponent(reamming_nodes);
+            System.out.println(nodesets.size());
+
+            component_list.add(nodesets);
+
+            for (int n : nodesets) {
+                reamming_nodes.remove(n);
+            }
+        }
+
+        for (int i = 0; i < component_list.size() - 1; i++) {
+//            HashSet<Integer> nodes_ets = component_list.get(i);
+//            HashSet<Integer> next_sets = component_list.get(i + 1);
+//            createConnectedEdge(nodes_ets, next_sets);
+            HashSet<Integer> nodes_ets = component_list.get(i);
+            createConnectedEdge(nodes_ets, i, component_list);
+
+        }
+
+        if (reamming_nodes.size() == 1) {
+            for (Map.Entry<Integer, node> n : reamming_nodes.entrySet()) {
+                int sid = n.getKey();
+                int eid = getNN(sid);
+                String[] costs = new String[3];
+                for (int j = 0; j < 3; j++) {
+                    costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+                }
+                this.Edges.put(new Pair<>(sid, eid), costs);
+            }
+
+        }
+
+
+        File f = new File(this.EdgesPath);
+        if (f.exists()) {
+            f.delete();
+        }
+
+        writeEdgeToDisk();
+
+    }
+
+    private void createConnectedEdge(HashSet<Integer> nodes_ets, int set_i, ArrayList<HashSet<Integer>> component_list) {
+        double min_dist = Double.MAX_VALUE;
+        int component_id = -1;
+        for (int i = 0; i < component_list.size(); i++) {
+            if (i != set_i) {
+                double dist = nearest_dist(nodes_ets, component_list.get(i));
+                if (dist < min_dist) {
+                    component_id = i;
+                    min_dist = dist;
+                }
+            }
+        }
+
+//        System.out.println(set_i+"------"+component_id);
+
+
+        int[] ids = nearest_id_pair(nodes_ets, component_list.get(component_id));
+        int sid = ids[0];
+        int did = ids[1];
+        String[] costs = new String[3];
+        for (int j = 0; j < 3; j++) {
+            costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+        }
+        this.Edges.put(new Pair<>(sid, did), costs);
+
+
+    }
+
+    private double nearest_dist(HashSet<Integer> nodes_ets, HashSet<Integer> next_sets) {
+        double min_dist = Double.MAX_VALUE;
+        for (int c_n : nodes_ets) {
+            double s_latitude = this.Nodes.get(c_n).latitude;
+            double s_longitude = this.Nodes.get(c_n).longitude;
+
+            for (int n : next_sets) {
+                double n_latitude = this.Nodes.get(n).latitude;
+                double n_longitude = this.Nodes.get(n).longitude;
+                double dist = Math.sqrt(Math.pow(s_latitude - n_latitude, 2) + Math.pow(s_longitude - n_longitude, 2));
+                if (dist < min_dist) {
+                    min_dist = dist;
+                }
+            }
+        }
+
+        return min_dist;
+    }
+
+
+    private int[] nearest_id_pair(HashSet<Integer> nodes_ets, HashSet<Integer> next_sets) {
+        int result[] = new int[2];
+        double min_dist = Double.MAX_VALUE;
+        for (int c_n : nodes_ets) {
+            double s_latitude = this.Nodes.get(c_n).latitude;
+            double s_longitude = this.Nodes.get(c_n).longitude;
+
+            for (int n : next_sets) {
+                double n_latitude = this.Nodes.get(n).latitude;
+                double n_longitude = this.Nodes.get(n).longitude;
+                double dist = Math.sqrt(Math.pow(s_latitude - n_latitude, 2) + Math.pow(s_longitude - n_longitude, 2));
+                if (dist < min_dist) {
+                    min_dist = dist;
+                    result[0] = c_n;
+                    result[1] = n;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private int getNN(int sid) {
+        double min_dist = Double.MAX_VALUE;
+        int result = 0;
+        double s_latitude = this.Nodes.get(sid).latitude;
+        double s_longitude = this.Nodes.get(sid).longitude;
+        for (int n : this.Nodes.keySet()) {
+            double n_latitude = this.Nodes.get(n).latitude;
+            double n_longitude = this.Nodes.get(n).longitude;
+            double dist = Math.sqrt(Math.pow(s_latitude - n_latitude, 2) + Math.pow(s_longitude - n_longitude, 2));
+            if (dist < min_dist) {
+                min_dist = dist;
+                result = n;
+            }
+        }
+
+        return result;
+    }
+
+    private void createConnectedEdge(HashSet<Integer> nodes_ets, HashSet<Integer> next_sets) {
+        int sid = getRandomeNode(nodes_ets);
+        int eid = getNNById(sid, next_sets);
+
+        String[] costs = new String[3];
+        for (int j = 0; j < 3; j++) {
+            costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+        }
+
+        this.Edges.put(new Pair<>(sid, eid), costs);
+    }
+
+    private int getNNById(int sid, HashSet<Integer> next_sets) {
+        double min_dist = Double.MAX_VALUE;
+        int result = 0;
+        double s_latitude = this.Nodes.get(sid).latitude;
+        double s_longitude = this.Nodes.get(sid).longitude;
+        for (int n : next_sets) {
+            double n_latitude = this.Nodes.get(n).latitude;
+            double n_longitude = this.Nodes.get(n).longitude;
+            double dist = Math.sqrt(Math.pow(s_latitude - n_latitude, 2) + Math.pow(s_longitude - n_longitude, 2));
+            if (dist < min_dist) {
+                min_dist = dist;
+                result = n;
+            }
+        }
+
+        return result;
+    }
+
+    private int getRandomeNode(HashSet<Integer> nodes_ets) {
+        int randomIndex = getRandomNumberInRange_int(0, nodes_ets.size() - 1);
+
+        int i = 0;
+        for (Integer key : nodes_ets) {
+            if (i == randomIndex) {
+                return key;
+            }
+
+            i++;
+        }
+        return -1;
+    }
+
+    //Find the connected component in the given remaining nodes set
+    private HashSet<Integer> findComponent(HashMap<Integer, node> reamming_nodes) {
+        HashSet<Integer> node_sets = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        int startNode = getRandomeStartingNode(reamming_nodes);
+
+        queue.add(startNode);
+
+        while (!queue.isEmpty()) {
+            int v = queue.poll();
+            node_sets.add(v);
+//            System.out.println(v);
+            HashSet<Integer> n_nodes = getNeigbor(v);
+            for (int n : n_nodes) {
+                if (!node_sets.contains(n) && !queue.contains(n)) {
+                    queue.add(n);
+                }
+            }
+        }
+
+        return node_sets;
+
+
+    }
+
+    private HashSet<Integer> getNeigbor(int v) {
+        HashSet<Integer> result = new HashSet<>();
+        for (Map.Entry<Pair<Integer, Integer>, String[]> e : this.Edges.entrySet()) {
+            if (e.getKey().getKey() == v) {
+                result.add(e.getKey().getValue());
+            } else if (e.getKey().getValue() == v) {
+                result.add(e.getKey().getKey());
+            }
+        }
+        return result;
+    }
+
+    private int getRandomeStartingNode(HashMap<Integer, node> reamming_nodes) {
+        Set<Integer> keyList = reamming_nodes.keySet();
+        int randomIndex = getRandomNumberInRange_int(0, keyList.size() - 1);
+
+        int i = 0;
+        for (Integer key : keyList) {
+            if (i == randomIndex) {
+                return key;
+            }
+
+            i++;
+        }
+        return -1;
+    }
+
+    private void readFromDist() {
+        try {
+
+            File f = new File(this.NodePath);
+            BufferedReader b = new BufferedReader(new FileReader(f));
+            String readLine = "";
+//            System.out.println("Reading file using Buffered Reader");
+
+            while ((readLine = b.readLine()) != null) {
+                node n = new node();
+                n.id = Integer.parseInt(readLine.split(" ")[0]);
+                n.latitude = Double.parseDouble(readLine.split(" ")[1]);
+                n.longitude = Double.parseDouble(readLine.split(" ")[2]);
+                this.Nodes.put(n.id, n);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+
+            File f = new File(this.EdgesPath);
+            BufferedReader b = new BufferedReader(new FileReader(f));
+            String readLine = "";
+//            System.out.println("Reading file using Buffered Reader");
+
+            while ((readLine = b.readLine()) != null) {
+                int s_id = Integer.parseInt(readLine.split(" ")[0]);
+                int e_id = Integer.parseInt(readLine.split(" ")[1]);
+
+                String costs[] = new String[3];
+                costs[0] = readLine.split(" ")[2];
+                costs[1] = readLine.split(" ")[3];
+                costs[2] = readLine.split(" ")[4];
+
+
+                this.Edges.put(new Pair<>(s_id, e_id), costs);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
