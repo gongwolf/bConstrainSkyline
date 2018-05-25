@@ -31,8 +31,8 @@ public class CreateDB {
 
     public static void main(String args[]) {
 
-        int graphsize = 2000;
-        int degree =4;
+        int graphsize = 10000;
+        int degree =1;
         int dimension=3;
 
         if (args.length == 3) {

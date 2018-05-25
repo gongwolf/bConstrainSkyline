@@ -6,10 +6,7 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
 import javafx.util.Pair;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class GoogleMaps {
@@ -25,24 +22,23 @@ public class GoogleMaps {
     }
 
     public static void main(String args[]) {
-        int range = 800;
+        int range = 200;
 
-        if(args.length==1)
-        {
+        if (args.length == 1) {
             range = Integer.valueOf(args[0]);
         }
 
         GoogleMaps g = new GoogleMaps();
 
-        double lat1 = 43.153826 ;
+        double lat1 = 43.153826;
         double long1 = -77.65942;
-        double lat2 = 43.173793 ;
+        double lat2 = 43.173793;
         double long2 = -77.667754;
 
         g.distanceInMeters(lat1, long1, lat2, long2);
-        g.readBusInfo();
-        System.out.println(g.busStations.size());
-        g.statisticInRange(range);
+//        g.readBusInfo();
+//        System.out.println(g.busStations.size());
+//        g.statisticInRange(range);
 //        g.averageDistance();
 //        g.findDistanceToBusStop(37.75731290, -122.42150700);
 
@@ -56,6 +52,103 @@ public class GoogleMaps {
 //                break;
 //            }
 //        }
+        g.getAddressInformation();
+    }
+
+    public static double distanceInMeters(double lat1, double long1, double lat2, double long2) {
+        long R = 6371000;
+        double d;
+
+        double r_lat1 = Math.PI / 180 * lat1;
+        double r_lat2 = Math.PI / 180 * lat2;
+//        double delta_lat = Math.PI / 180 * (lat2 - lat1);
+        double delta_long = Math.PI / 180 * (long2 - long1);
+//        double a = Math.sin(delta_lat / 2) * Math.sin(delta_lat / 2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.sin(delta_long / 2) * Math.sin(delta_long / 2);
+//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//        d = R * c;
+//        System.out.println(d);
+//        double x = Math.PI / 180 * (long2 - long1) * Math.cos(Math.PI / 180 * (lat1 + lat2) / 2);
+//        double y = Math.PI / 180 * (lat2 - lat1);
+//        d = Math.sqrt(x * x + y * y) * R;
+//        System.out.println(d);
+        d = Math.acos(Math.sin(r_lat1) * Math.sin(r_lat2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.cos(delta_long)) * R;
+//        System.out.println(d);
+        return d;
+    }
+
+    public void getAddressInformation() {
+        String bs_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data";
+
+        String bus_data = bs_path + "/NodeInfo.txt";
+        String path_node_with_id = bs_path + "/Node_with_placeID.txt";
+        HashMap<Integer, Pair<Double, Double>> nodeList = new HashMap<>();
+        try {
+            File f = new File(bus_data);
+            BufferedReader b = new BufferedReader(new FileReader(f));
+            String readLine = "";
+            while (((readLine = b.readLine()) != null)) {
+                String[] infos = readLine.trim().split(" ");
+                int id = Integer.parseInt(infos[0]);
+                double latitude = Double.parseDouble(infos[1]);
+                double longitude = Double.parseDouble(infos[2]);
+                nodeList.put(id, new Pair<>(latitude, longitude));
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(nodeList.size());
+
+        TreeMap<Integer, Pair<Double, Double>> sortedNodeList = new TreeMap<>(nodeList);
+        BufferedWriter writer = null;
+        try {
+
+            File outputFile = new File(path_node_with_id);
+            if (outputFile.exists()) {
+                outputFile.delete();
+            }
+            writer = new BufferedWriter(new FileWriter(outputFile, true));
+
+            for (Map.Entry<Integer, Pair<Double, Double>> e : sortedNodeList.entrySet()) {
+
+                System.out.println(e.getKey() + " " + e.getValue().getKey() + " " + e.getValue().getValue());
+                int id = e.getKey();
+                double lat = e.getValue().getKey();
+                double lng = e.getValue().getValue();
+
+//                if (id == 10) {
+//                    break;
+//                }
+
+                String name = "", placeid = "";
+                PlacesSearchResponse resps = PlacesApi.nearbySearchQuery(this.context, new LatLng(lat, lng)).rankby(RankBy.DISTANCE).
+                        type(PlaceType.BUS_STATION, PlaceType.FOOD, PlaceType.RESTAURANT, PlaceType.TRAIN_STATION).await();
+
+//                PlacesSearchResponse resps = PlacesApi.radarSearchQuery(this.context, new LatLng(lat, lng),2000).await();
+                PlacesSearchResult[] results = resps.results;
+
+                if (results.length >= 1) {
+////                        System.out.println(results[0].formattedAddress);
+//                    System.out.println(results[0].name);
+////                        System.out.println(results[0].vicinity);
+//                    System.out.println(results[0].placeId);
+                    name = results[0].name;
+                    placeid = results[0].placeId;
+                }
+
+                writer.append(id + "," + lat + "," + lng + ", " + name + " ," + placeid + "\n");
+            }
+
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
     }
 
     private void averageDistance() {
@@ -179,27 +272,6 @@ public class GoogleMaps {
 
         return result;
 
-    }
-
-    public static double distanceInMeters(double lat1, double long1, double lat2, double long2) {
-        long R = 6371000;
-        double d;
-
-        double r_lat1 = Math.PI / 180 * lat1;
-        double r_lat2 = Math.PI / 180 * lat2;
-//        double delta_lat = Math.PI / 180 * (lat2 - lat1);
-        double delta_long = Math.PI / 180 * (long2 - long1);
-//        double a = Math.sin(delta_lat / 2) * Math.sin(delta_lat / 2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.sin(delta_long / 2) * Math.sin(delta_long / 2);
-//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//        d = R * c;
-//        System.out.println(d);
-//        double x = Math.PI / 180 * (long2 - long1) * Math.cos(Math.PI / 180 * (lat1 + lat2) / 2);
-//        double y = Math.PI / 180 * (lat2 - lat1);
-//        d = Math.sqrt(x * x + y * y) * R;
-//        System.out.println(d);
-        d = Math.acos(Math.sin(r_lat1) * Math.sin(r_lat2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.cos(delta_long)) * R;
-//        System.out.println(d);
-        return d;
     }
 
     public void readBusInfo() {

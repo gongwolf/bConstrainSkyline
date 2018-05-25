@@ -72,13 +72,13 @@ public class SyntheticData {
         } else {
 
             if (g_str == null) {
-                graphsize = 2000;
+                graphsize = 10000;
             } else {
                 graphsize = Integer.parseInt(g_str);
             }
 
             if (n_str == null) {
-                numberOfNodes = 1000;
+                numberOfNodes = 5000;
             } else {
                 numberOfNodes = Integer.parseInt(n_str);
             }
@@ -90,13 +90,13 @@ public class SyntheticData {
             }
 
             if (r_str == null) {
-                range = 10;
+                range = 6;
             } else {
                 range = Double.parseDouble(r_str);
             }
 
             if (de_str == null) {
-                degree = 4;
+                degree = 1;
             } else {
                 degree = Integer.parseInt(de_str);
             }

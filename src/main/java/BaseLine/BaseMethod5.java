@@ -90,13 +90,13 @@ public class BaseMethod5 {
         } else {
 
             if (g_str == null) {
-                graph_size = 4000;
+                graph_size = 10000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
 
             if (de_str == null) {
-                degree = "4";
+                degree = "1";
             } else {
                 degree = de_str;
             }
@@ -108,13 +108,13 @@ public class BaseMethod5 {
             }
 
             if (hn_str == null) {
-                hotels_num = 2000;
+                hotels_num = 5000;
             } else {
                 hotels_num = Integer.parseInt(hn_str);
             }
 
             if (r_str == null) {
-                range = 10;
+                range = 6;
             } else {
                 range = Integer.parseInt(r_str);
             }

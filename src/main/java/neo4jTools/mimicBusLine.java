@@ -7,35 +7,39 @@ import java.io.*;
 import java.util.*;
 
 public class mimicBusLine {
-    String DBBase = "/home/gqxwolf/mydata/projectData/busline/data/";
-    String EdgesPath = DBBase + "SegInfo.txt";
-    String NodePath = DBBase + "NodeInfo.txt";
     //direction
     final int righttop = 1;
     final int rightbuttom = 2;
     final int leftbuttom = 3;
     final int lefttop = 4;
     private final int numofNode;
-
-    double movement = 20;
-    private double samnode_t = 2;
+    String DBBase = "/home/gqxwolf/mydata/projectData/busline";
+    String EdgesPath = DBBase + "SegInfo.txt";
+    String NodePath = DBBase + "NodeInfo.txt";
+    double movement;
+    double samnode_t;
 
     HashMap<Integer, node> Nodes = new HashMap<>();
     HashMap<Pair<Integer, Integer>, String[]> Edges = new HashMap<>();
 
     int max_node_id;
 
-    public mimicBusLine(int numofNode) {
+    public mimicBusLine(int numofNode, double movement, double samnode_t) {
+        this.DBBase = this.DBBase + "_" + numofNode + "/data/";
+        this.EdgesPath = DBBase + "SegInfo.txt";
+        this.NodePath = DBBase + "NodeInfo.txt";
         this.numofNode = numofNode;
         this.max_node_id = 0;
+        this.samnode_t = samnode_t;
+        this.movement = movement;
 
 
     }
 
     public static void main(String args[]) {
-        int graphsize = 100;
-        mimicBusLine m = new mimicBusLine(graphsize);
-//        m.generateGraph(true);
+        int graphsize = 10000;
+        mimicBusLine m = new mimicBusLine(graphsize, 15, 1.2);
+        m.generateGraph(true);
         m.readFromDist();
         while (m.findComponent(m.Nodes).size() != graphsize) {
             m.connectedComponent();
@@ -108,7 +112,10 @@ public class mimicBusLine {
                         break;
                 }
 
-                while (Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, 2)) < samnode_t) {
+
+                while (Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, 2)) < samnode_t ||
+                        (new_n.latitude > 360 || new_n.latitude < 0) ||
+                        (new_n.longitude > 360 || new_n.longitude < 0)) {
                     next_direction = getRandomNumberInRange_int(1, 4);
                     switch (next_direction) {
                         case righttop:
@@ -131,6 +138,7 @@ public class mimicBusLine {
                 }
 
             } else {
+                //find the direction can not go
                 int not_go_direction = 0;
                 if (Nodes.get(bus_ids[i - 1]).latitude - Nodes.get(bus_ids[i - 2]).latitude >= 0 && Nodes.get(bus_ids[i - 1]).longitude - Nodes.get(bus_ids[i - 2]).longitude >= 0) {
                     not_go_direction = this.leftbuttom;
@@ -166,8 +174,23 @@ public class mimicBusLine {
                         break;
                 }
 
+                int tried_times = 0;
                 while (Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, 2)) < samnode_t ||
-                        Math.sqrt(Math.pow(new_n.latitude - Nodes.get(bus_ids[i - 2]).latitude, 2) + Math.pow(new_n.longitude - Nodes.get(bus_ids[i - 2]).longitude, 2)) < samnode_t) {
+                        Math.sqrt(Math.pow(new_n.latitude - Nodes.get(bus_ids[i - 2]).latitude, 2) + Math.pow(new_n.longitude - Nodes.get(bus_ids[i - 2]).longitude, 2)) < samnode_t ||
+                        getAngleInDegree(new double[]{p_l - Nodes.get(bus_ids[i - 2]).latitude, p_g - Nodes.get(bus_ids[i - 2]).longitude}, new double[]{new_n.latitude - p_l, new_n.longitude - p_g}) > 80 ||
+                        (new_n.latitude > 360 || new_n.latitude < 0) ||
+                        (new_n.longitude > 360 || new_n.longitude < 0)) {
+//                    boolean f1 = Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, 2)) < samnode_t;
+//                    boolean f2 = Math.sqrt(Math.pow(new_n.latitude - Nodes.get(bus_ids[i - 2]).latitude, 2) + Math.pow(new_n.longitude - Nodes.get(bus_ids[i - 2]).longitude, 2)) < samnode_t;
+//                    boolean f3 = getAngleInDegree(new double[]{p_l - Nodes.get(bus_ids[i - 2]).latitude, p_g - Nodes.get(bus_ids[i - 2]).longitude}, new double[]{new_n.latitude - p_l, new_n.longitude - p_g}) > 90;
+//                    boolean f4 = new_n.latitude > 360 || new_n.latitude < 0;
+//                    boolean f5 = new_n.longitude > 360 || new_n.longitude < 0;
+//                    System.out.println(f1+" "+f2+" "+f3+" "+f4+" "+f5+" ");
+
+                    if (tried_times == 200) {
+                        break;
+                    }
+
                     next_direction = getRandomDirection(not_go_direction);
                     switch (next_direction) {
                         case righttop:
@@ -186,6 +209,37 @@ public class mimicBusLine {
                             new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
                             new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
                             break;
+                    }
+
+                    tried_times++;
+                }
+
+
+                if (tried_times == 200) {
+                    while (Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, 2)) < samnode_t ||
+                            Math.sqrt(Math.pow(new_n.latitude - Nodes.get(bus_ids[i - 2]).latitude, 2) + Math.pow(new_n.longitude - Nodes.get(bus_ids[i - 2]).longitude, 2)) < samnode_t ||
+                            (new_n.latitude > 360 || new_n.latitude < 0) ||
+                            (new_n.longitude > 360 || new_n.longitude < 0)) {
+
+                        next_direction = getRandomDirection(not_go_direction);
+                        switch (next_direction) {
+                            case righttop:
+                                new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                                new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
+                                break;
+                            case rightbuttom:
+                                new_n.latitude = getRandomNumberInRange(p_l, p_l + movement);
+                                new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
+                                break;
+                            case leftbuttom:
+                                new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                                new_n.longitude = getRandomNumberInRange(p_g - movement, p_g);
+                                break;
+                            case lefttop:
+                                new_n.latitude = getRandomNumberInRange(p_l - movement, p_l);
+                                new_n.longitude = getRandomNumberInRange(p_g, p_g + movement);
+                                break;
+                        }
                     }
                 }
 
@@ -208,13 +262,14 @@ public class mimicBusLine {
             if (i > 0) {
                 double p_l = Nodes.get(bus_ids[i - 1]).latitude;
                 double p_g = Nodes.get(bus_ids[i - 1]).longitude;
-                double dist = Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, samnode_t));
+                double dist = Math.sqrt(Math.pow(new_n.latitude - p_l, 2) + Math.pow(new_n.longitude - p_g, 2));
 
                 System.out.println(newid + "  " + bus_ids[i - 1] + "  " + new_n.latitude + " " + new_n.longitude + " " + p_l + " " + p_g + " " + dist);
 
                 String[] costs = new String[3];
                 for (int j = 0; j < 3; j++) {
-                    costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+//                    costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+                    costs[j] = String.valueOf(getGaussian(dist, dist));
                 }
 
                 System.out.println(bus_ids[i - 1] + "," + new_n.id + " " + costs[0] + " " + costs[1] + " " + costs[2]);
@@ -351,9 +406,12 @@ public class mimicBusLine {
             for (Map.Entry<Integer, node> n : reamming_nodes.entrySet()) {
                 int sid = n.getKey();
                 int eid = getNN(sid);
+                double dist = Math.sqrt(Math.pow(this.Nodes.get(sid).latitude - this.Nodes.get(eid).latitude, 2) + Math.pow(this.Nodes.get(sid).longitude - this.Nodes.get(eid).longitude, 2));
+
                 String[] costs = new String[3];
                 for (int j = 0; j < 3; j++) {
-                    costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+//                    costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+                    costs[j] = String.valueOf(getGaussian(dist, dist));
                 }
                 this.Edges.put(new Pair<>(sid, eid), costs);
             }
@@ -389,9 +447,12 @@ public class mimicBusLine {
         int[] ids = nearest_id_pair(nodes_ets, component_list.get(component_id));
         int sid = ids[0];
         int did = ids[1];
+        double dist = Math.sqrt(Math.pow(this.Nodes.get(sid).latitude - this.Nodes.get(did).latitude, 2) + Math.pow(this.Nodes.get(sid).longitude - this.Nodes.get(did).longitude, 2));
+
         String[] costs = new String[3];
         for (int j = 0; j < 3; j++) {
-            costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+//                    costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
+            costs[j] = String.valueOf(getGaussian(dist, dist));
         }
         this.Edges.put(new Pair<>(sid, did), costs);
 
@@ -446,28 +507,18 @@ public class mimicBusLine {
         double s_latitude = this.Nodes.get(sid).latitude;
         double s_longitude = this.Nodes.get(sid).longitude;
         for (int n : this.Nodes.keySet()) {
-            double n_latitude = this.Nodes.get(n).latitude;
-            double n_longitude = this.Nodes.get(n).longitude;
-            double dist = Math.sqrt(Math.pow(s_latitude - n_latitude, 2) + Math.pow(s_longitude - n_longitude, 2));
-            if (dist < min_dist) {
-                min_dist = dist;
-                result = n;
+            if (n != sid) {
+                double n_latitude = this.Nodes.get(n).latitude;
+                double n_longitude = this.Nodes.get(n).longitude;
+                double dist = Math.sqrt(Math.pow(s_latitude - n_latitude, 2) + Math.pow(s_longitude - n_longitude, 2));
+                if (dist < min_dist) {
+                    min_dist = dist;
+                    result = n;
+                }
             }
         }
 
         return result;
-    }
-
-    private void createConnectedEdge(HashSet<Integer> nodes_ets, HashSet<Integer> next_sets) {
-        int sid = getRandomeNode(nodes_ets);
-        int eid = getNNById(sid, next_sets);
-
-        String[] costs = new String[3];
-        for (int j = 0; j < 3; j++) {
-            costs[j] = String.valueOf(getRandomNumberInRange(0, 5));
-        }
-
-        this.Edges.put(new Pair<>(sid, eid), costs);
     }
 
     private int getNNById(int sid, HashSet<Integer> next_sets) {
@@ -486,20 +537,6 @@ public class mimicBusLine {
         }
 
         return result;
-    }
-
-    private int getRandomeNode(HashSet<Integer> nodes_ets) {
-        int randomIndex = getRandomNumberInRange_int(0, nodes_ets.size() - 1);
-
-        int i = 0;
-        for (Integer key : nodes_ets) {
-            if (i == randomIndex) {
-                return key;
-            }
-
-            i++;
-        }
-        return -1;
     }
 
     //Find the connected component in the given remaining nodes set
@@ -598,6 +635,15 @@ public class mimicBusLine {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public double getAngleInDegree(double[] x, double[] y) {
+        double r1 = x[0] * y[0] + x[1] * y[1];
+        double r2 = Math.sqrt(x[0] * x[0] + x[1] * x[1]);
+        double r3 = Math.sqrt(y[0] * y[0] + y[1] * y[1]);
+//        System.out.println(r1/(r2*r3));
+//        System.out.println(Math.toDegrees(Math.acos(r1/(r2*r3))));
+        return Math.toDegrees(Math.acos(r1 / (r2 * r3)));
     }
 }
 
