@@ -52,7 +52,8 @@ public class GoogleMaps {
 //                break;
 //            }
 //        }
-        g.getAddressInformation();
+//        g.getAddressInformation();
+        g.getAddressDetails();
     }
 
     public static double distanceInMeters(double lat1, double long1, double lat2, double long2) {
@@ -149,6 +150,75 @@ public class GoogleMaps {
         } catch (ApiException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void getAddressDetails() {
+        String bs_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data";
+
+        String bus_data = bs_path + "/Node_with_placeID.txt";
+        String path_node_with_details = bs_path + "/Node_with_placeDetails.txt";
+        BufferedWriter writer = null;
+        try {
+            File outputFile = new File(path_node_with_details);
+            if (outputFile.exists()) {
+                outputFile.delete();
+            }
+
+            writer = new BufferedWriter(new FileWriter(outputFile));
+
+
+            File f = new File(bus_data);
+            BufferedReader b = new BufferedReader(new FileReader(f));
+            String readLine = "";
+            while (((readLine = b.readLine()) != null)) {
+                StringBuffer sb = new StringBuffer();
+                System.out.println(readLine);
+                String[] infos = readLine.trim().split(",");
+                int id = Integer.parseInt(infos[0]);
+                double latitude = Double.parseDouble(infos[1]);
+                double longitude = Double.parseDouble(infos[2]);
+                String name = infos[3];
+                String placeID = infos[4];
+
+                sb.append(id).append(";");
+                sb.append(latitude).append(";");
+                sb.append(longitude).append(";");
+                sb.append(name).append(";");
+                sb.append(placeID).append(";");
+
+                PlaceDetails Details = PlacesApi.placeDetails(context, placeID).await();
+                sb.append(Details.formattedAddress).append(";");
+//                System.out.println("    " + Details.name);
+//                System.out.println("    " + Details.geometry.location);
+                for (AddressComponent c : Details.addressComponents) {
+                    sb.append(" " + c.longName + " "+c.shortName).append("|");
+//                    System.out.print("    " + c.longName + " "+c.shortName);
+//                    for (AddressComponentType cty : c.types) {
+//                        System.out.print(cty + ";");
+//                    }
+//                    System.out.println();
+
+                }
+//                Arrays.stream(Details.addressComponents).forEach(c -> System.out.println(c.longName+" "+c.types));
+//                Arrays.stream(Details.types).forEach(c -> System.out.print("    " + c + ","));
+//                System.out.println();
+                writer.write(sb.substring(0,sb.length()-1));
+                writer.write("\n");
+                break;
+//                writer.append(id + "," + lat + "," + lng + ", " + name + " ," + placeid + "\n");
+
+            }
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        } catch (ApiException e1) {
+            e1.printStackTrace();
+        }
+
     }
 
     private void averageDistance() {
