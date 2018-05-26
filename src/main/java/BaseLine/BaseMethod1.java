@@ -6,6 +6,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
+import testTools.GoogleMaps;
 
 import java.util.*;
 
@@ -111,11 +112,13 @@ public class BaseMethod1 {
         ArrayList<path> Results = new ArrayList<>();
         Skyline sky = new Skyline(treePath);
         long r1 = System.currentTimeMillis();
-        sky.allDatas(queryD);
+        sky.BBS(queryD);
+        sNodes = sky.skylineStaticNodes;
+
+        long sk_counter = 0;
 
 //        System.out.println("Find candidate static node by BBS " + (System.currentTimeMillis() - r1) + "ms " + sky.skylineStaticNodes.size());
         long bbs_rt = System.currentTimeMillis() - r1;
-        sNodes = sky.allNodes;
 //        System.out.println(sNodes.size());
 //        System.out.println("=====================================================");
 
@@ -209,9 +212,10 @@ public class BaseMethod1 {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
-            System.out.println("expansion finished "+ expasion_rt);
+            System.out.println("expansion finished " + expasion_rt);
 
             for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
+                sk_counter += mm.getValue().skyPaths.size();
                 for (path np : mm.getValue().skyPaths) {
                     addToSkylineResult(np, queryD);
                 }
@@ -261,6 +265,8 @@ public class BaseMethod1 {
         int bus_stop_in_result = final_bus_stops.size();
 
         sb.append("  " + visited_bus_stop + "," + bus_stop_in_result + "," + (double) bus_stop_in_result / visited_bus_stop + "   " + this.sky_add_result_counter);
+
+        sb.append(" ").append(sk_counter);
 
         System.out.println(sb.toString());
 //        this.finalDatas.stream().forEach(f -> System.out.println(f));
@@ -320,6 +326,8 @@ public class BaseMethod1 {
             double[] final_costs = new double[np.costs.length + 3];
             System.arraycopy(np.costs, 0, final_costs, 0, np.costs.length);
             double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
+//            double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
+
             final_costs[0] += end_distance;
 
             double[] d_attrs = d.getData();
