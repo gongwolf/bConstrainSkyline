@@ -31,6 +31,7 @@ public class SyntheticData {
         this.grahsize = graphsize;
         this.degree = degree;
         this.info_path = "/home/gqxwolf/mydata/projectData/testGraph" + this.grahsize + "_" + this.degree + "/data";
+        //this.info_path="/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
 
         this.upper = upper;
 
@@ -109,7 +110,7 @@ public class SyntheticData {
 
 
             SyntheticData sd = new SyntheticData(numberOfNodes, dimension, graphsize, degree, range, upper);
-            sd.test();
+            //sd.test();
 //        sd.createStaticNodes(numberOfNodes, dimension);
             sd.testStaticRTree();
 
@@ -312,8 +313,8 @@ public class SyntheticData {
 
 
     public void testStaticRTree() {
-        String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + grahsize + "_" + degree + "_" + range + "_" + this.numberOfNodes + ".rtr";
-
+        //String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + grahsize + "_" + degree + "_" + range + "_" + this.numberOfNodes + ".rtr";
+        String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree_LA.rtr";
         RTree rt = new RTree(treePath, Constants.CACHESIZE);
 
         System.out.println((((Node) rt.root_ptr).get_num_of_data()));

@@ -193,7 +193,7 @@ public class connector {
         propertiesName.clear();
         try (Transaction tx = graphDB.beginTx()) {
 
-            Iterable<Relationship> rels = graphDB.getNodeById(0).getRelationships(Line.Linked, Direction.BOTH);
+            Iterable<Relationship> rels = graphDB.getNodeById(1).getRelationships(Line.Linked, Direction.BOTH);
             if (rels.iterator().hasNext()) {
                 Relationship rel = rels.iterator().next();
 //                System.out.println(rel);

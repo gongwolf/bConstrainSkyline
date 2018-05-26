@@ -10,6 +10,8 @@ import org.neo4j.graphdb.Transaction;
 import java.util.*;
 
 public class BaseMethod1 {
+    private final String graphPath;
+    private final String dataPath;
     public ArrayList<path> qqqq = new ArrayList<>();
     public ArrayList<Result> skyPaths = new ArrayList<>();
     Random r;
@@ -40,11 +42,38 @@ public class BaseMethod1 {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
-        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
+//        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
         this.threshold = threshold;
+
+
+//        this.graphPath = home_folder + "/neo4j334/testdb_LA/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_LA.rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_LA.txt";
+
+//        this.graphPath = home_folder + "/neo4j334/testdb_NY/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_NY.rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_NY.txt";
+
+
+        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
+
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
     }
+
+    public BaseMethod1(String city) {
+        r = new Random();
+        this.threshold = threshold;
+        this.graphPath = home_folder + "/neo4j334/testdb_" + city + "/databases/graph.db";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_" + city + ".rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_" + city + ".txt";
+
+    }
+
 
     public static void main(String args[]) {
         int graph_size = 10;
@@ -111,10 +140,9 @@ public class BaseMethod1 {
 //        System.out.println("==========");
 //
 
-        String graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         //System.out.println(graphPath);
         long db_time = System.currentTimeMillis();
-        connector n = new connector(graphPath);
+        connector n = new connector(this.graphPath);
         n.startDB();
         this.graphdb = n.getDBObject();
 
@@ -181,6 +209,7 @@ public class BaseMethod1 {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
+            System.out.println("expansion finished "+ expasion_rt);
 
             for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
                 for (path np : mm.getValue().skyPaths) {

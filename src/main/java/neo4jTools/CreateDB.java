@@ -19,32 +19,42 @@ public class CreateDB {
     private GraphDatabaseService graphdb = null;
 
     public CreateDB(int graphsize, int degree) {
-        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
-        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
-
+//        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
+//        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
+        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + "SF" + "/databases/graph.db";
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data/";
         //this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real/data/";
         //this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_real/databases/graph.db";
 
-        NodesPath = DBBase + "NodeInfo.txt";
-        SegsPath = DBBase + "SegInfo.txt";
+        NodesPath = DBBase + "SF_NodeInfo.txt";
+        SegsPath = DBBase + "SF_SegInfo.txt";
+    }
+
+
+    public CreateDB() {
+
+        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + "NY" + "/databases/graph.db";
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data/";
+        NodesPath = DBBase + "NY_NodeInfo.txt";
+        SegsPath = DBBase + "NY_SegInfo.txt";
     }
 
     public static void main(String args[]) {
 
-        int graphsize = 10000;
-        int degree =1;
-        int dimension=3;
+//        int graphsize = 10000;
+//        int degree =1;
+//        int dimension=3;
+//
+//        if (args.length == 3) {
+//            graphsize = Integer.parseInt(args[0]);
+//            degree = Integer.parseInt(args[1]);
+//            dimension = Integer.parseInt(args[2]);
+//        }
+//
+//        generateGraph g = new generateGraph(graphsize, degree, dimension);
+//        g.generateG(true);
 
-        if (args.length == 3) {
-            graphsize = Integer.parseInt(args[0]);
-            degree = Integer.parseInt(args[1]);
-            dimension = Integer.parseInt(args[2]);
-        }
-
-        generateGraph g = new generateGraph(graphsize, degree, dimension);
-        g.generateG(true);
-
-        CreateDB db = new CreateDB(graphsize, degree);
+        CreateDB db = new CreateDB();
 //        db.createDatabasewithIndex("Id");
         db.createDatabase();
     }
@@ -60,6 +70,8 @@ public class CreateDB {
         nconn.startDB();
         this.graphdb = nconn.getDBObject();
 
+        int num_node = 0, num_edge = 0;
+
 
         try (Transaction tx = this.graphdb.beginTx()) {
             BufferedReader br = new BufferedReader(new FileReader(NodesPath));
@@ -72,6 +84,7 @@ public class CreateDB {
                 double lat = Double.parseDouble(attrs[1]);
                 double log = Double.parseDouble(attrs[2]);
                 Node n = createNode(id, lat, log);
+                num_node++;
             }
 
             br = new BufferedReader(new FileReader(SegsPath));
@@ -85,6 +98,7 @@ public class CreateDB {
                 double MetersDistance = Double.parseDouble(attrs[3]);
                 double RunningTime = Double.parseDouble(attrs[4]);
                 createRelation(src, des, EDistence, MetersDistance, RunningTime);
+                num_edge++;
             }
 
             tx.success();
@@ -95,6 +109,7 @@ public class CreateDB {
 
         nconn.shutdownDB();
         System.out.println("Database is created, the location of the db file is " + this.DB_PATH);
+        System.out.println("there are total "+num_node+" nodes and "+num_edge+" edges");
     }
 
 
@@ -151,7 +166,7 @@ public class CreateDB {
             rel.setProperty("MetersDistance", metersDistance);
             rel.setProperty("RunningTime", runningTime);
         } catch (Exception e) {
-            System.out.println(src+"-->"+des);
+            System.out.println(src + "-->" + des);
         }
     }
 

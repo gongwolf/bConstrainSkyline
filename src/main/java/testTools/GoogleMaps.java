@@ -161,11 +161,11 @@ public class GoogleMaps {
         BufferedWriter writer = null;
         try {
             File outputFile = new File(path_node_with_details);
-            if (outputFile.exists()) {
-                outputFile.delete();
-            }
+//            if (outputFile.exists()) {
+//                outputFile.delete();
+//            }
 
-            writer = new BufferedWriter(new FileWriter(outputFile));
+            writer = new BufferedWriter(new FileWriter(outputFile,true));
 
 
             File f = new File(bus_data);
@@ -178,36 +178,44 @@ public class GoogleMaps {
                 int id = Integer.parseInt(infos[0]);
                 double latitude = Double.parseDouble(infos[1]);
                 double longitude = Double.parseDouble(infos[2]);
-                String name = infos[3];
-                String placeID = infos[4];
+
+//                String name = infos[3];
+                String placeID = infos[infos.length - 1];
 
                 sb.append(id).append(";");
                 sb.append(latitude).append(";");
                 sb.append(longitude).append(";");
-                sb.append(name).append(";");
+//                sb.append(name).append(";");
                 sb.append(placeID).append(";");
 
-                PlaceDetails Details = PlacesApi.placeDetails(context, placeID).await();
-                sb.append(Details.formattedAddress).append(";");
+//                Thread.sleep(500);
+
+                if (id >= 19129) {
+//                    System.out.println("placeid:"+placeID+" "+(placeID==null)+" "+placeID.equals("  "));
+                    if (placeID != null && !placeID.equals("  ")) {
+                        PlaceDetails Details = PlacesApi.placeDetails(context, placeID).await();
+                        sb.append(Details.formattedAddress).append(";");
 //                System.out.println("    " + Details.name);
 //                System.out.println("    " + Details.geometry.location);
-                for (AddressComponent c : Details.addressComponents) {
-                    sb.append(" " + c.longName + " "+c.shortName).append("|");
+                        for (AddressComponent c : Details.addressComponents) {
+                            sb.append(" " + c.longName + " " + c.shortName).append("|");
 //                    System.out.print("    " + c.longName + " "+c.shortName);
 //                    for (AddressComponentType cty : c.types) {
 //                        System.out.print(cty + ";");
 //                    }
 //                    System.out.println();
 
-                }
+                        }
+                    }
 //                Arrays.stream(Details.addressComponents).forEach(c -> System.out.println(c.longName+" "+c.types));
 //                Arrays.stream(Details.types).forEach(c -> System.out.print("    " + c + ","));
 //                System.out.println();
-                writer.write(sb.substring(0,sb.length()-1));
-                writer.write("\n");
-                break;
+                    writer.write(sb.substring(0, sb.length() - 1));
+                    writer.write("\n");
+//                break;
 //                writer.append(id + "," + lat + "," + lng + ", " + name + " ," + placeid + "\n");
 
+                }
             }
             writer.close();
 
