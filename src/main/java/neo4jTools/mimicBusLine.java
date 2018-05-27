@@ -25,7 +25,7 @@ public class mimicBusLine {
     int max_node_id;
 
     public mimicBusLine(int numofNode, double movement, double samnode_t) {
-        this.DBBase = this.DBBase + "_" + numofNode + "/data/";
+        this.DBBase = this.DBBase + "_" + numofNode + "_"+samnode_t+"/data/";
         this.EdgesPath = DBBase + "SegInfo.txt";
         this.NodePath = DBBase + "NodeInfo.txt";
         this.numofNode = numofNode;
@@ -38,7 +38,7 @@ public class mimicBusLine {
 
     public static void main(String args[]) {
         int graphsize = 10000;
-        mimicBusLine m = new mimicBusLine(graphsize, 15, 1.2);
+        mimicBusLine m = new mimicBusLine(graphsize, 10, 2);
         m.generateGraph(true);
         m.readFromDist();
         while (m.findComponent(m.Nodes).size() != graphsize) {

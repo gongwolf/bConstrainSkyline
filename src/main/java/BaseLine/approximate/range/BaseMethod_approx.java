@@ -284,11 +284,11 @@ public class BaseMethod_approx {
 //                index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-                    if (!p.rels.isEmpty()) {
+//                    if (!p.rels.isEmpty()) {
                         long ats = System.nanoTime();
                         boolean f = addToSkylineResult(p, this.sNodes);
                         addResult_rt += System.nanoTime() - ats;
-                    }
+//                    }
                 }
             }
 
@@ -322,11 +322,11 @@ public class BaseMethod_approx {
 
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 

@@ -53,14 +53,14 @@ public class BaseMethod1 {
 //        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_LA.rtr";
 //        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_LA.txt";
 
-//        this.graphPath = home_folder + "/neo4j334/testdb_NY/databases/graph.db";
-//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_NY.rtr";
-//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_NY.txt";
+        this.graphPath = home_folder + "/neo4j334/testdb_NY/databases/graph.db";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_NY.rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_NY.txt";
 
 
-        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
-        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
-        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
+//        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
 
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
@@ -193,6 +193,7 @@ public class BaseMethod1 {
                         ArrayList<path> new_paths = p.expand();
                         expasion_rt += (System.nanoTime() - ee);
                         for (path np : new_paths) {
+//                            if (!np.hasCycle()) {
                             myNode next_n;
                             if (this.tmpStoreNodes.containsKey(np.endNode)) {
                                 next_n = tmpStoreNodes.get(np.endNode);
@@ -205,6 +206,7 @@ public class BaseMethod1 {
                                 mqueue.add(next_n);
                             }
                         }
+//                        }
                     }
                 }
 
@@ -212,7 +214,7 @@ public class BaseMethod1 {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
-            System.out.println("expansion finished " + expasion_rt);
+//            System.out.println("expansion finished " + expasion_rt);
 
             for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
                 sk_counter += mm.getValue().skyPaths.size();
@@ -251,11 +253,11 @@ public class BaseMethod1 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
 
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 
@@ -297,9 +299,9 @@ public class BaseMethod1 {
     private boolean addToSkylineResult(path np, Data queryD) {
         this.add_counter++;
         long r2a = System.nanoTime();
-        if (np.rels.isEmpty()) {
-            return false;
-        }
+//        if (np.rels.isEmpty()) {
+//            return false;
+//        }
 
 //        if (np.isDummyPath()) {
 //            return false;

@@ -15,7 +15,8 @@ import java.io.FileReader;
 import java.util.*;
 
 public class BaseMethod_mixed {
-    private final int hotels_num;
+    private int hotels_num;
+    private String graphPath;
     public ArrayList<Result> skyPaths = new ArrayList<>();
     public ArrayList<Data> sky_hotel;
     Random r;
@@ -55,12 +56,21 @@ public class BaseMethod_mixed {
         this.hotels_num = hotels_num;
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+
 //        System.out.println(this.treePath);
 //        System.out.println(this.dataPath);
 //        System.exit(0);
 
 //        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree.rtr";
 //        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+    }
+
+    public BaseMethod_mixed(String tree, String data, String graphPath,double distance_threshold) {
+        this.distance_threshold = distance_threshold;
+        this.treePath = tree;
+        this.dataPath = data;
+        this.graphPath = graphPath;
     }
 
 
@@ -106,7 +116,6 @@ public class BaseMethod_mixed {
         long r1 = System.currentTimeMillis();
 
 //        String graphPath = home_folder + "/neo4j334/testdb_real_50/databases/graph.db";
-        String graphPath = home_folder+"/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -206,6 +215,8 @@ public class BaseMethod_mixed {
 
                 myNode v = mqueue.pop();
 
+//                System.out.println(v.id);
+
                 counter++;
 
                 path[] needToProcess = new path[constants.path_dimension];
@@ -232,6 +243,8 @@ public class BaseMethod_mixed {
                     path p = needToProcess[i];
                     if (p != null && !p.expaned) {
                         p.expaned = true;
+//                        System.out.println(p);
+
 
                         long ee = System.nanoTime();
                         ArrayList<path> new_paths = p.expand();
@@ -239,6 +252,8 @@ public class BaseMethod_mixed {
 
 
                         for (path np : new_paths) {
+//                            System.out.println(np);
+
                             myNode next_n;
                             if (this.tmpStoreNodes.containsKey(np.endNode)) {
                                 next_n = tmpStoreNodes.get(np.endNode);
@@ -247,6 +262,7 @@ public class BaseMethod_mixed {
 //                                next_n = new myNode(queryD, np.endNode, -1);
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
+//                            System.out.println(np);
 
                             //lemma 2
                             if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
@@ -343,11 +359,11 @@ public class BaseMethod_mixed {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
 
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 
@@ -420,7 +436,7 @@ public class BaseMethod_mixed {
 //            }
 
 
-            if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId()) && distance_threshold>end_distance) {
+            if (final_costs[0] < d.distance_q && final_costs[0] < this.dominated_checking.get(d.getPlaceId()) && distance_threshold > end_distance) {
 
                 double[] d_attrs = d.getData();
                 for (int i = 4; i < final_costs.length; i++) {
@@ -504,6 +520,8 @@ public class BaseMethod_mixed {
 //                    counter_in_range++;
 //                }
             }
+
+//            System.out.println(distz);
 
 //            this.distance_threshold = distz;
 

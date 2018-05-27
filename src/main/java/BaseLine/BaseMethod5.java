@@ -14,7 +14,7 @@ import java.io.*;
 import java.util.*;
 
 public class BaseMethod5 {
-    private static int nn_dist;
+    private static double nn_dist;
     private final int hotels_num;
     private final double range;
     public ArrayList<path> qqqq = new ArrayList<>();
@@ -51,9 +51,9 @@ public class BaseMethod5 {
         r = new Random(System.nanoTime());
         this.graph_size = graph_size;
         this.degree = degree;
-//        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
-//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
-//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
 
 
 //        this.graphPath = home_folder + "/neo4j334/testdb_LA/databases/graph.db";
@@ -66,9 +66,9 @@ public class BaseMethod5 {
 //        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_NY.txt";
 
 
-        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
-        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
-        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
+//        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
 
 
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
@@ -129,7 +129,7 @@ public class BaseMethod5 {
             }
 
             if (qn_str == null) {
-                query_num = 1;
+                query_num = 1000;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
@@ -154,7 +154,8 @@ public class BaseMethod5 {
 
 //            int[] id_list = new int[]{462,472,791};
             Data[] queryList = new Data[query_num];
-
+            int[] random_id = new int[]{8883, 5080, 5120, 5175, 4032, 4090, 5073, 8935, 5140, 9358, 5088, 5159};
+            query_num = random_id.length;
 
             for (int i = 0; i < query_num; i++) {
                 BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
@@ -164,20 +165,23 @@ public class BaseMethod5 {
             }
 
 
+//            for (int i = 0; i < query_num; i++) {
+//
+//                BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
+////                BaseMethod1 bMethod = new BaseMethod1("NY");
+//                bMethod.baseline(queryList[i]);
+//            }
+
+            System.out.println("=================================");
 
             for (int i = 0; i < query_num; i++) {
                 BaseMethod5 all_lemmas = new BaseMethod5(graph_size, degree, range, hotels_num);
 //                BaseMethod5 all_lemmas = new BaseMethod5("NY");
                 all_lemmas.baseline(queryList[i]);
+//                break;
+//                GoogleMaps.distanceStatistic(all_lemmas.skyPaths,all_lemmas.tmpStoreNodes);
             }
-            System.out.println("=================================");
 
-            for (int i = 0; i < query_num; i++) {
-
-                BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
-//                BaseMethod1 bMethod = new BaseMethod1("NY");
-                bMethod.baseline(queryList[i]);
-            }
 
 //            System.out.println("=================================");
 //
@@ -218,7 +222,7 @@ public class BaseMethod5 {
         sky.findSkyline();
 
         this.sky_hotel = new ArrayList<>(sky.sky_hotels);
-//        for (Data sddd : this.sky_hotel) {
+//        for (Data sddd : sky.sky_hotels) {
 //            System.out.println(sddd.getPlaceId());
 //        }
 //        System.out.println("there are " + this.sky_hotel.size() + " skyline hotels");
@@ -289,11 +293,16 @@ public class BaseMethod5 {
             db_time = System.currentTimeMillis() - db_time;
             r1 = System.currentTimeMillis();
             Node startNode = nearestNetworkNode(queryD);
+//            if (nn_dist > 1000) {
+//                n.shutdownDB();
+//                return;
+//            }
             long nn_rt = System.currentTimeMillis() - r1;
 
             long rt = System.currentTimeMillis();
 
             myNode s = new myNode(queryD, startNode.getId(), -1);
+//            System.out.println(GoogleMaps.distanceInMeters(queryD.location[0], queryD.location[1], s.locations[0], s.locations[1]));
 
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
@@ -303,6 +312,16 @@ public class BaseMethod5 {
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
+
+//                int aa = 0;
+//                for (path p : v.skyPaths) {
+//                    if (!p.expaned) {
+//                        aa++;
+//                    }
+//                }
+//                if (aa != 0) {
+//                    System.out.println(v.id + " " + aa);
+//                }
                 counter++;
 
                 for (int i = 0; i < v.skyPaths.size(); i++) {
@@ -314,29 +333,29 @@ public class BaseMethod5 {
                         ArrayList<path> new_paths = p.expand();
                         expasion_rt += (System.nanoTime() - ee);
                         for (path np : new_paths) {
-                            myNode next_n;
-                            if (this.tmpStoreNodes.containsKey(np.endNode)) {
-                                next_n = tmpStoreNodes.get(np.endNode);
-                            } else {
-                                next_n = new myNode(queryD, np.endNode, -1);
-                                this.tmpStoreNodes.put(next_n.id, next_n);
-                            }
+                            if (!np.hasCycle()) {
+                                myNode next_n;
+                                if (this.tmpStoreNodes.containsKey(np.endNode)) {
+                                    next_n = tmpStoreNodes.get(np.endNode);
+                                } else {
+                                    next_n = new myNode(queryD, np.endNode, -1);
+                                    this.tmpStoreNodes.put(next_n.id, next_n);
+                                }
 
-                            //lemma 2
-                            if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
-                                if (next_n.addToSkyline(np)) {
-                                    mqueue.add(next_n);
+                                //lemma 2
+                                if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
+                                    if (next_n.addToSkyline(np)) {
+                                        mqueue.add(next_n);
+                                    }
                                 }
                             }
                         }
-
-
                     }
                 }
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
-            System.out.println("expansion finished " + expasion_rt);
+//            System.out.println("expansion finished " + expasion_rt);
 
             long tt_sl = 0;
 
@@ -351,13 +370,13 @@ public class BaseMethod5 {
                 index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-                    if (!p.rels.isEmpty()) {
-                        long ats = System.nanoTime();
+//                    if (!p.rels.isEmpty()) {
+                    long ats = System.nanoTime();
 
-                        boolean f = addToSkylineResult(p, sNodes);
+                    boolean f = addToSkylineResult(p, sNodes);
 
-                        addResult_rt += System.nanoTime() - ats;
-                    }
+                    addResult_rt += System.nanoTime() - ats;
+//                    }
                 }
 
 
@@ -389,11 +408,11 @@ public class BaseMethod5 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
 
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 
@@ -404,7 +423,7 @@ public class BaseMethod5 {
 
         sb.append("  " + visited_bus_stop + "," + bus_stop_in_result + "," + (double) bus_stop_in_result / visited_bus_stop + "   " + this.sky_add_result_counter);
 
-        sb.append(" " + sNodes.size()+" "+sk_counter);
+        sb.append(" " + sNodes.size() + " " + sk_counter);
 
         System.out.println(sb.toString());
 
@@ -426,9 +445,9 @@ public class BaseMethod5 {
 //    private boolean addToSkylineResult(path np, Data d) {
         this.add_counter++;
         long r2a = System.nanoTime();
-        if (np.rels.isEmpty()) {
-            return false;
-        }
+//        if (np.rels.isEmpty()) {
+//            return false;
+//        }
 //        if (np.isDummyPath()) {
 //            return false;
 //        }
@@ -562,10 +581,11 @@ public class BaseMethod5 {
             if (distz > temp_distz) {
                 nn_node = n;
                 distz = temp_distz;
+//                nn_dist = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
             }
         }
 
-        nn_dist = (int) Math.ceil(distz);
+//        nn_dist = (int) Math.ceil(distz);
         return nn_node;
     }
 

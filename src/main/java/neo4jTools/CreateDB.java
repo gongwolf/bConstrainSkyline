@@ -33,10 +33,16 @@ public class CreateDB {
 
     public CreateDB() {
 
-        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + "NY" + "/databases/graph.db";
-        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data/";
-        NodesPath = DBBase + "NY_NodeInfo.txt";
-        SegsPath = DBBase + "NY_SegInfo.txt";
+//        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + "NY" + "/databases/graph.db";
+//        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data/";
+//        NodesPath = DBBase + "NY_NodeInfo.txt";
+//        SegsPath = DBBase + "NY_SegInfo.txt";
+
+
+        this.DB_PATH = "/home/gqxwolf/neo4j334/busline_10000_2.0/databases/graph.db";
+        this.DBBase = "/home/gqxwolf/mydata/projectData/busline_10000_2.0/data/";
+        NodesPath = DBBase + "NodeInfo.txt";
+        SegsPath = DBBase + "SegInfo.txt";
     }
 
     public static void main(String args[]) {

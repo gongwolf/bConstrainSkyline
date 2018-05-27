@@ -14,10 +14,11 @@ import java.io.FileReader;
 import java.util.*;
 
 public class BaseMethod_subPath {
-    private final int hotels_num;
+    private int hotels_num;
     public ArrayList<Result> skyPaths = new ArrayList<>();
     public ArrayList<Data> sky_hotel;
     Random r;
+    String graphPath;
 
 
     String treePath;
@@ -54,12 +55,21 @@ public class BaseMethod_subPath {
         this.hotels_num = hotels_num;
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath= home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
 //        System.out.println(this.treePath);
 //        System.out.println(this.dataPath);
 //        System.exit(0);
 
 //        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree.rtr";
 //        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+    }
+
+
+    public BaseMethod_subPath(String tree,String data, String graphPath)
+    {
+        this.treePath = tree;
+        this.dataPath = data;
+        this.graphPath= graphPath;
     }
 
 
@@ -105,7 +115,7 @@ public class BaseMethod_subPath {
         long r1 = System.currentTimeMillis();
 
 //        String graphPath = home_folder + "/neo4j334/testdb_real_50/databases/graph.db";
-        String graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -337,11 +347,11 @@ public class BaseMethod_subPath {
 
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 
@@ -487,8 +497,8 @@ public class BaseMethod_subPath {
                 double lat = (double) n.getProperty("lat");
                 double log = (double) n.getProperty("log");
 
-//                double temp_distz = Math.sqrt(Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
-                double temp_distz = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
+                double temp_distz = Math.sqrt(Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
+//                double temp_distz = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
                 if (distz > temp_distz) {
                     nn_node = n;
                     distz = temp_distz;

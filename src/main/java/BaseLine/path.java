@@ -210,4 +210,13 @@ public class path {
         }
         return true;
     }
+
+    public boolean hasCycle() {
+        for (int i = 0; i < rels.size() - 2; i++) {
+            if (this.endNode == rels.get(i)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

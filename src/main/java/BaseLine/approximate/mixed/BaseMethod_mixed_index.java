@@ -15,6 +15,7 @@ import java.util.*;
 
 public class BaseMethod_mixed_index {
     private final int hotels_num;
+    private final String graphPath;
     public ArrayList<Result> skyPaths = new ArrayList<>();
     public ArrayList<Data> sky_hotel;
     Random r;
@@ -54,6 +55,8 @@ public class BaseMethod_mixed_index {
         this.hotels_num = hotels_num;
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+
 //        System.out.println(this.treePath);
 //        System.out.println(this.dataPath);
 //        System.exit(0);
@@ -105,7 +108,6 @@ public class BaseMethod_mixed_index {
         long r1 = System.currentTimeMillis();
 
 //        String graphPath = home_folder + "/neo4j334/testdb_real_50/databases/graph.db";
-        String graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
         connector n = new connector(graphPath);
@@ -326,11 +328,11 @@ public class BaseMethod_mixed_index {
 
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 

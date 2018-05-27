@@ -1,5 +1,8 @@
 package testTools;
 
+import BaseLine.Result;
+import BaseLine.myNode;
+import RstarTree.Data;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PlacesApi;
 import com.google.maps.errors.ApiException;
@@ -31,11 +34,12 @@ public class GoogleMaps {
         GoogleMaps g = new GoogleMaps();
 
         double lat1 = 43.153826;
-        double long1 = -77.65942;
+        double long1 = -77.05942;
         double lat2 = 43.173793;
         double long2 = -77.667754;
 
-        g.distanceInMeters(lat1, long1, lat2, long2);
+        System.out.println(g.distanceInMeters(lat1, long1, lat2, long2));
+        System.out.println(Math.sqrt(Math.pow(lat1-lat2,2)+Math.pow(long1-long2,2)));
 //        g.readBusInfo();
 //        System.out.println(g.busStations.size());
 //        g.statisticInRange(range);
@@ -53,7 +57,7 @@ public class GoogleMaps {
 //            }
 //        }
 //        g.getAddressInformation();
-        g.getAddressDetails();
+//        g.getAddressDetails();
     }
 
     public static double distanceInMeters(double lat1, double long1, double lat2, double long2) {
@@ -62,19 +66,52 @@ public class GoogleMaps {
 
         double r_lat1 = Math.PI / 180 * lat1;
         double r_lat2 = Math.PI / 180 * lat2;
-//        double delta_lat = Math.PI / 180 * (lat2 - lat1);
+        double delta_lat = Math.PI / 180 * (lat2 - lat1);
         double delta_long = Math.PI / 180 * (long2 - long1);
-//        double a = Math.sin(delta_lat / 2) * Math.sin(delta_lat / 2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.sin(delta_long / 2) * Math.sin(delta_long / 2);
-//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//        d = R * c;
+        double a = Math.sin(delta_lat / 2) * Math.sin(delta_lat / 2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.sin(delta_long / 2) * Math.sin(delta_long / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        d = R * c;
 //        System.out.println(d);
 //        double x = Math.PI / 180 * (long2 - long1) * Math.cos(Math.PI / 180 * (lat1 + lat2) / 2);
 //        double y = Math.PI / 180 * (lat2 - lat1);
 //        d = Math.sqrt(x * x + y * y) * R;
 //        System.out.println(d);
-        d = Math.acos(Math.sin(r_lat1) * Math.sin(r_lat2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.cos(delta_long)) * R;
+//        d = Math.acos(Math.sin(r_lat1) * Math.sin(r_lat2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.cos(delta_long)) * R;
 //        System.out.println(d);
         return d;
+    }
+
+    public static void distanceStatistic(ArrayList<Result> skyPaths, HashMap<Long, myNode> tmpStoreNodes) {
+        HashSet<Long> startnodes = new HashSet<>();
+        HashSet<Long> endNodes = new HashSet<>();
+//        System.out.println(tmpStoreNodes.size());
+        Data q = null;
+        for (Result r : skyPaths) {
+
+            if (q == null) {
+                q = r.start;
+            }
+
+            int skylist[] = new int[]{2372, 1081, 2539, 8650, 8826, 510, 5046, 3840, 9350, 3144, 1692};
+
+            boolean flag = false;
+            for (long sid : skylist) {
+                if (r.end.getPlaceId() == sid) {
+                    flag = true;
+//                    break;
+                }
+            }
+
+            if (!flag) {
+                if (r.p != null) {
+                    double d1 = GoogleMaps.distanceInMeters(q.location[0], q.location[1], tmpStoreNodes.get(r.p.startNode).locations[0], tmpStoreNodes.get(r.p.startNode).locations[1]);
+                    double d2 = GoogleMaps.distanceInMeters(q.location[0], q.location[1], tmpStoreNodes.get(r.p.endNode).locations[0], tmpStoreNodes.get(r.p.endNode).locations[1]);
+                    System.out.println(q.PlaceId + " " + r.p.startNode + " " + r.p.endNode + " " + d1 + " " + d2);
+                }
+            }
+        }
+
+
     }
 
     public void getAddressInformation() {
@@ -165,7 +202,7 @@ public class GoogleMaps {
 //                outputFile.delete();
 //            }
 
-            writer = new BufferedWriter(new FileWriter(outputFile,true));
+            writer = new BufferedWriter(new FileWriter(outputFile, true));
 
 
             File f = new File(bus_data);

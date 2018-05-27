@@ -18,9 +18,7 @@ public class connector {
     String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
     String conFile = "/home/gqxwolf/neo4j334/conf/neo4j.conf";
     public static GraphDatabaseService graphDB;
-    public static ArrayList<String> propertiesName=new ArrayList<>();
-
-
+    public static ArrayList<String> propertiesName = new ArrayList<>();
 
 
     public connector(String DB_PATH) {
@@ -52,12 +50,12 @@ public class connector {
     }
 
     public void startDB() {
-        this.graphDB=null;
+        this.graphDB = null;
         //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
         GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(this.DB_PATH));
 //        builder.loadPropertiesFromFile(conFile)
-        builder.setConfig(GraphDatabaseSettings.mapped_memory_page_size, "2k")
-                .setConfig(GraphDatabaseSettings.pagecache_memory, "2G");
+//        builder.setConfig(GraphDatabaseSettings.mapped_memory_page_size, "2k")
+        builder.setConfig(GraphDatabaseSettings.pagecache_memory, "2G");
 
         this.graphDB = builder.newGraphDatabase();
 

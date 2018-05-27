@@ -55,118 +55,77 @@ public class statistic {
 //        s.shutdown();
     }
 
-    public static void goodnessAnalyze(ArrayList<Result> all, ArrayList<Result> approx, String dist_measure) {
-        int all_n = all.size();
-        int approx_n = approx.size();
+    public static double goodnessAnalyze(ArrayList<Result> all, ArrayList<Result> approx, String dist_measure) {
 
-        if (all.isEmpty()) {
-            System.out.println("the result is empty");
-            return;
+        HashSet<Integer> distinct_all = new HashSet<>();
+
+        for (Result r : all) {
+            distinct_all.add(r.end.getPlaceId());
         }
+
+        int n_all = distinct_all.size();
+
+
 
         double[] all_max_array = getBoundsArray(all, "max");
         double[] all_min_array = getBoundsArray(all, "min");
         double[] approx_max_array = getBoundsArray(approx, "max");
         double[] approx_min_array = getBoundsArray(approx, "min");
         double max = Math.sqrt(7);
-        System.out.print(max + "   ---  ");
 
 
-        HashSet<Integer> differ_base_with_apprx = new HashSet<>();
-        double sum_up_all = 0;
-
+        //find common objects
+        HashSet<Integer> common_set = new HashSet<>();
         for (Result r : all) {
-            boolean flag = false;
-            double min_distance = Double.POSITIVE_INFINITY;
             for (Result r1 : approx) {
-                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                    double d = 0;
-
-                    switch (dist_measure) {
-                        case "edu":
-                            d = EduclidianDist(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
-                            break;
-                        case "cos":
-                            d = CosineSimilarity(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
-                            break;
-                    }
-
-                    if (d < min_distance) {
-                        min_distance = d;
-                    }
+                if (r.end.getPlaceId() == r1.end.getPlaceId()) {
+                    common_set.add(r1.end.getPlaceId());
                 }
-
-                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                    if (!flag) {
-                        flag = true;
-                    }
-                }
-            }
-
-
-            if (!flag) {
-                differ_base_with_apprx.add(r.end.getPlaceId());
-            } else {
-                switch (dist_measure) {
-                    case "edu":
-                        sum_up_all += (max - min_distance);
-                        break;
-                    case "cos":
-                        sum_up_all += (1 - min_distance);
-                        break;
-                }
-
             }
         }
 
-        System.out.print(differ_base_with_apprx.size() + " " + (sum_up_all / all_n) + "   ---  ");
 
-        HashSet<Integer> differ_apprx_with_base = new HashSet<>();
-        double sum_up_approx = 0;
-        for (Result r1 : approx) {
-            boolean flag = false;
+        ArrayList<Integer> commonList = new ArrayList<>(common_set);
+
+        double sum_up = 0;
+        for (int idx : commonList) {
             double min_distance = Double.POSITIVE_INFINITY;
-
             for (Result r : all) {
-                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                    double d = 0;
-                    switch (dist_measure) {
-                        case "edu":
-                            d = EduclidianDist(r1, r, all_max_array, all_min_array, approx_max_array, approx_min_array);
-                            break;
-                        case "cos":
-                            d = CosineSimilarity(r1, r, all_max_array, all_min_array, approx_max_array, approx_min_array);
-                            break;
+                if (r.end.getPlaceId() == idx) {
+                    for (Result r1 : approx) {
+                        if (r1.end.getPlaceId() == idx) {
+                            double d = 0;
+
+                            switch (dist_measure) {
+                                case "edu":
+                                    d = EduclidianDist(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                                    break;
+                                case "cos":
+                                    d = CosineSimilarity(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                                    break;
+                            }
+
+                            if (d < min_distance) {
+                                min_distance = d;
+                            }
+                        }
+
                     }
 
-                    if (d < min_distance) {
-                        min_distance = d;
-                    }
-                }
-
-                if (r1.end.getPlaceId() == r.end.getPlaceId()) {
-                    if (!flag) {
-                        flag = true;
-                    }
                 }
             }
 
-
-            if (!flag) {
-                differ_apprx_with_base.add(r1.end.getPlaceId());
-            } else {
-                switch (dist_measure) {
-                    case "edu":
-                        sum_up_approx += (max - min_distance);
-                        break;
-                    case "cos":
-                        sum_up_approx += (1 - min_distance);
-                        break;
-                }
-
+            switch (dist_measure) {
+                case "edu":
+                    sum_up += (max - min_distance);
+                    break;
+                case "cos":
+                    sum_up += (1 - min_distance);
+                    break;
             }
         }
-        System.out.println("    " + differ_apprx_with_base.size() + "   " + (sum_up_approx / approx_n));
+
+        return sum_up/n_all;
     }
 
 
@@ -249,7 +208,97 @@ public class statistic {
 //            d += Math.pow(v1 - v2, 2);
         }
         d = d1 / (Math.sqrt(d2) * Math.sqrt(d3));
-        return (1-d);
+        return (1 - d);
+    }
+
+    public static double goodnessAnalyze(ArrayList<Result> all, ArrayList<Result> approx, String dist_measure, int topK) {
+        double[] all_max_array = getBoundsArray(all, "max");
+        double[] all_min_array = getBoundsArray(all, "min");
+        double[] approx_max_array = getBoundsArray(approx, "max");
+        double[] approx_min_array = getBoundsArray(approx, "min");
+        double max = Math.sqrt(7);
+
+
+        //find common objects
+        HashSet<Integer> common_set = new HashSet<>();
+        for (Result r : all) {
+            for (Result r1 : approx) {
+                if (r.end.getPlaceId() == r1.end.getPlaceId()) {
+                    common_set.add(r1.end.getPlaceId());
+                }
+            }
+        }
+
+
+        ArrayList<Integer> commonList = new ArrayList<>(common_set);
+//        System.out.println(" c:"+common_set.size());
+
+        if (commonList.size() < topK) {
+            return goodnessAnalyze(all, approx, dist_measure);
+        }
+
+        HashMap<Integer, Double> selected = new HashMap<>();
+        double sum_up = 0;
+        for (int i = 0; i < topK; i++) {
+
+            //random select object
+            int idx = getRandomNumberInRange_int(0, common_set.size() - 1);
+            while (selected.containsKey(idx)) {
+                idx = getRandomNumberInRange_int(0, common_set.size() - 1);
+            }
+
+            double min_distance = Double.POSITIVE_INFINITY;
+            for (Result r : all) {
+                if (r.end.getPlaceId() == commonList.get(idx)) {
+                    for (Result r1 : approx) {
+                        if (r1.end.getPlaceId() == commonList.get(idx)) {
+                            double d = 0;
+                            switch (dist_measure) {
+                                case "edu":
+                                    d = EduclidianDist(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                                    break;
+                                case "cos":
+                                    d = CosineSimilarity(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                                    break;
+                            }
+//                            System.out.println(min_distance+" "+d);
+
+                            if (d < min_distance) {
+                                min_distance = d;
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+            switch (dist_measure) {
+                case "edu":
+                    sum_up += (max - min_distance);
+                    selected.put(idx,(max - min_distance));
+                    break;
+                case "cos":
+                    sum_up += (1 - min_distance);
+                    selected.put(idx,(1 - min_distance));
+                    break;
+            }
+
+//            System.out.println(sum_up);
+        }
+
+        return sum_up/topK;
+    }
+
+
+    public static int getRandomNumberInRange_int(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 
     private void readHotels() {
