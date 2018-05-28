@@ -66,7 +66,6 @@ public class statistic {
         int n_all = distinct_all.size();
 
 
-
         double[] all_max_array = getBoundsArray(all, "max");
         double[] all_min_array = getBoundsArray(all, "min");
         double[] approx_max_array = getBoundsArray(approx, "max");
@@ -79,7 +78,9 @@ public class statistic {
         for (Result r : all) {
             for (Result r1 : approx) {
                 if (r.end.getPlaceId() == r1.end.getPlaceId()) {
-                    common_set.add(r1.end.getPlaceId());
+                    if (r1.p != null & r.p != null) {
+                        common_set.add(r1.end.getPlaceId());
+                    }
                 }
             }
         }
@@ -94,19 +95,21 @@ public class statistic {
                 if (r.end.getPlaceId() == idx) {
                     for (Result r1 : approx) {
                         if (r1.end.getPlaceId() == idx) {
-                            double d = 0;
+                            if (r1.p != null & r.p != null) {
+                                double d = 0;
 
-                            switch (dist_measure) {
-                                case "edu":
-                                    d = EduclidianDist(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
-                                    break;
-                                case "cos":
-                                    d = CosineSimilarity(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
-                                    break;
-                            }
+                                switch (dist_measure) {
+                                    case "edu":
+                                        d = EduclidianDist(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                                        break;
+                                    case "cos":
+                                        d = CosineSimilarity(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                                        break;
+                                }
 
-                            if (d < min_distance) {
-                                min_distance = d;
+                                if (d < min_distance) {
+                                    min_distance = d;
+                                }
                             }
                         }
 
@@ -125,7 +128,7 @@ public class statistic {
             }
         }
 
-        return sum_up/n_all;
+        return sum_up / n_all;
     }
 
 
@@ -212,6 +215,25 @@ public class statistic {
     }
 
     public static double goodnessAnalyze(ArrayList<Result> all, ArrayList<Result> approx, String dist_measure, int topK) {
+
+        //find common objects
+
+        HashSet<Integer> common_set = new HashSet<>();
+        for (Result r : all) {
+            for (Result r1 : approx) {
+                if (r.end.getPlaceId() == r1.end.getPlaceId()) {
+                    if (r1.p != null & r.p != null) {
+                        common_set.add(r1.end.getPlaceId());
+                    }
+                }
+            }
+        }
+        ArrayList<Integer> commonList = new ArrayList<>(common_set);
+
+        if (commonList.size() < topK) {
+            return goodnessAnalyze(all, approx, dist_measure);
+        }
+
         double[] all_max_array = getBoundsArray(all, "max");
         double[] all_min_array = getBoundsArray(all, "min");
         double[] approx_max_array = getBoundsArray(approx, "max");
@@ -219,23 +241,6 @@ public class statistic {
         double max = Math.sqrt(7);
 
 
-        //find common objects
-        HashSet<Integer> common_set = new HashSet<>();
-        for (Result r : all) {
-            for (Result r1 : approx) {
-                if (r.end.getPlaceId() == r1.end.getPlaceId()) {
-                    common_set.add(r1.end.getPlaceId());
-                }
-            }
-        }
-
-
-        ArrayList<Integer> commonList = new ArrayList<>(common_set);
-//        System.out.println(" c:"+common_set.size());
-
-        if (commonList.size() < topK) {
-            return goodnessAnalyze(all, approx, dist_measure);
-        }
 
         HashMap<Integer, Double> selected = new HashMap<>();
         double sum_up = 0;
@@ -252,22 +257,23 @@ public class statistic {
                 if (r.end.getPlaceId() == commonList.get(idx)) {
                     for (Result r1 : approx) {
                         if (r1.end.getPlaceId() == commonList.get(idx)) {
-                            double d = 0;
-                            switch (dist_measure) {
-                                case "edu":
-                                    d = EduclidianDist(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
-                                    break;
-                                case "cos":
-                                    d = CosineSimilarity(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
-                                    break;
-                            }
+                            if (r1.p != null & r.p != null) {
+                                double d = 0;
+                                switch (dist_measure) {
+                                    case "edu":
+                                        d = EduclidianDist(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                                        break;
+                                    case "cos":
+                                        d = CosineSimilarity(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
+                                        break;
+                                }
 //                            System.out.println(min_distance+" "+d);
 
-                            if (d < min_distance) {
-                                min_distance = d;
+                                if (d < min_distance) {
+                                    min_distance = d;
+                                }
                             }
                         }
-
                     }
 
                 }
@@ -276,18 +282,18 @@ public class statistic {
             switch (dist_measure) {
                 case "edu":
                     sum_up += (max - min_distance);
-                    selected.put(idx,(max - min_distance));
+                    selected.put(idx, (max - min_distance));
                     break;
                 case "cos":
                     sum_up += (1 - min_distance);
-                    selected.put(idx,(1 - min_distance));
+                    selected.put(idx, (1 - min_distance));
                     break;
             }
 
 //            System.out.println(sum_up);
         }
 
-        return sum_up/topK;
+        return sum_up / topK;
     }
 
 
