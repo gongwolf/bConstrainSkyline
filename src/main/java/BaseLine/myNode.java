@@ -15,6 +15,7 @@ public class myNode {
     public ArrayList<path> skyPaths;
     public double distance_q;
     public double[] locations;
+    public boolean inqueue;
 
     public myNode(Data queryNode, long current_id, double distance_threshold) {
         this.node = this.id = current_id;
@@ -31,6 +32,8 @@ public class myNode {
             path dp = new path(this);
             this.skyPaths.add(dp);
         }
+
+        inqueue=false;
     }
 
 
@@ -43,6 +46,7 @@ public class myNode {
 //            this.distance_q = Math.sqrt(Math.pow(locations[0] - queryNode.location[0], 2) + Math.pow(locations[1] - queryNode.location[1], 2));
             tx.success();
         }
+        inqueue=false;
     }
 
     public double[] getLocations() {

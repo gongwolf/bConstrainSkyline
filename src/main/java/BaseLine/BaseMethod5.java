@@ -51,9 +51,9 @@ public class BaseMethod5 {
         r = new Random(System.nanoTime());
         this.graph_size = graph_size;
         this.degree = degree;
-        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
-        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
-        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
+//        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
 
 
 //        this.graphPath = home_folder + "/neo4j334/testdb_LA/databases/graph.db";
@@ -66,9 +66,9 @@ public class BaseMethod5 {
 //        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_NY.txt";
 
 
-//        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
-//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
-//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
+        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
 
 
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
@@ -293,16 +293,16 @@ public class BaseMethod5 {
             db_time = System.currentTimeMillis() - db_time;
             r1 = System.currentTimeMillis();
             Node startNode = nearestNetworkNode(queryD);
-//            if (nn_dist > 1000) {
-//                n.shutdownDB();
-//                return;
-//            }
+            if (nn_dist > 1000) {
+                n.shutdownDB();
+                return;
+            }
             long nn_rt = System.currentTimeMillis() - r1;
 
             long rt = System.currentTimeMillis();
 
             myNode s = new myNode(queryD, startNode.getId(), -1);
-//            System.out.println(GoogleMaps.distanceInMeters(queryD.location[0], queryD.location[1], s.locations[0], s.locations[1]));
+            System.out.println(GoogleMaps.distanceInMeters(queryD.location[0], queryD.location[1], s.locations[0], s.locations[1]));
 
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
@@ -312,16 +312,17 @@ public class BaseMethod5 {
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
+                v.inqueue = false;
 
-//                int aa = 0;
-//                for (path p : v.skyPaths) {
-//                    if (!p.expaned) {
-//                        aa++;
-//                    }
-//                }
-//                if (aa != 0) {
-//                    System.out.println(v.id + " " + aa);
-//                }
+                int aa = 0;
+                for (path p : v.skyPaths) {
+                    if (!p.expaned) {
+                        aa++;
+                    }
+                }
+                if (aa != 0) {
+                    System.out.println(v.id + " " + aa);
+                }
                 counter++;
 
                 for (int i = 0; i < v.skyPaths.size(); i++) {
@@ -344,8 +345,9 @@ public class BaseMethod5 {
 
                                 //lemma 2
                                 if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
-                                    if (next_n.addToSkyline(np)) {
+                                    if (next_n.addToSkyline(np) && !next_n.inqueue) {
                                         mqueue.add(next_n);
+                                        next_n.inqueue = true;
                                     }
                                 }
                             }
@@ -355,7 +357,7 @@ public class BaseMethod5 {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
-//            System.out.println("expansion finished " + expasion_rt);
+            System.out.println("expansion finished " + exploration_rt);
 
             long tt_sl = 0;
 
@@ -581,7 +583,7 @@ public class BaseMethod5 {
             if (distz > temp_distz) {
                 nn_node = n;
                 distz = temp_distz;
-//                nn_dist = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
+                nn_dist = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
             }
         }
 
