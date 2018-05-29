@@ -50,9 +50,9 @@ public class BaseMethod5 {
         r = new Random(System.nanoTime());
         this.graph_size = graph_size;
         this.degree = degree;
-//        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
-//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
-//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
 
 
 //        this.graphPath = home_folder + "/neo4j334/testdb_LA/databases/graph.db";
@@ -69,9 +69,9 @@ public class BaseMethod5 {
 //        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
 //        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
 
-        this.graphPath = home_folder + "/neo4j334/testdb_SF_Random/databases/graph.db";
-        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
-        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
+//        this.graphPath = home_folder + "/neo4j334/testdb_SF_Random/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
 
 
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";

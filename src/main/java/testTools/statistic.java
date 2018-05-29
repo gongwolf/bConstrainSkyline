@@ -216,23 +216,22 @@ public class statistic {
 
     public static double goodnessAnalyze(ArrayList<Result> all, ArrayList<Result> approx, String dist_measure, int topK) {
 
-        //find common objects
 
-        HashSet<Integer> common_set = new HashSet<>();
+        HashSet<Integer> distinct_all = new HashSet<>();
+
         for (Result r : all) {
-            for (Result r1 : approx) {
-                if (r.end.getPlaceId() == r1.end.getPlaceId()) {
-                    if (r1.p != null & r.p != null) {
-                        common_set.add(r1.end.getPlaceId());
-                    }
-                }
-            }
+            distinct_all.add(r.end.getPlaceId());
         }
-        ArrayList<Integer> commonList = new ArrayList<>(common_set);
 
-        if (commonList.size() < topK) {
+        int n_all = distinct_all.size();
+
+        if (n_all < topK) {
             return goodnessAnalyze(all, approx, dist_measure);
         }
+
+
+        HashMap<Integer, Double> selected = new HashMap<>();
+        ArrayList<Integer> allList = new ArrayList<>(distinct_all);
 
         double[] all_max_array = getBoundsArray(all, "max");
         double[] all_min_array = getBoundsArray(all, "min");
@@ -241,22 +240,20 @@ public class statistic {
         double max = Math.sqrt(7);
 
 
-
-        HashMap<Integer, Double> selected = new HashMap<>();
         double sum_up = 0;
-        for (int i = 0; i < topK; i++) {
 
+        for (int i = 0; i < topK; i++) {
             //random select object
-            int idx = getRandomNumberInRange_int(0, common_set.size() - 1);
+            int idx = getRandomNumberInRange_int(0, n_all - 1);
             while (selected.containsKey(idx)) {
-                idx = getRandomNumberInRange_int(0, common_set.size() - 1);
+                idx = getRandomNumberInRange_int(0, n_all - 1);
             }
 
             double min_distance = Double.POSITIVE_INFINITY;
             for (Result r : all) {
-                if (r.end.getPlaceId() == commonList.get(idx)) {
+                if (r.end.getPlaceId() == allList.get(idx)) {
                     for (Result r1 : approx) {
-                        if (r1.end.getPlaceId() == commonList.get(idx)) {
+                        if (r1.end.getPlaceId() == allList.get(idx)) {
                             if (r1.p != null & r.p != null) {
                                 double d = 0;
                                 switch (dist_measure) {
@@ -267,7 +264,6 @@ public class statistic {
                                         d = CosineSimilarity(r, r1, all_max_array, all_min_array, approx_max_array, approx_min_array);
                                         break;
                                 }
-//                            System.out.println(min_distance+" "+d);
 
                                 if (d < min_distance) {
                                     min_distance = d;
@@ -279,18 +275,20 @@ public class statistic {
                 }
             }
 
-            switch (dist_measure) {
-                case "edu":
-                    sum_up += (max - min_distance);
-                    selected.put(idx, (max - min_distance));
-                    break;
-                case "cos":
-                    sum_up += (1 - min_distance);
-                    selected.put(idx, (1 - min_distance));
-                    break;
+            if(min_distance!=Double.POSITIVE_INFINITY)
+            {
+                switch (dist_measure) {
+                    case "edu":
+                        sum_up += (max - min_distance);
+                        selected.put(idx, (max - min_distance));
+                        break;
+                    case "cos":
+                        sum_up += (1 - min_distance);
+                        selected.put(idx, (1 - min_distance));
+                        break;
+                }
             }
 
-//            System.out.println(sum_up);
         }
 
         return sum_up / topK;

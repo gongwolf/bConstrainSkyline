@@ -10,20 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1927bf6b-a886-486f-9482-a756607011b0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/subpath/BaseMethod_subPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/subpath/BaseMethod_subPath.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/statistic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/statistic.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -42,11 +31,8 @@
       <file leaf-file-name="BaseMethod5.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2098">
-              <caret line="373" selection-start-line="373" selection-end-line="373" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="81">
+              <caret line="73" column="74" lean-forward="true" selection-start-line="71" selection-start-column="74" selection-end-line="73" selection-end-column="74" />
             </state>
           </provider>
         </entry>
@@ -54,8 +40,8 @@
       <file leaf-file-name="BaseMethod_approx.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="213" selection-start-line="213" selection-end-line="213" />
+            <state relative-caret-position="2655">
+              <caret line="184" selection-start-line="184" selection-end-line="184" />
             </state>
           </provider>
         </entry>
@@ -63,8 +49,8 @@
       <file leaf-file-name="BaseMethod1.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="231" column="71" selection-start-line="231" selection-start-column="57" selection-end-line="231" selection-end-column="71" />
+            <state relative-caret-position="3570">
+              <caret line="246" column="44" selection-start-line="246" selection-start-column="44" selection-end-line="246" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -72,8 +58,8 @@
       <file leaf-file-name="BaseMethod_approx_index.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="260" selection-start-line="260" selection-end-line="260" />
+            <state relative-caret-position="3930">
+              <caret line="269" selection-start-line="269" selection-end-line="269" />
             </state>
           </provider>
         </entry>
@@ -81,8 +67,8 @@
       <file leaf-file-name="BaseMethod_subPath.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/subpath/BaseMethod_subPath.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="50" column="13" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
+            <state relative-caret-position="540">
+              <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -90,8 +76,8 @@
       <file leaf-file-name="BaseMethod_mixed.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="64" selection-start-line="64" selection-end-line="69" selection-end-column="5" />
+            <state relative-caret-position="780">
+              <caret line="60" selection-start-line="60" selection-end-line="60" />
             </state>
           </provider>
         </entry>
@@ -99,17 +85,8 @@
       <file leaf-file-name="BaseMethod_mixed_index.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="34" column="12" selection-start-line="34" selection-start-column="12" selection-end-line="34" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Skyline.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-381">
-              <caret line="60" column="107" selection-start-line="60" selection-start-column="107" selection-end-line="60" selection-end-column="107" />
+            <state relative-caret-position="285">
+              <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -117,10 +94,20 @@
       <file leaf-file-name="test.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="180" column="17" selection-start-line="180" selection-start-column="17" selection-end-line="180" selection-end-column="17" />
+            <state relative-caret-position="130">
+              <caret line="134" column="38" lean-forward="true" selection-start-line="134" selection-start-column="38" selection-end-line="134" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="statistic.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/statistic.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="186">
+              <caret line="340" lean-forward="true" selection-start-line="340" selection-end-line="340" />
               <folding>
-                <marker date="1527543742043" expanded="true" signature="9817:10013" ph="..." />
+                <element signature="e#15115#15116#0" expanded="true" />
+                <element signature="e#15148#15149#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -129,8 +116,8 @@
       <file leaf-file-name="Index.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/testTools/Index.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-973">
-              <caret line="184" column="5" selection-start-line="184" selection-start-column="5" selection-end-line="184" selection-end-column="5" />
+            <state relative-caret-position="2970">
+              <caret line="210" column="5" selection-start-line="210" selection-start-column="5" selection-end-line="210" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -217,7 +204,6 @@
         <option value="$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java" />
         <option value="$PROJECT_DIR$/src/main/java/neo4jTools/mimicBusLine.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/path.java" />
-        <option value="$PROJECT_DIR$/src/main/java/testTools/statistic.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/analyzeResult.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/noMyNodes.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java" />
@@ -231,9 +217,10 @@
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/Index.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/statistic.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" />
       </list>
     </option>
@@ -643,7 +630,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="46" y="-11" width="1875" height="1092" extended-state="6" />
+    <frame x="39" y="25" width="1881" height="1055" extended-state="6" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
@@ -654,13 +641,12 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5119617" side_tool="true" weight="0.23166844" />
       <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948583" />
-      <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48803827" visible="true" weight="0.34837356" />
+      <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48803827" weight="0.34750265" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="3" />
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49651325" weight="0.24356869" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32004198" />
-      <window_info id="Structure" order="1" sideWeight="0.50348675" side_tool="true" weight="0.24356869" />
+      <window_info id="Structure" order="1" sideWeight="0.50348675" side_tool="true" weight="0.2434875" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
       <window_info anchor="right" id="Theme Preview" order="6" />
@@ -671,23 +657,24 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32004198" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32004198" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
-      <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48803827" visible="true" weight="0.34837356" />
+      <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48803827" visible="true" weight="0.34750265" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49651325" weight="0.24356869" />
-      <window_info id="Structure" order="1" sideWeight="0.50348675" side_tool="true" weight="0.24356869" />
+      <window_info id="Structure" order="1" sideWeight="0.50348675" side_tool="true" visible="true" weight="0.2434875" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info id="Image Layers" order="6" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32004198" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4449108" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info anchor="bottom" id="Terminal" order="9" />
@@ -951,13 +938,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/statistic.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4464">
-          <caret line="256" column="52" selection-start-line="256" selection-start-column="42" selection-end-line="256" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/noMyNodes.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -998,10 +978,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="178">
           <caret line="66" selection-start-line="66" selection-end-line="66" />
-          <folding>
-            <element signature="e#768#769#0" expanded="true" />
-            <element signature="e#806#807#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1024,77 +1000,82 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-381">
+        <state relative-caret-position="810">
           <caret line="60" column="107" selection-start-line="60" selection-start-column="107" selection-end-line="60" selection-end-column="107" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="260" selection-start-line="260" selection-end-line="260" />
+        <state relative-caret-position="3930">
+          <caret line="269" selection-start-line="269" selection-end-line="269" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="213" selection-start-line="213" selection-end-line="213" />
+        <state relative-caret-position="2655">
+          <caret line="184" selection-start-line="184" selection-end-line="184" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/subpath/BaseMethod_subPath.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="50" column="13" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
+        <state relative-caret-position="540">
+          <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="64" selection-start-line="64" selection-end-line="69" selection-end-column="5" />
+        <state relative-caret-position="780">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="34" column="12" selection-start-line="34" selection-start-column="12" selection-end-line="34" selection-end-column="12" />
+        <state relative-caret-position="285">
+          <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/testTools/Index.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-973">
-          <caret line="184" column="5" selection-start-line="184" selection-start-column="5" selection-end-line="184" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="180" column="17" selection-start-line="180" selection-start-column="17" selection-end-line="180" selection-end-column="17" />
-          <folding>
-            <marker date="1527543742043" expanded="true" signature="9817:10013" ph="..." />
-          </folding>
+        <state relative-caret-position="2970">
+          <caret line="210" column="5" selection-start-line="210" selection-start-column="5" selection-end-line="210" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="231" column="71" selection-start-line="231" selection-start-column="57" selection-end-line="231" selection-end-column="71" />
+        <state relative-caret-position="3570">
+          <caret line="246" column="44" selection-start-line="246" selection-start-column="44" selection-end-line="246" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/statistic.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="340" lean-forward="true" selection-start-line="340" selection-end-line="340" />
+          <folding>
+            <element signature="e#15115#15116#0" expanded="true" />
+            <element signature="e#15148#15149#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="134" column="38" lean-forward="true" selection-start-line="134" selection-start-column="38" selection-end-line="134" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2098">
-          <caret line="373" selection-start-line="373" selection-end-line="373" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="81">
+          <caret line="73" column="74" lean-forward="true" selection-start-line="71" selection-start-column="74" selection-end-line="73" selection-end-column="74" />
         </state>
       </provider>
     </entry>

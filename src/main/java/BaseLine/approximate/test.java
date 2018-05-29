@@ -20,6 +20,7 @@ public class test {
         int graph_size, query_num, hotels_num;
         String degree;
         double range;
+        String city;
 
         Options options = new Options();
         options.addOption("g", "grahpsize", true, "number of nodes in the graph");
@@ -28,6 +29,7 @@ public class test {
         options.addOption("hn", "hotelsnum", true, "number of hotels in the graph");
         options.addOption("r", "range", true, "range of the distance to be considered");
         options.addOption("h", "help", false, "print the help of this command");
+        options.addOption("c", "city", false, "the city name");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -37,6 +39,7 @@ public class test {
         String qn_str = cmd.getOptionValue("qn");
         String hn_str = cmd.getOptionValue("hn");
         String r_str = cmd.getOptionValue("r");
+        String c_str = cmd.getOptionValue("c");
 
 
         if (cmd.hasOption("h")) {
@@ -76,30 +79,37 @@ public class test {
             }
 
 
+            if (c_str == null) {
+                city = "SF";
+            } else {
+                city = c_str;
+            }
+
+
             Data[] queryList = new Data[query_num];
 
             String home_folder = System.getProperty("user.home");
-            String graph = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
+            String graph = home_folder + "/neo4j334/testdb_"+city+"/databases/graph.db";
 
             connector n = new connector(graph);
             n.startDB();
             GraphDatabaseService graphdb = n.getDBObject();
             try (Transaction tx = graphdb.beginTx()) {
                 for (int i = 0; i < query_num; i++) {
-                    BaseMethod5 bm5 = new BaseMethod5("SF");
+                    BaseMethod5 bm5 = new BaseMethod5(city);
                     bm5.graphdb = graphdb;
                     int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
 
                     Data queryD = bm5.getDataById(random_place_id);
                     bm5.nearestNetworkNode(queryD);
                     double distance = bm5.nn_dist;
-                    System.out.println(distance);
-                    while (distance > 0.011) {
+//                    System.out.println(distance);
+                    while (distance > 0.0105) {
                         random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
                         queryD = bm5.getDataById(random_place_id);
                         bm5.nearestNetworkNode(queryD);
                         distance = bm5.nn_dist;
-                        System.out.println(distance);
+//                        System.out.println(distance);
                     }
                     queryList[i] = queryD;
                 }
@@ -111,7 +121,8 @@ public class test {
 
             for (Data d : queryList) {
 //                t.testing(graph_size, degree, range, hotels_num, d);
-                t.test_real(d);
+                t.test_real(d,city);
+                System.out.println("===============================================");
             }
         }
 
@@ -168,16 +179,16 @@ public class test {
 
     }
 
-    public void test_real(Data queryD) {
-        System.out.println(queryD);
+    public void test_real(Data queryD,String city) {
+//        System.out.println(queryD);
         String home_folder = System.getProperty("user.home");
-        String graph = home_folder + "/neo4j334/testdb_SF_Random/databases/graph.db";
-        String tree = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
-        String data = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
+        String graph = home_folder + "/neo4j334/testdb_"+city+"_Random/databases/graph.db";
+        String tree = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_"+city+".rtr";
+        String data = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_"+city+".txt";
 
 
-        BaseMethod1 bm1 = new BaseMethod1("SF");
-        BaseMethod5 bm5 = new BaseMethod5("SF");
+        BaseMethod1 bm1 = new BaseMethod1(city);
+        BaseMethod5 bm5 = new BaseMethod5(city);
         bm1.baseline(queryD);
         bm5.baseline(queryD);
 
@@ -198,15 +209,21 @@ public class test {
 
         System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_range.skyPaths, "cos"));
         System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_range.skyPaths, "cos", 10));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_range.skyPaths, "cos", 20));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_range.skyPaths, "cos", 50));
         System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_range.skyPaths, "cos", 100));
 
 
         System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos"));
         System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 10));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 20));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 50));
         System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 100));
 
         System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos"));
         System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 10));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 20));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 50));
         System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 100));
 
 //        BaseMethod_subPath bs_sub = new BaseMethod_subPath(tree, data, graph,1000);
