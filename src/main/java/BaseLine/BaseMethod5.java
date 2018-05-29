@@ -8,15 +8,12 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
 import testTools.GoogleMaps;
-import testTools.Index;
 
 import java.io.*;
 import java.util.*;
 
 public class BaseMethod5 {
-    private static double nn_dist;
-    private final int hotels_num;
-    private final double range;
+    public double nn_dist;
     public ArrayList<path> qqqq = new ArrayList<>();
     public ArrayList<Result> skyPaths = new ArrayList<>();
     Random r = new Random(System.nanoTime());
@@ -33,7 +30,9 @@ public class BaseMethod5 {
     //Todo: each hotel know the distance to the hotel than dominate it.
     HashMap<Integer, Double> dominated_checking = new HashMap<>(); //
     String home_folder = System.getProperty("user.home");
-    private GraphDatabaseService graphdb;
+    private int hotels_num;
+    private double range;
+    public GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
     private ArrayList<Data> sky_hotel;
@@ -66,7 +65,11 @@ public class BaseMethod5 {
 //        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_NY.txt";
 
 
-        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
+//        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
+
+        this.graphPath = home_folder + "/neo4j334/testdb_SF_Random/databases/graph.db";
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
 
@@ -77,12 +80,18 @@ public class BaseMethod5 {
 
     public BaseMethod5(String city) {
         r = new Random(System.nanoTime());
-        this.range = 300;
-        this.graphPath = home_folder + "/neo4j334/testdb_" + city + "/databases/graph.db";
+//        this.range = 300;
+        this.graphPath = home_folder + "/neo4j334/testdb_" + city + "_Random/databases/graph.db";
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_" + city + ".rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_" + city + ".txt";
         this.hotels_num = getNumberOfHotels();
 
+    }
+
+    public BaseMethod5(String tree, String data, String graph) {
+        this.graphPath = graph;
+        this.treePath = tree;
+        this.dataPath = data;
     }
 
     public static void main(String args[]) throws ParseException {
@@ -129,7 +138,7 @@ public class BaseMethod5 {
             }
 
             if (qn_str == null) {
-                query_num = 1000;
+                query_num = 3;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
@@ -154,32 +163,39 @@ public class BaseMethod5 {
 
 //            int[] id_list = new int[]{462,472,791};
             Data[] queryList = new Data[query_num];
-            int[] random_id = new int[]{8883, 5080, 5120, 5175, 4032, 4090, 5073, 8935, 5140, 9358, 5088, 5159};
-            query_num = random_id.length;
+//            int[] random_id = new int[]{8883, 5080, 5120, 5175, 4032, 4090, 5073, 8935, 5140, 9358, 5088, 5159};
+//            query_num = random_id.length;
 
             for (int i = 0; i < query_num; i++) {
                 BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
                 int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+
                 Data queryD = bm5.getDataById(random_place_id);
+                bm5.nearestNetworkNode(queryD);
+                double distance = bm5.nn_dist;
+                while (distance > 1000) {
+                    queryD = bm5.getDataById(random_place_id);
+                    bm5.nearestNetworkNode(queryD);
+                    distance = bm5.nn_dist;
+                }
                 queryList[i] = queryD;
             }
 
 
-//            for (int i = 0; i < query_num; i++) {
-//
-//                BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
+            for (int i = 0; i < query_num; i++) {
+
+                BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
 ////                BaseMethod1 bMethod = new BaseMethod1("NY");
-//                bMethod.baseline(queryList[i]);
-//            }
+                bMethod.baseline(queryList[i]);
+            }
 
             System.out.println("=================================");
 
             for (int i = 0; i < query_num; i++) {
                 BaseMethod5 all_lemmas = new BaseMethod5(graph_size, degree, range, hotels_num);
-//                BaseMethod5 all_lemmas = new BaseMethod5("NY");
                 all_lemmas.baseline(queryList[i]);
 //                break;
-//                GoogleMaps.distanceStatistic(all_lemmas.skyPaths,all_lemmas.tmpStoreNodes);
+//                GoogleMaps.distanceStatistic(all_lemmas.skyPaths, all_lemmas.tmpStoreNodes);
             }
 
 
@@ -293,16 +309,13 @@ public class BaseMethod5 {
             db_time = System.currentTimeMillis() - db_time;
             r1 = System.currentTimeMillis();
             Node startNode = nearestNetworkNode(queryD);
-            if (nn_dist > 1000) {
-                n.shutdownDB();
-                return;
-            }
+
             long nn_rt = System.currentTimeMillis() - r1;
 
             long rt = System.currentTimeMillis();
 
             myNode s = new myNode(queryD, startNode.getId(), -1);
-            System.out.println(GoogleMaps.distanceInMeters(queryD.location[0], queryD.location[1], s.locations[0], s.locations[1]));
+//            System.out.println(GoogleMaps.distanceInMeters(queryD.location[0], queryD.location[1], s.locations[0], s.locations[1]));
 
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
@@ -314,15 +327,15 @@ public class BaseMethod5 {
                 myNode v = mqueue.pop();
                 v.inqueue = false;
 
-                int aa = 0;
-                for (path p : v.skyPaths) {
-                    if (!p.expaned) {
-                        aa++;
-                    }
-                }
-                if (aa != 0) {
-                    System.out.println(v.id + " " + aa);
-                }
+//                int aa = 0;
+//                for (path p : v.skyPaths) {
+//                    if (!p.expaned) {
+//                        aa++;
+//                    }
+//                }
+////                if (aa != 0) {
+//                System.out.println(v.id + " " + aa);
+//                }
                 counter++;
 
                 for (int i = 0; i < v.skyPaths.size(); i++) {
@@ -357,7 +370,7 @@ public class BaseMethod5 {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
-            System.out.println("expansion finished " + exploration_rt);
+//            System.out.println("expansion finished " + exploration_rt);
 
             long tt_sl = 0;
 
@@ -410,11 +423,11 @@ public class BaseMethod5 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
 
-//            if (r.p != null) {
-//                for (Long nn : r.p.nodes) {
-//                    final_bus_stops.add(nn);
-//                }
-//            }
+            if (r.p != null) {
+                for (Long nn : r.p.nodes) {
+                    final_bus_stops.add(nn);
+                }
+            }
         }
 
 
@@ -583,9 +596,11 @@ public class BaseMethod5 {
             if (distz > temp_distz) {
                 nn_node = n;
                 distz = temp_distz;
-                nn_dist = GoogleMaps.distanceInMeters(lat, log, queryD.location[0], queryD.location[1]);
+                this.nn_dist = distz;
             }
         }
+
+        this.nn_dist = distz;
 
 //        nn_dist = (int) Math.ceil(distz);
         return nn_node;

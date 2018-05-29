@@ -1,14 +1,18 @@
 package BaseLine.approximate;
 
+import BaseLine.BaseMethod;
+import BaseLine.BaseMethod1;
 import BaseLine.BaseMethod5;
-import BaseLine.Result;
 import BaseLine.approximate.mixed.BaseMethod_mixed;
 import BaseLine.approximate.mixed.BaseMethod_mixed_index;
 import BaseLine.approximate.range.BaseMethod_approx;
 import BaseLine.approximate.range.BaseMethod_approx_index;
 import BaseLine.approximate.subpath.BaseMethod_subPath;
 import RstarTree.Data;
+import neo4jTools.connector;
 import org.apache.commons.cli.*;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Transaction;
 
 public class test {
     public static void main(String args[]) throws ParseException {
@@ -74,17 +78,40 @@ public class test {
 
             Data[] queryList = new Data[query_num];
 
+            String home_folder = System.getProperty("user.home");
+            String graph = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
 
-            for (int i = 0; i < query_num; i++) {
-                BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
-                int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
-                Data queryD = bm5.getDataById(random_place_id);
-                queryList[i] = queryD;
+            connector n = new connector(graph);
+            n.startDB();
+            GraphDatabaseService graphdb = n.getDBObject();
+            try (Transaction tx = graphdb.beginTx()) {
+                for (int i = 0; i < query_num; i++) {
+                    BaseMethod5 bm5 = new BaseMethod5("SF");
+                    bm5.graphdb = graphdb;
+                    int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+
+                    Data queryD = bm5.getDataById(random_place_id);
+                    bm5.nearestNetworkNode(queryD);
+                    double distance = bm5.nn_dist;
+                    System.out.println(distance);
+                    while (distance > 0.011) {
+                        random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+                        queryD = bm5.getDataById(random_place_id);
+                        bm5.nearestNetworkNode(queryD);
+                        distance = bm5.nn_dist;
+                        System.out.println(distance);
+                    }
+                    queryList[i] = queryD;
+                }
+
+                tx.success();
             }
 
+            n.shutdownDB();
+
             for (Data d : queryList) {
-                t.testing(graph_size, degree, range, hotels_num, d);
-//                t.test_real(d);
+//                t.testing(graph_size, degree, range, hotels_num, d);
+                t.test_real(d);
             }
         }
 
@@ -110,19 +137,19 @@ public class test {
         bs_mix_index.baseline(queryD);
 
 
-        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths,bs_approx.skyPaths,"cos"));
-        System.out.print(" "+testTools.statistic.goodnessAnalyze(bm5.skyPaths,bs_approx.skyPaths,"cos",10));
-        System.out.println(" "+testTools.statistic.goodnessAnalyze(bm5.skyPaths,bs_approx.skyPaths,"cos",100));
+        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos"));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos", 10));
+        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos", 100));
 
 
-        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths,bs_sub.skyPaths,"cos"));
-        System.out.print(" "+testTools.statistic.goodnessAnalyze(bm5.skyPaths,bs_sub.skyPaths,"cos",10));
-        System.out.println(" "+testTools.statistic.goodnessAnalyze(bm5.skyPaths,bs_sub.skyPaths,"cos",100));
+        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos"));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 10));
+        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 100));
 
 
-        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths,bs_mix.skyPaths,"cos"));
-        System.out.print(" "+testTools.statistic.goodnessAnalyze(bm5.skyPaths,bs_mix.skyPaths,"cos",10));
-        System.out.println(" "+testTools.statistic.goodnessAnalyze(bm5.skyPaths,bs_mix.skyPaths,"cos",100));
+        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos"));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 10));
+        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 100));
 //        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "edu");
 ////        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos");
 ////        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx_index.skyPaths, "edu");
@@ -142,16 +169,50 @@ public class test {
     }
 
     public void test_real(Data queryD) {
+        System.out.println(queryD);
         String home_folder = System.getProperty("user.home");
-        String graph = home_folder + "/neo4j334/testdb_LA/databases/graph.db";
-        String tree = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_LA.rtr";
-        String data = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_LA.txt";
+        String graph = home_folder + "/neo4j334/testdb_SF_Random/databases/graph.db";
+        String tree = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+        String data = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
+
+
+        BaseMethod1 bm1 = new BaseMethod1("SF");
+        BaseMethod5 bm5 = new BaseMethod5("SF");
+        bm1.baseline(queryD);
+        bm5.baseline(queryD);
+
+
+        BaseMethod_approx bs_range = new BaseMethod_approx(tree, data, graph, 0.0105);
+        BaseMethod_approx_index bs_range_indexed = new BaseMethod_approx_index(tree, data, graph, 0.0105);
+        bs_range.baseline(queryD);
+        bs_range_indexed.baseline(queryD);
 
 
         BaseMethod_subPath bs_sub = new BaseMethod_subPath(tree, data, graph);
         bs_sub.baseline(queryD);
-        BaseMethod_mixed bs_mix = new BaseMethod_mixed(tree, data, graph, 0.01);
+
+        BaseMethod_mixed bs_mix = new BaseMethod_mixed(tree, data, graph, 0.0105);
+        BaseMethod_mixed_index bs_mix_indexed = new BaseMethod_mixed_index(tree, data, graph, 0.0105);
         bs_mix.baseline(queryD);
+        bs_mix_indexed.baseline(queryD);
+
+        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_range.skyPaths, "cos"));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_range.skyPaths, "cos", 10));
+        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_range.skyPaths, "cos", 100));
+
+
+        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos"));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 10));
+        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 100));
+
+        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos"));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 10));
+        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 100));
+
+//        BaseMethod_subPath bs_sub = new BaseMethod_subPath(tree, data, graph,1000);
+//        bs_sub.baseline(queryD);
+//        BaseMethod_mixed bs_mix = new BaseMethod_mixed(tree, data, graph, 0.01);
+//        bs_mix.baseline(queryD);
 
 
     }

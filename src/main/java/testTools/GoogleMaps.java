@@ -33,10 +33,10 @@ public class GoogleMaps {
 
         GoogleMaps g = new GoogleMaps();
 
-        double lat1 = 43.153826;
-        double long1 = -77.05942;
-        double lat2 = 43.173793;
-        double long2 = -77.667754;
+        double lat1 = 32.279799;
+        double long1 = -106.756235;
+        double lat2 = 32.282049;
+        double long2 =-106.766577;
 
         System.out.println(g.distanceInMeters(lat1, long1, lat2, long2));
         System.out.println(Math.sqrt(Math.pow(lat1-lat2,2)+Math.pow(long1-long2,2)));
@@ -66,17 +66,17 @@ public class GoogleMaps {
 
         double r_lat1 = Math.PI / 180 * lat1;
         double r_lat2 = Math.PI / 180 * lat2;
-        double delta_lat = Math.PI / 180 * (lat2 - lat1);
+//        double delta_lat = Math.PI / 180 * (lat2 - lat1);
         double delta_long = Math.PI / 180 * (long2 - long1);
-        double a = Math.sin(delta_lat / 2) * Math.sin(delta_lat / 2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.sin(delta_long / 2) * Math.sin(delta_long / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        d = R * c;
+//        double a = Math.sin(delta_lat / 2) * Math.sin(delta_lat / 2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.sin(delta_long / 2) * Math.sin(delta_long / 2);
+//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//        d = R * c;
 //        System.out.println(d);
 //        double x = Math.PI / 180 * (long2 - long1) * Math.cos(Math.PI / 180 * (lat1 + lat2) / 2);
 //        double y = Math.PI / 180 * (lat2 - lat1);
 //        d = Math.sqrt(x * x + y * y) * R;
 //        System.out.println(d);
-//        d = Math.acos(Math.sin(r_lat1) * Math.sin(r_lat2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.cos(delta_long)) * R;
+        d = Math.acos(Math.sin(r_lat1) * Math.sin(r_lat2) + Math.cos(r_lat1) * Math.cos(r_lat2) * Math.cos(delta_long)) * R;
 //        System.out.println(d);
         return d;
     }
@@ -92,15 +92,15 @@ public class GoogleMaps {
                 q = r.start;
             }
 
-            int skylist[] = new int[]{2372, 1081, 2539, 8650, 8826, 510, 5046, 3840, 9350, 3144, 1692};
+//            int skylist[] = new int[]{2372, 1081, 2539, 8650, 8826, 510, 5046, 3840, 9350, 3144, 1692};
 
             boolean flag = false;
-            for (long sid : skylist) {
-                if (r.end.getPlaceId() == sid) {
-                    flag = true;
-//                    break;
-                }
-            }
+//            for (long sid : skylist) {
+//                if (r.end.getPlaceId() == sid) {
+//                    flag = true;
+////                    break;
+//                }
+//            }
 
             if (!flag) {
                 if (r.p != null) {

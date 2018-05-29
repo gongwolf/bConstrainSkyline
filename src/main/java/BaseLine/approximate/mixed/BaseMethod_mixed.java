@@ -8,23 +8,17 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
 import testTools.GoogleMaps;
-import testTools.Index;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 
 public class BaseMethod_mixed {
-    private int hotels_num;
-    private String graphPath;
     public ArrayList<Result> skyPaths = new ArrayList<>();
     public ArrayList<Data> sky_hotel;
     Random r;
-
-
     String treePath;
     String dataPath;
-
     int graph_size;
     String degree;
     long add_oper = 0;
@@ -37,6 +31,8 @@ public class BaseMethod_mixed {
     //        int distance_threshold = Integer.MAX_VALUE;
     double distance_threshold = 0.001;
     String home_folder = System.getProperty("user.home");
+    private int hotels_num;
+    private String graphPath;
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
@@ -66,47 +62,11 @@ public class BaseMethod_mixed {
 //        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real.txt";
     }
 
-    public BaseMethod_mixed(String tree, String data, String graphPath,double distance_threshold) {
+    public BaseMethod_mixed(String tree, String data, String graphPath, double distance_threshold) {
         this.distance_threshold = distance_threshold;
         this.treePath = tree;
         this.dataPath = data;
         this.graphPath = graphPath;
-    }
-
-
-    public static void main(String args[]) {
-        int graph_size = 8000;
-        String degree = "4";
-        int query_num = 1;
-        int hotels_num = 20000;
-        double dis_t = 300;
-        double range = 300;
-
-
-        Data[] queryList = new Data[query_num];
-        BaseMethod_mixed b_appx = new BaseMethod_mixed(graph_size, degree, dis_t, range, hotels_num);
-
-//        int[] numbers = new int[]{241};
-        for (int i = 0; i < query_num; i++) {
-            int random_place_id = b_appx.getRandomNumberInRange_int(0, hotels_num - 1);
-            Data queryD = b_appx.getDataById(random_place_id);
-            queryList[i] = queryD;
-        }
-
-
-        for (int i = 0; i < query_num; i++) {
-            System.out.println("====================================");
-            b_appx.baseline(queryList[i]);
-        }
-
-//        System.out.println("=====================================================");
-//
-//
-//        for (int i = 0; i < query_num; i++) {
-//            BaseMethod5 Lemmas_method = new BaseMethod5(graph_size, degree);
-//            Lemmas_method.baseline(queryList[i]);
-//
-//        }
     }
 
 
@@ -214,6 +174,7 @@ public class BaseMethod_mixed {
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
+                v.inqueue = false;
 
 //                System.out.println(v.id);
 
@@ -266,8 +227,9 @@ public class BaseMethod_mixed {
 
                             //lemma 2
                             if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
-                                if (next_n.addToSkyline(np)) {
+                                if (next_n.addToSkyline(np) && !next_n.inqueue) {
                                     mqueue.add(next_n);
+                                    next_n.inqueue = true;
                                 }
                             }
                         }
@@ -418,7 +380,7 @@ public class BaseMethod_mixed {
             double[] final_costs = new double[np.costs.length + 3];
             System.arraycopy(np.costs, 0, final_costs, 0, np.costs.length);
             double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
-//            d.distance_q = Math.sqrt(Math.pow(queryD.location[0] - d.location[0], 2) + Math.pow(queryD.location[1] - d.location[1], 2));
+            d.distance_q = Math.sqrt(Math.pow(queryD.location[0] - d.location[0], 2) + Math.pow(queryD.location[1] - d.location[1], 2));
 //            double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
 //            d.distance_q = GoogleMaps.distanceInMeters(queryD.location[0], queryD.location[1], d.location[0], d.location[1]);
 

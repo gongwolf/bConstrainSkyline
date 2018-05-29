@@ -14,16 +14,12 @@ import java.io.FileReader;
 import java.util.*;
 
 public class BaseMethod_mixed_index {
-    private final int hotels_num;
     private final String graphPath;
     public ArrayList<Result> skyPaths = new ArrayList<>();
     public ArrayList<Data> sky_hotel;
     Random r;
-
-
     String treePath;
     String dataPath;
-
     int graph_size;
     String degree;
     long add_oper = 0;
@@ -36,6 +32,7 @@ public class BaseMethod_mixed_index {
     //        int distance_threshold = Integer.MAX_VALUE;
     double distance_threshold = 0.001;
     String home_folder = System.getProperty("user.home");
+    private int hotels_num;
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
@@ -66,39 +63,11 @@ public class BaseMethod_mixed_index {
     }
 
 
-    public static void main(String args[]) {
-        int graph_size = 8000;
-        String degree = "4";
-        int query_num = 1;
-        int hotels_num = 20000;
-        double dis_t = 300;
-        double range = 300;
-
-
-        Data[] queryList = new Data[query_num];
-        BaseMethod_mixed_index b_appx = new BaseMethod_mixed_index(graph_size, degree, dis_t, range, hotels_num);
-
-//        int[] numbers = new int[]{241};
-        for (int i = 0; i < query_num; i++) {
-            int random_place_id = b_appx.getRandomNumberInRange_int(0, hotels_num - 1);
-            Data queryD = b_appx.getDataById(random_place_id);
-            queryList[i] = queryD;
-        }
-
-
-        for (int i = 0; i < query_num; i++) {
-            System.out.println("====================================");
-            b_appx.baseline(queryList[i]);
-        }
-
-//        System.out.println("=====================================================");
-//
-//
-//        for (int i = 0; i < query_num; i++) {
-//            BaseMethod5 Lemmas_method = new BaseMethod5(graph_size, degree);
-//            Lemmas_method.baseline(queryList[i]);
-//
-//        }
+    public BaseMethod_mixed_index(String tree, String data, String graphPath, double distance_threshold) {
+        this.distance_threshold = distance_threshold;
+        this.treePath = tree;
+        this.dataPath = data;
+        this.graphPath = graphPath;
     }
 
 
@@ -206,7 +175,7 @@ public class BaseMethod_mixed_index {
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
-
+                v.inqueue = false;
                 counter++;
 
                 path[] needToProcess = new path[constants.path_dimension];
@@ -251,8 +220,9 @@ public class BaseMethod_mixed_index {
 
                             //lemma 2
                             if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
-                                if (next_n.addToSkyline(np)) {
+                                if (next_n.addToSkyline(np) && !next_n.inqueue) {
                                     mqueue.add(next_n);
+                                    next_n.inqueue = true;
                                 }
                             }
                         }
@@ -276,7 +246,7 @@ public class BaseMethod_mixed_index {
 
 //            System.out.println(sk_counter+"~~~~~");
 
-            Index idx = new Index(this.graph_size, this.degree, this.distance_threshold, this.hotels_num, this.distance_threshold);
+            Index idx = new Index("SF");
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 long t_index_s = System.nanoTime();
                 myNode my_n = entry.getValue();

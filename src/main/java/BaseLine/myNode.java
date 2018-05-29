@@ -32,7 +32,6 @@ public class myNode {
             path dp = new path(this);
             this.skyPaths.add(dp);
         }
-
         inqueue=false;
     }
 

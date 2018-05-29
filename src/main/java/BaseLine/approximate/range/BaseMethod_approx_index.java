@@ -7,6 +7,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
+import testTools.GoogleMaps;
 import testTools.Index;
 
 import java.io.BufferedReader;
@@ -14,16 +15,12 @@ import java.io.FileReader;
 import java.util.*;
 
 public class BaseMethod_approx_index {
-    private final int hotels_num;
     public ArrayList<path> qqqq = new ArrayList<>();
     public ArrayList<Result> skyPaths = new ArrayList<>();
     public ArrayList<Data> sky_hotel;
     Random r;
-
-
     String treePath;
     String dataPath;
-
     int graph_size;
     String degree;
     long add_oper = 0;
@@ -36,6 +33,8 @@ public class BaseMethod_approx_index {
     //        int distance_threshold = Integer.MAX_VALUE;
     double distance_threshold = 0.001;
     String home_folder = System.getProperty("user.home");
+    private int hotels_num;
+    private String graphPath;
     private GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
@@ -60,6 +59,13 @@ public class BaseMethod_approx_index {
 
 //        this.treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
 //        this.dataPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real.txt";
+    }
+
+    public BaseMethod_approx_index(String tree, String data, String graph, double distance_threshold) {
+        this.graphPath = graph;
+        this.treePath = tree;
+        this.dataPath = data;
+        this.distance_threshold = distance_threshold;
     }
 
 
@@ -105,7 +111,7 @@ public class BaseMethod_approx_index {
         long r1 = System.currentTimeMillis();
 
 //        String graphPath = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
-        String graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+//        String graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
 //        System.out.println(graphPath);
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
@@ -210,6 +216,7 @@ public class BaseMethod_approx_index {
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
+                v.inqueue = false;
                 counter++;
 //                System.out.println(v.id+"   ");
 //                System.out.println("=================================");
@@ -239,8 +246,9 @@ public class BaseMethod_approx_index {
                             if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
 //                            if (!(this.tmpStoreNodes.get(np.startNode.getId()).distance_q > next_n.distance_q) && next_n.distance_q <= 10000) {
 //                            System.out.println(next_n.skyPaths.isEmpty());
-                                if (next_n.addToSkyline(np)) {
+                                if (next_n.addToSkyline(np) && !next_n.inqueue) {
                                     mqueue.add(next_n);
+                                    next_n.inqueue = true;
                                 }
                             }
                         }
@@ -249,6 +257,7 @@ public class BaseMethod_approx_index {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
+//            System.out.println("exploration_rt" + exploration_rt);
 
             long tt_sl = 0;
 
@@ -257,7 +266,7 @@ public class BaseMethod_approx_index {
 
 //            System.out.println("there are " + this.tmpStoreNodes.size() + " bus stops are visited");
 
-            Index idx = new Index(this.graph_size, this.degree, this.distance_threshold, this.hotels_num, this.distance_threshold);
+            Index idx = new Index("SF");
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 sk_counter += entry.getValue().skyPaths.size();
                 long t_index_s = System.nanoTime();
@@ -273,9 +282,9 @@ public class BaseMethod_approx_index {
 //                        if(my_n.id==453){
 //                            System.out.println(p);
 //                        }
-                        long ats = System.nanoTime();
-                        boolean f = addToSkylineResult(p, d_list);
-                        addResult_rt += System.nanoTime() - ats;
+                    long ats = System.nanoTime();
+                    boolean f = addToSkylineResult(p, d_list);
+                    addResult_rt += System.nanoTime() - ats;
 //                    }
                 }
             }
@@ -366,13 +375,14 @@ public class BaseMethod_approx_index {
             long rrr = System.nanoTime();
 
 
-
             double[] final_costs = new double[np.costs.length + 3];
             System.arraycopy(np.costs, 0, final_costs, 0, np.costs.length);
             double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
             d.distance_q = Math.sqrt(Math.pow(queryD.location[0] - d.location[0], 2) + Math.pow(queryD.location[1] - d.location[1], 2));
 
 //            double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
+//            double end_distance = GoogleMaps.distanceInMeters(my_endNode.locations[0], my_endNode.locations[1], d.location[0], d.location[1]);
+//            d.distance_q = GoogleMaps.distanceInMeters(queryD.location[0], queryD.location[1], d.location[0], d.location[1]);
 
 
             final_costs[0] += end_distance;

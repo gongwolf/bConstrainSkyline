@@ -5,6 +5,7 @@ import javafx.util.Pair;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 public class SplitGraph {
@@ -56,9 +57,8 @@ public class SplitGraph {
 
 
     public void readFile() {
-        String bs_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data";
+        String bs_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50_Random/data";
         String path_node_with_details = bs_path + "/Node_with_placeDetails.txt";
-        String path_Edge = bs_path + "/SegInfo.txt";
         try {
             int non_list = 0;
 
@@ -181,7 +181,7 @@ public class SplitGraph {
         TreeMap<Integer, Integer> sortedNodeList = new TreeMap<>(node_Map); //original id --> new id
 
 
-        String bs_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data";
+        String bs_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50_Random/data";
         String path_Edge = bs_path + "/SegInfo.txt";
 
         String target_edge = bs_path + "/" + city_name + "_SegInfo.txt";
@@ -214,9 +214,13 @@ public class SplitGraph {
                 did = Integer.parseInt(readLine.split(" ")[1]);
 
                 if (node_Map.containsKey(sid) && node_Map.containsKey(did)) { //if the start node and the end node are in the same city
-                    costs[0] = Double.parseDouble(readLine.split(" ")[2]);
-                    costs[1] = Double.parseDouble(readLine.split(" ")[3]);
-                    costs[2] = Double.parseDouble(readLine.split(" ")[4]);
+//                    costs[0] = Double.parseDouble(readLine.split(" ")[2]);
+//                    costs[1] = Double.parseDouble(readLine.split(" ")[3]);
+//                    costs[2] = Double.parseDouble(readLine.split(" ")[4]);
+
+                    costs[0] = randomFloatInRange(1,20);
+                    costs[1] = randomFloatInRange(1,20);
+                    costs[2] = randomFloatInRange(1,20);
                     writer_edge.write(node_Map.get(sid) + " " + node_Map.get(did) + " " + costs[0] + " " + costs[1] + " " + costs[2] + "\n");
                 }
             }
@@ -236,5 +240,12 @@ public class SplitGraph {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public float randomFloatInRange(float min, float max) {
+        Random r = new Random();
+        float random = min + r.nextFloat() * (max - min);
+        return random;
     }
 }

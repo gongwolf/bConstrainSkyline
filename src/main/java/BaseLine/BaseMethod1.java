@@ -36,6 +36,7 @@ public class BaseMethod1 {
     private ArrayList<Data> sky_hotel;
     private boolean add;
 
+
 //    HashMap<Integer, Double> dominated_checking = new HashMap<>();
 
 
@@ -53,9 +54,9 @@ public class BaseMethod1 {
 //        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_LA.rtr";
 //        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_LA.txt";
 
-        this.graphPath = home_folder + "/neo4j334/testdb_NY/databases/graph.db";
-        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_NY.rtr";
-        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_NY.txt";
+//        this.graphPath = home_folder + "/neo4j334/testdb_NY/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_NY.rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_NY.txt";
 
 
 //        this.graphPath = home_folder + "/neo4j334/testdb_SF/databases/graph.db";
@@ -64,15 +65,26 @@ public class BaseMethod1 {
 
 //        this.treePath= "/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr";
 //        System.out.println(treePath);
+
+
+        this.graphPath = home_folder + "/neo4j334/testdb_SF_Random/databases/graph.db";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
     }
 
     public BaseMethod1(String city) {
         r = new Random();
         this.threshold = threshold;
-        this.graphPath = home_folder + "/neo4j334/testdb_" + city + "/databases/graph.db";
+        this.graphPath = home_folder + "/neo4j334/testdb_" + city + "_Random/databases/graph.db";
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_" + city + ".rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_" + city + ".txt";
 
+    }
+
+    public BaseMethod1(String tree, String data, String graph) {
+        this.graphPath = graph;
+        this.treePath = tree;
+        this.dataPath = data;
     }
 
 
@@ -161,6 +173,7 @@ public class BaseMethod1 {
             db_time = System.currentTimeMillis() - db_time;
             r1 = System.currentTimeMillis();
             Node startNode = nearestNetworkNode(queryD);
+
             long nn_rt = System.currentTimeMillis() - r1;
 //            System.out.println("Find nearest road network " + nn_rt + " ms");
 //            System.out.println(startNode.getProperty("lat") + " " + startNode.getProperty("log"));
@@ -178,6 +191,7 @@ public class BaseMethod1 {
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
+                v.inqueue = false;
 
                 counter++;
                 //if (++counter % 1000 == 0) {
@@ -202,8 +216,9 @@ public class BaseMethod1 {
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
 
-                            if (next_n.addToSkyline(np)) {
+                            if (next_n.addToSkyline(np) && !next_n.inqueue) {
                                 mqueue.add(next_n);
+                                next_n.inqueue = true;
                             }
                         }
 //                        }
@@ -214,7 +229,7 @@ public class BaseMethod1 {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
-//            System.out.println("expansion finished " + expasion_rt);
+//            System.out.println("expansion finished " + exploration_rt);
 
             for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
                 sk_counter += mm.getValue().skyPaths.size();
@@ -253,11 +268,11 @@ public class BaseMethod1 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
 
-//            if (r.p != null) {
-//                for (Long nn : r.p.nodes) {
-//                    final_bus_stops.add(nn);
-//                }
-//            }
+            if (r.p != null) {
+                for (Long nn : r.p.nodes) {
+                    final_bus_stops.add(nn);
+                }
+            }
         }
 
 

@@ -17,6 +17,9 @@ import java.util.Random;
 public class Index {
     private final String base = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/index";
     public String home_folder;
+    private String dataPath;
+    private String treePath;
+    private String graphPath;
     private int bits_place_id;
     private String source_data_tree;
     private String neo4j_db;
@@ -28,16 +31,38 @@ public class Index {
 
 
     public Index() {
-        this.distance_threshold = 6;
+        this.distance_threshold = 1000;
 
-        this.home_folder = base + "/test_2000_4_12.0_1000/";
-//        this.source_data_tree = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree.rtr";
-//        this.neo4j_db = "/home/gqxwolf/neo4j334/testdb_real_50/databases/graph.db";
-//        this.node_info_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50_int/data/NodeInfo.txt";
+        this.home_folder = base + "/" + "SF" + "_index_1000/";
+        this.graphPath = System.getProperty("user.home") + "/neo4j334/testdb_SF_Random/databases/graph.db";
+        this.treePath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+        this.dataPath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
 
-        this.source_data_tree = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_2000_4_12.0_1000.rtr";
-        this.neo4j_db = "/home/gqxwolf/neo4j334/testdb2000_4/databases/graph.db";
-        this.node_info_path = "/home/gqxwolf/mydata/projectData/testGraph2000_4/data/NodeInfo.txt";
+
+        this.source_data_tree = this.treePath;
+        this.neo4j_db = this.graphPath;
+        this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph_real_50_Random/data/"+"SF_"+"NodeInfo.txt";
+
+
+        this.num_nodes = getLineNumbers();
+
+        this.pagesize_list = 1024;
+//        this.pagesize_data = 2048;
+    }
+
+
+    public Index(String city) {
+        this.distance_threshold = 0.0105;
+
+        this.home_folder = base + "/" + city + "_index_1000/";
+        this.graphPath = System.getProperty("user.home") + "/neo4j334/testdb_"+city+"_Random/databases/graph.db";
+        this.treePath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/real_tree_"+city+".rtr";
+        this.dataPath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/staticNode_real_"+city+".txt";
+
+
+        this.source_data_tree = this.treePath;
+        this.neo4j_db = this.graphPath;
+        this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph_real_50_Random/data/"+city+"_NodeInfo.txt";
 
 
         this.num_nodes = getLineNumbers();
@@ -151,7 +176,8 @@ public class Index {
                 distance_thresholds = Double.parseDouble(t_str);
             }
 
-            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds);
+//            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds);
+            Index idx = new Index("LA");
             idx.buildIndex(true);
 //            idx.read_d_list_from_disk(452);
         }
@@ -332,6 +358,7 @@ public class Index {
                         d_list = new ArrayList<>();
                         for (Data d : sk.sky_hotels) {
                             double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
+//                            double d2 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], d.location[0], d.location[1]);
                             if (d2 < this.distance_threshold) {
                                 d_list.add(d);
                             }
@@ -344,9 +371,13 @@ public class Index {
                     for (Data d : sk.allNodes) {
                         boolean flag = true;
                         double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
+//                        double d2 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], d.location[0], d.location[1]);
+
                         double min_dist = Double.MAX_VALUE;
                         for (Data s_d : sk.sky_hotels) {
                             double d1 = Math.sqrt(Math.pow(node.locations[0] - s_d.location[0], 2) + Math.pow(node.locations[1] - s_d.location[1], 2));
+//                            double d1 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], s_d.location[0], s_d.location[1]);
+
                             if (checkDominated(s_d.getData(), d.getData()) && d1 < min_dist) {
                                 if (distance_threshold == -1) {
                                     min_dist = d1;
