@@ -65,17 +65,17 @@ public class analyzeResult {
 
 
                 //edu similar score
-                double range_cos =0;
+                double range_cos = 0;
                 double range_cos_10 = 0;
-                double range_cos_100 =0;
+                double range_cos_100 = 0;
 
-                double sub_cos =0;
+                double sub_cos = 0;
                 double sub_cos_10 = 0;
-                double sub_cos_100 =0;
+                double sub_cos_100 = 0;
 
-                double mix_cos =0;
+                double mix_cos = 0;
                 double mix_cos_10 = 0;
-                double mix_cos_100 =0;
+                double mix_cos_100 = 0;
 
 
                 int query_num = 0;
@@ -149,8 +149,8 @@ public class analyzeResult {
                 //graph_size, degree, hotels_num
                 sb.append(output_f.getName().split("_")[0] + " " + output_f.getName().split("_")[1] + " " + output_f.getName().split("_")[2]);
                 //running time in second
-                sb.append(" " + String.format("%.2f", rt_imporved / query_num) + " " + String.format("%.2f", rt_range / query_num) + " " + String.format("%.2f", rt_path / query_num)
-                        + " " + String.format("%.2f", rt_mix / query_num) + " " + String.format("%.2f", rt_range_index / query_num) + " " + String.format("%.2f", rt_mix_index / query_num) + " ");
+                sb.append(" " + String.format("%.2f", rt_imporved / query_num) + " " + String.format("%.2f", rt_path/ query_num) + " " + String.format("%.2f",  rt_range/ query_num)
+                        + " " + String.format("%.2f",  rt_range_index/ query_num) + " " + String.format("%.2f",  rt_mix/ query_num) + " " + String.format("%.2f", rt_mix_index / query_num) + " ");
                 //speed up ratio
                 sb.append(String.format("%.2f", rt_imporved / rt_range) + " " + String.format("%.2f", rt_imporved / rt_path) + " " + String.format("%.2f", rt_imporved / rt_mix)
                         + " " + String.format("%.2f", rt_imporved / rt_range_index) + " " + String.format("%.2f", rt_imporved / rt_mix_index) + " ");
@@ -158,9 +158,9 @@ public class analyzeResult {
                 sb.append(sk_imporved / query_num + " " + sk_range / query_num + " " + sk_path / query_num + " " + sk_mix / query_num + " ");
 
                 //
-                sb.append(String.format("%.4f", range_cos/query_num)+" "+String.format("%.4f", range_cos_10/query_num)+" "+String.format("%.4f", range_cos_100/query_num)+" ");
-                sb.append(String.format("%.4f", sub_cos/query_num)+" "+String.format("%.4f", sub_cos_10/query_num)+" "+String.format("%.4f", sub_cos_100/query_num)+" ");
-                sb.append(String.format("%.4f", mix_cos/query_num)+" "+String.format("%.4f", mix_cos_10/query_num)+" "+String.format("%.4f", mix_cos_100/query_num));
+                sb.append(String.format("%.4f", range_cos / query_num) + " " + String.format("%.4f", range_cos_10 / query_num) + " " + String.format("%.4f", range_cos_100 / query_num) + " ");
+                sb.append(String.format("%.4f", sub_cos / query_num) + " " + String.format("%.4f", sub_cos_10 / query_num) + " " + String.format("%.4f", sub_cos_100 / query_num) + " ");
+                sb.append(String.format("%.4f", mix_cos / query_num) + " " + String.format("%.4f", mix_cos_10 / query_num) + " " + String.format("%.4f", mix_cos_100 / query_num));
 //                sb.append(String.format("%.6f", f_t_range_edu / query_num) + " " + String.format("%.6f", f_t_path_edu / query_num) + " " + String.format("%.6f", f_t_mix_edu / query_num) + " ");
 //                sb.append(String.format("%.6f", range_t_f_edu / query_num) + " " + String.format("%.6f", path_t_f_edu / query_num) + " " + String.format("%.6f", mix_t_f_edu / query_num) + " ");
                 System.out.println(sb);
@@ -171,6 +171,340 @@ public class analyzeResult {
             }
 
 //            break;
+        }
+    }
+
+
+    private void anaylze_real() {
+        String fold = "/home/gqxwolf/shared_git/bConstrainSkyline/target/output/realSF_1000.txt";
+        File base_f = new File(fold);
+
+
+        try {
+            BufferedReader b = new BufferedReader(new FileReader(base_f));
+            String readLine = "";
+            int counter = 1;
+
+
+            //running time
+            double rt_base = 0;
+            double rt_imporved = 0;
+            double rt_range = 0;
+            double rt_range_index = 0;
+            double rt_path = 0;
+            double rt_mix = 0;
+            double rt_mix_index = 0;
+
+            //visited number
+            long v_base = 0;
+            long v_imporved = 0;
+            long v_range = 0;
+            long v_range_index = 0;
+            long v_path = 0;
+            long v_mix = 0;
+            long v_mix_index = 0;
+
+            long f_base = 0;
+            long f_imporved = 0;
+            long f_range = 0;
+            long f_range_index = 0;
+            long f_path = 0;
+            long f_mix = 0;
+            long f_mix_index = 0;
+
+            //skyline checking
+            long sk_base = 0;
+            long sk_imporved = 0;
+            long sk_range = 0;
+            long sk_range_index = 0;
+            long sk_path = 0;
+            long sk_mix = 0;
+            long sk_mix_index = 0;
+
+            //edu similar score
+            double f_t_range_edu = 0;
+            double range_t_f_edu = 0;
+            double f_t_path_edu = 0;
+            double path_t_f_edu = 0;
+            double f_t_mix_edu = 0;
+            double mix_t_f_edu = 0;
+
+
+            //edu similar score
+            double range_cos = 0;
+            double range_cos_10 = 0;
+            double range_cos_100 = 0;
+
+            double sub_cos = 0;
+            double sub_cos_10 = 0;
+            double sub_cos_100 = 0;
+
+            double mix_cos = 0;
+            double mix_cos_10 = 0;
+            double mix_cos_100 = 0;
+
+
+            int query_num = 0;
+
+            while ((readLine = b.readLine()) != null) {
+//                    System.out.println(readLine);
+                if (counter % 11 == 1) {
+                    String[] split_info = readLine.split(" ");
+//                    System.out.println(readLine);
+                    rt_base += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_imporved += Long.parseLong(split_info[split_info.length - 5].split(",")[0]);
+//                        v_imporved += Long.parseLong(split_info[split_info.length - 5].split(",")[1]);
+                    sk_base += Long.parseLong(split_info[split_info.length - 2]);
+                } else if (counter % 11 == 2) {
+                    String[] split_info = readLine.split(" ");
+                    rt_imporved += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_imporved += Long.parseLong(split_info[split_info.length - 5].split(",")[0]);
+//                        v_imporved += Long.parseLong(split_info[split_info.length - 5].split(",")[1]);
+                    sk_imporved += Long.parseLong(split_info[split_info.length - 3]);
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 5] + " " + split_info[split_info.length - 2]);
+                } else if (counter % 11 == 3) {
+                    String[] split_info = readLine.split(" ");
+                    rt_range += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_range += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_range += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_range += Long.parseLong(split_info[split_info.length - 1]);
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 11 == 4) {
+                    String[] split_info = readLine.split(" ");
+                    rt_range_index += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_range_index += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_range_index += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_range_index += Long.parseLong(split_info[split_info.length - 1]);
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 11 == 5) {
+                    String[] split_info = readLine.split(" ");
+                    rt_path += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_path += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_path += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_path += Long.parseLong(split_info[split_info.length - 1]);
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 11 == 6) {
+                    String[] split_info = readLine.split(" ");
+                    rt_mix += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_mix += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_mix += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_mix += Long.parseLong(split_info[split_info.length - 1]);
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 11 == 7) {
+                    String[] split_info = readLine.split(" ");
+                    rt_mix_index += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_mix_index += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_mix_index += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_mix_index += Long.parseLong(split_info[split_info.length - 1]);
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 11 == 8) {
+                    range_cos += Double.parseDouble(readLine.split(" ")[0]);
+                    range_cos_10 += Double.parseDouble(readLine.split(" ")[1]);
+                    range_cos_100 += Double.parseDouble(readLine.split(" ")[2]);
+//                        System.out.println(readLine.split(" ")[6] + " " + readLine.split(" ")[18]);
+                } else if (counter % 11 == 9) {
+                    sub_cos += Double.parseDouble(readLine.split(" ")[0]);
+                    sub_cos_10 += Double.parseDouble(readLine.split(" ")[1]);
+                    sub_cos_100 += Double.parseDouble(readLine.split(" ")[2]);
+                } else if (counter % 11 == 10) {
+                    mix_cos += Double.parseDouble(readLine.split(" ")[0]);
+                    mix_cos_10 += Double.parseDouble(readLine.split(" ")[1]);
+                    mix_cos_100 += Double.parseDouble(readLine.split(" ")[2]);
+                } else if (counter % 11 == 0) {
+                    query_num++;
+                }
+                counter++;
+            }
+
+//                System.out.println(mix_cos+" "+query_num);
+
+            StringBuffer sb = new StringBuffer();
+            //graph_size, degree, hotels_num
+//            sb.append(base_f.getName().split("_")[0] + " " + base_f.getName().split("_")[1] + " " + base_f.getName().split("_")[2]);
+            //running time in second
+            sb.append(" " + String.format("%.2f", rt_base / query_num) + " " + String.format("%.2f", rt_imporved / query_num) + " " + String.format("%.2f", rt_range / query_num) + " " + String.format("%.2f", rt_path / query_num)
+                    + " " + String.format("%.2f", rt_mix / query_num) + " " + String.format("%.2f", rt_range_index / query_num) + " " + String.format("%.2f", rt_mix_index / query_num) + " ");
+            //speed up ratio
+            sb.append(String.format("%.2f", rt_imporved / rt_range) + " " + String.format("%.2f", rt_imporved / rt_path) + " " + String.format("%.2f", rt_imporved / rt_mix)
+                    + " " + String.format("%.2f", rt_imporved / rt_range_index) + " " + String.format("%.2f", rt_imporved / rt_mix_index) + " ");
+            //skyline checking
+            sb.append(sk_base / query_num + " " + sk_imporved / query_num + " " + sk_range / query_num + " " + sk_path / query_num + " " + sk_mix / query_num + " ");
+
+            //
+            sb.append(String.format("%.4f", range_cos / query_num) + " " + String.format("%.4f", range_cos_10 / query_num) + " " + String.format("%.4f", range_cos_100 / query_num) + " ");
+            sb.append(String.format("%.4f", sub_cos / query_num) + " " + String.format("%.4f", sub_cos_10 / query_num) + " " + String.format("%.4f", sub_cos_100 / query_num) + " ");
+            sb.append(String.format("%.4f", mix_cos / query_num) + " " + String.format("%.4f", mix_cos_10 / query_num) + " " + String.format("%.4f", mix_cos_100 / query_num));
+//                sb.append(String.format("%.6f", f_t_range_edu / query_num) + " " + String.format("%.6f", f_t_path_edu / query_num) + " " + String.format("%.6f", f_t_mix_edu / query_num) + " ");
+//                sb.append(String.format("%.6f", range_t_f_edu / query_num) + " " + String.format("%.6f", path_t_f_edu / query_num) + " " + String.format("%.6f", mix_t_f_edu / query_num) + " ");
+            System.out.println(sb);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//            break;
+
+    }
+
+    public void readLA() {
+        String fold = "/home/gqxwolf/shared_git/bConstrainSkyline/target/output/realSF_500.txt";
+        File base_f = new File(fold);
+
+        try {
+            BufferedReader b = new BufferedReader(new FileReader(fold));
+            String readLine = "";
+            int counter = 1;
+
+
+            //running time
+            double rt_imporved = 0;
+            double rt_range = 0;
+            double rt_range_index = 0;
+            double rt_path = 0;
+            double rt_mix = 0;
+            double rt_mix_index = 0;
+
+            //visited number
+            long v_imporved = 0;
+            long v_range = 0;
+            long v_range_index = 0;
+            long v_path = 0;
+            long v_mix = 0;
+            long v_mix_index = 0;
+
+            long f_imporved = 0;
+            long f_range = 0;
+            long f_range_index = 0;
+            long f_path = 0;
+            long f_mix = 0;
+            long f_mix_index = 0;
+
+            //skyline checking
+            long sk_imporved = 0;
+            long sk_range = 0;
+            long sk_range_index = 0;
+            long sk_path = 0;
+            long sk_mix = 0;
+            long sk_mix_index = 0;
+
+            //edu similar score
+            double f_t_range_edu = 0;
+            double range_t_f_edu = 0;
+            double f_t_path_edu = 0;
+            double path_t_f_edu = 0;
+            double f_t_mix_edu = 0;
+            double mix_t_f_edu = 0;
+
+
+            //edu similar score
+            double range_cos = 0;
+            double range_cos_10 = 0;
+            double range_cos_100 = 0;
+
+            double sub_cos = 0;
+            double sub_cos_10 = 0;
+            double sub_cos_100 = 0;
+
+            double mix_cos = 0;
+            double mix_cos_10 = 0;
+            double mix_cos_100 = 0;
+
+
+            int query_num = 0;
+
+            while ((readLine = b.readLine()) != null) {
+//                    System.out.println(readLine);
+                if (counter % 10 == 1) {
+                    String[] split_info = readLine.split(" ");
+                    rt_imporved += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_imporved += Long.parseLong(split_info[split_info.length - 5].split(",")[0]);
+//                        v_imporved += Long.parseLong(split_info[split_info.length - 5].split(",")[1]);
+                    sk_imporved += Long.parseLong(split_info[split_info.length - 3].trim());
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 5] + " " + split_info[split_info.length - 2]);
+                } else if (counter % 10 == 2) {
+                    String[] split_info = readLine.split(" ");
+                    rt_range += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_range += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_range += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_range += Long.parseLong(split_info[split_info.length - 1]);
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 10 == 3) {
+                    System.out.println(readLine);
+                    String[] split_info = readLine.split(" ");
+                    rt_range_index += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_range_index += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_range_index += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_range_index += Long.parseLong(split_info[split_info.length - 1]);
+                    System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 10 == 4) {
+                    String[] split_info = readLine.split(" ");
+                    rt_path += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_path += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_path += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_path += Long.parseLong(split_info[split_info.length - 1]);
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 10 == 5) {
+                    String[] split_info = readLine.split(" ");
+                    rt_mix += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_mix += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_mix += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_mix += Long.parseLong(split_info[split_info.length - 1]);
+//                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 10 == 6) {
+                    System.out.println(readLine);
+                    String[] split_info = readLine.split(" ");
+                    rt_mix_index += (double) Long.parseLong(readLine.split("\\|")[1]) / 1000;
+//                        f_mix_index += Long.parseLong(split_info[split_info.length - 4].split(",")[0]);
+//                        v_mix_index += Long.parseLong(split_info[split_info.length - 4].split(",")[1]);
+                    sk_mix_index += Long.parseLong(split_info[split_info.length - 1]);
+                        System.out.println((double) Long.parseLong(readLine.split("\\|")[1]) / 1000 + " " + split_info[split_info.length - 4] + " " + split_info[split_info.length - 1]);
+                } else if (counter % 10 == 7) {
+                    range_cos += Double.parseDouble(readLine.split(" ")[0]);
+                    range_cos_10 += Double.parseDouble(readLine.split(" ")[1]);
+                    range_cos_100 += Double.parseDouble(readLine.split(" ")[2]);
+//                        System.out.println(readLine.split(" ")[6] + " " + readLine.split(" ")[18]);
+                } else if (counter % 10 == 8) {
+                    sub_cos += Double.parseDouble(readLine.split(" ")[0]);
+                    sub_cos_10 += Double.parseDouble(readLine.split(" ")[1]);
+                    sub_cos_100 += Double.parseDouble(readLine.split(" ")[2]);
+                } else if (counter % 10 == 9) {
+                    mix_cos += Double.parseDouble(readLine.split(" ")[0]);
+                    mix_cos_10 += Double.parseDouble(readLine.split(" ")[1]);
+                    mix_cos_100 += Double.parseDouble(readLine.split(" ")[2]);
+                } else if (counter % 10 == 0) {
+                    query_num++;
+                }
+                counter++;
+            }
+
+            System.out.println(query_num);
+
+//                System.out.println(mix_cos+" "+query_num);
+
+            StringBuffer sb = new StringBuffer();
+            //graph_size, degree, hotels_num
+//            sb.append(output_f.getName().split("_")[0] + " " + output_f.getName().split("_")[1] + " " + output_f.getName().split("_")[2]);
+            //running time in second
+            sb.append(" " + String.format("%.2f", rt_imporved / query_num) + " " + String.format("%.2f", rt_range / query_num) + " " + String.format("%.2f", rt_path / query_num)
+                    + " " + String.format("%.2f", rt_mix / query_num) + " " + String.format("%.2f", rt_range_index / query_num) + " " + String.format("%.2f", rt_mix_index / query_num) + " ");
+            //speed up ratio
+            sb.append(String.format("%.2f", rt_imporved / rt_range) + " " + String.format("%.2f", rt_imporved / rt_path) + " " + String.format("%.2f", rt_imporved / rt_mix)
+                    + " " + String.format("%.2f", rt_imporved / rt_range_index) + " " + String.format("%.2f", rt_imporved / rt_mix_index) + " ");
+            //skyline checking
+            sb.append(sk_imporved / query_num + " " + sk_range / query_num + " " + sk_path / query_num + " " + sk_mix / query_num + " ");
+
+            //
+            sb.append(String.format("%.4f", range_cos / query_num) + " " + String.format("%.4f", range_cos_10 / query_num) + " " + String.format("%.4f", range_cos_100 / query_num) + " ");
+            sb.append(String.format("%.4f", sub_cos / query_num) + " " + String.format("%.4f", sub_cos_10 / query_num) + " " + String.format("%.4f", sub_cos_100 / query_num) + " ");
+            sb.append(String.format("%.4f", mix_cos / query_num) + " " + String.format("%.4f", mix_cos_10 / query_num) + " " + String.format("%.4f", mix_cos_100 / query_num));
+//                sb.append(String.format("%.6f", f_t_range_edu / query_num) + " " + String.format("%.6f", f_t_path_edu / query_num) + " " + String.format("%.6f", f_t_mix_edu / query_num) + " ");
+//                sb.append(String.format("%.6f", range_t_f_edu / query_num) + " " + String.format("%.6f", path_t_f_edu / query_num) + " " + String.format("%.6f", mix_t_f_edu / query_num) + " ");
+            System.out.println(sb);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

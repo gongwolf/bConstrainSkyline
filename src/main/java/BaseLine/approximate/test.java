@@ -1,6 +1,5 @@
 package BaseLine.approximate;
 
-import BaseLine.BaseMethod;
 import BaseLine.BaseMethod1;
 import BaseLine.BaseMethod5;
 import BaseLine.approximate.mixed.BaseMethod_mixed;
@@ -29,7 +28,7 @@ public class test {
         options.addOption("hn", "hotelsnum", true, "number of hotels in the graph");
         options.addOption("r", "range", true, "range of the distance to be considered");
         options.addOption("h", "help", false, "print the help of this command");
-        options.addOption("c", "city", false, "the city name");
+        options.addOption("c", "city", true, "the city name");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -61,7 +60,7 @@ public class test {
             }
 
             if (qn_str == null) {
-                query_num = 1;
+                query_num = 5;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
@@ -86,43 +85,83 @@ public class test {
             }
 
 
+//            String home_folder = System.getProperty("user.home");
+//            String graph = home_folder + "/neo4j334/testdb_" + city + "_Random/databases/graph.db";
             Data[] queryList = new Data[query_num];
+//
+//            connector n = new connector(graph);
+//            n.startDB();
+//            GraphDatabaseService graphdb = n.getDBObject();
+//            try (Transaction tx = graphdb.beginTx()) {
+//                for (int i = 0; i < query_num; i++) {
+//                    BaseMethod5 bm5 = new BaseMethod5(city);
+//                    bm5.graphdb = graphdb;
+//                    int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+//
+//                    Data queryD = bm5.getDataById(random_place_id);
+//                    bm5.nearestNetworkNode(queryD);
+//                    double distance = bm5.nn_dist;
+////                    System.out.println(distance);
+//                    while (distance > 0.02115) {
+//                        random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+//                        queryD = bm5.getDataById(random_place_id);
+//                        bm5.nearestNetworkNode(queryD);
+//                        distance = bm5.nn_dist;
+////                        System.out.println(distance);
+//                    }
+//                    queryList[i] = queryD;
+//                }
+//
+//                tx.success();
+//            }
+//
+//            n.shutdownDB();
 
-            String home_folder = System.getProperty("user.home");
-            String graph = home_folder + "/neo4j334/testdb_"+city+"/databases/graph.db";
+            for (int i = 0; i < query_num; i++) {
 
-            connector n = new connector(graph);
-            n.startDB();
-            GraphDatabaseService graphdb = n.getDBObject();
-            try (Transaction tx = graphdb.beginTx()) {
-                for (int i = 0; i < query_num; i++) {
-                    BaseMethod5 bm5 = new BaseMethod5(city);
-                    bm5.graphdb = graphdb;
-                    int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
-
-                    Data queryD = bm5.getDataById(random_place_id);
-                    bm5.nearestNetworkNode(queryD);
-                    double distance = bm5.nn_dist;
-//                    System.out.println(distance);
-                    while (distance > 0.0105) {
-                        random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
-                        queryD = bm5.getDataById(random_place_id);
-                        bm5.nearestNetworkNode(queryD);
-                        distance = bm5.nn_dist;
-//                        System.out.println(distance);
-                    }
-                    queryList[i] = queryD;
-                }
-
-                tx.success();
+                BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
+                int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+                Data queryD = bm5.getDataById(random_place_id);
+                queryList[i] = queryD;
             }
 
-            n.shutdownDB();
+
+            /*
+             *
+             * For new york test generater
+             *
+             * */
+
+//            int[] random_id = new int[]{8883, 5080, 5120, 5175, 4032, 4090, 5073, 8935, 5140, 9358, 5088, 5159};
+//            query_num = random_id.length;
+//
+//            Data[] queryList = new Data[query_num];
+//
+//            connector n = new connector(graph);
+//            n.startDB();
+//            GraphDatabaseService graphdb = n.getDBObject();
+//            try (Transaction tx = graphdb.beginTx()) {
+//                for (int i = 0; i < query_num; i++) {
+//                    BaseMethod5 bm5 = new BaseMethod5(city);
+//                    bm5.graphdb = graphdb;
+//
+//                    Data queryD = bm5.getDataById(random_id[i]);
+//                    bm5.nearestNetworkNode(queryD);
+//
+//
+//                    queryList[i] = queryD;
+//                }
+//
+//                tx.success();
+//            }
+//
+//            n.shutdownDB();
 
             for (Data d : queryList) {
-//                t.testing(graph_size, degree, range, hotels_num, d);
-                t.test_real(d,city);
-                System.out.println("===============================================");
+                t.testing1(graph_size, degree, range, hotels_num, d);
+
+//                t.test_real(d, city);
+//                System.out.println("===============================================");
             }
         }
 
@@ -179,22 +218,41 @@ public class test {
 
     }
 
-    public void test_real(Data queryD,String city) {
-//        System.out.println(queryD);
-        String home_folder = System.getProperty("user.home");
-        String graph = home_folder + "/neo4j334/testdb_"+city+"_Random/databases/graph.db";
-        String tree = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_"+city+".rtr";
-        String data = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_"+city+".txt";
 
 
-        BaseMethod1 bm1 = new BaseMethod1(city);
-        BaseMethod5 bm5 = new BaseMethod5(city);
+    public void testing1(int graph_size, String degree, double range, int hotels_num, Data queryD) {
+
+
+        BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
+        BaseMethod1 bm1 = new BaseMethod1(graph_size, degree, range, range, hotels_num);
+
+
         bm1.baseline(queryD);
         bm5.baseline(queryD);
 
 
-        BaseMethod_approx bs_range = new BaseMethod_approx(tree, data, graph, 0.0105);
-        BaseMethod_approx_index bs_range_indexed = new BaseMethod_approx_index(tree, data, graph, 0.0105);
+        System.out.println("=================================");
+
+    }
+
+    public void test_real(Data queryD, String city) {
+//        System.out.println(queryD);
+        String home_folder = System.getProperty("user.home");
+        String graph = home_folder + "/neo4j334/testdb_" + city + "_Random/databases/graph.db";
+        String tree = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_" + city + ".rtr";
+        String data = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_" + city + ".txt";
+
+
+//        if (!city.equals("LA")) {
+//            BaseMethod1 bm1 = new BaseMethod1(city);
+//            bm1.baseline(queryD);
+//        }
+        BaseMethod5 bm5 = new BaseMethod5(city);
+        bm5.baseline(queryD);
+
+
+        BaseMethod_approx bs_range = new BaseMethod_approx(tree, data, graph, 0.02115);
+        BaseMethod_approx_index bs_range_indexed = new BaseMethod_approx_index(tree, data, graph, 0.02115);
         bs_range.baseline(queryD);
         bs_range_indexed.baseline(queryD);
 
@@ -202,8 +260,8 @@ public class test {
         BaseMethod_subPath bs_sub = new BaseMethod_subPath(tree, data, graph);
         bs_sub.baseline(queryD);
 
-        BaseMethod_mixed bs_mix = new BaseMethod_mixed(tree, data, graph, 0.0105);
-        BaseMethod_mixed_index bs_mix_indexed = new BaseMethod_mixed_index(tree, data, graph, 0.0105);
+        BaseMethod_mixed bs_mix = new BaseMethod_mixed(tree, data, graph, 0.02115);
+        BaseMethod_mixed_index bs_mix_indexed = new BaseMethod_mixed_index(tree, data, graph, 0.02115);
         bs_mix.baseline(queryD);
         bs_mix_indexed.baseline(queryD);
 

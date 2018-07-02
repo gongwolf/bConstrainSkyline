@@ -7,7 +7,6 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
-import testTools.GoogleMaps;
 import testTools.Index;
 
 import java.io.BufferedReader;
@@ -53,6 +52,8 @@ public class BaseMethod_approx_index {
         this.hotels_num = hotels_num;
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath = home_folder + "/neo4j334/testdb" + graph_size + "_" + degree + "/databases/graph.db";
+
 //        System.out.println(this.treePath);
 //        System.out.println(this.dataPath);
 //        System.exit(0);
@@ -266,7 +267,8 @@ public class BaseMethod_approx_index {
 
 //            System.out.println("there are " + this.tmpStoreNodes.size() + " bus stops are visited");
 
-            Index idx = new Index("SF");
+//            Index idx = new Index("SF");
+            Index idx = new Index(this.graph_size, this.degree, this.distance_threshold, this.hotels_num, this.distance_threshold);
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 sk_counter += entry.getValue().skyPaths.size();
                 long t_index_s = System.nanoTime();

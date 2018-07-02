@@ -2,9 +2,7 @@ package BaseLine;
 
 import neo4jTools.Line;
 import neo4jTools.connector;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,28 +27,45 @@ public class path {
         this.endNode = current.node;
         this.expaned = false;
 
-        this.nodes = new ArrayList<>();
-        this.rels = new ArrayList<>();
-        this.propertiesName = new ArrayList<>();
+        this.nodes = new ArrayList<>(100);
+        this.rels = new ArrayList<>(100);
+        this.propertiesName = new ArrayList<>(3);
 
         this.setPropertiesName();
 
         //store the Long Objects
-        this.nodes.add(getLongObject_Node(this.endNode));
+//        this.nodes.add(getLongObject_Node(this.endNode));
+
+        nodes.add(this.endNode);
     }
 
-    public path(path old_path, Relationship rel) {
+    public path(path old_path, long rel_id,long end_id) {
 
         this.costs = new double[constants.path_dimension];
         this.startNode = old_path.startNode;
-        this.endNode = rel.getEndNodeId();
+        this.endNode = end_id;
 
 
+//        int n_nodes = old_path.nodes.size();
+//        this.nodes = new ArrayList<>(n_nodes+1);
+//
+//        for(long nid:old_path.nodes)
+//        {
+//            nodes.add(nid);
+//        }
+//
+//
+//        int n_rels = old_path.rels.size();
+//        this.rels = new ArrayList<>(n_rels+1);
+//        for(long rid:old_path.rels)
+//        {
+//            rels.add(rid);
+//
+//        }
         this.nodes = new ArrayList<>();
         for (long n : old_path.nodes) {
             this.nodes.add(getLongObject_Node(n));
         }
-
         this.rels = new ArrayList<>();
         for (long e : old_path.rels) {
             this.rels.add(getLongObject_Edge(e));
@@ -62,11 +77,13 @@ public class path {
         expaned = false;
 
         this.nodes.add(getLongObject_Node(this.endNode));
-        this.rels.add(getLongObject_Edge(rel.getId()));
+        this.rels.add(getLongObject_Edge(rel_id));
+
+//        this.nodes.add(this.endNode);
+//        this.rels.add(rel_id);
 
         System.arraycopy(old_path.costs, 0, this.costs, 0, this.costs.length);
 
-        calculateCosts(rel);
     }
 
 //    public ArrayList<path> expand() {
@@ -88,13 +105,17 @@ public class path {
         ArrayList<path> result = new ArrayList<>();
 
         try (Transaction tx = connector.graphDB.beginTx()) {
-            Iterable<Relationship> rels = connector.graphDB.getNodeById(this.endNode).getRelationships(Line.Linked, Direction.OUTGOING);
+            ResourceIterable<Relationship> rels = (ResourceIterable<Relationship>) connector.graphDB.getNodeById(this.endNode).getRelationships(Line.Linked, Direction.OUTGOING);
             Iterator<Relationship> rel_Iter = rels.iterator();
             while (rel_Iter.hasNext()) {
                 Relationship rel = rel_Iter.next();
-                path nPath = new path(this, rel);
+                long rel_id = rel.getId();
+                long rel_endnode = rel.getEndNodeId();
+                path nPath = new path(this, rel_id,rel_endnode);
+                nPath.calculateCosts(rel);
                 result.add(nPath);
             }
+
             tx.success();
         }
         return result;

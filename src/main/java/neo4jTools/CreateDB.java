@@ -21,23 +21,22 @@ public class CreateDB {
     public CreateDB(int graphsize, int degree) {
 //        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
 //        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
-        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + "SF" + "/databases/graph.db";
-        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data/";
+        this.DB_PATH = "/home/gqxwolf/neo4j341/testdb_" + "LA" + "_normal" + "/databases/graph.db";
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50_int/data/normal/";
         //this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real/data/";
         //this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_real/databases/graph.db";
 
-        NodesPath = DBBase + "SF_NodeInfo.txt";
-        SegsPath = DBBase + "SF_SegInfo.txt";
+        NodesPath = DBBase + "LA_NodeInfo.txt";
+        SegsPath = DBBase + "LA_SegInfo.txt";
     }
 
 
     public CreateDB() {
 
-        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + "LA" + "_Random/databases/graph.db";
-        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50_Random/data/";
+        this.DB_PATH = "/home/gqxwolf/neo4j341/testdb_" + "LA" + "_"+"uniform" + "/databases/graph.db";
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50_int/data/uniform/";
         NodesPath = DBBase + "LA_NodeInfo.txt";
         SegsPath = DBBase + "LA_SegInfo.txt";
-
 
 //        this.DB_PATH = "/home/gqxwolf/neo4j334/busline_10000_2.0/databases/graph.db";
 //        this.DBBase = "/home/gqxwolf/mydata/projectData/busline_10000_2.0/data/";
@@ -89,7 +88,7 @@ public class CreateDB {
                 String id = attrs[0];
                 double lat = Double.parseDouble(attrs[1]);
                 double log = Double.parseDouble(attrs[2]);
-                Node n = createNode(id, lat, log);
+                createNode(id, lat, log);
                 num_node++;
             }
 
@@ -115,7 +114,7 @@ public class CreateDB {
 
         nconn.shutdownDB();
         System.out.println("Database is created, the location of the db file is " + this.DB_PATH);
-        System.out.println("there are total "+num_node+" nodes and "+num_edge+" edges");
+        System.out.println("there are total " + num_node + " nodes and " + num_edge + " edges");
     }
 
 

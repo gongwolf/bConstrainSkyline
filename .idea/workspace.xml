@@ -10,9 +10,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1927bf6b-a886-486f-9482-a756607011b0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_Random.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ben_manes_caffeine_caffeine_2_3_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_dropwizard_metrics_metrics_core_3_1_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_dropwizard_metrics_metrics_graphite_3_1_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_compress_1_12.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_lucene_lucene_analyzers_common_5_5_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_lucene_lucene_codecs_5_5_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_lucene_lucene_core_5_5_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_lucene_lucene_queryparser_5_5_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_bouncycastle_bcpkix_jdk15on_1_53.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_bouncycastle_bcprov_jdk15on_1_53.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_5_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qixugong.iml" beforeDir="false" afterPath="$PROJECT_DIR$/qixugong.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/statistic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/statistic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BaseLine/path.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BaseLine/path.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/Index.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/analyzeResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/analyzeResult.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -28,96 +54,87 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BaseMethod5.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
+      <file leaf-file-name="ReadRealDataSet_int.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="73" column="74" lean-forward="true" selection-start-line="71" selection-start-column="74" selection-end-line="73" selection-end-column="74" />
+            <state relative-caret-position="612">
+              <caret line="39" column="17" selection-start-line="39" selection-start-column="17" selection-end-line="39" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BaseMethod_approx.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2655">
-              <caret line="184" selection-start-line="184" selection-end-line="184" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseMethod1.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BaseMethod1.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3570">
-              <caret line="246" column="44" selection-start-line="246" selection-start-column="44" selection-end-line="246" selection-end-column="44" />
+            <state relative-caret-position="1784">
+              <caret line="227" selection-start-line="227" selection-end-line="227" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BaseMethod_approx_index.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java">
+      <file leaf-file-name="Result.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Result.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3930">
-              <caret line="269" selection-start-line="269" selection-end-line="269" />
+            <state relative-caret-position="126">
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BaseMethod_subPath.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/subpath/BaseMethod_subPath.java">
+      <file leaf-file-name="myNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/myNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
+            <state relative-caret-position="594">
+              <caret line="38" column="33" selection-start-line="38" selection-start-column="33" selection-end-line="38" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BaseMethod_mixed.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed.java">
+      <file leaf-file-name="path.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/path.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="780">
-              <caret line="60" selection-start-line="60" selection-end-line="60" />
+            <state relative-caret-position="192">
+              <caret line="199" selection-start-line="199" selection-end-line="199" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BaseMethod_mixed_index.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java">
+      <file leaf-file-name="idea64.vmoptions" pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/idea64.vmoptions">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
+            <state relative-caret-position="72">
+              <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java">
+      <file leaf-file-name="constants.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/constants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="134" column="38" lean-forward="true" selection-start-line="134" selection-start-column="38" selection-end-line="134" selection-end-column="38" />
+            <state relative-caret-position="144">
+              <caret line="8" column="38" selection-start-line="7" selection-start-column="37" selection-end-line="8" selection-end-column="38" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="statistic.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/statistic.java">
+      <file leaf-file-name="CreateDB.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="340" lean-forward="true" selection-start-line="340" selection-end-line="340" />
+            <state relative-caret-position="2880">
+              <caret line="169" column="24" selection-start-line="169" selection-start-column="24" selection-end-line="169" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="connector.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/connector.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="20" column="60" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="60" />
               <folding>
-                <element signature="e#15115#15116#0" expanded="true" />
-                <element signature="e#15148#15149#0" expanded="true" />
+                <element signature="e#768#769#0" expanded="true" />
+                <element signature="e#806#807#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Index.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/testTools/Index.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2970">
-              <caret line="210" column="5" selection-start-line="210" selection-start-column="5" selection-end-line="210" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -133,13 +150,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>334</find>
-      <find>faul</find>
-      <find>add</find>
-      <find>queue</find>
-      <find>Googl</find>
-      <find>math.sqrt</find>
-      <find>toString(</find>
       <find>toString</find>
       <find>Long</find>
       <find>data</find>
@@ -163,7 +173,17 @@
       <find>Math.sqrt(Math.pow(</find>
       <find>PlacesApi</find>
       <find>placesApi</find>
+      <find>0.0 0.0 0.0 0.0 0.0</find>
+      <find>===============================================</find>
+      <find>Random/</find>
+      <find>s_sum</find>
+      <find>ShutdownDB in Error handle function</find>
+      <find>cache</find>
+      <find>~~~~~~~~~~~~</find>
     </findStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/src</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -171,10 +191,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/testTools/BetaDistributionTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/GPSkyline/BFS/myNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/path.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/Skyline.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/myNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/BaseMethod_approx.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/approximate/dijkstra/BaseMethod_approx.java" />
@@ -197,31 +213,35 @@
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/neo4jTools/StringComparator.java" />
         <option value="$PROJECT_DIR$/src/main/java/neo4jTools/testingCosine.java" />
         <option value="$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java" />
         <option value="$PROJECT_DIR$/src/main/java/neo4jTools/mimicBusLine.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/path.java" />
-        <option value="$PROJECT_DIR$/src/main/java/testTools/analyzeResult.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/noMyNodes.java" />
-        <option value="$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java" />
-        <option value="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" />
-        <option value="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" />
-        <option value="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/subpath/BaseMethod_subPath.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java" />
-        <option value="$PROJECT_DIR$/src/main/java/testTools/Index.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" />
         <option value="$PROJECT_DIR$/src/main/java/testTools/statistic.java" />
-        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java" />
         <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/Index.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/analyzeResult.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_Random.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java" />
+        <option value="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" />
+        <option value="$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java" />
+        <option value="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/myNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/constants.java" />
+        <option value="$APPLICATION_CONFIG_DIR$/idea64.vmoptions" />
+        <option value="$PROJECT_DIR$/src/main/java/BaseLine/path.java" />
       </list>
     </option>
   </component>
@@ -258,7 +278,6 @@
     </navigator>
     <panes>
       <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -362,23 +381,6 @@
               <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="twoHop" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="twoHop" type="462c0819:PsiDirectoryNode" />
-              <item name="Cached" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -389,16 +391,12 @@
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="META-INF" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="qixugong" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bConstrainSkyline" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -407,6 +405,7 @@
     <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="qixugong" />
     <property name="SearchEverywhereHistoryKey" value="memory&#9;null&#9;null&#10;memoryin&#9;null&#9;null" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="JAVA" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
@@ -414,26 +413,26 @@
     <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="testTools" />
-      <recent name="aRtree" />
-      <recent name="BaseLine" />
-      <recent name="twoHop" />
-      <recent name="GPSkyline" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="BaseLine.approximate.mixed" />
-      <recent name="BaseLine.approximate.range" />
-      <recent name="BaseLine.approximate.dijkstra" />
-      <recent name="BaseLine.approximate.approximate.dijkstra" />
-      <recent name="BaseLine.approximate" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java/BaseLine/approximate/dijkstra" />
       <recent name="$PROJECT_DIR$/src/main/java/BaseLine/approximate" />
       <recent name="$PROJECT_DIR$/src/main/java/Baseline2" />
       <recent name="$PROJECT_DIR$/src/main/java/RstarTree" />
       <recent name="$PROJECT_DIR$/src/main/java/unDirectionalGraph" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="testTools" />
+      <recent name="BaseLine.approximate.mixed" />
+      <recent name="BaseLine.approximate.range" />
+      <recent name="BaseLine.approximate.dijkstra" />
+      <recent name="BaseLine.approximate.approximate.dijkstra" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="testTools" />
+      <recent name="aRtree" />
+      <recent name="BaseLine" />
+      <recent name="twoHop" />
+      <recent name="GPSkyline" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -448,14 +447,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.test">
+  <component name="RunManager" selected="Application.BaseMethod1">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HEIGHT" value="0" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <option name="WIDTH" value="0" />
     </configuration>
-    <configuration name="BaseMethod5" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="BaseLine.BaseMethod5" />
+    <configuration name="BaseMethod1" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="BaseLine.BaseMethod1" />
       <module name="qixugong" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -485,19 +484,8 @@
         </pattern>
       </extension>
     </configuration>
-    <configuration name="GoogleMaps" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="testTools.GoogleMaps" />
-      <module name="qixugong" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="testTools.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-    </configuration>
-    <configuration name="Index" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="testTools.Index" />
+    <configuration name="ReadRealDataSet_int" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="testTools.ReadRealDataSet_int" />
       <module name="qixugong" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -520,6 +508,17 @@
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration name="analyzeResult" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="testTools.analyzeResult" />
+      <module name="qixugong" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="testTools.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
     </configuration>
     <configuration name="test" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="BaseLine.approximate.test" />
@@ -580,19 +579,19 @@
     <list>
       <item itemvalue="Application.test" />
       <item itemvalue="Application.Build m" />
-      <item itemvalue="Application.BaseMethod5" />
-      <item itemvalue="Application.Index" />
+      <item itemvalue="Application.analyzeResult" />
+      <item itemvalue="Application.ReadRealDataSet_int" />
       <item itemvalue="Application.SplitGraph" />
       <item itemvalue="Application.CreateDB" />
-      <item itemvalue="Application.GoogleMaps" />
+      <item itemvalue="Application.BaseMethod1" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Index" />
-        <item itemvalue="Application.GoogleMaps" />
+        <item itemvalue="Application.BaseMethod1" />
+        <item itemvalue="Application.ReadRealDataSet_int" />
         <item itemvalue="Application.CreateDB" />
-        <item itemvalue="Application.BaseMethod5" />
         <item itemvalue="Application.SplitGraph" />
+        <item itemvalue="Application.analyzeResult" />
       </list>
     </recent_temporary>
   </component>
@@ -630,27 +629,28 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="39" y="25" width="1881" height="1055" extended-state="6" />
+    <frame x="46" y="-11" width="1875" height="1092" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.3134963" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.31269675" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
-      <window_info id="Image Layers" order="6" />
+      <window_info id="Image Layers" order="5" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5119617" side_tool="true" weight="0.23166844" />
       <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948583" />
-      <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48803827" weight="0.34750265" />
+      <window_info anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48803827" weight="0.33578175" />
       <window_info anchor="bottom" id="Terminal" order="9" />
-      <window_info id="Capture Tool" order="2" />
-      <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49651325" weight="0.24356869" />
-      <window_info id="Structure" order="1" sideWeight="0.50348675" side_tool="true" weight="0.2434875" />
+      <window_info id="Capture Tool" order="1" />
+      <window_info id="Designer" order="2" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.43192488" weight="0.24904214" />
+      <window_info id="Structure" order="6" sideWeight="0.5680751" side_tool="true" weight="0.24904214" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info id="UI Designer" order="4" />
+      <window_info id="UI Designer" order="3" />
       <window_info anchor="right" id="Theme Preview" order="6" />
-      <window_info id="Favorites" order="5" sideWeight="0.50422835" side_tool="true" weight="0.16822916" />
+      <window_info id="Favorites" order="4" sideWeight="0.5054773" side_tool="true" weight="0.24904214" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4449108" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -664,28 +664,28 @@
       <window_info anchor="bottom" id="Find" order="1" weight="0.32004198" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
-      <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48803827" visible="true" weight="0.34750265" />
+      <window_info active="true" anchor="bottom" x="59" y="24" width="1861" height="1056" id="Run" order="2" sideWeight="0.48803827" visible="true" weight="0.33578175" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49651325" weight="0.24356869" />
-      <window_info id="Structure" order="1" sideWeight="0.50348675" side_tool="true" visible="true" weight="0.2434875" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.43192488" weight="0.24904214" />
+      <window_info id="Structure" order="6" sideWeight="0.5680751" side_tool="true" weight="0.24904214" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295688" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info id="Image Layers" order="6" />
-      <window_info id="Designer" order="3" />
-      <window_info id="UI Designer" order="4" />
+      <window_info id="Image Layers" order="5" />
+      <window_info id="Designer" order="2" />
+      <window_info id="UI Designer" order="3" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4449108" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5119617" side_tool="true" weight="0.23166844" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948583" />
-      <window_info id="Capture Tool" order="2" />
+      <window_info id="Capture Tool" order="1" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.3134963" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.31269675" />
       <window_info anchor="right" id="Maven Projects" order="7" side_tool="true" weight="0.32895458" />
-      <window_info id="Favorites" order="5" sideWeight="0.50422835" side_tool="true" weight="0.16822916" />
+      <window_info id="Favorites" order="4" sideWeight="0.5054773" side_tool="true" weight="0.24904214" />
     </layout-to-restore>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -727,104 +727,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/Pindex/idxTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3260">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/myNodePriorityQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="158" column="6" selection-start-line="158" selection-start-column="6" selection-end-line="158" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/twoHop/TestShortestPath.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/twoHop/twoHopIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5618">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="132" column="20" selection-start-line="132" selection-start-column="20" selection-end-line="132" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/Streamable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="24" column="25" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/twoHop/Cached/Blocks.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="43" column="59" selection-start-line="43" selection-start-column="52" selection-end-line="43" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/PersistentList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1546">
-          <caret line="103" column="28" selection-start-line="103" selection-start-column="28" selection-end-line="103" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/RTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3135">
-          <caret line="209" column="35" selection-start-line="209" selection-start-column="35" selection-end-line="209" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/Data.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2556">
-          <caret line="151" column="33" selection-start-line="151" selection-start-column="16" selection-end-line="151" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/RTDataNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2448">
-          <caret line="138" column="40" selection-start-line="138" selection-start-column="31" selection-end-line="138" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RstarTree/CachedBlockFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1926">
-          <caret line="108" column="42" selection-start-line="108" selection-start-column="37" selection-end-line="108" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/twoHop/Cached/writeBinaryFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2142">
-          <caret line="121" column="53" selection-start-line="121" selection-start-column="48" selection-end-line="121" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/io/RandomAccessFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="802" selection-start-line="802" selection-end-line="802" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod3.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
@@ -860,13 +762,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Result.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/lang/Math.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="304">
@@ -879,13 +774,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1314">
-          <caret line="78" column="42" selection-start-line="78" selection-start-column="42" selection-end-line="78" selection-end-column="42" />
         </state>
       </provider>
     </entry>
@@ -903,20 +791,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1996">
-          <caret line="221" column="45" selection-start-line="221" selection-start-column="39" selection-end-line="221" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2460">
-          <caret line="172" column="41" selection-start-line="172" selection-start-column="37" selection-end-line="172" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/mimicBusLine.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2145">
@@ -924,42 +798,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1206">
-          <caret line="67" column="20" selection-start-line="67" selection-start-column="20" selection-end-line="67" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/analyzeResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2286">
-          <caret line="130" column="30" selection-start-line="130" selection-start-column="30" selection-end-line="130" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/noMyNodes.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="686">
-          <caret line="323" column="4" lean-forward="true" selection-start-line="323" selection-start-column="4" selection-end-line="326" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="59" column="78" selection-start-line="59" selection-start-column="78" selection-end-line="59" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/path.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="86" column="27" selection-start-line="86" selection-start-column="27" selection-end-line="86" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/io/PrintStream.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="307">
@@ -967,115 +806,284 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        <state relative-caret-position="-381">
+          <caret line="60" column="107" selection-start-line="60" selection-start-column="107" selection-end-line="60" selection-end-column="107" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/connector.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/statistic.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="66" selection-start-line="66" selection-end-line="66" />
+        <state relative-caret-position="557">
+          <caret line="232" column="41" selection-start-line="232" selection-start-column="33" selection-end-line="232" selection-end-column="41" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/myNode.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/subpath/BaseMethod_subPath.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="60" column="25" selection-start-line="60" selection-start-column="25" selection-end-line="60" selection-end-column="25" />
+        <state relative-caret-position="96">
+          <caret line="50" column="13" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="582">
+          <caret line="72" column="39" selection-start-line="72" selection-start-column="39" selection-end-line="72" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/Index.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="828">
+          <caret line="58" column="41" selection-start-line="58" selection-start-column="41" selection-end-line="58" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4284">
+          <caret line="249" column="131" selection-start-line="249" selection-start-column="131" selection-end-line="249" selection-end-column="131" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4662">
+          <caret line="270" column="71" selection-start-line="270" selection-end-line="271" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="792">
+          <caret line="55" column="49" selection-start-line="55" selection-end-line="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/analyzeResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="39" column="31" selection-start-line="39" selection-start-column="31" selection-end-line="39" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/tmpStop.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3780">
+          <caret line="221" column="45" selection-start-line="221" selection-start-column="39" selection-end-line="221" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/generateGraph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1314">
+          <caret line="78" column="42" selection-start-line="78" selection-start-column="42" selection-end-line="78" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5688">
+          <caret line="326" column="5" lean-forward="true" selection-start-line="326" selection-start-column="5" selection-end-line="326" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/testTools/GoogleMaps.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="38" column="23" selection-start-line="38" selection-start-column="23" selection-end-line="38" selection-end-column="23" />
+        <state relative-caret-position="-4542">
+          <caret line="193" column="83" selection-start-line="193" selection-start-column="83" selection-end-line="193" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SyntheticRealData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2178">
+          <caret line="129" column="43" selection-start-line="129" selection-start-column="36" selection-end-line="129" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="123" column="42" selection-start-line="123" selection-start-column="42" selection-end-line="123" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="691" selection-start-line="691" selection-end-line="699" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Skyline.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_Random.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="60" column="107" selection-start-line="60" selection-start-column="107" selection-end-line="60" selection-end-column="107" />
+        <state relative-caret-position="486">
+          <caret line="38" column="40" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx_index.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3930">
-          <caret line="269" selection-start-line="269" selection-end-line="269" />
+        <state relative-caret-position="2610">
+          <caret line="195" column="47" selection-start-line="229" selection-start-column="58" selection-end-line="231" selection-end-column="58" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/range/BaseMethod_approx.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/BusStation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2655">
-          <caret line="184" selection-start-line="184" selection-end-line="184" />
+        <state relative-caret-position="198">
+          <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/subpath/BaseMethod_subPath.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/ReadRealDataSet_int.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
+        <state relative-caret-position="612">
+          <caret line="39" column="17" selection-start-line="39" selection-start-column="17" selection-end-line="39" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-graphdb-api/3.4.1/neo4j-graphdb-api-3.4.1.jar!/org/neo4j/graphdb/GraphDatabaseService.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="60" selection-start-line="60" selection-end-line="60" />
+        <state relative-caret-position="203">
+          <caret line="65" column="9" selection-start-line="65" selection-start-column="9" selection-end-line="65" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/mixed/BaseMethod_mixed_index.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-kernel/3.4.1/neo4j-kernel-3.4.1.jar!/org/neo4j/graphdb/factory/GraphDatabaseSettings.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
+        <state relative-caret-position="279">
+          <caret line="253" column="49" selection-start-line="253" selection-start-column="44" selection-end-line="253" selection-end-column="49" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/Index.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/Result.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2970">
-          <caret line="210" column="5" selection-start-line="210" selection-start-column="5" selection-end-line="210" selection-end-column="5" />
+        <state relative-caret-position="126">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/idea.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/myNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="38" column="33" selection-start-line="38" selection-start-column="33" selection-end-line="38" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/util/Arrays.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="3207" column="28" selection-start-line="3207" selection-start-column="28" selection-end-line="3207" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2880">
+          <caret line="169" column="24" selection-start-line="169" selection-start-column="24" selection-end-line="169" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/util/ArrayList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="126" column="34" selection-start-line="126" selection-start-column="34" selection-end-line="126" selection-end-column="34" />
+          <folding>
+            <element signature="e#13713#13714#0" expanded="true" />
+            <element signature="e#13768#13769#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/lang/Long.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-15">
+          <caret line="946" column="11" selection-start-line="946" selection-start-column="11" selection-end-line="946" selection-end-column="11" />
+          <folding>
+            <element signature="e#35809#35810#0" expanded="true" />
+            <element signature="e#35843#35844#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-resource/3.4.1/neo4j-resource-3.4.1.jar!/org/neo4j/graphdb/ResourceIterable.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/neo4jTools/connector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="20" column="60" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="60" />
+          <folding>
+            <element signature="e#768#769#0" expanded="true" />
+            <element signature="e#806#807#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/idea64.vmoptions">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/path.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="199" selection-start-line="199" selection-end-line="199" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="38" selection-start-line="7" selection-start-column="37" selection-end-line="8" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod1.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3570">
-          <caret line="246" column="44" selection-start-line="246" selection-start-column="44" selection-end-line="246" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/testTools/statistic.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="340" lean-forward="true" selection-start-line="340" selection-end-line="340" />
-          <folding>
-            <element signature="e#15115#15116#0" expanded="true" />
-            <element signature="e#15148#15149#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/approximate/test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="134" column="38" lean-forward="true" selection-start-line="134" selection-start-column="38" selection-end-line="134" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/BaseLine/BaseMethod5.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="73" column="74" lean-forward="true" selection-start-line="71" selection-start-column="74" selection-end-line="73" selection-end-column="74" />
+        <state relative-caret-position="1784">
+          <caret line="227" selection-start-line="227" selection-end-line="227" />
         </state>
       </provider>
     </entry>

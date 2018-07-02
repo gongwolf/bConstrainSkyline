@@ -246,7 +246,8 @@ public class BaseMethod_mixed_index {
 
 //            System.out.println(sk_counter+"~~~~~");
 
-            Index idx = new Index("SF");
+//            Index idx = new Index("SF");
+            Index idx = new Index(this.graph_size, this.degree, this.distance_threshold, this.hotels_num, this.distance_threshold);
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 long t_index_s = System.nanoTime();
                 myNode my_n = entry.getValue();

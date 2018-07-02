@@ -52,9 +52,13 @@ public class Index {
 
 
     public Index(String city) {
-        this.distance_threshold = 0.0105;
+        //2000m->0.02115
+        //1500m->0.01583
+        //1000m-->0.0105
+        //500m-->0.0054
+        this.distance_threshold = 0.02115;
 
-        this.home_folder = base + "/" + city + "_index_1000/";
+        this.home_folder = base + "/" + city + "_index_2000/";
         this.graphPath = System.getProperty("user.home") + "/neo4j334/testdb_"+city+"_Random/databases/graph.db";
         this.treePath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/real_tree_"+city+".rtr";
         this.dataPath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/staticNode_real_"+city+".txt";
@@ -177,7 +181,7 @@ public class Index {
             }
 
 //            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds);
-            Index idx = new Index("LA");
+            Index idx = new Index("SF");
             idx.buildIndex(true);
 //            idx.read_d_list_from_disk(452);
         }

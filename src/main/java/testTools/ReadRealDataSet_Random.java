@@ -1,13 +1,19 @@
 package testTools;
 
 import javafx.util.Pair;
+import neo4jTools.BNode;
+import neo4jTools.Line;
+import neo4jTools.connector;
 import org.apache.commons.io.FileUtils;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 import java.io.*;
 import java.util.*;
 
-public class ReadRealDataSet_int {
+public class ReadRealDataSet_Random {
     String DB_PATH = "";
     String path_base = "/home/gqxwolf/shared_git/bConstrainSkyline/data/";
     String bus_data = path_base + "Bus_data/output.txt";
@@ -21,17 +27,17 @@ public class ReadRealDataSet_int {
     private GraphDatabaseService graphdb;
 
 
-    public ReadRealDataSet_int(double distance_range, boolean deleteBefore) {
+    public ReadRealDataSet_Random(double distance_range, boolean deleteBefore) {
         this.max_id = 0;
         this.distance_range = distance_range;
 
-        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_" + (int) distance_range + "_int_1/data/";
-//        this.DB_PATH = "/home/gqxwolf/neo4j341/testdb_real_" + (int) distance_range + "_int/databases/graph.db";
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_int" + (int) distance_range + "_Random/data/";
+        this.DB_PATH = "/home/gqxwolf/neo4j341/testdb_real_int" + (int) distance_range + "_Random/databases/graph.db";
         EdgesPath = DBBase + "SegInfo.txt";
         NodePath = DBBase + "NodeInfo.txt";
 
         System.out.println(this.DBBase);
-//        System.out.println(this.DB_PATH);
+        System.out.println(this.DB_PATH);
         System.out.println(this.EdgesPath);
         System.out.println(this.NodePath);
 
@@ -59,20 +65,26 @@ public class ReadRealDataSet_int {
         }
 
 
-        ReadRealDataSet_int reReal_int = new ReadRealDataSet_int(distance_range, deleteBefore);
+        ReadRealDataSet_Random reReal_int = new ReadRealDataSet_Random(distance_range, deleteBefore);
         reReal_int.ReadBusStop();
+//
+//        if (createDB) {
+//            reReal_int.createDatabase();
+//        }
+
     }
 
 
     public void ReadBusStop() {
         String path = this.bus_data;
-        System.out.println("read raw bus line data from :" + path);
+        System.out.println(path);
         try {
             File f = new File(path);
             BufferedReader b = new BufferedReader(new FileReader(f));
             String line = "";
 
             boolean start_new_line = false;
+            boolean show = false;
             int counter = 0;
 
             ArrayList<String> stopsInLine = new ArrayList<>();
@@ -129,14 +141,6 @@ public class ReadRealDataSet_int {
             e.printStackTrace();
         }
     }
-
-    /**
-     * This method is used to process each busline information.
-     * Read latitude and longitude of each bus stop b.
-     * If there exist One Busstop object Bo that the distance b to Bo is less than the given distance threshold, put the b into Bo's busstop's list.
-     * If not, create a new Busstop Object Bo to store b.
-     * Then sort the stop of the busline by sub_name and order. Iteratively check i and i+1 in tmplist to find the segment information.
-     */
 
     private void processBusLine(ArrayList<String> stopsInLine) {
         if (!stopsInLine.isEmpty()) {
@@ -211,10 +215,10 @@ public class ReadRealDataSet_int {
                     double d = distanceInMeters(this.stops_list.get(t.id).center[0], this.stops_list.get(t.id).center[1], this.stops_list.get(t_1.id).center[0], this.stops_list.get(t_1.id).center[1]);
 
                     if (d >= distance_range) {
-                        double d1 = (int) getGussianRandomValue(d * 2, d * 0.3);
-                        double d2 = (int) getGussianRandomValue(d * 1.5, d * 0.4);
+                        double d1 = getRandomNumberInRange_int(1,(int)(2*d));
+                        double d2 = getRandomNumberInRange_int(1,(int)(2*d));
                         SegObj s = new SegObj(sid, did, (int) d, d1, d2);
-                        this.seg_list.add(s); //store edge information that is used to write to disk later.
+                        this.seg_list.add(s);
                     }
                 }
             }
@@ -295,5 +299,88 @@ public class ReadRealDataSet_int {
         }
 
         return value;
+    }
+
+    public int getRandomNumberInRange_int(int min, int max) {
+
+        int value = 0;
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        while (value <= 0) {
+            value = r.nextInt((max - min) + 1) + min;
+        }
+        return value;
+    }
+
+    public void createDatabase() {
+        //System.out.println(DB_PATH);
+        //System.out.println(DBBase);
+        //System.out.println("=============");
+
+        connector nconn = new connector(this.DB_PATH);
+        //delete the data base at first
+        nconn.deleteDB();
+        nconn.startDB();
+        this.graphdb = nconn.getDBObject();
+
+
+        try (Transaction tx = this.graphdb.beginTx()) {
+            BufferedReader br = new BufferedReader(new FileReader(this.NodePath));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                //System.out.println(line);
+                String[] attrs = line.split(" ");
+
+                String id = attrs[0];
+                double lat = Double.parseDouble(attrs[1]);
+                double log = Double.parseDouble(attrs[2]);
+                Node n = createNode(id, lat, log);
+            }
+
+            br = new BufferedReader(new FileReader(this.EdgesPath));
+            line = null;
+            while ((line = br.readLine()) != null) {
+                //System.out.println(line);
+                String attrs[] = line.split(" ");
+                String src = attrs[0];
+                String des = attrs[1];
+                double EDistence = Double.parseDouble(attrs[2]);
+                double MetersDistance = Double.parseDouble(attrs[3]);
+                double RunningTime = Double.parseDouble(attrs[4]);
+                createRelation(src, des, EDistence, MetersDistance, RunningTime);
+            }
+
+            tx.success();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        nconn.shutdownDB();
+        System.out.println("Database is created, the location of the db file is " + this.DB_PATH);
+    }
+
+    private void createRelation(String src, String des, double eDistence, double metersDistance, double runningTime) {
+        try {
+            Node srcNode = this.graphdb.findNode(BNode.BusNode, "name", src);
+            Node desNode = this.graphdb.findNode(BNode.BusNode, "name", des);
+            Relationship rel = srcNode.createRelationshipTo(desNode, Line.Linked);
+            rel.setProperty("EDistence", eDistence);
+            rel.setProperty("MetersDistance", metersDistance);
+            rel.setProperty("RunningTime", runningTime);
+        } catch (Exception e) {
+            System.out.println(src + "-->" + des);
+        }
+    }
+
+    private Node createNode(String id, double lat, double log) {
+        Node n = this.graphdb.createNode(BNode.BusNode);
+        n.setProperty("name", id);
+        n.setProperty("lat", lat);
+        n.setProperty("log", log);
+        return n;
     }
 }

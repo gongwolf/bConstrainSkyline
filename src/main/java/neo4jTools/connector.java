@@ -15,10 +15,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class connector {
-    String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
-    String conFile = "/home/gqxwolf/neo4j334/conf/neo4j.conf";
     public static GraphDatabaseService graphDB;
     public static ArrayList<String> propertiesName = new ArrayList<>();
+    String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
+    String conFile = "/home/gqxwolf/neo4j341/conf/neo4j.conf";
 
 
     public connector(String DB_PATH) {
@@ -29,19 +29,21 @@ public class connector {
     }
 
     private static void registerShutdownHook(final GraphDatabaseService graphDb) {
-        // Registers a shutdown hook for the Neo4j instance so that it
-        // // shuts down nicely when the VM exits (even if you "Ctrl-C" the
-        // // running application).
+        //Registers a shutdown hook for the Neo4j instance so that it
+        // shuts down nicely when the VM exits (even if you "Ctrl-C" the
+        // running application).
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
                 graphDb.shutdown();
+                System.out.println("shutdown from hook");
             }
         });
     }
 
     public static void main(String args[]) {
         connector n = new connector();
+        n.startDB();
 //        n.test();
 //        n.clean();
         System.out.println(n.getNumberofNodes());
@@ -49,31 +51,63 @@ public class connector {
         n.shutdownDB();
     }
 
+    public static ArrayList<Relationship> getOutgoutingEdges(long Node_id) {
+        ArrayList<Relationship> results = new ArrayList<>();
+        try (Transaction tx = graphDB.beginTx()) {
+            Iterable<Relationship> rels = graphDB.getNodeById(Node_id).getRelationships(Line.Linked, Direction.OUTGOING);
+            Iterator<Relationship> rel_Iter = rels.iterator();
+            while (rel_Iter.hasNext()) {
+                Relationship rel = rel_Iter.next();
+                results.add(rel);
+            }
+            tx.success();
+        }
+
+        return results;
+    }
+
+    public static void getPropertiesName() {
+        propertiesName.clear();
+        try (Transaction tx = graphDB.beginTx()) {
+
+            Iterable<Relationship> rels = graphDB.getNodeById(1).getRelationships(Line.Linked, Direction.BOTH);
+            if (rels.iterator().hasNext()) {
+                Relationship rel = rels.iterator().next();
+//                System.out.println(rel);
+                Map<String, Object> pnamemap = rel.getAllProperties();
+//                System.out.println(pnamemap.size());
+                for (Map.Entry<String, Object> entry : pnamemap.entrySet()) {
+                    propertiesName.add(entry.getKey());
+                }
+            } else {
+                System.err.println("There is no edge from or to this node " + graphDB.getNodeById(0).getId());
+            }
+
+//            System.out.println(propertiesName.size());
+            tx.success();
+        }
+    }
+
     public void startDB() {
         this.graphDB = null;
         //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
         GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(this.DB_PATH));
-//        builder.loadPropertiesFromFile(conFile)
-//        builder.setConfig(GraphDatabaseSettings.mapped_memory_page_size, "2k")
-        builder.setConfig(GraphDatabaseSettings.pagecache_memory, "8G");
-
+        builder.loadPropertiesFromFile(conFile);
+        //builder.setConfig(GraphDatabaseSettings.mapped_memory_page_size, "2k")
+        //        .setConfig(GraphDatabaseSettings.pagecache_memory, "2G");
         this.graphDB = builder.newGraphDatabase();
-
-
-        //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(DB_PATH)).loadPropertiesFromFile("/home/gqxwolf/neo4j/conf/neo4j.properties").newGraphDatabase();
-
-
         registerShutdownHook(this.graphDB);
-        getPropertiesName();
-//        if (graphDB == null) {
-//            System.out.println("Initialize fault");
-//        } else {
-//            System.out.println("Initialize success");
-//        }
+    }
+
+    public void startDB(boolean getProperty) {
+        startDB();
+        if (getProperty) {
+            getPropertiesName();
+        }
     }
 
     public void shutdownDB() {
-        //System.out.println("Shut downing....");
+        System.out.println("Shutdow from normal way....");
         this.graphDB.shutdown();
     }
 
@@ -135,7 +169,6 @@ public class connector {
         return this.graphDB;
     }
 
-
     public long getNumberofNodes() {
 //        startDB();
         long result = 0;
@@ -164,48 +197,9 @@ public class connector {
         return result;
     }
 
-
     private Object getFromManagementBean(String Object, String Attribuite) {
         ObjectName objectName = JmxUtils.getObjectName(this.graphDB, Object);
         Object value = JmxUtils.getAttribute(objectName, Attribuite);
         return value;
-    }
-
-    public static ArrayList<Relationship> getOutgoutingEdges(long Node_id) {
-        ArrayList<Relationship> results = new ArrayList<>();
-        try (Transaction tx = graphDB.beginTx()) {
-            Iterable<Relationship> rels = graphDB.getNodeById(Node_id).getRelationships(Line.Linked, Direction.OUTGOING);
-            Iterator<Relationship> rel_Iter = rels.iterator();
-            while (rel_Iter.hasNext()) {
-                Relationship rel = rel_Iter.next();
-                results.add(rel);
-            }
-            tx.success();
-        }
-
-        return results;
-    }
-
-
-    public static void getPropertiesName() {
-        propertiesName.clear();
-        try (Transaction tx = graphDB.beginTx()) {
-
-            Iterable<Relationship> rels = graphDB.getNodeById(1).getRelationships(Line.Linked, Direction.BOTH);
-            if (rels.iterator().hasNext()) {
-                Relationship rel = rels.iterator().next();
-//                System.out.println(rel);
-                Map<String, Object> pnamemap = rel.getAllProperties();
-//                System.out.println(pnamemap.size());
-                for (Map.Entry<String, Object> entry : pnamemap.entrySet()) {
-                    propertiesName.add(entry.getKey());
-                }
-            } else {
-                System.err.println("There is no edge from or to this node " + graphDB.getNodeById(0).getId());
-            }
-
-//            System.out.println(propertiesName.size());
-            tx.success();
-        }
     }
 }

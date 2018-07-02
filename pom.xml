@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-enterprise</artifactId>
-            <version>3.3.4</version>
+            <version>3.4.1</version>
         </dependency>
 
         <dependency>
@@ -68,7 +68,7 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>approx_test</finalName>
+                    <finalName>approx_test_new1</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>

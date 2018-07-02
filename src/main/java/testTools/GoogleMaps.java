@@ -25,7 +25,7 @@ public class GoogleMaps {
     }
 
     public static void main(String args[]) {
-        int range = 200;
+        int range = 300;
 
         if (args.length == 1) {
             range = Integer.valueOf(args[0]);
@@ -33,16 +33,16 @@ public class GoogleMaps {
 
         GoogleMaps g = new GoogleMaps();
 
-        double lat1 = 32.279799;
-        double long1 = -106.756235;
-        double lat2 = 32.282049;
-        double long2 =-106.766577;
+        double lat1 = 32.283326;
+        double long1 = -106.760018;
+        double lat2 = 32.286532;
+        double long2 =-106.744523;
 
         System.out.println(g.distanceInMeters(lat1, long1, lat2, long2));
         System.out.println(Math.sqrt(Math.pow(lat1-lat2,2)+Math.pow(long1-long2,2)));
-//        g.readBusInfo();
-//        System.out.println(g.busStations.size());
-//        g.statisticInRange(range);
+        g.readBusInfo();
+        System.out.println(g.busStations.size());
+        g.statisticInRange(range);
 //        g.averageDistance();
 //        g.findDistanceToBusStop(37.75731290, -122.42150700);
 
@@ -119,7 +119,7 @@ public class GoogleMaps {
 
         String bus_data = bs_path + "/NodeInfo.txt";
         String path_node_with_id = bs_path + "/Node_with_placeID.txt";
-        HashMap<Integer, Pair<Double, Double>> nodeList = new HashMap<>();
+        HashMap<Integer, Pair<Double, Double>> nodeList = new HashMap<>(); //nodeid -> <latitude,longitude>
         try {
             File f = new File(bus_data);
             BufferedReader b = new BufferedReader(new FileReader(f));
@@ -192,7 +192,6 @@ public class GoogleMaps {
 
     public void getAddressDetails() {
         String bs_path = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data";
-
         String bus_data = bs_path + "/Node_with_placeID.txt";
         String path_node_with_details = bs_path + "/Node_with_placeDetails.txt";
         BufferedWriter writer = null;

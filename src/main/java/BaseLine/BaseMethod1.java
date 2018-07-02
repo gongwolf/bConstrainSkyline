@@ -6,14 +6,13 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
-import testTools.GoogleMaps;
 
+import java.io.*;
 import java.util.*;
 
 public class BaseMethod1 {
     private final String graphPath;
     private final String dataPath;
-    public ArrayList<path> qqqq = new ArrayList<>();
     public ArrayList<Result> skyPaths = new ArrayList<>();
     Random r;
     String treePath;
@@ -44,9 +43,9 @@ public class BaseMethod1 {
         r = new Random();
         this.graph_size = graph_size;
         this.degree = degree;
-//        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
-//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
-//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
         this.threshold = threshold;
 
 
@@ -67,18 +66,17 @@ public class BaseMethod1 {
 //        System.out.println(treePath);
 
 
-        this.graphPath = home_folder + "/neo4j334/testdb_SF_Random/databases/graph.db";
-        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
-        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
+//        this.graphPath = home_folder + "/neo4j334/testdb_SF_Random/databases/graph.db";
+//        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_SF.rtr";
+//        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_SF.txt";
     }
 
     public BaseMethod1(String city) {
         r = new Random();
         this.threshold = threshold;
-        this.graphPath = home_folder + "/neo4j334/testdb_" + city + "_Random/databases/graph.db";
+        this.graphPath = home_folder + "/neo4j341/testdb_" + city + "_" + "uniform_1/databases/graph.db";
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_" + city + ".rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_" + city + ".txt";
-
     }
 
     public BaseMethod1(String tree, String data, String graph) {
@@ -87,115 +85,138 @@ public class BaseMethod1 {
         this.dataPath = data;
     }
 
+    public BaseMethod1(String city, String graphPath) {
+        r = new Random();
+        this.threshold = threshold;
+        this.graphPath = graphPath;
+        this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_" + city + ".rtr";
+        this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_" + city + ".txt";
+    }
 
     public static void main(String args[]) {
-        int graph_size = 10;
-        String degree = "5";
-        int query_num = 1;
+        System.out.println("start ....................");
+        String graphPath1 = System.getProperty("user.home") + "/neo4j341/testdb_LA_uniform/databases/graph.db";
+        String graphPath2 = System.getProperty("user.home") + "/neo4j341/testdb_LA_uniform_1/databases/graph.db";
+        String graphPath3 = System.getProperty("user.home") + "/neo4j341/testdb_LA_normal/databases/graph.db";
 
-        if (args.length == 3) {
-            graph_size = Integer.parseInt(args[0]);
-            degree = args[1];
-            query_num = Integer.parseInt(args[2]);
+
+        int qn = 1;
+        int[] ids = new int[qn];
+
+        for (int i = 0; i < qn; i++) {
+            BaseMethod1 bs1 = new BaseMethod1("LA", graphPath1);
+            int id = bs1.getRandomNumberInRange_int(0, bs1.getNumberOfHotels() - 1);
+            ids[i] = id;
+            System.out.println(id);
         }
 
-        for (int i = 0; i < query_num; i++) {
-            BaseMethod1 bm1 = new BaseMethod1(graph_size, degree, 25, 10, 5000);
-//            Data queryD = bm.generateQueryData();
-////
-//            System.out.println(queryD);
+        for (int i = 0; i < qn; i++) {
+            BaseMethod1 bs1 = new BaseMethod1("LA", graphPath1);
+            bs1.test1(ids[i]);
+            System.out.println("----------------------------------");
+        }
+        //System.out.println("###################################");
 
-            Data queryD = new Data(3);
-            queryD.setPlaceId(9999999);
-            queryD.setLocation(new double[]{20.380422592163086, 9.294476509094238});
-            queryD.setData(new float[]{4.3136826f, 0.45063168f, 3.711781f});
-//            constants.print(queryD.location);
-//            constants.print(queryD.getData());
+        //for (int i = 0; i < qn; i++) {
+        //    BaseMethod1 bs2 = new BaseMethod1("LA", graphPath2);
+        //    bs2.test1(ids[i]);
+        //    System.out.println("----------------------------------");
+        //}
+        System.out.println("###################################");
 
+        for (int i = 0; i < qn; i++) {
+            BaseMethod1 bs3 = new BaseMethod1("LA", graphPath3);
+            bs3.test1(ids[i]);
+            System.out.println("----------------------------------");
 
-            bm1.baseline(queryD);
         }
     }
 
+    public void test1(int id) {
+        Data query = getDataById(id);
+        baseline(query);
+    }
+
     public void baseline(Data queryD) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(queryD.getPlaceId() + " ");
-        long s_sum = System.currentTimeMillis();
-        ArrayList<path> Results = new ArrayList<>();
-        Skyline sky = new Skyline(treePath);
-        long r1 = System.currentTimeMillis();
-        sky.BBS(queryD);
-        sNodes = sky.skylineStaticNodes;
-
+        long max_queue_size = 0;
+        long expand_path_num = 0;
+        long counter = 1;
         long sk_counter = 0;
-
-//        System.out.println("Find candidate static node by BBS " + (System.currentTimeMillis() - r1) + "ms " + sky.skylineStaticNodes.size());
-        long bbs_rt = System.currentTimeMillis() - r1;
-//        System.out.println(sNodes.size());
-//        System.out.println("=====================================================");
+        connector n = null;
+        StringBuffer sb = new StringBuffer();
+        connector.graphDB = null;
 
 
-        for (Data d : sNodes) {
-            double[] c = new double[constants.path_dimension + 3];
-            c[0] = d.distance_q;
-            double[] d_attrs = d.getData();
-            for (int i = 4; i < c.length; i++) {
-                c[i] = d_attrs[i - 4];
+        myNodePriorityQueue mqueue = new myNodePriorityQueue();
+
+        try {
+            sb.append(queryD.getPlaceId() + " ");
+            long s_sum = System.currentTimeMillis();
+            ArrayList<path> Results = new ArrayList<>();
+            Skyline sky = new Skyline(treePath);
+            long r1 = System.currentTimeMillis();
+            sky.BBS(queryD);
+            sNodes = sky.skylineStaticNodes;
+
+
+            long bbs_rt = System.currentTimeMillis() - r1;
+
+
+            for (Data d : sNodes) {
+                double[] c = new double[constants.path_dimension + 3];
+                c[0] = d.distance_q;
+                double[] d_attrs = d.getData();
+                for (int i = 4; i < c.length; i++) {
+                    c[i] = d_attrs[i - 4];
+                }
+
+                Result r = new Result(queryD, d, c, null);
+                addToSkyline(r);
             }
 
-            Result r = new Result(queryD, d, c, null);
-            addToSkyline(r);
-        }
-//        System.out.println(this.skyPaths.size());
-//        for (Result r : this.skyPaths) {
-//            System.out.println(r);
-//        }
-//        System.out.println("=====================================================");
-
-//        System.out.println("==========");
-//
-
-        //System.out.println(graphPath);
-        long db_time = System.currentTimeMillis();
-        connector n = new connector(this.graphPath);
-        n.startDB();
-        this.graphdb = n.getDBObject();
+            long db_time = System.currentTimeMillis();
+            n = new connector(this.graphPath);
+            n.startDB(true);
+            this.graphdb = n.getDBObject();
 
 
-        //this.skyPaths.add(new double[]{0, 0, 0, 0, 1.4886183, 0.01591295, 2.2001169});
+            //this.skyPaths.add(new double[]{0, 0, 0, 0, 1.4886183, 0.01591295, 2.2001169});
 
-        long counter = 0;
-        long addResult_rt = 0;
-        long expasion_rt = 0;
-
-
-        try (Transaction tx = this.graphdb.beginTx()) {
-            db_time = System.currentTimeMillis() - db_time;
-            r1 = System.currentTimeMillis();
-            Node startNode = nearestNetworkNode(queryD);
-
-            long nn_rt = System.currentTimeMillis() - r1;
-//            System.out.println("Find nearest road network " + nn_rt + " ms");
-//            System.out.println(startNode.getProperty("lat") + " " + startNode.getProperty("log"));
+            long addResult_rt = 0;
+            long expasion_rt = 0;
+            long nn_rt, rt;
 
 
-            long rt = System.currentTimeMillis();
+            try (Transaction tx = this.graphdb.beginTx()) {
+                db_time = System.currentTimeMillis() - db_time;
+                r1 = System.currentTimeMillis();
+                Node startNode = nearestNetworkNode(queryD);
 
-            myNode s = new myNode(queryD, startNode.getId(), -1);
+                nn_rt = System.currentTimeMillis() - r1;
 
-            myNodePriorityQueue mqueue = new myNodePriorityQueue();
-            mqueue.add(s);
 
-            this.tmpStoreNodes.put(s.id, s);
+                rt = System.currentTimeMillis();
 
+                myNode s = new myNode(queryD, startNode.getId(), -1);
+                mqueue.add(s);
+
+
+                this.tmpStoreNodes.put(s.id, s);
+                System.out.println("find nn finished");
+                tx.success();
+            }
+
+//            try{
             while (!mqueue.isEmpty()) {
+                if (mqueue.size() >= max_queue_size) {
+                    max_queue_size = mqueue.size();
+                }
+
+                counter++;
 
                 myNode v = mqueue.pop();
                 v.inqueue = false;
 
-                counter++;
-                //if (++counter % 1000 == 0) {
-                //}
                 for (int i = 0; i < v.skyPaths.size(); i++) {
                     path p = v.skyPaths.get(i);
 
@@ -216,9 +237,14 @@ public class BaseMethod1 {
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
 
-                            if (next_n.addToSkyline(np) && !next_n.inqueue) {
-                                mqueue.add(next_n);
-                                next_n.inqueue = true;
+                            if (next_n.addToSkyline(np)) {
+
+                                expand_path_num++;
+
+                                if (!next_n.inqueue) {
+                                    mqueue.add(next_n);
+                                    next_n.inqueue = true;
+                                }
                             }
                         }
 //                        }
@@ -229,86 +255,87 @@ public class BaseMethod1 {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
+            System.out.println("expasion finised in " + exploration_rt);
 //            System.out.println("expansion finished " + exploration_rt);
 
             for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
                 sk_counter += mm.getValue().skyPaths.size();
-                for (path np : mm.getValue().skyPaths) {
-                    addToSkylineResult(np, queryD);
-                }
+//                    for (path np : mm.getValue().skyPaths) {
+//                        addToSkylineResult(np, queryD);
+//                    }
             }
 
             sb.append(bbs_rt + "," + nn_rt + "," + exploration_rt + ",");
 
-            tx.success();
-        }
+            //tx.success();
+//            }
+            long shut_db_time = System.currentTimeMillis();
+            n.shutdownDB();
+            shut_db_time = System.currentTimeMillis() - shut_db_time;
 
-        //System.out.println("Found " + this.skyPaths.size() + " constrained skyline path in " + (System.currentTimeMillis() - rt) + " ms");
-//        for (double[] d : this.skyPaths) {
-//            constants.print(d);
-//        }
-        long shut_db_time = System.currentTimeMillis();
-        n.shutdownDB();
-        shut_db_time = System.currentTimeMillis() - shut_db_time;
-
-        s_sum = System.currentTimeMillis() - s_sum;
-        sb.append("|" + (s_sum - db_time - shut_db_time) + "|");
-        sb.append("," + this.skyPaths.size() + "," + counter + "|");
-        sb.append(addResult_rt / 1000000 + "(" + (this.add_oper / 1000000) + "+" + (this.check_add_oper / 1000000)
-                + "+" + (this.map_operation / 1000000) + "+" + (this.checkEmpty / 1000000) + "+" + (this.read_data / 1000000) + "),");
-        sb.append(expasion_rt / 1000000 + " ");
+            s_sum = System.currentTimeMillis() - s_sum;
+            sb.append("|" + (s_sum - db_time - shut_db_time) + "|");
+            sb.append("," + this.skyPaths.size() + "," + counter + "|");
+            sb.append(addResult_rt / 1000000 + "(" + (this.add_oper / 1000000) + "+" + (this.check_add_oper / 1000000)
+                    + "+" + (this.map_operation / 1000000) + "+" + (this.checkEmpty / 1000000) + "+" + (this.read_data / 1000000) + "),");
+            sb.append(expasion_rt / 1000000 + " ");
 //        sb.append("\nadd_to_Skyline_result " + this.add_counter + "  " + this.pro_add_result_counter + "  " + this.sky_add_result_counter + " ");
 //        sb.append((double) this.sky_add_result_counter / this.pro_add_result_counter);
 
-        List<Result> sortedList = new ArrayList(this.skyPaths);
-        Collections.sort(sortedList);
+            List<Result> sortedList = new ArrayList(this.skyPaths);
+            Collections.sort(sortedList);
 
-        HashSet<Long> final_bus_stops = new HashSet<>();
+            HashSet<Long> final_bus_stops = new HashSet<>();
 
-        for (Result r : sortedList) {
-            this.finalDatas.add(r.end);
+            for (Result r : sortedList) {
+                this.finalDatas.add(r.end);
 
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
+                if (r.p != null) {
+                    for (Long nn : r.p.nodes) {
+                        final_bus_stops.add(nn);
+                    }
                 }
             }
+
+
+            sb.append(finalDatas.size() + " " + this.skyPaths.size());
+
+            int visited_bus_stop = this.tmpStoreNodes.size();
+            int bus_stop_in_result = final_bus_stops.size();
+
+            sb.append("  " + visited_bus_stop + "," + bus_stop_in_result + "," + (double) bus_stop_in_result / visited_bus_stop + "   " + this.sky_add_result_counter);
+
+            sb.append(" ").append(sk_counter);
+
+            //System.out.println(sb.toString());
+            System.out.println(counter + "   " + max_queue_size + "   " + expand_path_num + "  " + ((double) expand_path_num / counter) + " " + sk_counter);
+        } catch (Exception e) {
+            for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
+                sk_counter += mm.getValue().skyPaths.size();
+            }
+            System.err.println("Exception" + counter + "   " + max_queue_size + "   " + expand_path_num + "  " + ((double) expand_path_num / counter) + " " + sk_counter);
+
+            if (n != null) {
+                System.out.println("ShutdownDB in Exception handle function");
+
+                n.shutdownDB();
+            }
+        } catch (Error r) {
+            for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
+                sk_counter += mm.getValue().skyPaths.size();
+            }
+            System.err.println("Error: " + counter + "   " + max_queue_size + "   " + expand_path_num + "  " + ((double) expand_path_num / counter) + " " + sk_counter);
+
+//            if (n != null) {
+//                System.out.println("ShutdownDB in Error handle function");
+//                n.shutdownDB();
+//            }
+            r.printStackTrace();
+            System.out.println("~~~~~~~~~~~~");
+        } finally {
+
         }
 
-
-        sb.append(finalDatas.size() + " " + this.skyPaths.size());
-
-        int visited_bus_stop = this.tmpStoreNodes.size();
-        int bus_stop_in_result = final_bus_stops.size();
-
-        sb.append("  " + visited_bus_stop + "," + bus_stop_in_result + "," + (double) bus_stop_in_result / visited_bus_stop + "   " + this.sky_add_result_counter);
-
-        sb.append(" ").append(sk_counter);
-
-        System.out.println(sb.toString());
-//        this.finalDatas.stream().forEach(f -> System.out.println(f));
-
-//        for (Result rrrrrrrr : this.skyPaths) {
-//            if (rrrrrrrr.end.getPlaceId() == 62) {
-//                System.out.println(rrrrrrrr);
-//                break;
-//            }
-//        }
-
-
-//        System.out.println(addResult_rt + "/" + add_counter + "=" + (double) addResult_rt / add_counter / 1000000);
-//
-//
-//        long tt_sl = 0;
-//        for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
-//            tt_sl += entry.getValue().skyPaths.size();
-////            for (path p : entry.getValue().skyPaths) {
-////                addToSkyline_p(p);
-////
-////            }
-//        }
-//
-//        System.out.println(this.tmpStoreNodes.size()+"   " + tt_sl);
     }
 
     private boolean addToSkylineResult(path np, Data queryD) {
@@ -461,6 +488,78 @@ public class BaseMethod1 {
             }
         }
         return true;
+    }
+
+
+    public Data getDataById(int placeId) {
+        BufferedReader br = null;
+        int linenumber = 0;
+
+        Data queryD = new Data(3);
+
+
+        try {
+            br = new BufferedReader(new FileReader(this.dataPath));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                if (linenumber == placeId) {
+//                    System.out.println(line);
+                    String[] infos = line.split(",");
+                    Double lat = Double.parseDouble(infos[1]);
+                    Double log = Double.parseDouble(infos[2]);
+
+
+                    Float c1 = Float.parseFloat(infos[3]);
+                    Float c2 = Float.parseFloat(infos[4]);
+                    Float c3 = Float.parseFloat(infos[5]);
+
+
+                    queryD.setPlaceId(placeId);
+                    queryD.setLocation(new double[]{lat, log});
+                    queryD.setData(new float[]{c1, c2, c3});
+                    break;
+                } else {
+                    linenumber++;
+                }
+            }
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Can not open the file, please check it. ");
+        }
+
+        return queryD;
+    }
+
+
+    public int getNumberOfHotels() {
+        int result = 0;
+        File f = new File(this.dataPath);
+        BufferedReader b = null;
+        try {
+            b = new BufferedReader(new FileReader(f));
+            String readLine = "";
+
+            while (((readLine = b.readLine()) != null)) {
+                result++;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public int getRandomNumberInRange_int(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 
 
