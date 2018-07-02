@@ -122,19 +122,20 @@ public class BaseMethod1 {
         //    bs2.test1(ids[i]);
         //    System.out.println("----------------------------------");
         //}
-        System.out.println("###################################");
-
-        for (int i = 0; i < qn; i++) {
-            BaseMethod1 bs3 = new BaseMethod1("LA", graphPath3);
-            bs3.test1(ids[i]);
-            System.out.println("----------------------------------");
-
-        }
+//        System.out.println("###################################");
+//
+//        for (int i = 0; i < qn; i++) {
+//            BaseMethod1 bs3 = new BaseMethod1("LA", graphPath3);
+//            bs3.test1(ids[i]);
+//            System.out.println("----------------------------------");
+//
+//        }
     }
 
     public void test1(int id) {
         Data query = getDataById(id);
-        baseline(query);
+        constants.readData(this.graphPath);
+//        baseline(query);
     }
 
     public void baseline(Data queryD) {
