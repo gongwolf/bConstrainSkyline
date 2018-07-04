@@ -14,8 +14,8 @@ import java.util.Map;
 public class constants {
     public static final int path_dimension = 4; //1(edu_dis)+3(road net work attrs)+3(static node attrs);
 
-    public static HashMap<Long, Long> accessedNodes = new HashMap<>();
-    public static HashMap<Long, Long> accessedEdges = new HashMap<>();
+    //public static HashMap<Long, Long> accessedNodes = new HashMap<>();
+    //public static HashMap<Long, Long> accessedEdges = new HashMap<>();
 
     public static HashMap<Long, Pair<Double, Double>> nodes = new HashMap<>();
     public static HashMap<Long, ArrayList<Pair<Pair<Long,Long>, double[]>>> edges = new HashMap<>(); //node_id --> ArrayList<<end_id,rel_id>, <double costs[]>>

@@ -73,21 +73,21 @@ public class BaseMethod7 {
         String graphPath3 = System.getProperty("user.home") + "/neo4j341/testdb_LA_normal/databases/graph.db";
 
 
-        int qn = 100;
+        int qn = 1;
         int[] ids = new int[qn];
 
         for (int i = 0; i < qn; i++) {
             BaseMethod7 bs1 = new BaseMethod7("LA", graphPath1);
             int id = bs1.getRandomNumberInRange_int(0, bs1.getNumberOfHotels() - 1);
-            ids[i] = id;
-            System.out.println(id);
+            ids[i] = 5130;
+            System.out.println(ids[i]);
         }
 
-//        for (int i = 0; i < qn; i++) {
-//            BaseMethod7 bs1 = new BaseMethod7("LA", graphPath1);
-//            bs1.test1(ids[i]);
-//            System.out.println("----------------------------------");
-//        }
+        for (int i = 0; i < qn; i++) {
+            BaseMethod7 bs1 = new BaseMethod7("LA", graphPath1);
+            bs1.test1(ids[i]);
+            System.out.println("----------------------------------");
+        }
         //System.out.println("###################################");
 
         //for (int i = 0; i < qn; i++) {
@@ -163,7 +163,7 @@ public class BaseMethod7 {
 
 
             this.tmpStoreNodes.put(s.id, s);
-            System.out.println("find nn finished "+s.id);
+            System.out.println("find nn finished " + s.id);
 
 
             while (!mqueue.isEmpty()) {
@@ -176,19 +176,26 @@ public class BaseMethod7 {
                 myNode v = mqueue.pop();
                 v.inqueue = false;
 
+//                if (counter >= 202703) {
+//                    System.out.println("  " + v.id + " " + v.skyPaths.size());
+//                }
+
+
+                ArrayList<Pair<Pair<Long, Long>, double[]>> outgoingEdges = v.getNextEdges();
+//                System.out.println(outgoingEdges.size());
                 for (int i = 0; i < v.skyPaths.size(); i++) {
                     path p = v.skyPaths.get(i);
-
-//                    constants.print(p.costs);
                     if (!p.expaned) {
                         p.expaned = true;
 
                         long ee = System.nanoTime();
-                        ArrayList<path> new_paths = p.expand();
                         expasion_rt += (System.nanoTime() - ee);
-                        for (path np : new_paths) {
-//                            if (!np.hasCycle()) {
+                        for (Pair<Pair<Long, Long>, double[]> oe : outgoingEdges) {
+
+                            path np = new path(p, oe.getKey().getValue(), oe.getKey().getKey());
+                            np.calculateCosts(oe.getValue());
                             myNode next_n;
+
                             if (this.tmpStoreNodes.containsKey(np.endNode)) {
                                 next_n = tmpStoreNodes.get(np.endNode);
                             } else {
@@ -197,18 +204,16 @@ public class BaseMethod7 {
                             }
 
                             if (next_n.addToSkyline(np)) {
-
                                 expand_path_num++;
-
                                 if (!next_n.inqueue) {
                                     mqueue.add(next_n);
                                     next_n.inqueue = true;
                                 }
                             }
                         }
-//                        }
                     }
                 }
+
 
 //                break;
             }
@@ -246,15 +251,15 @@ public class BaseMethod7 {
 
             HashSet<Long> final_bus_stops = new HashSet<>();
 
-            for (Result r : sortedList) {
-                this.finalDatas.add(r.end);
-
-                if (r.p != null) {
-                    for (Long nn : r.p.nodes) {
-                        final_bus_stops.add(nn);
-                    }
-                }
-            }
+//            for (Result r : sortedList) {
+//                this.finalDatas.add(r.end);
+//
+//                if (r.p != null) {
+//                    for (Long nn : r.p.nodes) {
+//                        final_bus_stops.add(nn);
+//                    }
+//                }
+//            }
 
 
             sb.append(finalDatas.size() + " " + this.skyPaths.size());

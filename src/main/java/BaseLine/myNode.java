@@ -2,6 +2,7 @@ package BaseLine;
 
 
 import RstarTree.Data;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 
@@ -128,4 +129,18 @@ public class myNode {
         // Compare the data members and return accordingly
         return c.id == this.id;
     }
+
+    public ArrayList<Pair<Pair<Long, Long>, double[]>> getNextEdges() {
+
+        ArrayList<Pair<Pair<Long, Long>, double[]>> result = new ArrayList<>();
+
+        ArrayList<Pair<Pair<Long, Long>, double[]>> outgoingEdges = constants.edges.get(this.id);
+        if (outgoingEdges != null) {
+            for (Pair<Pair<Long, Long>, double[]> e : outgoingEdges) {
+                result.add(e);
+            }
+        }
+        return result;
+    }
+
 }

@@ -68,11 +68,11 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>approx_test_new1</finalName>
+                    <finalName>testing</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>BaseLine.approximate.test</mainClass>
+                            <mainClass>BaseLine.BaseMethod7</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

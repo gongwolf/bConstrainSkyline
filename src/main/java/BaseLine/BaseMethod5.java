@@ -347,7 +347,7 @@ public class BaseMethod5 {
                         ArrayList<path> new_paths = p.expand();
                         expasion_rt += (System.nanoTime() - ee);
                         for (path np : new_paths) {
-                            if (!np.hasCycle()) {
+//                            if (!np.hasCycle()) {
                                 myNode next_n;
                                 if (this.tmpStoreNodes.containsKey(np.endNode)) {
                                     next_n = tmpStoreNodes.get(np.endNode);
@@ -363,7 +363,7 @@ public class BaseMethod5 {
                                         next_n.inqueue = true;
                                     }
                                 }
-                            }
+//                            }
                         }
                     }
                 }
@@ -423,11 +423,11 @@ public class BaseMethod5 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
 
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 

@@ -288,15 +288,15 @@ public class BaseMethod1 {
 
             HashSet<Long> final_bus_stops = new HashSet<>();
 
-            for (Result r : sortedList) {
-                this.finalDatas.add(r.end);
-
-                if (r.p != null) {
-                    for (Long nn : r.p.nodes) {
-                        final_bus_stops.add(nn);
-                    }
-                }
-            }
+//            for (Result r : sortedList) {
+//                this.finalDatas.add(r.end);
+//
+//                if (r.p != null) {
+//                    for (Long nn : r.p.nodes) {
+//                        final_bus_stops.add(nn);
+//                    }
+//                }
+//            }
 
 
             sb.append(finalDatas.size() + " " + this.skyPaths.size());

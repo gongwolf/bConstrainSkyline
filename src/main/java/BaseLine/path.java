@@ -12,9 +12,13 @@ public class path {
     public boolean expaned;
     public long startNode, endNode;
 
-    public ArrayList<Long> nodes;
-    public ArrayList<Long> rels;
-    public ArrayList<String> propertiesName;
+//    public ArrayList<Long> nodes;
+//    public ArrayList<Long> rels;
+
+//    public long[] nodes;
+//    public long[] rels;
+
+//    public ArrayList<String> propertiesName;
 
 
     public path(myNode current) {
@@ -26,16 +30,18 @@ public class path {
         this.endNode = current.node;
         this.expaned = false;
 
-        this.nodes = new ArrayList<>(100);
-        this.rels = new ArrayList<>(100);
-        this.propertiesName = new ArrayList<>(3);
+//        this.nodes = new ArrayList<>(100);
+//        this.rels = new ArrayList<>(100);
 
-        this.setPropertiesName();
+//        this.nodes=new long[]{this.endNode};
+//        this.rels = new long[]{};
+
+//        this.propertiesName = new ArrayList<>(3);
+
+//        this.setPropertiesName();
 
         //store the Long Objects
 //        this.nodes.add(getLongObject_Node(this.endNode));
-
-        nodes.add(this.endNode);
     }
 
     public path(path old_path, long rel_id, long end_id) {
@@ -45,43 +51,38 @@ public class path {
         this.endNode = end_id;
 
 
-//        int n_nodes = old_path.nodes.size();
-//        this.nodes = new ArrayList<>(n_nodes+1);
-//
-//        for(long nid:old_path.nodes)
-//        {
-//            nodes.add(nid);
-//        }
+//        int n_nodes = old_path.nodes.length;
+//        this.nodes = new long[n_nodes + 1];
+//        System.arraycopy(old_path.nodes,0,this.nodes,0,n_nodes);
 //
 //
-//        int n_rels = old_path.rels.size();
-//        this.rels = new ArrayList<>(n_rels+1);
-//        for(long rid:old_path.rels)
-//        {
-//            rels.add(rid);
 //
-//        }
-        this.nodes = new ArrayList<>();
-        for (long n : old_path.nodes) {
-            this.nodes.add(getLongObject_Node(n));
-        }
-        this.rels = new ArrayList<>();
-        for (long e : old_path.rels) {
-            this.rels.add(getLongObject_Edge(e));
-        }
+//        int n_rels = old_path.rels.length;
+//        this.rels = new long[n_rels + 1];
+//        System.arraycopy(old_path.rels,0,this.rels,0,n_rels);
 
-        this.propertiesName = new ArrayList<>(old_path.propertiesName);
+//        this.propertiesName = new ArrayList<>(old_path.propertiesName);
 
 
         expaned = false;
 
-        this.nodes.add(getLongObject_Node(this.endNode));
-        this.rels.add(getLongObject_Edge(rel_id));
 
-//        this.nodes.add(this.endNode);
-//        this.rels.add(rel_id);
+
+//        this.nodes[n_nodes]=this.endNode;
+//        this.rels[n_rels]=rel_id;
 
         System.arraycopy(old_path.costs, 0, this.costs, 0, this.costs.length);
+
+//        this.nodes.add(getLongObject_Node(this.endNode));
+//        this.rels.add(getLongObject_Edge(rel_id));
+//        this.nodes = new ArrayList<>();
+//        for (long n : old_path.nodes) {
+//            this.nodes.add(getLongObject_Node(n));
+//        }
+//        this.rels = new ArrayList<>();
+//        for (long e : old_path.rels) {
+//            this.rels.add(getLongObject_Edge(e));
+//        }
 
     }
 
@@ -135,61 +136,73 @@ public class path {
     }
 
 
-    private void calculateCosts(Relationship rel) {
-//        System.out.println(this.propertiesName.size());
-        if (this.startNode != this.endNode) {
-            int i = 1;
-            for (String pname : this.propertiesName) {
-//                System.out.println(i+" "+this.costs[i]+"  "+Double.parseDouble(rel.getProperty(pname).toString()));
+    public ArrayList<Pair<Pair<Long, Long>, double[]>> getNextEdges() {
 
-                this.costs[i] = this.costs[i] + (double) rel.getProperty(pname);
-                i++;
+        ArrayList<Pair<Pair<Long, Long>, double[]>> result = new ArrayList<>();
+
+        ArrayList<Pair<Pair<Long, Long>, double[]>> outgoingEdges = constants.edges.get(this.endNode);
+        if (outgoingEdges != null) {
+            for (Pair<Pair<Long, Long>, double[]> e : outgoingEdges) {
+                result.add(e);
             }
         }
+        return result;
     }
 
 
-    private void calculateCosts(double add_costs[]) {
+//    private void calculateCosts(Relationship rel) {
+////        System.out.println(this.propertiesName.size());
+//        if (this.startNode != this.endNode) {
+//            int i = 1;
+//            for (String pname : this.propertiesName) {
+////                System.out.println(i+" "+this.costs[i]+"  "+Double.parseDouble(rel.getProperty(pname).toString()));
+//
+//                this.costs[i] = this.costs[i] + (double) rel.getProperty(pname);
+//                i++;
+//            }
+//        }
+//    }
+
+
+    public void calculateCosts(double add_costs[]) {
 //        System.out.println(this.propertiesName.size());
         if (this.startNode != this.endNode) {
             int i = 1;
-            for (String pname : this.propertiesName) {
+            for (;i<constants.path_dimension;i++) {
 //                System.out.println(i+" "+this.costs[i]+"  "+Double.parseDouble(rel.getProperty(pname).toString()));
-
                 this.costs[i] = this.costs[i] + add_costs[i - 1];
-                i++;
             }
         }
     }
 
 
-    public void setPropertiesName() {
-        this.propertiesName = connector.propertiesName;
-    }
+//    public void setPropertiesName() {
+//        this.propertiesName = connector.propertiesName;
+//    }
 
-    public String toString() {
-//        System.out.println("dasdasd:   "+this.nodes.size()+"  "+this.rels.size());
-        StringBuffer sb = new StringBuffer();
-        if (this.rels.isEmpty()) {
-            sb.append("(" + this.startNode + ")");
-        } else {
-            int i;
-            for (i = 0; i < this.nodes.size() - 1; i++) {
-                sb.append("(" + this.nodes.get(i) + ")");
-                // sb.append("-[Linked," + this.relationships.get(i).getId() +
-                // "]->");
-                sb.append("-[" + this.rels.get(i) + "]-");
-            }
-            sb.append("(" + this.nodes.get(i) + ")");
-        }
-
-        sb.append(",[");
-        for (double d : this.costs) {
-            sb.append(" " + d);
-        }
-        sb.append("]");
-        return sb.toString();
-    }
+//    public String toString() {
+////        System.out.println("dasdasd:   "+this.nodes.size()+"  "+this.rels.size());
+//        StringBuffer sb = new StringBuffer();
+//        if (this.rels.isEmpty()) {
+//            sb.append("(" + this.startNode + ")");
+//        } else {
+//            int i;
+//            for (i = 0; i < this.nodes.size() - 1; i++) {
+//                sb.append("(" + this.nodes.get(i) + ")");
+//                // sb.append("-[Linked," + this.relationships.get(i).getId() +
+//                // "]->");
+//                sb.append("-[" + this.rels.get(i) + "]-");
+//            }
+//            sb.append("(" + this.nodes.get(i) + ")");
+//        }
+//
+//        sb.append(",[");
+//        for (double d : this.costs) {
+//            sb.append(" " + d);
+//        }
+//        sb.append("]");
+//        return sb.toString();
+//    }
 
     @Override
     public boolean equals(Object obj) {
@@ -223,32 +236,32 @@ public class path {
         return true;
     }
 
-    public Long getLongObject_Node(long id) {
-        Long id_obj = new Long(id);
-        Long Lobj;
-        if (!constants.accessedNodes.containsKey(id_obj)) {
-            Lobj = new Long(id);
-            constants.accessedNodes.put(id_obj, Lobj);
-        } else {
-            Lobj = constants.accessedNodes.get(id_obj);
-        }
-
-        return Lobj;
-    }
-
-
-    public Long getLongObject_Edge(long id) {
-        Long id_obj = new Long(id);
-        Long Lobj;
-        if (!constants.accessedEdges.containsKey(id_obj)) {
-            Lobj = new Long(id);
-            constants.accessedEdges.put(id_obj, Lobj);
-        } else {
-            Lobj = constants.accessedEdges.get(id_obj);
-        }
-
-        return Lobj;
-    }
+//    public Long getLongObject_Node(long id) {
+//        Long id_obj = new Long(id);
+//        Long Lobj;
+//        if (!constants.accessedNodes.containsKey(id_obj)) {
+//            Lobj = new Long(id);
+//            constants.accessedNodes.put(id_obj, Lobj);
+//        } else {
+//            Lobj = constants.accessedNodes.get(id_obj);
+//        }
+//
+//        return Lobj;
+//    }
+//
+//
+//    public Long getLongObject_Edge(long id) {
+//        Long id_obj = new Long(id);
+//        Long Lobj;
+//        if (!constants.accessedEdges.containsKey(id_obj)) {
+//            Lobj = new Long(id);
+//            constants.accessedEdges.put(id_obj, Lobj);
+//        } else {
+//            Lobj = constants.accessedEdges.get(id_obj);
+//        }
+//
+//        return Lobj;
+//    }
 
     public boolean isDummyPath() {
         for (int i = 1; i < this.costs.length; i++) {
@@ -259,12 +272,12 @@ public class path {
         return true;
     }
 
-    public boolean hasCycle() {
-        for (int i = 0; i < rels.size() - 2; i++) {
-            if (this.endNode == rels.get(i)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean hasCycle() {
+//        for (int i = 0; i < nodes.length ; i++) {
+//            if (this.endNode == nodes[i]) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }
