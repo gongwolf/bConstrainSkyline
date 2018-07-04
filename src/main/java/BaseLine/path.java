@@ -1,10 +1,15 @@
 package BaseLine;
 
 import javafx.util.Pair;
+import neo4jTools.Line;
 import neo4jTools.connector;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.ResourceIterable;
+import org.neo4j.graphdb.Transaction;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class path {
@@ -104,34 +109,34 @@ public class path {
     public ArrayList<path> expand() {
         ArrayList<path> result = new ArrayList<>();
 
-        ArrayList<Pair<Pair<Long, Long>, double[]>> outgoingEdges = constants.edges.get(this.endNode);
-        if (outgoingEdges != null) {
-            for (Pair<Pair<Long, Long>, double[]> e : outgoingEdges) {
-                long did = e.getKey().getKey();
-                long rel_id = e.getKey().getValue();
-                double[] add_costs = e.getValue();
-
-                path nPath = new path(this, rel_id, did);
-                nPath.calculateCosts(add_costs);
-
-                result.add(nPath);
-            }
-        }
-
-//        try (Transaction tx = connector.graphDB.beginTx()) {
-//            ResourceIterable<Relationship> rels = (ResourceIterable<Relationship>) connector.graphDB.getNodeById(this.endNode).getRelationships(Line.Linked, Direction.OUTGOING);
-//            Iterator<Relationship> rel_Iter = rels.iterator();
-//            while (rel_Iter.hasNext()) {
-//                Relationship rel = rel_Iter.next();
-//                long rel_id = rel.getId();
-//                long rel_endnode = rel.getEndNodeId();
-//                path nPath = new path(this, rel_id, rel_endnode);
-//                nPath.calculateCosts(rel);
+//        ArrayList<Pair<Pair<Long, Long>, double[]>> outgoingEdges = constants.edges.get(this.endNode);
+//        if (outgoingEdges != null) {
+//            for (Pair<Pair<Long, Long>, double[]> e : outgoingEdges) {
+//                long did = e.getKey().getKey();
+//                long rel_id = e.getKey().getValue();
+//                double[] add_costs = e.getValue();
+//
+//                path nPath = new path(this, rel_id, did);
+//                nPath.calculateCosts(add_costs);
+//
 //                result.add(nPath);
 //            }
-//
-//            tx.success();
 //        }
+
+        try (Transaction tx = connector.graphDB.beginTx()) {
+            ResourceIterable<Relationship> rels = (ResourceIterable<Relationship>) connector.graphDB.getNodeById(this.endNode).getRelationships(Line.Linked, Direction.OUTGOING);
+            Iterator<Relationship> rel_Iter = rels.iterator();
+            while (rel_Iter.hasNext()) {
+                Relationship rel = rel_Iter.next();
+                long rel_id = rel.getId();
+                long rel_endnode = rel.getEndNodeId();
+                path nPath = new path(this, rel_id, rel_endnode);
+                nPath.calculateCosts(rel);
+                result.add(nPath);
+            }
+
+            tx.success();
+        }
         return result;
     }
 
@@ -150,18 +155,18 @@ public class path {
     }
 
 
-//    private void calculateCosts(Relationship rel) {
-////        System.out.println(this.propertiesName.size());
-//        if (this.startNode != this.endNode) {
-//            int i = 1;
-//            for (String pname : this.propertiesName) {
-////                System.out.println(i+" "+this.costs[i]+"  "+Double.parseDouble(rel.getProperty(pname).toString()));
-//
-//                this.costs[i] = this.costs[i] + (double) rel.getProperty(pname);
-//                i++;
-//            }
-//        }
-//    }
+    private void calculateCosts(Relationship rel) {
+//        System.out.println(this.propertiesName.size());
+        if (this.startNode != this.endNode) {
+            int i = 1;
+            for (String pname : connector.propertiesName) {
+//                System.out.println(i+" "+this.costs[i]+"  "+Double.parseDouble(rel.getProperty(pname).toString()));
+
+                this.costs[i] = this.costs[i] + (double) rel.getProperty(pname);
+                i++;
+            }
+        }
+    }
 
 
     public void calculateCosts(double add_costs[]) {

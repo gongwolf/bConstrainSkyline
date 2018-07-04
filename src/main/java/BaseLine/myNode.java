@@ -3,6 +3,8 @@ package BaseLine;
 
 import RstarTree.Data;
 import javafx.util.Pair;
+import neo4jTools.connector;
+import org.neo4j.graphdb.Transaction;
 
 import java.util.ArrayList;
 
@@ -37,14 +39,14 @@ public class myNode {
     public myNode(long current_id) {
         this.node = this.id = current_id;
         this.locations = new double[2];
-        locations[0] = constants.nodes.get(this.id).getKey();
-        locations[1] = constants.nodes.get(this.id).getValue();
-//        try (Transaction tx = connector.graphDB.beginTx()) {
-//            locations[0] = (double) connector.graphDB.getNodeById(this.id).getProperty("lat");
-//            locations[1] = (double) connector.graphDB.getNodeById(this.id).getProperty("log");
-////            this.distance_q = Math.sqrt(Math.pow(locations[0] - queryNode.location[0], 2) + Math.pow(locations[1] - queryNode.location[1], 2));
-//            tx.success();
-//        }
+//        locations[0] = constants.nodes.get(this.id).getKey();
+//        locations[1] = constants.nodes.get(this.id).getValue();
+        try (Transaction tx = connector.graphDB.beginTx()) {
+            locations[0] = (double) connector.graphDB.getNodeById(this.id).getProperty("lat");
+            locations[1] = (double) connector.graphDB.getNodeById(this.id).getProperty("log");
+//            this.distance_q = Math.sqrt(Math.pow(locations[0] - queryNode.location[0], 2) + Math.pow(locations[1] - queryNode.location[1], 2));
+            tx.success();
+        }
         inqueue = false;
     }
 
@@ -53,16 +55,16 @@ public class myNode {
     }
 
     public void setLocations(Data queryNode) {
-        locations[0] = constants.nodes.get(this.id).getKey();
-        locations[1] = constants.nodes.get(this.id).getValue();
-        this.distance_q = Math.sqrt(Math.pow(locations[0] - queryNode.location[0], 2) + Math.pow(locations[1] - queryNode.location[1], 2));
-        //        try (Transaction tx = connector.graphDB.beginTx()) {
-        //            locations[0] = (double) connector.graphDB.getNodeById(this.id).getProperty("lat");
-        //            locations[1] = (double) connector.graphDB.getNodeById(this.id).getProperty("log");
-        //            this.distance_q = Math.sqrt(Math.pow(locations[0] - queryNode.location[0], 2) + Math.pow(locations[1] - queryNode.location[1], 2));
-        // //            this.distance_q = GoogleMaps.distanceInMeters(locations[0], locations[1], queryNode.location[0], queryNode.location[1]);
-        //            tx.success();
-        //        }
+//        locations[0] = constants.nodes.get(this.id).getKey();
+//        locations[1] = constants.nodes.get(this.id).getValue();
+//        this.distance_q = Math.sqrt(Math.pow(locations[0] - queryNode.location[0], 2) + Math.pow(locations[1] - queryNode.location[1], 2));
+        try (Transaction tx = connector.graphDB.beginTx()) {
+            locations[0] = (double) connector.graphDB.getNodeById(this.id).getProperty("lat");
+            locations[1] = (double) connector.graphDB.getNodeById(this.id).getProperty("log");
+            this.distance_q = Math.sqrt(Math.pow(locations[0] - queryNode.location[0], 2) + Math.pow(locations[1] - queryNode.location[1], 2));
+            //            this.distance_q = GoogleMaps.distanceInMeters(locations[0], locations[1], queryNode.location[0], queryNode.location[1]);
+            tx.success();
+        }
     }
 
     public long getId() {

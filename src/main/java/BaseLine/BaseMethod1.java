@@ -106,8 +106,8 @@ public class BaseMethod1 {
         for (int i = 0; i < qn; i++) {
             BaseMethod1 bs1 = new BaseMethod1("LA", graphPath1);
             int id = bs1.getRandomNumberInRange_int(0, bs1.getNumberOfHotels() - 1);
-            ids[i] = id;
-            System.out.println(id);
+            ids[i] = 5130;
+            System.out.println(ids[i]);
         }
 
         for (int i = 0; i < qn; i++) {
@@ -122,20 +122,18 @@ public class BaseMethod1 {
         //    bs2.test1(ids[i]);
         //    System.out.println("----------------------------------");
         //}
-//        System.out.println("###################################");
-//
-//        for (int i = 0; i < qn; i++) {
-//            BaseMethod1 bs3 = new BaseMethod1("LA", graphPath3);
-//            bs3.test1(ids[i]);
-//            System.out.println("----------------------------------");
-//
-//        }
+        System.out.println("###################################");
+
+        for (int i = 0; i < qn; i++) {
+            BaseMethod1 bs3 = new BaseMethod1("LA", graphPath3);
+            bs3.test1(ids[i]);
+            System.out.println("----------------------------------");
+        }
     }
 
     public void test1(int id) {
         Data query = getDataById(id);
-        constants.readData(this.graphPath);
-//        baseline(query);
+        baseline(query);
     }
 
     public void baseline(Data queryD) {
@@ -203,7 +201,7 @@ public class BaseMethod1 {
 
 
                 this.tmpStoreNodes.put(s.id, s);
-                System.out.println("find nn finished");
+                System.out.println("find nn finished "+s.id);
                 tx.success();
             }
 
@@ -318,9 +316,10 @@ public class BaseMethod1 {
 
             if (n != null) {
                 System.out.println("ShutdownDB in Exception handle function");
-
                 n.shutdownDB();
             }
+
+            e.printStackTrace();
         } catch (Error r) {
             for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
                 sk_counter += mm.getValue().skyPaths.size();
