@@ -18,7 +18,7 @@ public class constants {
     public static HashMap<Long, Long> accessedEdges = new HashMap<>();
 
     public static HashMap<Long, Pair<Double, Double>> nodes = new HashMap<>();
-    public static HashMap<Long, ArrayList<Pair<Long, double[]>>> edges = new HashMap<>();
+    public static HashMap<Long, ArrayList<Pair<Pair<Long,Long>, double[]>>> edges = new HashMap<>(); //node_id --> ArrayList<<end_id,rel_id>, <double costs[]>>
 
 
     public static void print(double[] costs) {
@@ -30,6 +30,8 @@ public class constants {
     }
 
     public static void readData(String graphPath) {
+        nodes = new HashMap<>();
+        edges = new HashMap<>();
         System.out.println(graphPath);
         connector.graphDB = null;
         connector n = new connector(graphPath);
@@ -70,7 +72,10 @@ public class constants {
 
                 long sid = r.getStartNodeId();
                 long did = r.getEndNodeId();
-                Pair p = new Pair(did, costs);
+
+                Pair<Long,Long> keys = new Pair(did,r.getId());
+
+                Pair p = new Pair(keys, costs);
 
                 ArrayList outgoingList = null;
                 if ((outgoingList = constants.edges.get(sid)) != null) {
@@ -78,15 +83,15 @@ public class constants {
                 } else {
                     outgoingList = new ArrayList();
                     outgoingList.add(p);
-                    constants.edges.put(sid,outgoingList);
+                    constants.edges.put(sid, outgoingList);
                 }
             }
 
-            int counter = 0 ;
-            for (Map.Entry<Long, ArrayList<Pair<Long, double[]>>> entity : constants.edges.entrySet()) {
-                counter+= entity.getValue().size();
+            int counter = 0;
+            for (Map.Entry<Long, ArrayList<Pair<Pair<Long,Long>, double[]>>> entity : constants.edges.entrySet()) {
+                counter += entity.getValue().size();
             }
-            System.out.println("Finish reading the edges "+ counter);
+            System.out.println("Finish reading the edges " + counter);
         }
     }
 }
