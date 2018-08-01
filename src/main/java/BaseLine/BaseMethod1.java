@@ -100,13 +100,13 @@ public class BaseMethod1 {
         String graphPath3 = System.getProperty("user.home") + "/neo4j341/testdb_LA_normal/databases/graph.db";
 
 
-        int qn = 1;
+        int qn = 20;
         int[] ids = new int[qn];
 
         for (int i = 0; i < qn; i++) {
             BaseMethod1 bs1 = new BaseMethod1("LA", graphPath1);
             int id = bs1.getRandomNumberInRange_int(0, bs1.getNumberOfHotels() - 1);
-            ids[i] = 5130;
+            ids[i] = id;
             System.out.println(ids[i]);
         }
 
