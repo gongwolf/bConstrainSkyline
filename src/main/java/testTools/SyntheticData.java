@@ -55,7 +55,7 @@ public class SyntheticData {
         options.addOption("r", "range", true, "range of the distance to be considered");
         options.addOption("de", "degree", true, "degree of the graphe");
         options.addOption("u", "upperbound", true, "upper bound of the beta distribution sampling");
-        options.addOption("h","help",false,"print the help of this command");
+        options.addOption("h", "help", false, "print the help of this command");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -110,8 +110,8 @@ public class SyntheticData {
 
 
             SyntheticData sd = new SyntheticData(numberOfNodes, dimension, graphsize, degree, range, upper);
-            //sd.test();
-//        sd.createStaticNodes(numberOfNodes, dimension);
+            sd.createStaticNodes_betaDistribution();
+//            sd.createStaticNodes(numberOfNodes, dimension);
             sd.testStaticRTree();
 
         }
@@ -119,9 +119,11 @@ public class SyntheticData {
 
     }
 
-    private void test() {
+    private void createStaticNodes_betaDistribution() {
+        //read the latitude and longitude of the node
         readNodeInfo();
 
+        //location of the R-tree
         String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + grahsize + "_" + degree + "_" + range + "_" + numberOfNodes + ".rtr";
         File fp = new File(treePath);
 
@@ -129,7 +131,7 @@ public class SyntheticData {
             fp.delete();
         }
 
-
+        //list of the information of the object
         String infoPath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_" + grahsize + "_" + degree + "_" + range + "_" + numberOfNodes + ".txt";
         File file = new File(infoPath);
         if (file.exists()) {
@@ -246,7 +248,7 @@ public class SyntheticData {
 
     }
 
-    private void createStaticNodes() {
+    private void createStaticNodes_normalDistribution() {
         File fp = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/test.rtr");
 
         if (fp.exists()) {
@@ -313,8 +315,8 @@ public class SyntheticData {
 
 
     public void testStaticRTree() {
-        //String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + grahsize + "_" + degree + "_" + range + "_" + this.numberOfNodes + ".rtr";
-        String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree_LA.rtr";
+        String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/test_" + grahsize + "_" + degree + "_" + range + "_" + this.numberOfNodes + ".rtr";
+//        String treePath = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree_LA.rtr";
         RTree rt = new RTree(treePath, Constants.CACHESIZE);
 
         System.out.println((((Node) rt.root_ptr).get_num_of_data()));

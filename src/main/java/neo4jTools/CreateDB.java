@@ -19,15 +19,18 @@ public class CreateDB {
     private GraphDatabaseService graphdb = null;
 
     public CreateDB(int graphsize, int degree) {
-//        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
-//        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
-        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + "SF" + "/databases/graph.db";
-        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data/";
+        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/";
+        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
+//        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + "SF" + "/databases/graph.db";
+//        this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50/data/";
         //this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real/data/";
         //this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_real/databases/graph.db";
 
-        NodesPath = DBBase + "SF_NodeInfo.txt";
-        SegsPath = DBBase + "SF_SegInfo.txt";
+        NodesPath = DBBase + "NodeInfo.txt";
+        SegsPath = DBBase + "SegInfo.txt";
+
+        System.out.println(DBBase);
+        System.out.println(DB_PATH);
     }
 
 
@@ -60,9 +63,14 @@ public class CreateDB {
 //        generateGraph g = new generateGraph(graphsize, degree, dimension);
 //        g.generateG(true);
 
-        CreateDB db = new CreateDB();
-//        db.createDatabasewithIndex("Id");
+//        CreateDB db = new CreateDB();
+//        db.createDatabase();
+
+        CreateDB db = new CreateDB(100000,4);
         db.createDatabase();
+
+
+//        db.createDatabasewithIndex("Id");
     }
 
     public void createDatabase() {
@@ -73,7 +81,8 @@ public class CreateDB {
         connector nconn = new connector(DB_PATH);
         //delete the data base at first
         nconn.deleteDB();
-        nconn.startDB();
+//        nconn.startDB();
+        nconn.startBD_without_getProperties();
         this.graphdb = nconn.getDBObject();
 
         int num_node = 0, num_edge = 0;

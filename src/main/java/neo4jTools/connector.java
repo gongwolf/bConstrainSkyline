@@ -15,10 +15,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class connector {
-    String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
-    String conFile = "/home/gqxwolf/neo4j334/conf/neo4j.conf";
     public static GraphDatabaseService graphDB;
     public static ArrayList<String> propertiesName = new ArrayList<>();
+    String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
+    String conFile = "/home/gqxwolf/neo4j334/conf/neo4j.conf";
 
 
     public connector(String DB_PATH) {
@@ -49,6 +49,43 @@ public class connector {
         n.shutdownDB();
     }
 
+    public static ArrayList<Relationship> getOutgoutingEdges(long Node_id) {
+        ArrayList<Relationship> results = new ArrayList<>();
+        try (Transaction tx = graphDB.beginTx()) {
+            Iterable<Relationship> rels = graphDB.getNodeById(Node_id).getRelationships(Line.Linked, Direction.OUTGOING);
+            Iterator<Relationship> rel_Iter = rels.iterator();
+            while (rel_Iter.hasNext()) {
+                Relationship rel = rel_Iter.next();
+                results.add(rel);
+            }
+            tx.success();
+        }
+
+        return results;
+    }
+
+    public static void getPropertiesName() {
+        propertiesName.clear();
+        try (Transaction tx = graphDB.beginTx()) {
+
+            Iterable<Relationship> rels = graphDB.getNodeById(1).getRelationships(Line.Linked, Direction.BOTH);
+            if (rels.iterator().hasNext()) {
+                Relationship rel = rels.iterator().next();
+//                System.out.println(rel);
+                Map<String, Object> pnamemap = rel.getAllProperties();
+//                System.out.println(pnamemap.size());
+                for (Map.Entry<String, Object> entry : pnamemap.entrySet()) {
+                    propertiesName.add(entry.getKey());
+                }
+            } else {
+                System.err.println("There is no edge from or to this node " + graphDB.getNodeById(0).getId());
+            }
+
+//            System.out.println(propertiesName.size());
+            tx.success();
+        }
+    }
+
     public void startDB() {
         this.graphDB = null;
         //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
@@ -70,6 +107,14 @@ public class connector {
 //        } else {
 //            System.out.println("Initialize success");
 //        }
+    }
+
+    public void startBD_without_getProperties() {
+        GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(this.DB_PATH));
+        builder.setConfig(GraphDatabaseSettings.pagecache_memory, "8G");
+        this.graphDB = builder.newGraphDatabase();
+        registerShutdownHook(this.graphDB);
+
     }
 
     public void shutdownDB() {
@@ -135,7 +180,6 @@ public class connector {
         return this.graphDB;
     }
 
-
     public long getNumberofNodes() {
 //        startDB();
         long result = 0;
@@ -164,48 +208,9 @@ public class connector {
         return result;
     }
 
-
     private Object getFromManagementBean(String Object, String Attribuite) {
         ObjectName objectName = JmxUtils.getObjectName(this.graphDB, Object);
         Object value = JmxUtils.getAttribute(objectName, Attribuite);
         return value;
-    }
-
-    public static ArrayList<Relationship> getOutgoutingEdges(long Node_id) {
-        ArrayList<Relationship> results = new ArrayList<>();
-        try (Transaction tx = graphDB.beginTx()) {
-            Iterable<Relationship> rels = graphDB.getNodeById(Node_id).getRelationships(Line.Linked, Direction.OUTGOING);
-            Iterator<Relationship> rel_Iter = rels.iterator();
-            while (rel_Iter.hasNext()) {
-                Relationship rel = rel_Iter.next();
-                results.add(rel);
-            }
-            tx.success();
-        }
-
-        return results;
-    }
-
-
-    public static void getPropertiesName() {
-        propertiesName.clear();
-        try (Transaction tx = graphDB.beginTx()) {
-
-            Iterable<Relationship> rels = graphDB.getNodeById(1).getRelationships(Line.Linked, Direction.BOTH);
-            if (rels.iterator().hasNext()) {
-                Relationship rel = rels.iterator().next();
-//                System.out.println(rel);
-                Map<String, Object> pnamemap = rel.getAllProperties();
-//                System.out.println(pnamemap.size());
-                for (Map.Entry<String, Object> entry : pnamemap.entrySet()) {
-                    propertiesName.add(entry.getKey());
-                }
-            } else {
-                System.err.println("There is no edge from or to this node " + graphDB.getNodeById(0).getId());
-            }
-
-//            System.out.println(propertiesName.size());
-            tx.success();
-        }
     }
 }

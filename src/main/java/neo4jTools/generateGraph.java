@@ -52,13 +52,13 @@ public class generateGraph {
         } else {
 
             if (g_str == null) {
-                numberNodes = 10000;
+                numberNodes = 100000;
             } else {
                 numberNodes = Integer.parseInt(g_str);
             }
 
             if (de_str == null) {
-                numberofDegree = 1;
+                numberofDegree = 4;
             } else {
                 numberofDegree = Integer.parseInt(de_str);
             }

@@ -171,13 +171,13 @@ public class BaseMethod5 {
                 int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
 
                 Data queryD = bm5.getDataById(random_place_id);
-                bm5.nearestNetworkNode(queryD);
-                double distance = bm5.nn_dist;
-                while (distance > 1000) {
-                    queryD = bm5.getDataById(random_place_id);
-                    bm5.nearestNetworkNode(queryD);
-                    distance = bm5.nn_dist;
-                }
+//                bm5.nearestNetworkNode(queryD);
+//                double distance = bm5.nn_dist;
+//                while (distance > 1000) {
+//                    queryD = bm5.getDataById(random_place_id);
+//                    bm5.nearestNetworkNode(queryD);
+//                    distance = bm5.nn_dist;
+//                }
                 queryList[i] = queryD;
             }
 
@@ -397,7 +397,7 @@ public class BaseMethod5 {
 
             }
 
-
+            //time that is used to find the candicated objects, find the nearest objects,
             sb.append(bbs_rt + "," + nn_rt + "," + exploration_rt + "," + (index_s / 1000000));
             tx.success();
         }
