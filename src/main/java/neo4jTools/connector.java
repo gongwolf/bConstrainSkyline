@@ -17,7 +17,7 @@ import java.util.Map;
 public class connector {
     public static GraphDatabaseService graphDB;
     public static ArrayList<String> propertiesName = new ArrayList<>();
-    String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
+    public String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
     String conFile = "/home/gqxwolf/neo4j334/conf/neo4j.conf";
 
 
@@ -172,6 +172,7 @@ public class connector {
     public void deleteDB() {
         try {
             FileUtils.deleteRecursively(new File(DB_PATH));
+            System.out.println("delete    "+DB_PATH);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -213,5 +214,11 @@ public class connector {
         ObjectName objectName = JmxUtils.getObjectName(this.graphDB, Object);
         Object value = JmxUtils.getAttribute(objectName, Attribuite);
         return value;
+    }
+
+    public void restartDB()
+    {
+        this.shutdownDB();
+        this.startBD_without_getProperties();
     }
 }

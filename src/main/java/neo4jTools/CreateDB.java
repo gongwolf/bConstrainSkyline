@@ -66,7 +66,7 @@ public class CreateDB {
 //        CreateDB db = new CreateDB();
 //        db.createDatabase();
 
-        CreateDB db = new CreateDB(1000000,4);
+        CreateDB db = new CreateDB(120000, 4);
         db.createDatabase();
 
 
@@ -82,13 +82,16 @@ public class CreateDB {
         //delete the data base at first
         nconn.deleteDB();
 //        nconn.startDB();
-        nconn.startBD_without_getProperties();
-        this.graphdb = nconn.getDBObject();
+//        nconn.startBD_without_getProperties();
+//        this.graphdb = nconn.getDBObject();
 
         int num_node = 0, num_edge = 0;
 
 
-        try (Transaction tx = this.graphdb.beginTx()) {
+        try {
+            nconn = new connector(DB_PATH);
+            nconn.startBD_without_getProperties();
+            this.graphdb = nconn.getDBObject();
             BufferedReader br = new BufferedReader(new FileReader(NodesPath));
             String line = null;
             while ((line = br.readLine()) != null) {
@@ -100,7 +103,20 @@ public class CreateDB {
                 double log = Double.parseDouble(attrs[2]);
                 Node n = createNode(id, lat, log);
                 num_node++;
+                if (num_node % 10000 == 0) {
+                    System.out.println(num_node + " nodes was created");
+                }
+
+                if (num_node % 50000 == 0) {
+                    nconn.restartDB();
+                    this.graphdb = nconn.getDBObject();
+                    System.out.println("Restart DB");
+                }
             }
+
+            nconn.restartDB();
+            this.graphdb = nconn.getDBObject();
+            System.out.println("Restart DB  "+nconn.DB_PATH);
 
             br = new BufferedReader(new FileReader(SegsPath));
             line = null;
@@ -114,9 +130,16 @@ public class CreateDB {
                 double RunningTime = Double.parseDouble(attrs[4]);
                 createRelation(src, des, EDistence, MetersDistance, RunningTime);
                 num_edge++;
-            }
+                if (num_edge % 10000 == 0) {
+                    System.out.println(num_edge + " nodes was created");
+                }
 
-            tx.success();
+                if (num_edge % 50000 == 0) {
+                    nconn.restartDB();
+                    this.graphdb = nconn.getDBObject();
+                    System.out.println("Restart DB");
+                }
+            }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -124,7 +147,7 @@ public class CreateDB {
 
         nconn.shutdownDB();
         System.out.println("Database is created, the location of the db file is " + this.DB_PATH);
-        System.out.println("there are total "+num_node+" nodes and "+num_edge+" edges");
+        System.out.println("there are total " + num_node + " nodes and " + num_edge + " edges");
     }
 
 
@@ -173,23 +196,40 @@ public class CreateDB {
     }
 
     private void createRelation(String src, String des, double eDistence, double metersDistance, double runningTime) {
-        try {
-            Node srcNode = this.graphdb.findNode(BNode.BusNode, "name", src);
-            Node desNode = this.graphdb.findNode(BNode.BusNode, "name", des);
+        try (Transaction tx = this.graphdb.beginTx()) {
+            //Node srcNode = this.graphdb.findNode(BNode.BusNode, "name", src);
+            //Node desNode = this.graphdb.findNode(BNode.BusNode, "name", des);
+            Node srcNode = this.graphdb.getNodeById(Long.valueOf(src));
+            Node desNode = this.graphdb.getNodeById(Long.valueOf(des));
+
             Relationship rel = srcNode.createRelationshipTo(desNode, Line.Linked);
             rel.setProperty("EDistence", eDistence);
             rel.setProperty("MetersDistance", metersDistance);
             rel.setProperty("RunningTime", runningTime);
+            tx.success();
         } catch (Exception e) {
             System.out.println(src + "-->" + des);
+            e.printStackTrace();
+            System.exit(0);
         }
     }
 
     private Node createNode(String id, double lat, double log) {
-        Node n = this.graphdb.createNode(BNode.BusNode);
-        n.setProperty("name", id);
-        n.setProperty("lat", lat);
-        n.setProperty("log", log);
-        return n;
+        try (Transaction tx = this.graphdb.beginTx()) {
+            Node n = this.graphdb.createNode(BNode.BusNode);
+            n.setProperty("name", id);
+            n.setProperty("lat", lat);
+            n.setProperty("log", log);
+            if (n.getId() != Long.valueOf(id)) {
+                System.out.println("id not match  "+n.getId()+"->"+id);
+            }
+            tx.success();
+            return n;
+        }
+
+    }
+
+    public void restartDB() {
+
     }
 }
