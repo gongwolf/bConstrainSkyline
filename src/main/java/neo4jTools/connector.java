@@ -89,6 +89,7 @@ public class connector {
     public void startDB() {
         this.graphDB = null;
         //this.graphDB = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
+//        System.out.println(this.DB_PATH);
         GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(this.DB_PATH));
 //        builder.loadPropertiesFromFile(conFile)
 //        builder.setConfig(GraphDatabaseSettings.mapped_memory_page_size, "2k")

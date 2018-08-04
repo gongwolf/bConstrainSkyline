@@ -66,7 +66,7 @@ public class CreateDB {
 //        CreateDB db = new CreateDB();
 //        db.createDatabase();
 
-        CreateDB db = new CreateDB(100000,4);
+        CreateDB db = new CreateDB(1000000,4);
         db.createDatabase();
 
 

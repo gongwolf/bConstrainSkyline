@@ -7,7 +7,6 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
-import testTools.GoogleMaps;
 
 import java.io.*;
 import java.util.*;
@@ -16,6 +15,7 @@ public class BaseMethod5 {
     public double nn_dist;
     public ArrayList<path> qqqq = new ArrayList<>();
     public ArrayList<Result> skyPaths = new ArrayList<>();
+    public GraphDatabaseService graphdb;
     Random r = new Random(System.nanoTime());
     String treePath;
     String dataPath;
@@ -32,7 +32,6 @@ public class BaseMethod5 {
     String home_folder = System.getProperty("user.home");
     private int hotels_num;
     private double range;
-    public GraphDatabaseService graphdb;
     private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sNodes = new ArrayList<>();
     private ArrayList<Data> sky_hotel;
@@ -583,21 +582,24 @@ public class BaseMethod5 {
     }
 
     public Node nearestNetworkNode(Data queryD) {
-
         Node nn_node = null;
         double distz = Float.MAX_VALUE;
+        try (Transaction tx = this.graphdb.beginTx()) {
 
-        ResourceIterable<Node> iter = this.graphdb.getAllNodes();
-        for (Node n : iter) {
-            double lat = (double) n.getProperty("lat");
-            double log = (double) n.getProperty("log");
 
-            double temp_distz = (Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
-            if (distz > temp_distz) {
-                nn_node = n;
-                distz = temp_distz;
-                this.nn_dist = distz;
+            ResourceIterable<Node> iter = this.graphdb.getAllNodes();
+            for (Node n : iter) {
+                double lat = (double) n.getProperty("lat");
+                double log = (double) n.getProperty("log");
+
+                double temp_distz = (Math.pow(lat - queryD.location[0], 2) + Math.pow(log - queryD.location[1], 2));
+                if (distz > temp_distz) {
+                    nn_node = n;
+                    distz = temp_distz;
+                    this.nn_dist = distz;
+                }
             }
+            tx.success();
         }
 
         this.nn_dist = distz;

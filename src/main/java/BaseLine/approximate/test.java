@@ -1,6 +1,5 @@
 package BaseLine.approximate;
 
-import BaseLine.BaseMethod;
 import BaseLine.BaseMethod1;
 import BaseLine.BaseMethod5;
 import BaseLine.approximate.mixed.BaseMethod_mixed;
@@ -12,7 +11,6 @@ import RstarTree.Data;
 import neo4jTools.connector;
 import org.apache.commons.cli.*;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Transaction;
 
 public class test {
     public static void main(String args[]) throws ParseException {
@@ -49,7 +47,7 @@ public class test {
         } else {
 
             if (g_str == null) {
-                graph_size = 2000;
+                graph_size = 60000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -61,7 +59,7 @@ public class test {
             }
 
             if (qn_str == null) {
-                query_num = 1;
+                query_num = 5;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
@@ -73,7 +71,7 @@ public class test {
             }
 
             if (r_str == null) {
-                range = 12;
+                range = 2;
             } else {
                 range = Integer.parseInt(r_str);
             }
@@ -85,45 +83,78 @@ public class test {
                 city = c_str;
             }
 
-
-            Data[] queryList = new Data[query_num];
-
             String home_folder = System.getProperty("user.home");
-            String graph = home_folder + "/neo4j334/testdb_"+city+"/databases/graph.db";
-
+            String graph = home_folder + "/neo4j334/testdb" + graph_size + "_" + degree + "/databases/graph.db";
+            System.out.println(graph);
             connector n = new connector(graph);
             n.startDB();
             GraphDatabaseService graphdb = n.getDBObject();
-            try (Transaction tx = graphdb.beginTx()) {
-                for (int i = 0; i < query_num; i++) {
-                    BaseMethod5 bm5 = new BaseMethod5(city);
-                    bm5.graphdb = graphdb;
-                    int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
 
-                    Data queryD = bm5.getDataById(random_place_id);
+            Data[] queryList = new Data[query_num];
+            for (int i = 0; i < query_num; i++) {
+                BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
+                bm5.graphdb = graphdb;
+                int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+                Data queryD = bm5.getDataById(random_place_id);
+                bm5.nearestNetworkNode(queryD);
+                double distance = bm5.nn_dist;
+                System.out.println(distance+"    "+range);
+                while (distance > range) {
+                    random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+                    queryD = bm5.getDataById(random_place_id);
                     bm5.nearestNetworkNode(queryD);
-                    double distance = bm5.nn_dist;
-//                    System.out.println(distance);
-                    while (distance > 0.0105) {
-                        random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
-                        queryD = bm5.getDataById(random_place_id);
-                        bm5.nearestNetworkNode(queryD);
-                        distance = bm5.nn_dist;
-//                        System.out.println(distance);
-                    }
-                    queryList[i] = queryD;
+                    distance = bm5.nn_dist;
                 }
-
-                tx.success();
+                queryList[i] = queryD;
             }
 
             n.shutdownDB();
 
             for (Data d : queryList) {
-//                t.testing(graph_size, degree, range, hotels_num, d);
-                t.test_real(d,city);
+                t.testing(graph_size, degree, range, hotels_num, d);
                 System.out.println("===============================================");
             }
+
+
+            /**
+             * Testing of real dataset
+             */
+//            String home_folder = System.getProperty("user.home");
+//            String graph = home_folder + "/neo4j334/testdb_"+city+"/databases/graph.db";
+//
+//            connector n = new connector(graph);
+//            n.startDB();
+//            GraphDatabaseService graphdb = n.getDBObject();
+//            try (Transaction tx = graphdb.beginTx()) {
+//                for (int i = 0; i < query_num; i++) {
+//                    BaseMethod5 bm5 = new BaseMethod5(city);
+//                    bm5.graphdb = graphdb;
+//                    int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+//
+//                    Data queryD = bm5.getDataById(random_place_id);
+//                    bm5.nearestNetworkNode(queryD);
+//                    double distance = bm5.nn_dist;
+////                    System.out.println(distance);
+//                    while (distance > 0.0105) {
+//                        random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+//                        queryD = bm5.getDataById(random_place_id);
+//                        bm5.nearestNetworkNode(queryD);
+//                        distance = bm5.nn_dist;
+////                        System.out.println(distance);
+//                    }
+//                    queryList[i] = queryD;
+//                }
+//
+//                tx.success();
+//            }
+//
+//            n.shutdownDB();
+
+//            for (Data d : queryList) {
+////                t.testing(graph_size, degree, range, hotels_num, d);
+//                t.test_real(d,city);
+//                System.out.println("===============================================");
+//            }
         }
 
     }
@@ -179,12 +210,12 @@ public class test {
 
     }
 
-    public void test_real(Data queryD,String city) {
+    public void test_real(Data queryD, String city) {
 //        System.out.println(queryD);
         String home_folder = System.getProperty("user.home");
-        String graph = home_folder + "/neo4j334/testdb_"+city+"_Random/databases/graph.db";
-        String tree = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_"+city+".rtr";
-        String data = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_"+city+".txt";
+        String graph = home_folder + "/neo4j334/testdb_" + city + "_Random/databases/graph.db";
+        String tree = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_" + city + ".rtr";
+        String data = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_" + city + ".txt";
 
 
         BaseMethod1 bm1 = new BaseMethod1(city);

@@ -89,6 +89,10 @@ public class Index {
 
 
         this.num_nodes = getLineNumbers();
+        System.out.println(this.home_folder);
+        System.out.println(this.source_data_tree);
+        System.out.println(this.neo4j_db);
+        System.out.println(node_info_path);
 
         this.pagesize_list = 1024;
 
@@ -147,7 +151,7 @@ public class Index {
         } else {
 
             if (g_str == null) {
-                graph_size = 2000;
+                graph_size = 60000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -165,7 +169,7 @@ public class Index {
             }
 
             if (r_str == null) {
-                range = 12;
+                range = 2;
             } else {
                 range = Double.parseDouble(r_str);
             }
@@ -176,10 +180,13 @@ public class Index {
                 distance_thresholds = Double.parseDouble(t_str);
             }
 
-//            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds);
-            Index idx = new Index("LA");
+            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds);
+//            Index idx = new Index("LA");
+            long st = System.currentTimeMillis();
             idx.buildIndex(true);
+            System.out.println("index building finished in "+(System.currentTimeMillis()-st));
 //            idx.read_d_list_from_disk(452);
+//            idx.test();
         }
 
     }
@@ -236,10 +243,10 @@ public class Index {
         try {
 
             long d_id = getRandomNumberInRange_int(0, 1000);
-
             RandomAccessFile data_f = new RandomAccessFile(Data_file, "rw");
             Data d = new Data(3);
             data_f.seek(d_id * d.get_size());
+            System.out.println(d.get_size());
             byte[] b_d = new byte[d.get_size()];
             data_f.read(b_d);
             d.read_from_buffer(b_d);
@@ -319,10 +326,10 @@ public class Index {
         }
 
         Skyline sk = new Skyline(this.source_data_tree);
-        sk.allDatas();
-        sk.findSkyline();
-        System.out.println(sk.allNodes.size());
-        System.out.println(sk.sky_hotels.size());
+        sk.allDatas(); //get all data objects from R-tree
+        sk.findSkyline(); //get skyline objects among all the data objects
+        System.out.println("number of data objects "+sk.allNodes.size());
+        System.out.println("number of skyline data objects:"+sk.sky_hotels.size());
         writeDataToDisk(sk.allNodes);
 
         String header_name = this.home_folder + "/header.idx";
@@ -370,11 +377,13 @@ public class Index {
                     //It means the hotel could be a candidate hotel of the bus stop n.
                     for (Data d : sk.allNodes) {
                         boolean flag = true;
+                        //distance from node to d
                         double d2 = Math.sqrt(Math.pow(node.locations[0] - d.location[0], 2) + Math.pow(node.locations[1] - d.location[1], 2));
 //                        double d2 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], d.location[0], d.location[1]);
 
                         double min_dist = Double.MAX_VALUE;
                         for (Data s_d : sk.sky_hotels) {
+                            //distance from node to the skyline data s_d
                             double d1 = Math.sqrt(Math.pow(node.locations[0] - s_d.location[0], 2) + Math.pow(node.locations[1] - s_d.location[1], 2));
 //                            double d1 = GoogleMaps.distanceInMeters(node.locations[0], node.locations[1], s_d.location[0], s_d.location[1]);
 

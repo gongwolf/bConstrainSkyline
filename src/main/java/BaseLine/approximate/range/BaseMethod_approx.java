@@ -53,6 +53,8 @@ public class BaseMethod_approx {
         this.distance_threshold = distance_threshold;
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/test_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + graph_size + "_" + degree + "_" + range + "_" + hotels_num + ".txt";
+        this.graphPath = home_folder + "/neo4j334/testdb" + this.graph_size + "_" + this.degree + "/databases/graph.db";
+
     }
 
     public BaseMethod_approx(String tree, String data, String graph, double distance_threshold) {
