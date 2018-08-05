@@ -17,7 +17,7 @@ import java.util.Map;
 public class connector {
     public static GraphDatabaseService graphDB;
     public static ArrayList<String> propertiesName = new ArrayList<>();
-    public String DB_PATH = "/home/gqxwolf/neo4j334/testdb20_5/databases/graph.db";
+    public String DB_PATH = "/home/gqxwolf/neo4j334/testdb1000000_4/databases/graph.db";
     String conFile = "/home/gqxwolf/neo4j334/conf/neo4j.conf";
 
 
@@ -42,11 +42,23 @@ public class connector {
 
     public static void main(String args[]) {
         connector n = new connector();
+        n.startBD_without_getProperties();
 //        n.test();
 //        n.clean();
         System.out.println(n.getNumberofNodes());
+        System.out.println(n.getNumberofEdges());
 
         n.shutdownDB();
+    }
+
+    private long getNumberofEdges() {
+        long result = 0;
+        try (Transaction tx = this.graphDB.beginTx()) {
+            ResourceIterable<Relationship> r = this.graphDB.getAllRelationships();
+            tx.success();
+            result = r.stream().count();
+        }
+        return result;
     }
 
     public static ArrayList<Relationship> getOutgoutingEdges(long Node_id) {

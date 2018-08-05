@@ -52,7 +52,7 @@ public class generateGraph {
         } else {
 
             if (g_str == null) {
-                numberNodes = 120000;
+                numberNodes = 200000;
             } else {
                 numberNodes = Integer.parseInt(g_str);
             }

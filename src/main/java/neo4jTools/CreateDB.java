@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CreateDB {
     String DBBase = "/home/gqxwolf/mydata/projectData/un_testGraph2000_5/data/";
@@ -67,7 +68,7 @@ public class CreateDB {
 //        CreateDB db = new CreateDB();
 //        db.createDatabase();
 
-        CreateDB db = new CreateDB(120000, 4);
+        CreateDB db = new CreateDB(50000, 4);
         db.createDatabase();
 
 
@@ -114,15 +115,46 @@ public class CreateDB {
 
         nconn.shutdownDB();
 
-        nconn = new connector(DB_PATH);
-        nconn.startBD_without_getProperties();
-        this.graphdb = nconn.getDBObject();
 
-        try (Transaction tx = this.graphdb.beginTx()) {
-            BufferedReader br = new BufferedReader(new FileReader(SegsPath));
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(SegsPath));
             String line = null;
+
+
+            ArrayList<String> ss = new ArrayList<>();
+
             while ((line = br.readLine()) != null) {
                 //System.out.println(line);
+                ss.add(line);
+                num_edge++;
+
+                if (num_edge % 100000 == 0) {
+                    process_batch_edges(ss);
+                    ss.clear();
+                    System.out.println(num_edge+" edges were created");
+                }
+            }
+            process_batch_edges(ss);
+            ss.clear();
+            System.out.println(num_edge+" edges were created");
+            nconn.shutdownDB();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Database is created, the location of the db file is " + this.DB_PATH);
+        System.out.println("there are total " + num_node + " nodes and " + num_edge + " edges");
+    }
+
+    private void process_batch_edges(ArrayList<String> ss) {
+        connector nconn = new connector(DB_PATH);
+        nconn.startBD_without_getProperties();
+        this.graphdb = nconn.getDBObject();
+        try (Transaction tx = this.graphdb.beginTx()) {
+            for (String line : ss) {
                 String attrs[] = line.split(" ");
                 String src = attrs[0];
                 String des = attrs[1];
@@ -130,21 +162,12 @@ public class CreateDB {
                 double MetersDistance = Double.parseDouble(attrs[3]);
                 double RunningTime = Double.parseDouble(attrs[4]);
                 createRelation(src, des, EDistence, MetersDistance, RunningTime);
-                num_edge++;
-                if (num_edge % 10000 == 0) {
-                    tx.success();
-                    System.out.println(num_edge + " edges was created");
-                }
             }
             tx.success();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-
         nconn.shutdownDB();
-        System.out.println("Database is created, the location of the db file is " + this.DB_PATH);
-        System.out.println("there are total " + num_node + " nodes and " + num_edge + " edges");
+
+
     }
 
 
@@ -211,14 +234,14 @@ public class CreateDB {
     }
 
     private Node createNode(String id, double lat, double log) {
-            Node n = this.graphdb.createNode(BNode.BusNode);
-            n.setProperty("name", id);
-            n.setProperty("lat", lat);
-            n.setProperty("log", log);
-            if (n.getId() != Long.valueOf(id)) {
-                System.out.println("id not match  " + n.getId() + "->" + id);
-            }
-            return n;
+        Node n = this.graphdb.createNode(BNode.BusNode);
+        n.setProperty("name", id);
+        n.setProperty("lat", lat);
+        n.setProperty("log", log);
+        if (n.getId() != Long.valueOf(id)) {
+            System.out.println("id not match  " + n.getId() + "->" + id);
+        }
+        return n;
 
 
     }

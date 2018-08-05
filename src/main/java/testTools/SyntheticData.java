@@ -73,13 +73,13 @@ public class SyntheticData {
         } else {
 
             if (g_str == null) {
-                graphsize = 10000;
+                graphsize = 1000;
             } else {
                 graphsize = Integer.parseInt(g_str);
             }
 
             if (n_str == null) {
-                numberOfNodes = 5000;
+                numberOfNodes = 1000;
             } else {
                 numberOfNodes = Integer.parseInt(n_str);
             }
@@ -91,13 +91,13 @@ public class SyntheticData {
             }
 
             if (r_str == null) {
-                range = 6;
+                range = 20;
             } else {
                 range = Double.parseDouble(r_str);
             }
 
             if (de_str == null) {
-                degree = 1;
+                degree = 4;
             } else {
                 degree = Integer.parseInt(de_str);
             }
@@ -159,6 +159,7 @@ public class SyntheticData {
 
                 Data d = new Data(this.dimension);
                 d.setPlaceId(i);
+                int tries = 0;
 
                 float latitude, longitude;
                 do {
@@ -176,8 +177,9 @@ public class SyntheticData {
 
                     if (counter != numberOfBusStopInRange) {
                         counter = 0;
+                        tries++;
                     }
-                } while (counter != numberOfBusStopInRange);
+                } while (counter != numberOfBusStopInRange || tries==500);
 
 
                 d.setLocation(new double[]{latitude, longitude});
