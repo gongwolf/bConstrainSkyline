@@ -125,7 +125,7 @@ public class BaseMethod5 {
         } else {
 
             if (g_str == null) {
-                graph_size = 2000;
+                graph_size = 200000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -149,15 +149,15 @@ public class BaseMethod5 {
             }
 
             if (r_str == null) {
-                range = 12;
+                range = 1.2;
             } else {
-                range = Integer.parseInt(r_str);
+                range = Double.parseDouble(r_str);
             }
 
             if (t_str == null) {
                 threshold = range;
             } else {
-                threshold = Integer.parseInt(t_str);
+                threshold = Double.parseDouble(t_str);
             }
 
 //            int[] id_list = new int[]{462,472,791};
