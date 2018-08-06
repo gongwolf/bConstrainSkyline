@@ -299,11 +299,11 @@ public class BaseMethod_approx {
 
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
-//            if (r.p != null) {
-//                for (Long nn : r.p.nodes) {
-//                    final_bus_stops.add(nn);
-//                }
-//            }
+            if (r.p != null) {
+                for (Long nn : r.p.nodes) {
+                    final_bus_stops.add(nn);
+                }
+            }
         }
 
 

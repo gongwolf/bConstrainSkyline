@@ -7,7 +7,6 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
-import testTools.GoogleMaps;
 import testTools.Index;
 
 import java.io.BufferedReader;
@@ -267,7 +266,7 @@ public class BaseMethod_approx_index {
 
 //            System.out.println("there are " + this.tmpStoreNodes.size() + " bus stops are visited");
 
-            Index idx = new Index("SF");
+            Index idx = new Index(this.graph_size, this.degree, this.distance_threshold, this.hotels_num, this.distance_threshold);
             for (Map.Entry<Long, myNode> entry : tmpStoreNodes.entrySet()) {
                 sk_counter += entry.getValue().skyPaths.size();
                 long t_index_s = System.nanoTime();
@@ -279,14 +278,14 @@ public class BaseMethod_approx_index {
 //                index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-//                    if (!p.rels.isEmpty()) {
+                    if (!p.rels.isEmpty()) {
 //                        if(my_n.id==453){
 //                            System.out.println(p);
 //                        }
-                    long ats = System.nanoTime();
-                    boolean f = addToSkylineResult(p, d_list);
-                    addResult_rt += System.nanoTime() - ats;
-//                    }
+                        long ats = System.nanoTime();
+                        boolean f = addToSkylineResult(p, d_list);
+                        addResult_rt += System.nanoTime() - ats;
+                    }
                 }
             }
 
@@ -320,11 +319,11 @@ public class BaseMethod_approx_index {
 
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
-//            if (r.p != null) {
-//                for (Long nn : r.p.nodes) {
-//                    final_bus_stops.add(nn);
-//                }
-//            }
+            if (r.p != null) {
+                for (Long nn : r.p.nodes) {
+                    final_bus_stops.add(nn);
+                }
+            }
         }
 
 

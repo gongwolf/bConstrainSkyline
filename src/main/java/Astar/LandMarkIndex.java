@@ -156,7 +156,7 @@ public class LandMarkIndex {
 
     public static void main(String args[]) {
         LandMarkIndex lmi = new LandMarkIndex(1000, 4, 10);
-//        lmi.buildIndex();
+        lmi.buildIndex();
         lmi.getRefNodes();
         lmi.readLandMark(1, 83);
     }

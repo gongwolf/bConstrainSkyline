@@ -125,7 +125,7 @@ public class BaseMethod5 {
         } else {
 
             if (g_str == null) {
-                graph_size = 200000;
+                graph_size = 2000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -149,7 +149,7 @@ public class BaseMethod5 {
             }
 
             if (r_str == null) {
-                range = 1.2;
+                range = 12;
             } else {
                 range = Double.parseDouble(r_str);
             }
@@ -346,23 +346,23 @@ public class BaseMethod5 {
                         ArrayList<path> new_paths = p.expand();
                         expasion_rt += (System.nanoTime() - ee);
                         for (path np : new_paths) {
-                            if (!np.hasCycle()) {
-                                myNode next_n;
-                                if (this.tmpStoreNodes.containsKey(np.endNode)) {
-                                    next_n = tmpStoreNodes.get(np.endNode);
-                                } else {
-                                    next_n = new myNode(queryD, np.endNode, -1);
-                                    this.tmpStoreNodes.put(next_n.id, next_n);
-                                }
+//                            if (!np.hasCycle()) {
+                            myNode next_n;
+                            if (this.tmpStoreNodes.containsKey(np.endNode)) {
+                                next_n = tmpStoreNodes.get(np.endNode);
+                            } else {
+                                next_n = new myNode(queryD, np.endNode, -1);
+                                this.tmpStoreNodes.put(next_n.id, next_n);
+                            }
 
-                                //lemma 2
-                                if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
-                                    if (next_n.addToSkyline(np) && !next_n.inqueue) {
-                                        mqueue.add(next_n);
-                                        next_n.inqueue = true;
-                                    }
+                            //lemma 2
+                            if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
+                                if (next_n.addToSkyline(np) && !next_n.inqueue) {
+                                    mqueue.add(next_n);
+                                    next_n.inqueue = true;
                                 }
                             }
+//                            }
                         }
                     }
                 }
@@ -421,7 +421,6 @@ public class BaseMethod5 {
 
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
-
             if (r.p != null) {
                 for (Long nn : r.p.nodes) {
                     final_bus_stops.add(nn);

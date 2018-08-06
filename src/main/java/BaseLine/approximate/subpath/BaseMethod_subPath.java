@@ -304,13 +304,13 @@ public class BaseMethod_subPath {
 //                index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-                    if (!p.rels.isEmpty() && p.expaned) {
+//                    if (!p.rels.isEmpty() && p.expaned) {
                         if (p.expaned) {
                             long ats = System.nanoTime();
                             boolean f = addToSkylineResult(p, sNodes);
                             addResult_rt += System.nanoTime() - ats;
                         }
-                    }
+//                    }
                 }
             }
 

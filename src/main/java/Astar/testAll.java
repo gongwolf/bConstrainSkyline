@@ -2,6 +2,7 @@ package Astar;
 
 import BaseLine.*;
 import BaseLine.approximate.range.BaseMethod_approx;
+import BaseLine.approximate.range.BaseMethod_approx_index;
 import RstarTree.Data;
 import neo4jTools.connector;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -11,8 +12,7 @@ import org.neo4j.graphdb.Transaction;
 
 import java.util.*;
 
-public class AstarApproximate {
-
+public class testAll {
     private final LandMarkIndex lmi;
     private final double distance_threshold;
     public ArrayList<Result> skyPaths = new ArrayList<>();
@@ -26,15 +26,16 @@ public class AstarApproximate {
     String treePath;
     String dataPath;
     String home_folder = System.getProperty("user.home");
-    HashMap<Long, myNode> tmpStoreNodes = new HashMap();
     private ArrayList<Data> sky_hotel;
     private ArrayList<Data> sNodes = new ArrayList<>();
     private HashMap<Integer, ArrayList<Integer>> nearbyList;
     private HashSet<Data> finalDatas = new HashSet<>();
     private double nn_dist;
+    private HashMap<Long, myNode> tmpStoreNodes = new HashMap();
+    private Data queryD;
 
 
-    public AstarApproximate(int graph_size, String degree, double range, int hotels_num) {
+    public testAll(int graph_size, String degree, double range, int hotels_num) {
         this.range = range;
         this.hotels_num = hotels_num;
         r = new Random(System.nanoTime());
@@ -45,41 +46,46 @@ public class AstarApproximate {
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
         this.distance_threshold = range;
         lmi = new LandMarkIndex(graph_size, degree);
+        System.out.println(this.distance_threshold);
     }
 
     public static void main(String args[]) {
-        for (int i = 0; i < 3; i++) {
-            AstarApproximate asa = new AstarApproximate(1000, "4", 14, 1000);
+        for (int i = 0; i < 1; i++) {
 
             BaseMethod5 bm5 = new BaseMethod5(1000, "4", 14, 1000);
             int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
             Data queryD = bm5.getDataById(random_place_id);
-            asa.baseline(queryD);
 
+            testAll tsa = new testAll(1000, "4", 14, 1000);
+            tsa.baseline(queryD);
 
             BaseMethod_approx bs_approx = new BaseMethod_approx(1000, "4", 14, 14, 1000);
             bs_approx.baseline(queryD);
+
+            BaseMethod_approx_index bs_approx_idx = new BaseMethod_approx_index(1000, "4", 14, 14, 1000);
+            bs_approx_idx.baseline(queryD);
             System.out.println("=================================");
         }
     }
 
     public void baseline(Data queryD) {
-//        this.queryD = queryD;
+
+        this.tmpStoreNodes.clear();
+
         StringBuffer sb = new StringBuffer();
         sb.append(queryD.getPlaceId() + " ");
+        long s_sum = System.currentTimeMillis();
+        ArrayList<path> Results = new ArrayList<>();
         Skyline sky = new Skyline(treePath);
-
-
-        //find the skyline hotels of the whole dataset.
-        sky.findSkyline();
-        this.sky_hotel = new ArrayList<>(sky.sky_hotels);
-
-        //Find the hotels that aren't dominated by the query point
         long r1 = System.currentTimeMillis();
         sky.BBS(queryD);
-        long bbs_rt = System.currentTimeMillis() - r1;
         sNodes = sky.skylineStaticNodes;
-        sb.append(this.sNodes.size() + " " + this.sky_hotel.size() + " ");
+
+        long sk_counter = 0;
+
+        long bbs_rt = System.currentTimeMillis() - r1;
+
+
         for (Data d : sNodes) {
             double[] c = new double[constants.path_dimension + 3];
             c[0] = d.distance_q;
@@ -94,43 +100,26 @@ public class AstarApproximate {
             }
         }
 
-        sb.append(this.skyPaths.size() + " ");
-
-        NearbyObjects nb = new NearbyObjects(this.graph_size, this.degree, this.range, this.hotels_num);
-        this.nearbyList = nb.getNearbyList();
-
-        connector n = new connector(graphPath);
-//        System.out.println(graphPath);
+        long db_time = System.currentTimeMillis();
+        connector n = new connector(this.graphPath);
         n.startDB();
         this.graphdb = n.getDBObject();
 
-        long rr = System.currentTimeMillis();
-        for (Data d : this.sNodes) {
-//            if (nearbyList.containsKey(d.getPlaceId()) && d.getPlaceId() != queryD.getPlaceId()) {
-//            if (d.getPlaceId() != queryD.getPlaceId()) {
-            queryResultSourceDestination(queryD, d);
-//                break;
-//            }
-        }
 
-        List<Result> sortedList = new ArrayList(this.skyPaths);
-        Collections.sort(sortedList);
-        for (Result r : sortedList) {
-            this.finalDatas.add(r.end);
-        }
+        //this.skyPaths.add(new double[]{0, 0, 0, 0, 1.4886183, 0.01591295, 2.2001169});
 
-        sb.append((System.currentTimeMillis() - rr) + " " + finalDatas.size() + " " + this.skyPaths.size());
+        long counter = 0;
+        long addResult_rt = 0;
+        long expasion_rt = 0;
 
-        n.shutdownDB();
 
-        System.out.println(sb);
-    }
-
-    private void queryResultSourceDestination(Data queryD, Data d) {
-        this.tmpStoreNodes.clear();
-        double d_distance_lower = getwaklingLowerBound(d);
         try (Transaction tx = this.graphdb.beginTx()) {
+            db_time = System.currentTimeMillis() - db_time;
+            r1 = System.currentTimeMillis();
             Node startNode = nearestNetworkNode(queryD);
+
+            long nn_rt = System.currentTimeMillis() - r1;
+
             long rt = System.currentTimeMillis();
 
             myNode s = new myNode(queryD, startNode.getId(), this.distance_threshold);
@@ -138,13 +127,14 @@ public class AstarApproximate {
             myNodePriorityQueue mqueue = new myNodePriorityQueue();
             mqueue.add(s);
 
-            tmpStoreNodes.put(s.id, s);
+            this.tmpStoreNodes.put(s.id, s);
 
             while (!mqueue.isEmpty()) {
 
                 myNode v = mqueue.pop();
                 v.inqueue = false;
 
+                counter++;
 
                 for (int i = 0; i < v.skyPaths.size(); i++) {
                     path p = v.skyPaths.get(i);
@@ -153,30 +143,25 @@ public class AstarApproximate {
                     if (!p.expaned) {
                         p.expaned = true;
 
-
                         long ee = System.nanoTime();
                         ArrayList<path> new_paths = p.expand();
+                        expasion_rt += (System.nanoTime() - ee);
                         for (path np : new_paths) {
-
-                            if (!Expended(np, d, d_distance_lower)) {
-                                continue;
+//                            if (!np.hasCycle()) {
+                            myNode next_n;
+                            if (this.tmpStoreNodes.containsKey(np.endNode)) {
+                                next_n = tmpStoreNodes.get(np.endNode);
+                            } else {
+                                next_n = new myNode(queryD, np.endNode, this.distance_threshold);
+                                this.tmpStoreNodes.put(next_n.id, next_n);
                             }
 
-                            if (!np.hasCycle()) {
-                                myNode next_n;
-                                if (tmpStoreNodes.containsKey(np.endNode)) {
-                                    next_n = tmpStoreNodes.get(np.endNode);
-                                } else {
-                                    next_n = new myNode(queryD, np.endNode, this.distance_threshold);
-                                    tmpStoreNodes.put(next_n.id, next_n);
-                                }
-
-                                if (next_n.addToSkyline(np) && !next_n.inqueue) {
-                                    mqueue.add(next_n);
-                                    next_n.inqueue = true;
-                                }
+                            if (next_n.addToSkyline(np) && !next_n.inqueue) {
+                                mqueue.add(next_n);
+                                next_n.inqueue = true;
                             }
                         }
+//                        }
                     }
                 }
             }
@@ -184,15 +169,30 @@ public class AstarApproximate {
             long exploration_rt = System.currentTimeMillis() - rt;
 //            System.out.println("expansion finished " + exploration_rt);
 
-            for (Map.Entry<Long, myNode> mm : tmpStoreNodes.entrySet()) {
+            for (Map.Entry<Long, myNode> mm : this.tmpStoreNodes.entrySet()) {
+                sk_counter += mm.getValue().skyPaths.size();
                 for (path np : mm.getValue().skyPaths) {
-                    addToSkylineResult(np, d, queryD);
+                    addToSkylineResult(np, queryD);
                 }
             }
 
+            sb.append(bbs_rt + "," + nn_rt + "," + exploration_rt + ",");
+
             tx.success();
         }
+
+        List<Result> sortedList = new ArrayList(this.skyPaths);
+        Collections.sort(sortedList);
+        for (Result r : sortedList) {
+            this.finalDatas.add(r.end);
+        }
+
+        sb.append(" " + finalDatas.size() + "  " + skyPaths.size());
+        n.shutdownDB();
+
+        System.out.println(sb);
     }
+
 
     private boolean addToSkylineResult(path np, Data queryD) {
         long r2a = System.nanoTime();
@@ -234,113 +234,6 @@ public class AstarApproximate {
         }
 
         return flag;
-    }
-
-    private boolean addToSkylineResult(path np, Data d, Data queryD) {
-        boolean flag = false;
-
-        myNode my_endNode = this.tmpStoreNodes.get(np.endNode);
-        if (d.getPlaceId() == queryD.getPlaceId()) {
-            return true;
-        }
-
-        double[] final_costs = new double[np.costs.length + 3];
-        System.arraycopy(np.costs, 0, final_costs, 0, np.costs.length);
-        double end_distance = Math.sqrt(Math.pow(my_endNode.locations[0] - d.location[0], 2) + Math.pow(my_endNode.locations[1] - d.location[1], 2));
-
-        final_costs[0] += end_distance;
-
-        if (final_costs[0] < d.distance_q && end_distance < this.distance_threshold) {
-            double[] d_attrs = d.getData();
-            for (int i = 4; i < final_costs.length; i++) {
-                final_costs[i] = d_attrs[i - 4];
-            }
-
-            Result r = new Result(queryD, d, final_costs, np);
-
-
-            boolean t = addToSkyline(r);
-            if (!flag && t) {
-                flag = true;
-            }
-        }
-
-
-        return flag;
-
-    }
-
-    private double getwaklingLowerBound(Data d) {
-        int placeid = d.getPlaceId();
-        ArrayList<Integer> nearByNodeId = this.nearbyList.get(placeid);
-
-        double result = Double.MAX_VALUE;
-        try (Transaction tx = this.graphdb.beginTx()) {
-            for (int nid : nearByNodeId) {
-//                System.out.println("     " + nid + " " + placeid);
-                double n_lat = (double) this.graphdb.getNodeById(nid).getProperty("lat");
-                double n_long = (double) this.graphdb.getNodeById(nid).getProperty("log");
-                double n_dist = Math.sqrt(Math.pow(n_lat - d.location[0], 2) + Math.pow(n_long - d.location[1], 2));
-                if (n_dist < result) {
-                    result = n_dist;
-                }
-
-            }
-            tx.success();
-        }
-
-        return result;
-    }
-
-    private boolean Expended(path p, Data d, double walking_lowerbound) {
-
-        int placeid = d.getPlaceId();
-        ArrayList<Integer> nearByNodeId = this.nearbyList.get(placeid);
-
-
-        double[] lowerbound = new double[7];
-        lowerbound[0] = walking_lowerbound;
-        lowerbound[4] = d.getData()[0];
-        lowerbound[5] = d.getData()[1];
-        lowerbound[6] = d.getData()[2];
-//        System.out.println(" ~~~~ " + lowerbound[4] + " " + lowerbound[5] + " " + lowerbound[6] + " " + lowerbound[0]);
-
-        for (int i = 1; i < 4; i++) {
-            lowerbound[i] = Double.POSITIVE_INFINITY;
-        }
-
-
-        for (int nid : nearByNodeId) {
-            double[] tmp_lowerbound = lmi.readLandMark(p.endNode, nid);
-            for (int i = 0; i < 3; i++) {
-                if (tmp_lowerbound[i] < lowerbound[i + 1]) {
-                    lowerbound[i + 1] = tmp_lowerbound[i];
-                }
-            }
-        }
-
-//        System.out.println(" ~~~~ " + " " + lowerbound[0] + " " + lowerbound[1] + " " + lowerbound[2] + " " + lowerbound[3] + lowerbound[4] + " " + lowerbound[5] + " " + lowerbound[6]);
-
-
-        for (int i = 0; i < 4; i++) {
-            lowerbound[i] = p.costs[i] + lowerbound[i];
-
-        }
-
-        return !checkDominatedInResults(lowerbound);
-//        return false;
-
-    }
-
-    private boolean checkDominatedInResults(double[] lowerbound) {
-        boolean result = false;
-        for (Result r : this.skyPaths) {
-            if (checkDominated(r.costs, lowerbound)) {
-                return true;
-            }
-        }
-
-        return result;
     }
 
     public boolean addToSkyline(Result r) {

@@ -6,7 +6,6 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
-import testTools.GoogleMaps;
 
 import java.util.*;
 
@@ -267,7 +266,6 @@ public class BaseMethod1 {
 
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
-
             if (r.p != null) {
                 for (Long nn : r.p.nodes) {
                     final_bus_stops.add(nn);

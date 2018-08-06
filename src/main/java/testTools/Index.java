@@ -89,10 +89,10 @@ public class Index {
 
 
         this.num_nodes = getLineNumbers();
-        System.out.println(this.home_folder);
-        System.out.println(this.source_data_tree);
-        System.out.println(this.neo4j_db);
-        System.out.println(node_info_path);
+//        System.out.println(this.home_folder);
+//        System.out.println(this.source_data_tree);
+//        System.out.println(this.neo4j_db);
+//        System.out.println(node_info_path);
 
         this.pagesize_list = 1024;
 
@@ -151,7 +151,7 @@ public class Index {
         } else {
 
             if (g_str == null) {
-                graph_size = 60000;
+                graph_size = 200000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -169,7 +169,7 @@ public class Index {
             }
 
             if (r_str == null) {
-                range = 2;
+                range = 1.2;
             } else {
                 range = Double.parseDouble(r_str);
             }
