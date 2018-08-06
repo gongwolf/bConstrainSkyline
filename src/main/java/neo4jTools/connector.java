@@ -51,7 +51,7 @@ public class connector {
         n.shutdownDB();
     }
 
-    private long getNumberofEdges() {
+    public long getNumberofEdges() {
         long result = 0;
         try (Transaction tx = this.graphDB.beginTx()) {
             ResourceIterable<Relationship> r = this.graphDB.getAllRelationships();
@@ -233,4 +233,6 @@ public class connector {
         this.shutdownDB();
         this.startBD_without_getProperties();
     }
+
+
 }

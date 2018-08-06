@@ -152,6 +152,8 @@ public class BaseMethod_approx {
             dominated_checking.put(cand_d.getPlaceId(), h_to_h_dist);
         }
 
+        sb.append(this.skyPaths.size()+" ");
+
 //        System.out.println("==========" + this.skyPaths.size());
 
         int visited_bus_stop = 0;
