@@ -160,8 +160,8 @@ public class BaseMethod5 {
                 threshold = Double.parseDouble(t_str);
             }
 
-//            int[] id_list = new int[]{462,472,791};
-            Data[] queryList = new Data[query_num];
+            int[] id_list = new int[]{61,843,541,548,14};
+            Data[] queryList = new Data[id_list.length];
 //            int[] random_id = new int[]{8883, 5080, 5120, 5175, 4032, 4090, 5073, 8935, 5140, 9358, 5088, 5159};
 //            query_num = random_id.length;
 
@@ -169,7 +169,7 @@ public class BaseMethod5 {
                 BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
                 int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
 
-                Data queryD = bm5.getDataById(random_place_id);
+                Data queryD = bm5.getDataById(id_list[i]);
 //                bm5.nearestNetworkNode(queryD);
 //                double distance = bm5.nn_dist;
 //                while (distance > 1000) {
@@ -181,12 +181,12 @@ public class BaseMethod5 {
             }
 
 
-            for (int i = 0; i < query_num; i++) {
-
-                BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
-////                BaseMethod1 bMethod = new BaseMethod1("NY");
-                bMethod.baseline(queryList[i]);
-            }
+//            for (int i = 0; i < query_num; i++) {
+//
+//                BaseMethod1 bMethod = new BaseMethod1(graph_size, degree, threshold, range, hotels_num);
+//////                BaseMethod1 bMethod = new BaseMethod1("NY");
+//                bMethod.baseline(queryList[i]);
+//            }
 
             System.out.println("=================================");
 
