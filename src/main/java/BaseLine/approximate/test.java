@@ -47,7 +47,7 @@ public class test {
         } else {
 
             if (g_str == null) {
-                graph_size = 200000;
+                graph_size = 1000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -59,7 +59,7 @@ public class test {
             }
 
             if (qn_str == null) {
-                query_num = 3;
+                query_num = 10;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
@@ -71,7 +71,7 @@ public class test {
             }
 
             if (r_str == null) {
-                range = 1.2;
+                range = 14;
             } else {
                 range = Integer.parseInt(r_str);
             }

@@ -14,13 +14,14 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
 
 public class LandMarkIndex {
 
-    private String graphDB_path=null;
+    private String graphDB_path = null;
     String graphpath;
-    private  Random r=null;
+    private Random r = null;
     int graph_size;
     int degree;
     int landmarkNumber;
@@ -28,6 +29,7 @@ public class LandMarkIndex {
 
     private ArrayList<String> property_names;
     public String landmark_folder;
+    private HashMap<Integer, HashMap<Integer, double[]>> landmark=new HashMap<>();  //ref_node_id -> hashmap<node_id, un_directional shortest distances from ref node to node id>
 //    private ArrayList<Integer> RefNodes;
 
 
@@ -46,7 +48,7 @@ public class LandMarkIndex {
         this.graph_size = graph_size;
         this.graphpath = "/home/gqxwolf/mydata/projectData/testGraph" + graph_size + "_" + degree + "/data/";
         this.landmark_folder = graphpath + "landmarks/";
-        System.out.println(this.graphpath);
+//        System.out.println(this.graphpath);
         this.getRefNodes();
     }
 
@@ -155,7 +157,7 @@ public class LandMarkIndex {
 
 
     public static void main(String args[]) {
-        LandMarkIndex lmi = new LandMarkIndex(1000, 4, 10);
+        LandMarkIndex lmi = new LandMarkIndex(10000, 4, 3);
         lmi.buildIndex();
         lmi.getRefNodes();
         lmi.readLandMark(1, 83);
@@ -197,7 +199,6 @@ public class LandMarkIndex {
                     }
 
 
-
                     if (abs_value > lowerbound[i] && sTol != -2 && lToe != -2) {
                         lowerbound[i] = abs_value;
                     }
@@ -225,4 +226,62 @@ public class LandMarkIndex {
 
         return lowerbound;
     }
+
+
+    public void loadLandMarkToMem() {
+        System.out.println(this.landmark_folder);
+        for (int ref_node : this.refNodes) {
+            String spe_landmark_index_file = this.landmark_folder + ref_node + ".lmk";
+            try {
+                HashMap<Integer, double[]> landmarks_info = new HashMap<>();
+                RandomAccessFile file = new RandomAccessFile(spe_landmark_index_file, "r");
+                for (int i = 0; i < this.graph_size; i++) {
+                    double d1 = file.readDouble();
+                    double d2 = file.readDouble();
+                    double d3 = file.readDouble();
+                    landmarks_info.put(i, new double[]{d1, d2, d3});
+                }
+
+                this.landmark.put(ref_node, landmarks_info);
+                file.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public double[] readLandMark_Memory(int snode, int enode) {
+        double lowerbound[] = new double[3];
+        for (int i = 0; i < lowerbound.length; i++) {
+            lowerbound[i] = Double.NEGATIVE_INFINITY;
+        }
+
+        for (int landmark : this.refNodes) {
+            double[] stol = this.landmark.get(landmark).get(snode);
+            double[] ltoe = this.landmark.get(landmark).get(enode);
+            for (int i = 0; i < lowerbound.length; i++) {
+                double abs_value = Math.abs(stol[i] - ltoe[i]);
+
+                if (stol[i] == -1) {
+                    abs_value = Math.abs(ltoe[i]);
+                } else if (ltoe[i] == -1) {
+                    abs_value = Math.abs(stol[i]);
+                }
+
+                if (abs_value > lowerbound[i] && stol[i] != -2 && ltoe[i] != -2) {
+                    lowerbound[i] = abs_value;
+                }
+            }
+//                System.out.println("\n-------------------------------------------_");
+        }
+
+//        System.out.println(lowerbound[0] + " " + lowerbound[1] + " " + lowerbound[2] + " ");
+
+
+        return lowerbound;
+    }
+
 }

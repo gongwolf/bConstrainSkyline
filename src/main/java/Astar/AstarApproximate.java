@@ -2,6 +2,7 @@ package Astar;
 
 import BaseLine.*;
 import BaseLine.approximate.range.BaseMethod_approx;
+import BaseLine.approximate.range.BaseMethod_approx_index;
 import RstarTree.Data;
 import neo4jTools.connector;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -45,20 +46,32 @@ public class AstarApproximate {
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
         this.distance_threshold = range;
         lmi = new LandMarkIndex(graph_size, degree);
+        lmi.loadLandMarkToMem();
     }
 
     public static void main(String args[]) {
-        for (int i = 0; i < 3; i++) {
-            AstarApproximate asa = new AstarApproximate(1000, "4", 14, 1000);
+        int graphsize = 10000;
+        String degree = "4";
+        double range = 4;
+        int hotel_num = 1000;
 
-            BaseMethod5 bm5 = new BaseMethod5(1000, "4", 14, 1000);
+        for (int i = 0; i < 3; i++) {
+
+            BaseMethod5 bm5 = new BaseMethod5(graphsize, degree, range, hotel_num);
             int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
             Data queryD = bm5.getDataById(random_place_id);
+
+            AstarApproximate asa = new AstarApproximate(graphsize, degree, range, hotel_num);
             asa.baseline(queryD);
 
 
-            BaseMethod_approx bs_approx = new BaseMethod_approx(1000, "4", 14, 14, 1000);
+            testAll tsa = new testAll(graphsize, degree, range, hotel_num);
+            tsa.baseline(queryD);
+
+            BaseMethod_approx bs_approx = new BaseMethod_approx(graphsize, degree, range, range, hotel_num);
             bs_approx.baseline(queryD);
+//            BaseMethod_approx_index bs_approx_idx = new BaseMethod_approx_index(1000, "4", 14, 14, 1000);
+//            bs_approx_idx.baseline(queryD);
             System.out.println("=================================");
         }
     }
@@ -105,12 +118,15 @@ public class AstarApproximate {
         this.graphdb = n.getDBObject();
 
         long rr = System.currentTimeMillis();
+        int i = 0;
         for (Data d : this.sNodes) {
 //            if (nearbyList.containsKey(d.getPlaceId()) && d.getPlaceId() != queryD.getPlaceId()) {
-//            if (d.getPlaceId() != queryD.getPlaceId()) {
-            queryResultSourceDestination(queryD, d);
+            if (d.getPlaceId() != queryD.getPlaceId()) {
+                long rrrr = System.currentTimeMillis();
+                queryResultSourceDestination(queryD, d);
+//                System.out.println(i++ + " " + d.getPlaceId() + "   " + (System.currentTimeMillis() - rrrr));
 //                break;
-//            }
+            }
         }
 
         List<Result> sortedList = new ArrayList(this.skyPaths);
@@ -127,6 +143,8 @@ public class AstarApproximate {
     }
 
     private void queryResultSourceDestination(Data queryD, Data d) {
+
+        d.distance_q = Math.sqrt(Math.pow(queryD.location[0] - d.location[0], 2) + Math.pow(queryD.location[1] - d.location[1], 2));
         this.tmpStoreNodes.clear();
         double d_distance_lower = getwaklingLowerBound(d);
         try (Transaction tx = this.graphdb.beginTx()) {
@@ -171,9 +189,11 @@ public class AstarApproximate {
                                     tmpStoreNodes.put(next_n.id, next_n);
                                 }
 
-                                if (next_n.addToSkyline(np) && !next_n.inqueue) {
-                                    mqueue.add(next_n);
-                                    next_n.inqueue = true;
+                                if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
+                                    if (next_n.addToSkyline(np) && !next_n.inqueue) {
+                                        mqueue.add(next_n);
+                                        next_n.inqueue = true;
+                                    }
                                 }
                             }
                         }
@@ -182,14 +202,16 @@ public class AstarApproximate {
             }
 
             long exploration_rt = System.currentTimeMillis() - rt;
-//            System.out.println("expansion finished " + exploration_rt);
 
-            for (Map.Entry<Long, myNode> mm : tmpStoreNodes.entrySet()) {
-                for (path np : mm.getValue().skyPaths) {
-                    addToSkylineResult(np, d, queryD);
+            for (int dest_stop_id : this.nearbyList.get(d.getPlaceId())) {
+                myNode mm = tmpStoreNodes.get((long) dest_stop_id);
+                if (mm != null) {
+                    for (path np : mm.skyPaths) {
+                        addToSkylineResult(np, d, queryD);
+//                    addToSkylineResult(np, queryD);
+                    }
                 }
             }
-
             tx.success();
         }
     }
@@ -274,7 +296,7 @@ public class AstarApproximate {
         int placeid = d.getPlaceId();
         ArrayList<Integer> nearByNodeId = this.nearbyList.get(placeid);
 
-        double result = Double.MAX_VALUE;
+        double result = Double.POSITIVE_INFINITY;
         try (Transaction tx = this.graphdb.beginTx()) {
             for (int nid : nearByNodeId) {
 //                System.out.println("     " + nid + " " + placeid);
@@ -303,7 +325,6 @@ public class AstarApproximate {
         lowerbound[4] = d.getData()[0];
         lowerbound[5] = d.getData()[1];
         lowerbound[6] = d.getData()[2];
-//        System.out.println(" ~~~~ " + lowerbound[4] + " " + lowerbound[5] + " " + lowerbound[6] + " " + lowerbound[0]);
 
         for (int i = 1; i < 4; i++) {
             lowerbound[i] = Double.POSITIVE_INFINITY;
@@ -311,21 +332,18 @@ public class AstarApproximate {
 
 
         for (int nid : nearByNodeId) {
-            double[] tmp_lowerbound = lmi.readLandMark(p.endNode, nid);
+            double[] tmp_lowerbound = lmi.readLandMark_Memory((int) p.endNode, nid);
             for (int i = 0; i < 3; i++) {
                 if (tmp_lowerbound[i] < lowerbound[i + 1]) {
                     lowerbound[i + 1] = tmp_lowerbound[i];
                 }
             }
         }
-
-//        System.out.println(" ~~~~ " + " " + lowerbound[0] + " " + lowerbound[1] + " " + lowerbound[2] + " " + lowerbound[3] + lowerbound[4] + " " + lowerbound[5] + " " + lowerbound[6]);
-
-
         for (int i = 0; i < 4; i++) {
             lowerbound[i] = p.costs[i] + lowerbound[i];
-
         }
+//        System.out.println(p);
+//        System.out.println(" ~~~~ "+ " " + lowerbound[0]+ " " + lowerbound[1]+ " " + lowerbound[2]+ " " + lowerbound[3]+" " + lowerbound[4] + " " + lowerbound[5] + " " + lowerbound[6] );
 
         return !checkDominatedInResults(lowerbound);
 //        return false;

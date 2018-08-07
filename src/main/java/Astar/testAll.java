@@ -46,24 +46,24 @@ public class testAll {
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_" + this.graph_size + "_" + this.degree + "_" + range + "_" + hotels_num + ".txt";
         this.distance_threshold = range;
         lmi = new LandMarkIndex(graph_size, degree);
-        System.out.println(this.distance_threshold);
+//        System.out.println(this.distance_threshold);
     }
 
     public static void main(String args[]) {
         for (int i = 0; i < 1; i++) {
 
-            BaseMethod5 bm5 = new BaseMethod5(1000, "4", 14, 1000);
+            BaseMethod5 bm5 = new BaseMethod5(10000, "4", 6, 1000);
             int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
             Data queryD = bm5.getDataById(random_place_id);
 
-            testAll tsa = new testAll(1000, "4", 14, 1000);
+            testAll tsa = new testAll(10000, "4", 6, 1000);
             tsa.baseline(queryD);
 
-            BaseMethod_approx bs_approx = new BaseMethod_approx(1000, "4", 14, 14, 1000);
+            BaseMethod_approx bs_approx = new BaseMethod_approx(10000, "4", 6, 6, 1000);
             bs_approx.baseline(queryD);
 
-            BaseMethod_approx_index bs_approx_idx = new BaseMethod_approx_index(1000, "4", 14, 14, 1000);
-            bs_approx_idx.baseline(queryD);
+//            BaseMethod_approx_index bs_approx_idx = new BaseMethod_approx_index(10000, "4", 6, 6, 1000);
+//            bs_approx_idx.baseline(queryD);
             System.out.println("=================================");
         }
     }
@@ -149,6 +149,7 @@ public class testAll {
                         for (path np : new_paths) {
 //                            if (!np.hasCycle()) {
                             myNode next_n;
+
                             if (this.tmpStoreNodes.containsKey(np.endNode)) {
                                 next_n = tmpStoreNodes.get(np.endNode);
                             } else {
@@ -156,12 +157,14 @@ public class testAll {
                                 this.tmpStoreNodes.put(next_n.id, next_n);
                             }
 
-                            if (next_n.addToSkyline(np) && !next_n.inqueue) {
-                                mqueue.add(next_n);
-                                next_n.inqueue = true;
+
+                            if (!(this.tmpStoreNodes.get(np.startNode).distance_q > next_n.distance_q)) {
+                                if (next_n.addToSkyline(np) && !next_n.inqueue) {
+                                    mqueue.add(next_n);
+                                    next_n.inqueue = true;
+                                }
                             }
                         }
-//                        }
                     }
                 }
             }
