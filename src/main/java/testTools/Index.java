@@ -151,7 +151,7 @@ public class Index {
         } else {
 
             if (g_str == null) {
-                graph_size = 1000;
+                graph_size = 50000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -169,7 +169,7 @@ public class Index {
             }
 
             if (r_str == null) {
-                range = 14;
+                range = 2;
             } else {
                 range = Double.parseDouble(r_str);
             }

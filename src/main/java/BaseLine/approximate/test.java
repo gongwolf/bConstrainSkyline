@@ -47,7 +47,7 @@ public class test {
         } else {
 
             if (g_str == null) {
-                graph_size = 1000;
+                graph_size = 50000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -71,7 +71,7 @@ public class test {
             }
 
             if (r_str == null) {
-                range = 14;
+                range = 2;
             } else {
                 range = Integer.parseInt(r_str);
             }
@@ -163,7 +163,7 @@ public class test {
     public void testing(int graph_size, String degree, double range, int hotels_num, Data queryD) {
 
 
-//        BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
+        BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
         BaseMethod_approx bs_approx = new BaseMethod_approx(graph_size, degree, range, range, hotels_num);
         BaseMethod_approx_index bs_approx_index = new BaseMethod_approx_index(graph_size, degree, range, range, hotels_num);
 
@@ -171,7 +171,7 @@ public class test {
         BaseMethod_mixed bs_mix = new BaseMethod_mixed(graph_size, degree, range, range, hotels_num);
         BaseMethod_mixed_index bs_mix_index = new BaseMethod_mixed_index(graph_size, degree, range, range, hotels_num);
 
-//        bm5.baseline(queryD);
+        bm5.baseline(queryD);
         bs_approx.baseline(queryD);
         bs_approx_index.baseline(queryD);
         bs_sub.baseline(queryD);
@@ -179,20 +179,21 @@ public class test {
         bs_mix_index.baseline(queryD);
 
 
-//        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos"));
-//        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos", 10));
-//        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos", 100));
+        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos"));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos", 10));
+        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos", 100));
 
 
-//        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos"));
-//        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 10));
-//        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 100));
-//
-//
-//        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos"));
-//        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 10));
-//        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 100));
-//        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "edu");
+        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos"));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 10));
+        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_sub.skyPaths, "cos", 100));
+
+
+        System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos"));
+        System.out.print(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 10));
+        System.out.println(" " + testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_mix.skyPaths, "cos", 100));
+
+//          testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "edu");
 ////        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos");
 ////        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx_index.skyPaths, "edu");
 //        testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx_index.skyPaths, "cos");
