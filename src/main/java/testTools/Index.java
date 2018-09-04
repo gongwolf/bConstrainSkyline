@@ -87,6 +87,8 @@ public class Index {
             this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/NodeInfo.txt";
         }
 
+//        System.out.println(home_folder);
+
 
         this.num_nodes = getLineNumbers();
 //        System.out.println(this.home_folder);
@@ -141,7 +143,7 @@ public class Index {
         String de_str = cmd.getOptionValue("de");
         String hn_str = cmd.getOptionValue("hn");
         String r_str = cmd.getOptionValue("r");
-        String t_str = cmd.getOptionValue("y");
+        String t_str = cmd.getOptionValue("t");
 
 
         if (cmd.hasOption("h")) {
@@ -151,7 +153,7 @@ public class Index {
         } else {
 
             if (g_str == null) {
-                graph_size = 50000;
+                graph_size = 10000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -169,13 +171,14 @@ public class Index {
             }
 
             if (r_str == null) {
-                range = 2;
+                range = 4;
             } else {
                 range = Double.parseDouble(r_str);
             }
 
             if (t_str == null) {
                 distance_thresholds = range;
+//                distance_thresholds = -1;
             } else {
                 distance_thresholds = Double.parseDouble(t_str);
             }

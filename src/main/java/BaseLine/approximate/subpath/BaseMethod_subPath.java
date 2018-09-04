@@ -114,6 +114,9 @@ public class BaseMethod_subPath {
 
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
+        connector.graphDB=null;
+        constants.accessedEdges.clear();
+        constants.accessedNodes.clear();
         connector n = new connector(graphPath);
         n.startDB();
         this.graphdb = n.getDBObject();
@@ -345,11 +348,11 @@ public class BaseMethod_subPath {
 
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 

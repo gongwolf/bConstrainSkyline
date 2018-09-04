@@ -19,17 +19,16 @@ import java.util.Random;
 
 public class LandMarkIndex {
 
-    private String graphDB_path = null;
+    public String landmark_folder;
     String graphpath;
-    private Random r = null;
     int graph_size;
     int degree;
     int landmarkNumber;
+    private String graphDB_path = null;
+    private Random r = null;
     private ArrayList<Integer> refNodes;
-
     private ArrayList<String> property_names;
-    public String landmark_folder;
-    private HashMap<Integer, HashMap<Integer, double[]>> landmark=new HashMap<>();  //ref_node_id -> hashmap<node_id, un_directional shortest distances from ref node to node id>
+    private HashMap<Integer, HashMap<Integer, double[]>> landmark = new HashMap<>();  //ref_node_id -> hashmap<node_id, un_directional shortest distances from ref node to node id>
 //    private ArrayList<Integer> RefNodes;
 
 
@@ -52,6 +51,16 @@ public class LandMarkIndex {
         this.getRefNodes();
     }
 
+    public static void main(String args[]) {
+        int nodes[] = {10000};
+        for (int gs : nodes) {
+            LandMarkIndex lmi = new LandMarkIndex(gs, 4, 4);
+            lmi.buildIndex();
+            lmi.getRefNodes();
+            double[] lb = lmi.readLandMark(1, 83);
+            System.out.println(lb[0] + " " + lb[1] + " " + lb[2]);
+        }
+    }
 
     public void buildIndex() {
         try {
@@ -155,14 +164,6 @@ public class LandMarkIndex {
         return r.nextInt((max - min) + 1) + min;
     }
 
-
-    public static void main(String args[]) {
-        LandMarkIndex lmi = new LandMarkIndex(10000, 4, 3);
-        lmi.buildIndex();
-        lmi.getRefNodes();
-        lmi.readLandMark(1, 83);
-    }
-
     private void getRefNodes() {
         File f = new File(this.landmark_folder);
         this.refNodes = new ArrayList<>();
@@ -176,6 +177,11 @@ public class LandMarkIndex {
 
     public double[] readLandMark(long snode, int enode) {
         double lowerbound[] = new double[3];
+
+        if (snode == enode) {
+            return lowerbound;
+        }
+
         for (int i = 0; i < lowerbound.length; i++) {
             lowerbound[i] = Double.NEGATIVE_INFINITY;
         }
@@ -229,7 +235,7 @@ public class LandMarkIndex {
 
 
     public void loadLandMarkToMem() {
-        System.out.println(this.landmark_folder);
+        //System.out.println(this.landmark_folder);
         for (int ref_node : this.refNodes) {
             String spe_landmark_index_file = this.landmark_folder + ref_node + ".lmk";
             try {
@@ -254,11 +260,15 @@ public class LandMarkIndex {
 
 
     public double[] readLandMark_Memory(int snode, int enode) {
+
+
         double lowerbound[] = new double[3];
         for (int i = 0; i < lowerbound.length; i++) {
             lowerbound[i] = Double.NEGATIVE_INFINITY;
         }
-
+        if (snode == enode) {
+            return lowerbound;
+        }
         for (int landmark : this.refNodes) {
             double[] stol = this.landmark.get(landmark).get(snode);
             double[] ltoe = this.landmark.get(landmark).get(enode);

@@ -133,6 +133,7 @@ public class connector {
     public void shutdownDB() {
         //System.out.println("Shut downing....");
         this.graphDB.shutdown();
+        this.graphDB=null;
     }
 
     public void clean() {

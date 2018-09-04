@@ -33,6 +33,7 @@ public class AstarApproximate {
     private HashMap<Integer, ArrayList<Integer>> nearbyList;
     private HashSet<Data> finalDatas = new HashSet<>();
     private double nn_dist;
+    long sky_add_result_counter=0;
 
 
     public AstarApproximate(int graph_size, String degree, double range, int hotels_num) {
@@ -50,29 +51,41 @@ public class AstarApproximate {
     }
 
     public static void main(String args[]) {
-        int graphsize = 10000;
-        String degree = "4";
-        double range = 4;
-        int hotel_num = 1000;
+//        int[] graphs= new int[]{1000,2000,4000,6000,8000,10000};
+//        double[] ranges= new double[]{14,12,10,8,6,4};
 
-        for (int i = 0; i < 3; i++) {
+        int[] graphs= new int[]{10000};
+        double[] ranges= new double[]{6};
+        int[] hotels_nums=new int[]{30000};
 
-            BaseMethod5 bm5 = new BaseMethod5(graphsize, degree, range, hotel_num);
-            int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
-            Data queryD = bm5.getDataById(random_place_id);
+        for(int j = 0 ; j < hotels_nums.length ; j++) {
+            int graphsize = graphs[0];
+            String degree = "4";
+            double range = ranges[0];
+            int hotel_num = hotels_nums[j];
 
-            AstarApproximate asa = new AstarApproximate(graphsize, degree, range, hotel_num);
-            asa.baseline(queryD);
+            System.out.println(graphsize+" "+degree+" "+range+" "+hotel_num);
+            for (int i = 0; i < 6; i++) {
 
+                BaseMethod5 bm5 = new BaseMethod5(graphsize, degree, range, hotel_num);
+                int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+                Data queryD = bm5.getDataById(random_place_id);
 
-            testAll tsa = new testAll(graphsize, degree, range, hotel_num);
-            tsa.baseline(queryD);
+                AstarApproximate asa = new AstarApproximate(graphsize, degree, range, hotel_num);
+                asa.baseline(queryD);
 
-            BaseMethod_approx bs_approx = new BaseMethod_approx(graphsize, degree, range, range, hotel_num);
-            bs_approx.baseline(queryD);
-//            BaseMethod_approx_index bs_approx_idx = new BaseMethod_approx_index(1000, "4", 14, 14, 1000);
-//            bs_approx_idx.baseline(queryD);
-            System.out.println("=================================");
+                BaseMethod1 bMethod = new BaseMethod1(graphsize, degree, range, range, hotel_num);
+                bMethod.baseline(queryD);
+
+                BaseMethod5 all_lemmas = new BaseMethod5(graphsize, degree, range, hotel_num);
+                all_lemmas.baseline(queryD);
+
+                BaseMethod_approx bs_approx = new BaseMethod_approx(graphsize, degree, range, range, hotel_num);
+                bs_approx.baseline(queryD);
+
+                System.out.println("=================================");
+            }
+            System.out.println("--------------------------------------------------------------");
         }
     }
 
@@ -135,7 +148,7 @@ public class AstarApproximate {
             this.finalDatas.add(r.end);
         }
 
-        sb.append((System.currentTimeMillis() - rr) + " " + finalDatas.size() + " " + this.skyPaths.size());
+        sb.append(" | "+(System.currentTimeMillis() - rr) +" | "+this.sky_add_result_counter+ " " + finalDatas.size() + " " + this.skyPaths.size());
 
         n.shutdownDB();
 
@@ -208,7 +221,6 @@ public class AstarApproximate {
                 if (mm != null) {
                     for (path np : mm.skyPaths) {
                         addToSkylineResult(np, d, queryD);
-//                    addToSkylineResult(np, queryD);
                     }
                 }
             }
@@ -280,8 +292,8 @@ public class AstarApproximate {
 
             Result r = new Result(queryD, d, final_costs, np);
 
-
             boolean t = addToSkyline(r);
+            this.sky_add_result_counter++;
             if (!flag && t) {
                 flag = true;
             }

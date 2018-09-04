@@ -15,8 +15,8 @@ public class path {
     public boolean expaned;
     public long startNode, endNode;
 
-    public ArrayList<Long> nodes;
-    public ArrayList<Long> rels;
+//    public ArrayList<Long> nodes;
+//    public ArrayList<Long> rels;
     public ArrayList<String> propertiesName;
 
 
@@ -29,14 +29,14 @@ public class path {
         this.endNode = current.node;
         this.expaned = false;
 
-        this.nodes = new ArrayList<>();
-        this.rels = new ArrayList<>();
+//        this.nodes = new ArrayList<>();
+//        this.rels = new ArrayList<>();
         this.propertiesName = new ArrayList<>();
 
         this.setPropertiesName();
 
         //store the Long Objects
-        this.nodes.add(getLongObject_Node(this.endNode));
+//        this.nodes.add(getLongObject_Node(this.endNode));
     }
 
     public path(path old_path, Relationship rel) {
@@ -46,23 +46,23 @@ public class path {
         this.endNode = rel.getEndNodeId();
 
 
-        this.nodes = new ArrayList<>();
-        for (long n : old_path.nodes) {
-            this.nodes.add(getLongObject_Node(n));
-        }
-
-        this.rels = new ArrayList<>();
-        for (long e : old_path.rels) {
-            this.rels.add(getLongObject_Edge(e));
-        }
+//        this.nodes = new ArrayList<>();
+//        for (long n : old_path.nodes) {
+//            this.nodes.add(getLongObject_Node(n));
+//        }
+//
+//        this.rels = new ArrayList<>();
+//        for (long e : old_path.rels) {
+//            this.rels.add(getLongObject_Edge(e));
+//        }
 
         this.propertiesName = new ArrayList<>(old_path.propertiesName);
 
 
         expaned = false;
 
-        this.nodes.add(getLongObject_Node(this.endNode));
-        this.rels.add(getLongObject_Edge(rel.getId()));
+//        this.nodes.add(getLongObject_Node(this.endNode));
+//        this.rels.add(getLongObject_Edge(rel.getId()));
 
         System.arraycopy(old_path.costs, 0, this.costs, 0, this.costs.length);
 
@@ -122,18 +122,18 @@ public class path {
     public String toString() {
 //        System.out.println("dasdasd:   "+this.nodes.size()+"  "+this.rels.size());
         StringBuffer sb = new StringBuffer();
-        if (this.rels.isEmpty()) {
-            sb.append("(" + this.startNode + ")");
-        } else {
-            int i;
-            for (i = 0; i < this.nodes.size() - 1; i++) {
-                sb.append("(" + this.nodes.get(i) + ")");
-                // sb.append("-[Linked," + this.relationships.get(i).getId() +
-                // "]->");
-                sb.append("-[" + this.rels.get(i) + "]-");
-            }
-            sb.append("(" + this.nodes.get(i) + ")");
-        }
+//        if (this.rels.isEmpty()) {
+//            sb.append("(" + this.startNode + ")");
+//        } else {
+//            int i;
+//            for (i = 0; i < this.nodes.size() - 1; i++) {
+//                sb.append("(" + this.nodes.get(i) + ")");
+//                // sb.append("-[Linked," + this.relationships.get(i).getId() +
+//                // "]->");
+//                sb.append("-[" + this.rels.get(i) + "]-");
+//            }
+//            sb.append("(" + this.nodes.get(i) + ")");
+//        }
 
         sb.append(",[");
         for (double d : this.costs) {
@@ -212,11 +212,11 @@ public class path {
     }
 
     public boolean hasCycle() {
-        for (int i = 0; i < rels.size() - 2; i++) {
-            if (this.endNode == rels.get(i)) {
-                return true;
-            }
-        }
+//        for (int i = 0; i < rels.size() - 2; i++) {
+//            if (this.endNode == rels.get(i)) {
+//                return true;
+//            }
+//        }
         return false;
     }
 }

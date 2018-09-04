@@ -2,6 +2,7 @@ package BaseLine.approximate;
 
 import BaseLine.BaseMethod1;
 import BaseLine.BaseMethod5;
+import BaseLine.Result;
 import BaseLine.approximate.mixed.BaseMethod_mixed;
 import BaseLine.approximate.mixed.BaseMethod_mixed_index;
 import BaseLine.approximate.range.BaseMethod_approx;
@@ -11,6 +12,9 @@ import RstarTree.Data;
 import neo4jTools.connector;
 import org.apache.commons.cli.*;
 import org.neo4j.graphdb.GraphDatabaseService;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class test {
     public static void main(String args[]) throws ParseException {
@@ -47,7 +51,7 @@ public class test {
         } else {
 
             if (g_str == null) {
-                graph_size = 50000;
+                graph_size = 2000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -59,7 +63,7 @@ public class test {
             }
 
             if (qn_str == null) {
-                query_num = 10;
+                query_num = 4;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
@@ -71,7 +75,7 @@ public class test {
             }
 
             if (r_str == null) {
-                range = 2;
+                range = 12;
             } else {
                 range = Integer.parseInt(r_str);
             }
@@ -85,7 +89,7 @@ public class test {
 
             String home_folder = System.getProperty("user.home");
             String graph = home_folder + "/neo4j334/testdb" + graph_size + "_" + degree + "/databases/graph.db";
-            System.out.println(graph);
+//            System.out.println(graph);
             connector n = new connector(graph);
             n.startDB();
             GraphDatabaseService graphdb = n.getDBObject();
@@ -98,22 +102,24 @@ public class test {
                 Data queryD = bm5.getDataById(random_place_id);
                 bm5.nearestNetworkNode(queryD);
                 double distance = bm5.nn_dist;
-                System.out.println(distance+"    "+range);
                 while (distance > range) {
                     random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
                     queryD = bm5.getDataById(random_place_id);
                     bm5.nearestNetworkNode(queryD);
                     distance = bm5.nn_dist;
                 }
+//                System.out.println(distance+"    "+range);
                 queryList[i] = queryD;
             }
 
             n.shutdownDB();
 
-            for (Data d : queryList) {
-                t.testing(graph_size, degree, range, hotels_num, d);
-                System.out.println("===============================================");
-            }
+//            for (Data d : queryList) {
+//                t.testing(graph_size, degree, range, hotels_num, d);
+//                System.out.println("===============================================");
+//            }
+//
+            NewTesting(queryList,graph_size, degree, range, hotels_num);
 
 
             /**
@@ -159,24 +165,106 @@ public class test {
 
     }
 
+    private static void NewTesting(Data[] queryList, int graph_size, String degree, double range, int hotels_num) {
+
+        ArrayList<ArrayList<Result>> rs_baseline=new ArrayList<>();
+        ArrayList<ArrayList<Result>> rs_range=new ArrayList<>();
+        ArrayList<ArrayList<Result>> rs_sub=new ArrayList<>();
+        ArrayList<ArrayList<Result>> rs_mix=new ArrayList<>();
+        for(Data queryD:queryList)
+        {
+            BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
+            bm5.baseline(queryD);
+            rs_baseline.add(new ArrayList<>(bm5.skyPaths));
+        }
+        System.out.println("===============================================");
+
+
+        for(Data queryD:queryList)
+        {
+            BaseMethod_approx bs_approx = new BaseMethod_approx(graph_size, degree, range, range, hotels_num);
+            bs_approx.baseline(queryD);
+        }
+        System.out.println("===============================================");
+
+
+        for(Data queryD:queryList)
+        {
+            BaseMethod_approx_index bs_approx_index = new BaseMethod_approx_index(graph_size, degree, range, range, hotels_num);
+            bs_approx_index.baseline(queryD);
+            rs_range.add(new ArrayList<>(bs_approx_index.skyPaths));
+        }
+        System.out.println("===============================================");
+
+
+        for(Data queryD:queryList)
+        {
+            BaseMethod_subPath bs_sub = new BaseMethod_subPath(graph_size, degree, range, range, hotels_num);
+            bs_sub.baseline(queryD);
+            rs_sub.add(new ArrayList<>(bs_sub.skyPaths));
+        }
+
+        System.out.println("===============================================");
+
+        for(Data queryD:queryList) {
+            BaseMethod_mixed bs_mix = new BaseMethod_mixed(graph_size, degree, range, range, hotels_num);
+            bs_mix.baseline(queryD);
+        }
+
+        System.out.println("===============================================");
+
+
+        for(Data queryD:queryList)
+        {
+            BaseMethod_mixed_index bs_mix_index = new BaseMethod_mixed_index(graph_size, degree, range, range, hotels_num);
+            bs_mix_index.baseline(queryD);
+            rs_mix.add(new ArrayList<>(bs_mix_index.skyPaths));
+        }
+
+        System.out.println("===============================================");
+
+        for(int i = 0 ; i < queryList.length;i++)
+        {
+            System.out.print(testTools.statistic.goodnessAnalyze(rs_baseline.get(i), rs_range.get(i), "cos"));
+            System.out.print(" " + testTools.statistic.goodnessAnalyze(rs_baseline.get(i), rs_range.get(i), "cos", 10));
+            System.out.println(" " + testTools.statistic.goodnessAnalyze(rs_baseline.get(i), rs_range.get(i), "cos", 100));
+
+
+            System.out.print(testTools.statistic.goodnessAnalyze(rs_baseline.get(i), rs_sub.get(i), "cos"));
+            System.out.print(" " + testTools.statistic.goodnessAnalyze(rs_baseline.get(i), rs_sub.get(i), "cos", 10));
+            System.out.println(" " + testTools.statistic.goodnessAnalyze(rs_baseline.get(i), rs_sub.get(i), "cos", 100));
+
+
+            System.out.print(testTools.statistic.goodnessAnalyze(rs_baseline.get(i), rs_mix.get(i), "cos"));
+            System.out.print(" " + testTools.statistic.goodnessAnalyze(rs_baseline.get(i), rs_mix.get(i), "cos", 10));
+            System.out.println(" " + testTools.statistic.goodnessAnalyze(rs_baseline.get(i), rs_mix.get(i), "cos", 100));
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
 
     public void testing(int graph_size, String degree, double range, int hotels_num, Data queryD) {
 
 
-        BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
+
         BaseMethod_approx bs_approx = new BaseMethod_approx(graph_size, degree, range, range, hotels_num);
+        bs_approx.baseline(queryD);
+
         BaseMethod_approx_index bs_approx_index = new BaseMethod_approx_index(graph_size, degree, range, range, hotels_num);
+        bs_approx_index.baseline(queryD);
+
 
         BaseMethod_subPath bs_sub = new BaseMethod_subPath(graph_size, degree, range, range, hotels_num);
-        BaseMethod_mixed bs_mix = new BaseMethod_mixed(graph_size, degree, range, range, hotels_num);
-        BaseMethod_mixed_index bs_mix_index = new BaseMethod_mixed_index(graph_size, degree, range, range, hotels_num);
-
-        bm5.baseline(queryD);
-        bs_approx.baseline(queryD);
-        bs_approx_index.baseline(queryD);
         bs_sub.baseline(queryD);
+
+        BaseMethod_mixed bs_mix = new BaseMethod_mixed(graph_size, degree, range, range, hotels_num);
         bs_mix.baseline(queryD);
+
+        BaseMethod_mixed_index bs_mix_index = new BaseMethod_mixed_index(graph_size, degree, range, range, hotels_num);
         bs_mix_index.baseline(queryD);
+
+        BaseMethod5 bm5 = new BaseMethod5(graph_size, degree, range, hotels_num);
+        bm5.baseline(queryD);
 
 
         System.out.print(testTools.statistic.goodnessAnalyze(bm5.skyPaths, bs_approx.skyPaths, "cos"));

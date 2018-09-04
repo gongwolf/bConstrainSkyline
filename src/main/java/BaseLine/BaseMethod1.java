@@ -267,9 +267,9 @@ public class BaseMethod1 {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end);
             if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
             }
         }
 

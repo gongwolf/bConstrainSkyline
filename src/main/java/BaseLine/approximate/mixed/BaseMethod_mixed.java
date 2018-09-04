@@ -77,6 +77,9 @@ public class BaseMethod_mixed {
 //        String graphPath = home_folder + "/neo4j334/testdb_real_50/databases/graph.db";
         long s_sum = System.currentTimeMillis();
         long db_time = System.currentTimeMillis();
+        connector.graphDB=null;
+        constants.accessedEdges.clear();
+        constants.accessedNodes.clear();
         connector n = new connector(graphPath);
         n.startDB();
         this.graphdb = n.getDBObject();
@@ -278,13 +281,13 @@ public class BaseMethod_mixed {
 //                index_s += (System.nanoTime() - t_index_s);
 
                 for (path p : my_n.skyPaths) {
-                    if (!p.rels.isEmpty() && p.expaned) {
+//                    if (!p.rels.isEmpty() && p.expaned) {
                         if (p.expaned) {
                             long ats = System.nanoTime();
                             boolean f = addToSkylineResult(p, sNodes);
                             addResult_rt += System.nanoTime() - ats;
                         }
-                    }
+//                    }
                 }
             }
 
@@ -320,11 +323,11 @@ public class BaseMethod_mixed {
         for (Result r : sortedList) {
             this.finalDatas.add(r.end.getPlaceId());
 
-            if (r.p != null) {
-                for (Long nn : r.p.nodes) {
-                    final_bus_stops.add(nn);
-                }
-            }
+//            if (r.p != null) {
+//                for (Long nn : r.p.nodes) {
+//                    final_bus_stops.add(nn);
+//                }
+//            }
         }
 
 
