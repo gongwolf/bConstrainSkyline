@@ -50,6 +50,34 @@ public class Index {
 //        this.pagesize_data = 2048;
     }
 
+    public Index(int graphsize, String degree, double range, int num_hotels, double distance_thresholds, int index_num) {
+        this.distance_threshold = distance_thresholds;
+
+        if (distance_thresholds != -1) {
+            this.home_folder = base + "/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels+"_"+index_num;
+            this.source_data_tree = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels+"_"+index_num + ".rtr";
+            this.neo4j_db = System.getProperty("user.home") + "/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
+            this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/NodeInfo.txt";
+        } else {
+            this.home_folder = base + "/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels + "_all";
+            this.source_data_tree = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels + ".rtr";
+            this.neo4j_db = System.getProperty("user.home") + "/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
+            this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/NodeInfo.txt";
+        }
+
+//        System.out.println(home_folder);
+
+
+        this.num_nodes = getLineNumbers();
+//        System.out.println(this.home_folder);
+//        System.out.println(this.source_data_tree);
+//        System.out.println(this.neo4j_db);
+//        System.out.println(node_info_path);
+
+        this.pagesize_list = 1024;
+
+    }
+
 
     public Index(String city) {
         this.distance_threshold = 0.0105;
