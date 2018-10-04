@@ -181,7 +181,7 @@ public class Index {
         } else {
 
             if (g_str == null) {
-                graph_size = 10000;
+                graph_size = 50000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -199,7 +199,7 @@ public class Index {
             }
 
             if (r_str == null) {
-                range = 4;
+                range = 2.5;
             } else {
                 range = Double.parseDouble(r_str);
             }
@@ -211,7 +211,7 @@ public class Index {
                 distance_thresholds = Double.parseDouble(t_str);
             }
 
-            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds);
+            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds,5);
 //            Index idx = new Index("LA");
             long st = System.currentTimeMillis();
             idx.buildIndex(true);

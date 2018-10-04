@@ -68,11 +68,11 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>AstarApproximate</finalName>
+                    <finalName>ccccc_test</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>Astar.AstarApproximate</mainClass>
+                            <mainClass>BaseLine.compare5D.test</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

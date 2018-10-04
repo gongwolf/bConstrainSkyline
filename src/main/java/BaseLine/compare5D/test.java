@@ -49,7 +49,7 @@ public class test {
         } else {
 
             if (g_str == null) {
-                graph_size = 2000;
+                graph_size = 50000;
             } else {
                 graph_size = Integer.parseInt(g_str);
             }
@@ -61,7 +61,7 @@ public class test {
             }
 
             if (qn_str == null) {
-                query_num = 4;
+                query_num = 3;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
@@ -73,9 +73,9 @@ public class test {
             }
 
             if (r_str == null) {
-                range = 12;
+                range = 2.5;
             } else {
-                range = Integer.parseInt(r_str);
+                range = Double.parseDouble(r_str);
             }
 
 
