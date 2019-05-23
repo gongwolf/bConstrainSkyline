@@ -24,12 +24,10 @@ public class SyntheticRealData {
 
     public SyntheticRealData(int dimension) {
         this.dimension = dimension;
-
     }
 
     public static void main(String args[]) {
         int dimension = 3;
-
 
         if (args.length == 1) {
             dimension = Integer.parseInt(args[0]);
@@ -59,7 +57,7 @@ public class SyntheticRealData {
             this.max_id=0;
             long counter = 0;
 
-            File file = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real_"+city+".txt");
+            File file = new File("/home/gqxwolf/shared_git/bConstrainSkyline/data/staticNode_real_"+city+".txt"); //store the hotel information
             String t_path = "/home/gqxwolf/shared_git/bConstrainSkyline/data/real_tree_"+city+".rtr";
             RTree rt = new RTree(t_path, Constants.BLOCKLENGTH, Constants.CACHESIZE, dimension);
 

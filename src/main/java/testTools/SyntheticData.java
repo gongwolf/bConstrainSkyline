@@ -38,10 +38,6 @@ public class SyntheticData {
         this.range = range;
     }
 
-    public static void arguements() {
-
-
-    }
 
     public static void main(String args[]) throws ParseException {
         //deal with the parameter

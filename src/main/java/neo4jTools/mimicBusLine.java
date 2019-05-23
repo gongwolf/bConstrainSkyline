@@ -7,11 +7,12 @@ import java.io.*;
 import java.util.*;
 
 public class mimicBusLine {
-    //direction
+    //four directions
     final int righttop = 1;
     final int rightbuttom = 2;
     final int leftbuttom = 3;
     final int lefttop = 4;
+
     private final int numofNode;
     String DBBase = "/home/gqxwolf/mydata/projectData/busline";
     String EdgesPath = DBBase + "SegInfo.txt";
@@ -283,7 +284,7 @@ public class mimicBusLine {
 
     private int hasNodes(node node) {
         int flag = -1;
-        for (Map.Entry<Integer, neo4jTools.node> n : this.Nodes.entrySet()) {
+        for (Map.Entry<Integer, node> n : this.Nodes.entrySet()) {
             if (Math.sqrt(Math.pow(n.getValue().latitude - node.latitude, 2) + Math.pow(n.getValue().longitude - node.longitude, 2)) < samnode_t) {
                 flag = n.getKey();
 //                System.out.println("find a node " + flag);

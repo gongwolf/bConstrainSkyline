@@ -84,7 +84,6 @@ public class BaseMethod5 {
         this.treePath = home_folder + "/shared_git/bConstrainSkyline/data/real_tree_" + city + ".rtr";
         this.dataPath = home_folder + "/shared_git/bConstrainSkyline/data/staticNode_real_" + city + ".txt";
         this.hotels_num = getNumberOfHotels();
-
     }
 
     public BaseMethod5(String tree, String data, String graph) {
