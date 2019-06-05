@@ -130,7 +130,6 @@ public class GoogleMaps {
                 double latitude = Double.parseDouble(infos[1]);
                 double longitude = Double.parseDouble(infos[2]);
                 nodeList.put(id, new Pair<>(latitude, longitude));
-
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -266,6 +265,8 @@ public class GoogleMaps {
 
     }
 
+
+    //calculate the average distance from the IOPs to its nearest bus stop
     private void averageDistance() {
 
         String[] cities = new String[]{"Los Angeles", "New York", "San Francisco"};
@@ -323,6 +324,7 @@ public class GoogleMaps {
         return result;
     }
 
+    //calculate the distribution of the number of bus stops within the given range for each IOP
     private void statisticInRange(int range) {
         HashMap<Integer, Integer> result = new HashMap<>();
         String[] cities = new String[]{"Los Angeles", "New York", "San Francisco"};

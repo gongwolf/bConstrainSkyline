@@ -64,7 +64,7 @@ public class test {
             }
 
             if (qn_str == null) {
-                query_num = 4;
+                query_num = 1;
             } else {
                 query_num = Integer.parseInt(qn_str);
             }
@@ -139,15 +139,15 @@ public class test {
                     bm5.graphdb = graphdb;
                     int random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
 
-                    Data queryD = bm5.getDataById(random_place_id);
+                    Data queryD = bm5.getDataById(5079);
                     bm5.nearestNetworkNode(queryD);
-                    double distance = bm5.nn_dist;
-                    while (distance > 0.0105) {
-                        random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
-                        queryD = bm5.getDataById(random_place_id);
-                        bm5.nearestNetworkNode(queryD);
-                        distance = bm5.nn_dist;
-                    }
+//                    double distance = bm5.nn_dist;
+//                    while (distance > 0.0105) {
+//                        random_place_id = bm5.getRandomNumberInRange_int(0, bm5.getNumberOfHotels() - 1);
+//                        queryD = bm5.getDataById(random_place_id);
+//                        bm5.nearestNetworkNode(queryD);
+//                        distance = bm5.nn_dist;
+//                    }
                     queryList[i] = queryD;
                 }
 
@@ -156,9 +156,17 @@ public class test {
 
             n.shutdownDB();
 
-            for (Data d : queryList) {
-                t.test_real(d,city);
-                System.out.println("===============================================");
+////            for (Data d : queryList) {
+//                t.test_real(d,city);
+////                System.out.println("===============================================");
+////            }
+
+            for(Data d:queryList){
+                BaseMethod5 bm5 = new BaseMethod5("NY");
+                bm5.baseline(d);
+                for(Result r: bm5.skyPaths){
+                    System.out.println(r);
+                }
             }
         }
 
