@@ -7,7 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f64d462b-75d9-4d7a-9c10-54dcb8ba3c36" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/TestCase/IndexTestClass.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/Index.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,21 +30,6 @@
         <option value="Class" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>main</find>
-      <find>hasNodes</find>
-      <find>random</find>
-      <find>testdb_&quot; + city + &quot;_Random</find>
-      <find>_Random</find>
-      <find>LA_SegInfo</find>
-      <find>testdb_NY_Random</find>
-      <find>Node_with_placeDetails</find>
-      <find>outfilename_</find>
-      <find>statisticInRange</find>
-      <find>index</find>
-    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -92,21 +80,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.GoogleMaps">
-    <configuration name="AstarApproximate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Astar.AstarApproximate" />
-      <module name="qixugong" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Astar.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Application.IndexTestClass">
     <configuration name="GoogleMaps" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="testTools.GoogleMaps" />
       <module name="qixugong" />
@@ -128,6 +102,20 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="testTools.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IndexTestClass" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestCase.IndexTestClass" />
+      <module name="qixugong" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="TestCase.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -207,19 +195,19 @@
     <list>
       <item itemvalue="Application.Package_Jar_file" />
       <item itemvalue="Application.Unnamed" />
-      <item itemvalue="Application.AstarApproximate" />
       <item itemvalue="Application.GoogleMaps" />
       <item itemvalue="Application.Index" />
       <item itemvalue="Application.SyntheticRealData" />
       <item itemvalue="Application.test" />
+      <item itemvalue="Application.IndexTestClass" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.IndexTestClass" />
         <item itemvalue="Application.GoogleMaps" />
         <item itemvalue="Application.test" />
         <item itemvalue="Application.SyntheticRealData" />
         <item itemvalue="Application.Index" />
-        <item itemvalue="Application.AstarApproximate" />
       </list>
     </recent_temporary>
   </component>
@@ -241,7 +229,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

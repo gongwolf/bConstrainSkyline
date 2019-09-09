@@ -15,7 +15,8 @@ import java.util.Comparator;
 import java.util.Random;
 
 public class Index {
-    private final String base = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/index";
+//    private final String base = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/index";
+    private final String base = System.getProperty("user.home") + "/mydata/DemoProject/data/index";
     public String home_folder;
     private String dataPath;
     private String treePath;
@@ -41,7 +42,7 @@ public class Index {
 
         this.source_data_tree = this.treePath;
         this.neo4j_db = this.graphPath;
-        this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph_real_50_Random/data/"+"SF_"+"NodeInfo.txt";
+        this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph_real_50_Random/data/" + "SF_" + "NodeInfo.txt";
 
 
         this.num_nodes = getLineNumbers();
@@ -54,8 +55,8 @@ public class Index {
         this.distance_threshold = distance_thresholds;
 
         if (distance_thresholds != -1) {
-            this.home_folder = base + "/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels+"_"+index_num;
-            this.source_data_tree = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels+"_"+index_num + ".rtr";
+            this.home_folder = base + "/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels + "_" + index_num;
+            this.source_data_tree = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/test_" + graphsize + "_" + degree + "_" + range + "_" + num_hotels + "_" + index_num + ".rtr";
             this.neo4j_db = System.getProperty("user.home") + "/neo4j334/testdb" + graphsize + "_" + degree + "/databases/graph.db";
             this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph" + graphsize + "_" + degree + "/data/NodeInfo.txt";
         } else {
@@ -83,20 +84,42 @@ public class Index {
         this.distance_threshold = 0.0105;
 
         this.home_folder = base + "/" + city + "_index_1000/";
-        this.graphPath = System.getProperty("user.home") + "/neo4j334/testdb_"+city+"_Random/databases/graph.db";
-        this.treePath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/real_tree_"+city+".rtr";
-        this.dataPath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/staticNode_real_"+city+".txt";
+        this.graphPath = System.getProperty("user.home") + "/neo4j334/testdb_" + city + "_Random/databases/graph.db";
+        this.treePath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/real_tree_" + city + ".rtr";
+        this.dataPath = System.getProperty("user.home") + "/shared_git/bConstrainSkyline/data/staticNode_real_" + city + ".txt";
 
 
         this.source_data_tree = this.treePath;
         this.neo4j_db = this.graphPath;
-        this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph_real_50_Random/data/"+city+"_NodeInfo.txt";
+        this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph_real_50_Random/data/" + city + "_NodeInfo.txt";
 
 
         this.num_nodes = getLineNumbers();
 
         this.pagesize_list = 1024;
 //        this.pagesize_data = 2048;
+    }
+
+
+    public Index(String city, double distance_threshold) {
+//		this.distance_threshold = 0.0105;
+        this.distance_threshold = distance_threshold;
+        if (distance_threshold != -1) {
+            this.home_folder = base + "/" + city + "_index_" + (int) distance_threshold + "/";
+        } else {
+            this.home_folder = base + "/" + city + "_index_all/";
+        }
+
+        this.graphPath = System.getProperty("user.home") + "/neo4j334/testdb_" + city + "_Random/databases/graph.db";
+        this.treePath = System.getProperty("user.home") + "/mydata/DemoProject/data/real_tree_" + city + ".rtr";
+        this.dataPath = System.getProperty("user.home") + "/mydata/DemoProject/data/staticNode_real_" + city + ".txt";
+
+        this.source_data_tree = this.treePath;
+        this.neo4j_db = this.graphPath;
+        this.node_info_path = System.getProperty("user.home") + "/mydata/projectData/testGraph_real_50_Random/data/"
+                + city + "_NodeInfo.txt";
+        this.num_nodes = getLineNumbers();
+        this.pagesize_list = 1024;
     }
 
 
@@ -211,11 +234,11 @@ public class Index {
                 distance_thresholds = Double.parseDouble(t_str);
             }
 
-            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds,5);
+            Index idx = new Index(graph_size, degree, range, hotels_num, distance_thresholds, 5);
 //            Index idx = new Index("LA");
             long st = System.currentTimeMillis();
             idx.buildIndex(true);
-            System.out.println("index building finished in "+(System.currentTimeMillis()-st));
+            System.out.println("index building finished in " + (System.currentTimeMillis() - st));
 //            idx.read_d_list_from_disk(452);
 //            idx.test();
         }
@@ -359,8 +382,8 @@ public class Index {
         Skyline sk = new Skyline(this.source_data_tree);
         sk.allDatas(); //get all data objects from R-tree
         sk.findSkyline(); //get skyline objects among all the data objects
-        System.out.println("number of data objects "+sk.allNodes.size());
-        System.out.println("number of skyline data objects:"+sk.sky_hotels.size());
+        System.out.println("number of data objects " + sk.allNodes.size());
+        System.out.println("number of skyline data objects:" + sk.sky_hotels.size());
         writeDataToDisk(sk.allNodes);
 
         String header_name = this.home_folder + "/header.idx";

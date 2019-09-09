@@ -203,12 +203,12 @@ public class connector {
             tx.success();
             result = r.stream().count();
         }
-        System.out.println("dbms.memory.pagecache.size ~~~~  " + Long.valueOf((String) getFromManagementBean("Configuration", "dbms.memory.pagecache.size")) / 1024 + "k");
-        System.out.println("dbms.memory.pagecache.size ~~~~  " + Long.valueOf((String) getFromManagementBean("Configuration", "unsupported.dbms.memory.pagecache.pagesize")) / 1024 + "k");
-        System.out.println("NumberOfCommittedTransactions ~~~~  " + (long) getFromManagementBean("Transactions", "NumberOfCommittedTransactions"));
-        System.out.println("TotalStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TotalStoreSize") / 1024 + "k");
-        System.out.println("StringStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "StringStoreSize") / 1024 + "k");
-        System.out.println("TransactionLogsSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TransactionLogsSize") / 1024 + "k");
+//        System.out.println("dbms.memory.pagecache.size ~~~~  " + Long.valueOf((String) getFromManagementBean("Configuration", "dbms.memory.pagecache.size")) / 1024 + "k");
+//        System.out.println("dbms.memory.pagecache.size ~~~~  " + Long.valueOf((String) getFromManagementBean("Configuration", "unsupported.dbms.memory.pagecache.pagesize")) / 1024 + "k");
+//        System.out.println("NumberOfCommittedTransactions ~~~~  " + (long) getFromManagementBean("Transactions", "NumberOfCommittedTransactions"));
+//        System.out.println("TotalStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TotalStoreSize") / 1024 + "k");
+//        System.out.println("StringStoreSize ~~~~  " + (long) getFromManagementBean("Store sizes", "StringStoreSize") / 1024 + "k");
+//        System.out.println("TransactionLogsSize ~~~~  " + (long) getFromManagementBean("Store sizes", "TransactionLogsSize") / 1024 + "k");
 
 
 //        System.out.println("~~~~  " + Long.valueOf((String)getFromManagementBean("Configuration", "dbms.memory.heap.initial_size"))/1024);
