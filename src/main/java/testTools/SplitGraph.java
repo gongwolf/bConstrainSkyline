@@ -86,7 +86,6 @@ public class SplitGraph {
                 } else {
                     node_city_map.put(id, city_id);
                     node_info.put(id, new Pair<>(lat, lng));
-
                 }
 
 

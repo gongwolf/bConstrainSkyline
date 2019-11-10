@@ -56,7 +56,7 @@ public class ReadRealDataSet {
     }
 
     public static void main(String args[]) {
-        double distance_range = 30;
+        double distance_range = 50;
         boolean deleteBefore = true;
         boolean createDB = false;
 
@@ -94,7 +94,7 @@ public class ReadRealDataSet {
             while (((line = b.readLine()) != null)) {
                 counter++;
 
-                if (line.startsWith("           ") && line.indexOf("~") != -1) {
+                if (line.startsWith("           ") && line.indexOf("~~~") != -1) {
 
                     processBusLine(stopsInLine);
                     start_new_line = true;
@@ -217,8 +217,10 @@ public class ReadRealDataSet {
                     double d = distanceInMeters(this.stops_list.get(t.id).center[0], this.stops_list.get(t.id).center[1], this.stops_list.get(t_1.id).center[0], this.stops_list.get(t_1.id).center[1]);
 
                     if (d >= distance_range) {
-                        double d1 = getGussianRandomValue(d * 2, d * 0.3);
-                        double d2 = getGussianRandomValue(d * 1.5, d * 0.4);
+//                        double d1 = getGussianRandomValue(d * 2, d * 0.3);
+//                        double d2 = getGussianRandomValue(d * 1.5, d * 0.4);
+                        double d1 = (getGussianRandomValue(d * 2, d * 0.3)/1000)*0.5; //dollars
+                        double d2 = (getGussianRandomValue(d * 1.5, d * 0.4)/177); //mins
                         SegObj s = new SegObj(sid, did, d, d1, d2);
                         this.seg_list.add(s);
                     }

@@ -38,7 +38,7 @@ public class CreateDB {
 
     public CreateDB() {
 
-        String city = "SF";
+        String city = "LA";
         this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + city + "_Gaussian/databases/graph.db";
         this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50_Random/data/";
         NodesPath = DBBase + city + "_NodeInfo.txt";
