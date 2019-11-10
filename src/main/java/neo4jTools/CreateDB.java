@@ -38,10 +38,11 @@ public class CreateDB {
 
     public CreateDB() {
 
-        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + "LA" + "_Random/databases/graph.db";
+        String city = "SF";
+        this.DB_PATH = "/home/gqxwolf/neo4j334/testdb_" + city + "_Gaussian/databases/graph.db";
         this.DBBase = "/home/gqxwolf/mydata/projectData/testGraph_real_50_Random/data/";
-        NodesPath = DBBase + "LA_NodeInfo.txt";
-        SegsPath = DBBase + "LA_SegInfo.txt";
+        NodesPath = DBBase + city + "_NodeInfo.txt";
+        SegsPath = DBBase + city + "_SegInfo.txt";
 
 
 //        this.DB_PATH = "/home/gqxwolf/neo4j334/busline_10000_2.0/databases/graph.db";
@@ -65,11 +66,11 @@ public class CreateDB {
 //        generateGraph g = new generateGraph(graphsize, degree, dimension);
 //        g.generateG(true);
 
-//        CreateDB db = new CreateDB();
-//        db.createDatabase();
-
-        CreateDB db = new CreateDB(50000, 4);
+        CreateDB db = new CreateDB();
         db.createDatabase();
+
+//        CreateDB db = new CreateDB(50000, 4);
+//        db.createDatabase();
 
 
 //        db.createDatabasewithIndex("Id");
@@ -132,13 +133,12 @@ public class CreateDB {
                 if (num_edge % 100000 == 0) {
                     process_batch_edges(ss);
                     ss.clear();
-                    System.out.println(num_edge+" edges were created");
+                    System.out.println(num_edge + " edges were created");
                 }
             }
             process_batch_edges(ss);
             ss.clear();
-            System.out.println(num_edge+" edges were created");
-            nconn.shutdownDB();
+            System.out.println(num_edge + " edges were created");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -166,8 +166,6 @@ public class CreateDB {
             tx.success();
         }
         nconn.shutdownDB();
-
-
     }
 
 

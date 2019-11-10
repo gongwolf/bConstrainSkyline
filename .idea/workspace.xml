@@ -7,10 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f64d462b-75d9-4d7a-9c10-54dcb8ba3c36" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/TestCase/IndexTestClass.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/connector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/Index.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neo4jTools/CreateDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/testTools/SplitGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,12 +40,6 @@
         <option name="importAutomatically" value="true" />
       </MavenImportingSettings>
     </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="46" />
-    <option name="y" value="-11" />
-    <option name="width" value="1875" />
-    <option name="height" value="1092" />
   </component>
   <component name="ProjectId" id="1PNyKL45iccMUANVkR93SlCth8j" />
   <component name="ProjectLevelVcsManager">
@@ -80,14 +74,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.IndexTestClass">
-    <configuration name="GoogleMaps" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="testTools.GoogleMaps" />
+  <component name="RunManager" selected="Application.CreateDB">
+    <configuration name="CreateDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="neo4jTools.CreateDB" />
       <module name="qixugong" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="testTools.*" />
+          <option name="PATTERN" value="neo4jTools.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -95,8 +89,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Index" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="testTools.Index" />
+    <configuration name="GoogleMaps" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="testTools.GoogleMaps" />
       <module name="qixugong" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -132,8 +126,8 @@
         <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="assembly:single" />
       </method>
     </configuration>
-    <configuration name="SyntheticRealData" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="testTools.SyntheticRealData" />
+    <configuration name="SplitGraph" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="testTools.SplitGraph" />
       <module name="qixugong" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
@@ -196,20 +190,23 @@
       <item itemvalue="Application.Package_Jar_file" />
       <item itemvalue="Application.Unnamed" />
       <item itemvalue="Application.GoogleMaps" />
-      <item itemvalue="Application.Index" />
-      <item itemvalue="Application.SyntheticRealData" />
       <item itemvalue="Application.test" />
       <item itemvalue="Application.IndexTestClass" />
+      <item itemvalue="Application.SplitGraph" />
+      <item itemvalue="Application.CreateDB" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.CreateDB" />
+        <item itemvalue="Application.SplitGraph" />
         <item itemvalue="Application.IndexTestClass" />
         <item itemvalue="Application.GoogleMaps" />
         <item itemvalue="Application.test" />
-        <item itemvalue="Application.SyntheticRealData" />
-        <item itemvalue="Application.Index" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -236,82 +233,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <last-edited>qixugong:jar</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <last-edited>No facets are configured</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>qixugong</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-                <option value="0.6" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <last-edited>Maven: com.github.ben-manes.caffeine:caffeine:2.3.3</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>

@@ -214,13 +214,13 @@ public class SplitGraph {
                 did = Integer.parseInt(readLine.split(" ")[1]);
 
                 if (node_Map.containsKey(sid) && node_Map.containsKey(did)) { //if the start node and the end node are in the same city
-//                    costs[0] = Double.parseDouble(readLine.split(" ")[2]);
-//                    costs[1] = Double.parseDouble(readLine.split(" ")[3]);
-//                    costs[2] = Double.parseDouble(readLine.split(" ")[4]);
+                    costs[0] = Double.parseDouble(readLine.split(" ")[2]);
+                    costs[1] = Double.parseDouble(readLine.split(" ")[3]);
+                    costs[2] = Double.parseDouble(readLine.split(" ")[4]);
 
-                    costs[0] = randomFloatInRange(1,20);
-                    costs[1] = randomFloatInRange(1,20);
-                    costs[2] = randomFloatInRange(1,20);
+//                    costs[0] = randomFloatInRange(1,20);
+//                    costs[1] = randomFloatInRange(1,20);
+//                    costs[2] = randomFloatInRange(1,20);
                     writer_edge.write(node_Map.get(sid) + " " + node_Map.get(did) + " " + costs[0] + " " + costs[1] + " " + costs[2] + "\n");
                 }
             }
